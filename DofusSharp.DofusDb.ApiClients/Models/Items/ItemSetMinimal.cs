@@ -1,12 +1,18 @@
-﻿using DofusSharp.DofusDb.Models.Common;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
 
-namespace DofusSharp.DofusDb.Models.Items;
+namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 
 /// <summary>
 ///     A set of items that can be equipped together to gain bonuses.
+///     This is a minimal version of <see cref="ItemSet" />, it does not include the full details of the items in the set.
 /// </summary>
-public class ItemSet : DofusDbEntity
+public class ItemSetMinimal
 {
+    /// <summary>
+    ///     The unique identifier of the item set.
+    /// </summary>
+    public int? Id { get; init; }
+
     /// <summary>
     ///     The name of the item set.
     /// </summary>
@@ -25,7 +31,7 @@ public class ItemSet : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of the items that belong to the item set.
     /// </summary>
-    public IReadOnlyCollection<Item>? Items { get; init; }
+    public IReadOnlyCollection<int>? Items { get; init; }
 
     /// <summary>
     ///     The unique identifiers of the item types of the items that belong to the item set.

@@ -1,4 +1,4 @@
-﻿using DofusSharp.DofusDb.Models.Items;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Items;
 
 namespace DofusSharp.DofusDb.ApiClients;
 

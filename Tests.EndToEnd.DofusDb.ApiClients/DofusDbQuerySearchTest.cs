@@ -1,5 +1,5 @@
 ﻿using DofusSharp.DofusDb.ApiClients;
-using DofusSharp.DofusDb.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
 using FluentAssertions;
 
 namespace Tests.EndToEnd.DofusDb.ApiClients;

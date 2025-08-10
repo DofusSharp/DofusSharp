@@ -1,4 +1,4 @@
-﻿namespace DofusSharp.DofusDb.Models.Common;
+﻿namespace DofusSharp.DofusDb.ApiClients.Models.Common;
 
 /// <summary>
 ///     A gender.

@@ -1,5 +1,5 @@
-﻿using DofusSharp.DofusDb.ApiClients.Search;
-using DofusSharp.DofusDb.Models;
+﻿using DofusSharp.DofusDb.ApiClients.Models;
+using DofusSharp.DofusDb.ApiClients.Search;
 
 namespace DofusSharp.DofusDb.ApiClients;
 

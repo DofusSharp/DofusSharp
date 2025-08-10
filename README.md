@@ -1,8 +1,11 @@
-# DofusDB Community
+# Dofus#
 
-This repository contains community-driven C# libraries and tools built around the DofusDB project.
+This repository contains C# libraries and applications around the game Dofus.
 
-- [Models](https://github.com/ismailbennani/DofusDBCommunity/tree/main/DofusDbCommunity.Models): C# models for the resources available in the DofusDB API.
+## Applications
 
-- [ApiClients](https://github.com/ismailbennani/DofusDBCommunity/tree/main/DofusDbCommunity.ApiClients): API clients for the DofusDB API.
+WIP
 
+## Libraries
+
+- [DofusDb.ApiClients](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.DofusDb.ApiClients): API clients for the DofusDB APIs.

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
+using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
-using DofusSharp.DofusDb.Models;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
