@@ -1,4 +1,4 @@
-﻿namespace DofusSharp.DofusDb.Models.Items;
+﻿namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 
 /// <summary>
 ///     An effect of an item, applied when the item is used.

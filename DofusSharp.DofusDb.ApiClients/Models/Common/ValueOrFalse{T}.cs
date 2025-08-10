@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace DofusSharp.DofusDb.Models.Common;
+namespace DofusSharp.DofusDb.ApiClients.Models.Common;
 
 /// <summary>
 ///     Either a value of type T, or false.

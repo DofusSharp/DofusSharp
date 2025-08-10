@@ -1,4 +1,4 @@
-﻿namespace DofusSharp.DofusDb.Models;
+﻿namespace DofusSharp.DofusDb.ApiClients.Models;
 
 public abstract class DofusDbEntity
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using DofusSharp.DofusDb.Models.Common;
+using DofusSharp.DofusDb.ApiClients.Models.Common;
 
-namespace DofusSharp.DofusDb.Models.Items;
+namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 
 /// <summary>
 ///     An item in the game.

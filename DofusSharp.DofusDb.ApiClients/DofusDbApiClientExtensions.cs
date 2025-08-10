@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.Json;
+using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
-using DofusSharp.DofusDb.Models;
 
 namespace DofusSharp.DofusDb.ApiClients;
 

@@ -1,6 +1,6 @@
 ﻿using DofusSharp.DofusDb.ApiClients;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Search;
-using DofusSharp.DofusDb.Models.Items;
 using FluentAssertions;
 
 namespace Tests.EndToEnd.DofusDb.ApiClients;

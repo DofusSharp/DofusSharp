@@ -1,6 +1,6 @@
-﻿using DofusSharp.DofusDb.Models.Common;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
 
-namespace DofusSharp.DofusDb.Models.Items;
+namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 
 /// <summary>
 ///     A super type of item, used for categorization.

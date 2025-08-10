@@ -1,4 +1,4 @@
-﻿namespace DofusSharp.DofusDb.Models.Items;
+﻿namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 
 /// <summary>
 ///     An item in the game.

@@ -1,11 +1,7 @@
 # configuration file for dotnet-releaser
 [msbuild]
-project = "DofusDbCommunity.sln"
+project = "DofusSharp.sln"
 [github]
 user = "ismailbennani"
-repo = "DofusDBCommunity"
+repo = "DofusSharp"
 version_prefix = "v"
-[brew]
-publish = false
-[service]
-publish = false
