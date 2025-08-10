@@ -5,7 +5,3 @@ project = "DofusSharp.sln"
 user = "ismailbennani"
 repo = "DofusSharp"
 version_prefix = "v"
-[brew]
-publish = false
-[service]
-publish = false
