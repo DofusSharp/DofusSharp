@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using DofusSharp.DofusDb.ApiClients;
+using DofusSharp.DofusDb.ApiClients.Clients;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using FluentAssertions;
 using JetBrains.Annotations;

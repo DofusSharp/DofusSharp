@@ -1,4 +1,4 @@
-namespace DofusSharp.DofusDb.ApiClients.Http;
+namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 /// <summary>
 ///     A stream that wraps an <see cref="HttpResponseMessage" /> to ensure it is disposed when the stream is disposed.

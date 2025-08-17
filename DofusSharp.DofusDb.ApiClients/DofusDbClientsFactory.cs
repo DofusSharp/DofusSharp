@@ -1,4 +1,5 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
+﻿using DofusSharp.DofusDb.ApiClients.Clients;
+using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using DofusSharp.DofusDb.ApiClients;
+using DofusSharp.DofusDb.ApiClients.Clients;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
