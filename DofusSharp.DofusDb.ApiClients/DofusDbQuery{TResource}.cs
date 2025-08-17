@@ -94,6 +94,18 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
         return client.MultiQuerySearchAsync(query, cancellationToken);
     }
 
+    /// <summary>
+    ///     Count the number of results that the `ExecuteAsync` method would return.
+    ///     This method only performs one request and does not retrieve the actual resources.
+    /// </summary>
+    /// <returns>The search result containing all resources matching the query.</returns>
+    public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+    {
+        int totalCount = await client.CountAsync(_predicates, cancellationToken);
+        int countMinusSkipped = totalCount - (_skip ?? 0);
+        return Math.Clamp(countMinusSkipped, 0, _limit ?? int.MaxValue);
+    }
+
     SearchQuery BuildQuery() =>
         new()
         {
