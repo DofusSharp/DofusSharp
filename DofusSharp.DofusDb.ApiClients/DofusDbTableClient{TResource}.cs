@@ -52,7 +52,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
 
         SearchQuery query = new() { Limit = 0, Predicates = predicates };
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
-        HttpResponseMessage response = await httpClient.GetAsync(queryParams, cancellationToken);
+        HttpResponseMessage response = await httpClient.GetAsync($"?{queryParams}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
         SearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<SearchResult<TResource>>(cancellationToken);
