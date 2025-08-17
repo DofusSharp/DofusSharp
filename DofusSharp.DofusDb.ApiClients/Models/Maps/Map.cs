@@ -8,7 +8,7 @@ public class Map : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of background fixtures for the map.
     /// </summary>
-    public IReadOnlyCollection<int>? BackgroundFixtures { get; init; }
+    public IReadOnlyCollection<MapFixture>? BackgroundFixtures { get; init; }
 
     /// <summary>
     ///     The number of background fixtures in the map.
@@ -18,7 +18,7 @@ public class Map : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of foreground fixtures for the map.
     /// </summary>
-    public IReadOnlyCollection<int>? ForegroundFixtures { get; init; }
+    public IReadOnlyCollection<MapFixture>? ForegroundFixtures { get; init; }
 
     /// <summary>
     ///     The number of foreground fixtures in the map.
@@ -119,7 +119,7 @@ public class Map : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of layers for the map.
     /// </summary>
-    public IReadOnlyCollection<int>? Layers { get; init; }
+    public IReadOnlyCollection<MapLayer>? Layers { get; init; }
 
     /// <summary>
     ///     The number of layers in the map.

@@ -18,9 +18,9 @@
     Positions: [
       0
     ],
+    Id: 1,
     CreatedAt: DateTimeOffset_1,
-    UpdatedAt: DateTimeOffset_2,
-    Id: 1
+    UpdatedAt: DateTimeOffset_2
   },
   CategoryId: 0,
   IsInEncyclopedia: true,
@@ -29,8 +29,8 @@
   RawZone: ,
   Mimickable: true,
   CraftXpRatio: -1,
-  CreatedAt: DateTimeOffset_3,
-  UpdatedAt: DateTimeOffset_4,
   EvolutiveTypeId: 0,
-  Id: 1
+  Id: 1,
+  CreatedAt: DateTimeOffset_3,
+  UpdatedAt: DateTimeOffset_4
 }

@@ -20,9 +20,9 @@
       Positions: [
         0
       ],
-      Id: 1,
       CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_2
+      UpdatedAt: DateTimeOffset_2,
+      Id: 1
     },
     CategoryId: 0,
     IsInEncyclopedia: true,
@@ -31,10 +31,10 @@
     RawZone: ,
     Mimickable: true,
     CraftXpRatio: -1,
-    EvolutiveTypeId: 0,
-    Id: 1,
     CreatedAt: DateTimeOffset_3,
-    UpdatedAt: DateTimeOffset_4
+    UpdatedAt: DateTimeOffset_4,
+    EvolutiveTypeId: 0,
+    Id: 1
   },
   Name: {
     De: Eulenamulett,
@@ -62,6 +62,8 @@
   RealWeight: 1,
   Price: 800,
   Criteria: ,
+  CreatedAt: DateTimeOffset_5,
+  UpdatedAt: DateTimeOffset_6,
   Img: https://api.beta.dofusdb.fr/img/items/1001.png,
   ItemSetId: -1,
   ItemSet: {
@@ -111,7 +113,5 @@
   IsLegendary: false,
   Visibility: ,
   ChangeVersion: ,
-  Id: 70,
-  CreatedAt: DateTimeOffset_5,
-  UpdatedAt: DateTimeOffset_6
+  Id: 70
 }
