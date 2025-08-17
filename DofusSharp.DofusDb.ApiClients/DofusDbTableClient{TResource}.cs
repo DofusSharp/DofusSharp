@@ -46,11 +46,13 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         return result;
     }
 
-    public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+    public async Task<int> CountAsync(IReadOnlyCollection<SearchPredicate> predicates, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = CreateHttpClient();
 
-        HttpResponseMessage response = await httpClient.GetAsync("?$limit=0", cancellationToken);
+        SearchQuery query = new() { Limit = 0, Predicates = predicates };
+        string queryParams = _queryParamsBuilder.BuildQueryParams(query);
+        HttpResponseMessage response = await httpClient.GetAsync(queryParams, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         SearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<SearchResult<TResource>>(cancellationToken);

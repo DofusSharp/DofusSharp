@@ -7,6 +7,9 @@ namespace DofusSharp.DofusDb.ApiClients;
 
 public static class DofusDbTableClientExtensions
 {
+    public static Task<int> CountAsync<TResource(this IDofusDbTableClient<TResource> client, CancellationToken cancellationToken = default) where TResource: DofusDbEntity =>
+        client.CountAsync([], cancellationToken);
+    
     /// <summary>
     ///     Fetch ressources matching the search query from the API.
     ///     Performs multiple queries if necessary to fetch the requested number of results.
