@@ -9,6 +9,15 @@ namespace Tests.EndToEnd.DofusDb.ApiClients;
 public class DofusDbQuerySearchTest
 {
     [Fact]
+    public async Task ShouldCountWithPredicate()
+    {
+        DofusDbQuery<ItemSet> query = DofusDbQuery.Beta(Constants.Referrer).ItemSets();
+        int level20SetsCount = await query.Where(s => s.Level == 20).CountAsync();
+        List<ItemSet> allSets = await query.ExecuteAsync().ToListAsync();
+        level20SetsCount.Should().Be(allSets.Count(s => s.Level == 20));
+    }
+    
+    [Fact]
     public async Task ShouldLimitSearchResults()
     {
         DofusDbQuery<Item> query = DofusDbQuery.Beta(Constants.Referrer).Items();
