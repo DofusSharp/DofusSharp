@@ -141,7 +141,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task Execute_ShouldSetPredicateParameter_In()
     {
-        List<int?> collection = [1, 2];
+        List<long?> collection = [1, 2];
         await _builder.Where(i => collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<SearchQuery>(), It.IsAny<CancellationToken>()));
@@ -153,7 +153,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task Execute_ShouldSetPredicateParameter_Nin()
     {
-        List<int?> collection = [1, 2];
+        List<long?> collection = [1, 2];
         await _builder.Where(i => !collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<SearchQuery>(), It.IsAny<CancellationToken>()));
@@ -255,7 +255,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task Execute_ShouldSetPredicateParameter_Not_In()
     {
-        List<int?> collection = [1, 2];
+        List<long?> collection = [1, 2];
         await _builder.Where(i => !collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<SearchQuery>(), It.IsAny<CancellationToken>()));
@@ -267,7 +267,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task Execute_ShouldSetPredicateParameter_Not_Nin()
     {
-        List<int?> collection = [1, 2];
+        List<long?> collection = [1, 2];
         // ReSharper disable once DoubleNegationOperator
         await _builder.Where(i => !!collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
 
@@ -357,7 +357,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task Execute_ShouldSetPredicateParameter_Complex()
     {
-        List<int?> firstContainer = [1, 2];
+        List<long?> firstContainer = [1, 2];
         List<string?> secondContainer = ["value1", "value2"];
         List<string?> thirdContainer = ["value3", "value4"];
 
@@ -437,7 +437,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task Count_ShouldSetPredicateParameter_Complex()
     {
-        List<int?> firstContainer = [1, 2];
+        List<long?> firstContainer = [1, 2];
         List<string?> secondContainer = ["value1", "value2"];
         List<string?> thirdContainer = ["value3", "value4"];
 
