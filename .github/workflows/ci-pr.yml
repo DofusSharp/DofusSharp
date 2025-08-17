@@ -12,6 +12,11 @@ env:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    
+    permissions:
+      checks: write
+      pull-requests: write
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,11 +35,11 @@ jobs:
         run: dotnet build --no-restore
         
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --no-build --verbosity normal --logger:"trx;LogFileName=TestResults/dotnet-test-results.xml"
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2.16.1
-        if: always()
+        if: (!canceled())
         with:
-          trx_files: "${{ github.workspace }}/**/*.trx"
+          trx_files: "**/dotnet-test-result.xml"
 
