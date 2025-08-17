@@ -35,11 +35,12 @@ jobs:
         run: dotnet build --no-restore
         
       - name: Test
-        run: dotnet test --no-build --verbosity normal --logger:"trx;LogFileName=test-results.trx"
+        run: dotnet test --no-build --verbosity normal --logger trx
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2.16.1
         if: (!cancelled())
         with:
-          trx_files: "**/TestResults/test-results.trx"
+          # Test results are written to each test project's directory under the TestResults directory
+          trx_files: "**/TestResults/*.trx"
 
