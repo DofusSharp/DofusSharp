@@ -22,5 +22,6 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
     public IDofusDbTableClient<Area> Areas() => new DofusDbTableClient<Area>(new Uri(baseAddress, "areas/"), referrer);
     public IDofusDbTableClient<SubArea> SubAreas() => new DofusDbTableClient<SubArea>(new Uri(baseAddress, "subareas/"), referrer);
     public IDofusDbTableClient<Map> Maps() => new DofusDbTableClient<Map>(new Uri(baseAddress, "maps/"), referrer);
+    public IDofusDbTableClient<MapPosition> MapPositions() => new DofusDbTableClient<MapPosition>(new Uri(baseAddress, "map-positions/"), referrer);
     public IDofusDbTableClient<Dungeon> Dungeons() => new DofusDbTableClient<Dungeon>(new Uri(baseAddress, "dungeons/"), referrer);
 }
