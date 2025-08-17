@@ -10,6 +10,15 @@ namespace Tests.EndToEnd.DofusDb.ApiClients;
 public class DofusDbTableClientSearchTest
 {
     [Fact]
+    public async Task ShouldCountWithPredicate()
+    {
+        IDofusDbTableClient<ItemSet> client = DofusDbClient.Beta().ItemSets();
+        int level20SetsCount = await client.CountAsync(new SearchPredicate.Eq("level", "20"));
+        List<ItemSet> allSets = await client.MultiQuerySearchAsync().ToListAsync();
+        level20SetsCount.Should().Be(allSets.Count(s => s.Level == 20));
+    }
+
+    [Fact]
     public async Task ShouldLimitSearchResults()
     {
         IDofusDbTableClient<Item> client = DofusDbClient.Beta().Items();
