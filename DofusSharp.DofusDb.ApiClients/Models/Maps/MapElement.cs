@@ -10,7 +10,7 @@ public class MapElement
     /// <summary>
     ///     The unique identifier of the element.
     /// </summary>
-    public int? ElementId { get; init; }
+    public long? ElementId { get; init; }
 
     /// <summary>
     ///     The hue value of the element.

@@ -11,7 +11,7 @@ public class ItemSetMinimal
     /// <summary>
     ///     The unique identifier of the item set.
     /// </summary>
-    public int? Id { get; init; }
+    public long? Id { get; init; }
 
     /// <summary>
     ///     The name of the item set.
@@ -31,12 +31,12 @@ public class ItemSetMinimal
     /// <summary>
     ///     The unique identifiers of the items that belong to the item set.
     /// </summary>
-    public IReadOnlyCollection<int>? Items { get; init; }
+    public IReadOnlyCollection<long>? Items { get; init; }
 
     /// <summary>
     ///     The unique identifiers of the item types of the items that belong to the item set.
     /// </summary>
-    public IReadOnlyCollection<int>? TypeIds { get; init; }
+    public IReadOnlyCollection<long>? TypeIds { get; init; }
 
     /// <summary>
     ///     Whether the bonus of the item set is a secret bonus.

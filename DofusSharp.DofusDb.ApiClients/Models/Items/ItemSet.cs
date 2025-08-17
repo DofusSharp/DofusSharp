@@ -30,7 +30,7 @@ public class ItemSet : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of the item types of the items that belong to the item set.
     /// </summary>
-    public IReadOnlyCollection<int>? TypeIds { get; init; }
+    public IReadOnlyCollection<long>? TypeIds { get; init; }
 
     /// <summary>
     ///     Whether the bonus of the item set is a secret bonus.

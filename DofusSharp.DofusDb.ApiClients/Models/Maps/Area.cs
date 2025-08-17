@@ -10,7 +10,7 @@ public class Area : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the super area that the area belongs to.
     /// </summary>
-    public int? SuperAreaId { get; init; }
+    public long? SuperAreaId { get; init; }
 
     /// <summary>
     ///     Whether the area contains houses.
@@ -30,7 +30,7 @@ public class Area : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the world map associated with the area.
     /// </summary>
-    public int? WorldMapId { get; init; }
+    public long? WorldMapId { get; init; }
 
     /// <summary>
     ///     Whether the area has a world map.

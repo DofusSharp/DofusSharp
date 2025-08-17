@@ -30,12 +30,12 @@ public class SubArea : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of custom world maps for the sub area.
     /// </summary>
-    public IReadOnlyCollection<int>? CustomWorldMap { get; init; }
+    public IReadOnlyCollection<long>? CustomWorldMap { get; init; }
 
     /// <summary>
     ///     The unique identifier of the pack associated with the sub area.
     /// </summary>
-    public int? PackId { get; init; }
+    public long? PackId { get; init; }
 
     /// <summary>
     ///     The recommended level for the sub area.
@@ -70,17 +70,17 @@ public class SubArea : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of monsters present in the sub area.
     /// </summary>
-    public IReadOnlyCollection<int>? Monsters { get; init; }
+    public IReadOnlyCollection<long>? Monsters { get; init; }
 
     /// <summary>
     ///     The unique identifiers of entrance maps for the sub area.
     /// </summary>
-    public IReadOnlyCollection<int>? EntranceMapIds { get; init; }
+    public IReadOnlyCollection<long>? EntranceMapIds { get; init; }
 
     /// <summary>
     ///     The unique identifiers of exit maps for the sub area.
     /// </summary>
-    public IReadOnlyCollection<int>? ExitMapIds { get; init; }
+    public IReadOnlyCollection<long>? ExitMapIds { get; init; }
 
     /// <summary>
     ///     Whether the sub area is capturable.
@@ -90,32 +90,32 @@ public class SubArea : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of achievements for the sub area.
     /// </summary>
-    public IReadOnlyCollection<int>? Achievements { get; init; }
+    public IReadOnlyCollection<long>? Achievements { get; init; }
 
     /// <summary>
     ///     The unique identifier of the explore achievement for the sub area.
     /// </summary>
-    public int? ExploreAchievementId { get; init; }
+    public long? ExploreAchievementId { get; init; }
 
     /// <summary>
     ///     The unique identifiers of harvestables for the sub area.
     /// </summary>
-    public IReadOnlyCollection<int>? Harvestables { get; init; }
+    public IReadOnlyCollection<long>? Harvestables { get; init; }
 
     /// <summary>
     ///     The unique identifier of the associated zaap map for the sub area.
     /// </summary>
-    public int? AssociatedZaapMapId { get; init; }
+    public long? AssociatedZaapMapId { get; init; }
 
     /// <summary>
     ///     The unique identifiers of neighboring sub areas.
     /// </summary>
-    public IReadOnlyCollection<int>? Neighbors { get; init; }
+    public IReadOnlyCollection<long>? Neighbors { get; init; }
 
     /// <summary>
     ///     The unique identifier of the dungeon associated with the sub area.
     /// </summary>
-    public int? DungeonId { get; init; }
+    public long? DungeonId { get; init; }
 
     /// <summary>
     ///     The name of the sub area.
@@ -125,10 +125,10 @@ public class SubArea : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of quests for the sub area.
     /// </summary>
-    public IReadOnlyCollection<int>? QuestsIds { get; init; }
+    public IReadOnlyCollection<long>? QuestsIds { get; init; }
 
     /// <summary>
     ///     The unique identifiers of NPCs for the sub area.
     /// </summary>
-    public IReadOnlyCollection<int>? NpcsIds { get; init; }
+    public IReadOnlyCollection<long>? NpcsIds { get; init; }
 }
