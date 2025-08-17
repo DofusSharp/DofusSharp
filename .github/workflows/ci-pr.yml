@@ -41,5 +41,5 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2.16.1
         if: (!cancelled())
         with:
-          trx_files: "**/dotnet-test-result.xml"
+          trx_files: TestResults/dotnet-test-results.xml
 
