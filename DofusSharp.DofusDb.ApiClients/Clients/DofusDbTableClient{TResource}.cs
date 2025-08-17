@@ -4,9 +4,8 @@ using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 using DofusSharp.DofusDb.ApiClients.Serialization;
 
-namespace DofusSharp.DofusDb.ApiClients;
+namespace DofusSharp.DofusDb.ApiClients.Clients;
 
-/// <inheritdoc />
 class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TResource: DofusDbEntity
 {
     readonly JsonSerializerOptions? _options;
@@ -33,9 +32,8 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
 
     public async Task<TResource> GetAsync(int id, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = CreateHttpClient();
-
-        HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
+        using HttpClient httpClient = DofusDbClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
+        using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
         TResource? result = await response.Content.ReadFromJsonAsync<TResource>(_options, cancellationToken);
@@ -49,11 +47,11 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
 
     public async Task<int> CountAsync(IReadOnlyCollection<SearchPredicate> predicates, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = CreateHttpClient();
-
         SearchQuery query = new() { Limit = 0, Predicates = predicates };
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
-        HttpResponseMessage response = await httpClient.GetAsync($"?{queryParams}", cancellationToken);
+
+        using HttpClient httpClient = DofusDbClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
+        using HttpResponseMessage response = await httpClient.GetAsync($"?{queryParams}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
         SearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<SearchResult<TResource>>(cancellationToken);
@@ -67,12 +65,11 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
 
     public async Task<SearchResult<TResource>> SearchAsync(SearchQuery query, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = CreateHttpClient();
-
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
         string requestUri = string.IsNullOrWhiteSpace(queryParams) ? string.Empty : $"?{queryParams}";
 
-        HttpResponseMessage response = await httpClient.GetAsync(requestUri, cancellationToken);
+        using HttpClient httpClient = DofusDbClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
+        using HttpResponseMessage response = await httpClient.GetAsync(requestUri, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         SearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<SearchResult<TResource>>(_options, cancellationToken);
@@ -82,22 +79,5 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         }
 
         return result;
-    }
-
-    HttpClient CreateHttpClient()
-    {
-        HttpClient? httpClient = null;
-        try
-        {
-            httpClient = HttpClientFactory?.CreateClient("DofusSharp") ?? new HttpClient();
-            httpClient.BaseAddress = BaseAddress;
-            httpClient.DefaultRequestHeaders.Referrer = Referrer;
-            return httpClient;
-        }
-        catch
-        {
-            httpClient?.Dispose();
-            throw;
-        }
     }
 }
