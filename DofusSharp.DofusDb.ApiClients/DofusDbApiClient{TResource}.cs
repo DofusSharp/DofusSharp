@@ -47,6 +47,11 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     public Uri? Referrer { get; }
 
     /// <summary>
+    ///     The factory for creating HTTP clients used by this API client.
+    /// </summary>
+    public IHttpClientFactory? HttpClientFactory { get; set; }
+
+    /// <summary>
     ///     Fetch the resource with the specified ID from the API.
     /// </summary>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
@@ -119,7 +124,7 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
         HttpClient? httpClient = null;
         try
         {
-            httpClient = new HttpClient();
+            httpClient = HttpClientFactory?.CreateClient("DofusSharp") ?? new HttpClient();
             httpClient.BaseAddress = BaseAddress;
             httpClient.DefaultRequestHeaders.Referrer = Referrer;
             return httpClient;
