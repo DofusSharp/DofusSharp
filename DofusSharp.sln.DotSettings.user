@@ -14,7 +14,9 @@
       &lt;TestId&gt;xUnit::D6FF4731-AE7C-4EF1-A67B-94C556AE7108::net10.0::Tests.UnitTests.DofusDb.ApiClients.DofusDbApiClientTest&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;xUnit::D6FF4731-AE7C-4EF1-A67B-94C556AE7108::net10.0::Tests.UnitTests.DofusDb.ApiClients.DofusDbVersionClientTest&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;xUnit::A3DE0CCE-6B15-413D-AE71-3BB8360C4FC3::net10.0::Tests.EndToEnd.DofusDb.ApiClients.VersionClientTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::D6FF4731-AE7C-4EF1-A67B-94C556AE7108::net10.0::Tests.UnitTests.DofusDb.ApiClients.DofusDbTableClientTest&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
     &lt;Project Location="D:\source\repos\DofusSharp\Tests.EndToEnd.DofusDb.ApiClients" Presentation="&amp;lt;DofusDb&amp;gt;\&amp;lt;Tests.EndToEnd.DofusDb.ApiClients&amp;gt;" /&gt;&#xD;
+    &lt;ProjectFile&gt;D6FF4731-AE7C-4EF1-A67B-94C556AE7108/f:SearchRequestQueryParamsBuilderTest.cs&lt;/ProjectFile&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

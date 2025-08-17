@@ -7,9 +7,48 @@ namespace DofusSharp.DofusDb.ApiClients;
 
 public static class DofusDbTableClientExtensions
 {
-    public static Task<int> CountAsync<TResource(this IDofusDbTableClient<TResource> client, CancellationToken cancellationToken = default) where TResource: DofusDbEntity =>
+    /// <summary>
+    ///     Fetch the number of resources available in the API.
+    /// </summary>
+    /// <param name="client">The client instance to use for the requests.</param>
+    /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>The total count of resources.</returns>
+    public static Task<int> CountAsync<TResource>(this IDofusDbTableClient<TResource> client, CancellationToken cancellationToken = default) where TResource: DofusDbEntity =>
         client.CountAsync([], cancellationToken);
-    
+
+    /// <summary>
+    ///     Fetch the number of resources available in the API.
+    /// </summary>
+    /// <param name="client">The client instance to use for the requests.</param>
+    /// <param name="predicate">The predicate to filter the resources.</param>
+    /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>The total count of resources.</returns>
+    public static Task<int> CountAsync<TResource>(this IDofusDbTableClient<TResource> client, SearchPredicate predicate, CancellationToken cancellationToken = default)
+        where TResource: DofusDbEntity =>
+        client.CountAsync([predicate], cancellationToken);
+
+    /// <summary>
+    ///     Fetch a paginated list of resources from the API based on the provided search query.
+    /// </summary>
+    /// <param name="client">The client instance to use for the requests.</param>
+    /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>The search result containing the resources matching the query.</returns>
+    public static Task<SearchResult<TResource>> SearchAsync<TResource>(this IDofusDbTableClient<TResource> client, CancellationToken cancellationToken = default)
+        where TResource: DofusDbEntity =>
+        client.SearchAsync(new SearchQuery(), cancellationToken);
+
+    /// <summary>
+    ///     Fetch ressources matching the search query from the API.
+    ///     Performs multiple queries if necessary to fetch the requested number of results.
+    /// </summary>
+    /// <param name="client">The client instance to use for the requests.</param>
+    /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
+    /// <returns>The search result containing all resources matching the query.</returns>
+    public static IAsyncEnumerable<TResource> MultiQuerySearchAsync<TResource>(this IDofusDbTableClient<TResource> client, CancellationToken cancellationToken = default)
+        where TResource: DofusDbEntity =>
+        MultiQuerySearchAsync(client, new SearchQuery(), cancellationToken);
+
     /// <summary>
     ///     Fetch ressources matching the search query from the API.
     ///     Performs multiple queries if necessary to fetch the requested number of results.
