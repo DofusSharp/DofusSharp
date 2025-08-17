@@ -73,7 +73,7 @@ public class SearchRequestQueryParamsBuilderTest
     {
         SearchQuery query = new() { Predicates = [new SearchPredicate.Eq("parameter", "value")] };
         string queryParams = _builder.BuildQueryParams(query);
-        queryParams.Should().Be("parameter[$eq]=value");
+        queryParams.Should().Be("parameter=value");
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public class SearchRequestQueryParamsBuilderTest
     {
         SearchQuery query = new() { Predicates = [new SearchPredicate.And(new SearchPredicate.Eq("parameter1", "value1"), new SearchPredicate.NotEq("parameter2", "value2"))] };
         string queryParams = _builder.BuildQueryParams(query);
-        queryParams.Should().Be("$and[0][parameter1][$eq]=value1&$and[1][parameter2][$neq]=value2");
+        queryParams.Should().Be("$and[0][parameter1]=value1&$and[1][parameter2][$neq]=value2");
     }
 
     [Fact]
@@ -145,7 +145,7 @@ public class SearchRequestQueryParamsBuilderTest
     {
         SearchQuery query = new() { Predicates = [new SearchPredicate.Or(new SearchPredicate.Eq("parameter1", "value1"), new SearchPredicate.NotEq("parameter2", "value2"))] };
         string queryParams = _builder.BuildQueryParams(query);
-        queryParams.Should().Be("$or[0][parameter1][$eq]=value1&$or[1][parameter2][$neq]=value2");
+        queryParams.Should().Be("$or[0][parameter1]=value1&$or[1][parameter2][$neq]=value2");
     }
 
     [Fact]
@@ -171,7 +171,7 @@ public class SearchRequestQueryParamsBuilderTest
             .Be(
                 "$or[0][parameter1][$in][]=value11&"
                 + "$or[0][parameter1][$in][]=value12&"
-                + "$or[1][$and][0][parameter2][$eq]=value2&"
+                + "$or[1][$and][0][parameter2]=value2&"
                 + "$or[1][$and][1][parameter3][$gt]=value3&"
                 + "$or[1][$and][2][parameter4][$nin][]=value41&"
                 + "$or[1][$and][2][parameter4][$nin][]=value42&"
