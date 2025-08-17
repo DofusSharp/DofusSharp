@@ -5,13 +5,15 @@ namespace DofusSharp.DofusDb.ApiClients;
 
 class DofusDbScalableImageClient : IDofusDbScalableImageClient
 {
-    public DofusDbScalableImageClient(Uri baseAddress, Uri? referrer = null)
+    public DofusDbScalableImageClient(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null)
     {
         BaseAddress = baseAddress;
+        ImageFormat = imageFormat;
         Referrer = referrer;
     }
 
     public Uri BaseAddress { get; }
+    public ImageFormat ImageFormat { get; }
     public Uri? Referrer { get; }
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
@@ -20,6 +22,7 @@ class DofusDbScalableImageClient : IDofusDbScalableImageClient
     public async Task<Stream> GetImageAsync(int id, ImageScale scale, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = CreateHttpClient();
+
         string scaleString = scale switch
         {
             ImageScale.Full => "1",
@@ -28,9 +31,10 @@ class DofusDbScalableImageClient : IDofusDbScalableImageClient
             ImageScale.Quarter => "0.25",
             _ => throw new ArgumentOutOfRangeException(nameof(scale), scale, null)
         };
+        string extension = ImageFormat.ToExtension();
 
         // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
-        HttpResponseMessage response = await httpClient.GetAsync($"{scaleString}/{id}.jpg", cancellationToken);
+        HttpResponseMessage response = await httpClient.GetAsync($"{scaleString}/{id}.{extension}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
         return await HttpResponseMessageStream.Create(response);
