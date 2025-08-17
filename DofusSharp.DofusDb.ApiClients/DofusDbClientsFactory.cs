@@ -13,6 +13,7 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
     public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
 
     public IDofusDbTableClient<Item> Items() => new DofusDbTableClient<Item>(new Uri(baseAddress, "items/"), referrer);
+    public IDofusDbImageClient ItemImages() => new DofusDbImageClient(new Uri(baseAddress, "img/items/"), referrer);
     public IDofusDbTableClient<ItemType> ItemTypes() => new DofusDbTableClient<ItemType>(new Uri(baseAddress, "item-types/"), referrer);
     public IDofusDbTableClient<ItemSuperType> ItemSuperTypes() => new DofusDbTableClient<ItemSuperType>(new Uri(baseAddress, "item-super-types/"), referrer);
     public IDofusDbTableClient<ItemSet> ItemSets() => new DofusDbTableClient<ItemSet>(new Uri(baseAddress, "item-sets/"), referrer);
@@ -22,6 +23,7 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
     public IDofusDbTableClient<Area> Areas() => new DofusDbTableClient<Area>(new Uri(baseAddress, "areas/"), referrer);
     public IDofusDbTableClient<SubArea> SubAreas() => new DofusDbTableClient<SubArea>(new Uri(baseAddress, "subareas/"), referrer);
     public IDofusDbTableClient<Map> Maps() => new DofusDbTableClient<Map>(new Uri(baseAddress, "maps/"), referrer);
+    public IDofusDbScalableImageClient MapImages() => new DofusDbScalableImageClient(new Uri(baseAddress, "img/maps/"), referrer);
     public IDofusDbTableClient<MapPosition> MapPositions() => new DofusDbTableClient<MapPosition>(new Uri(baseAddress, "map-positions/"), referrer);
     public IDofusDbTableClient<Dungeon> Dungeons() => new DofusDbTableClient<Dungeon>(new Uri(baseAddress, "dungeons/"), referrer);
 }

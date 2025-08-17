@@ -1,34 +1,28 @@
-using System.Net.Http.Json;
+﻿using DofusSharp.DofusDb.ApiClients.Http;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
-/// <inheritdoc />
-class DofusDbVersionClient : IDofusDbVersionClient
+class DofusDbImageClient : IDofusDbImageClient
 {
-    public DofusDbVersionClient(Uri baseAddress, Uri? referrer = null)
+    public DofusDbImageClient(Uri baseAddress, Uri? referrer = null)
     {
-        Referrer = referrer;
         BaseAddress = baseAddress;
+        Referrer = referrer;
     }
 
     public Uri BaseAddress { get; }
     public Uri? Referrer { get; }
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
-    public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
+    public async Task<Stream> GetImageAsync(int id, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = CreateHttpClient();
 
-        using HttpResponseMessage response = await httpClient.GetAsync(string.Empty, cancellationToken);
+        // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
+        HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        string? result = await response.Content.ReadFromJsonAsync<string>(cancellationToken);
-        if (result == null)
-        {
-            throw new InvalidOperationException("Could not deserialize the version.");
-        }
-
-        return Version.Parse(result);
+        return await HttpResponseMessageStream.Create(response);
     }
 
     HttpClient CreateHttpClient()

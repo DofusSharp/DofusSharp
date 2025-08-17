@@ -34,7 +34,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     {
         using HttpClient httpClient = CreateHttpClient();
 
-        HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
+        using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
         TResource? result = await response.Content.ReadFromJsonAsync<TResource>(_options, cancellationToken);
@@ -52,7 +52,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
 
         SearchQuery query = new() { Limit = 0, Predicates = predicates };
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
-        HttpResponseMessage response = await httpClient.GetAsync($"?{queryParams}", cancellationToken);
+        using HttpResponseMessage response = await httpClient.GetAsync($"?{queryParams}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
         SearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<SearchResult<TResource>>(cancellationToken);
@@ -71,7 +71,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
         string requestUri = string.IsNullOrWhiteSpace(queryParams) ? string.Empty : $"?{queryParams}";
 
-        HttpResponseMessage response = await httpClient.GetAsync(requestUri, cancellationToken);
+        using HttpResponseMessage response = await httpClient.GetAsync(requestUri, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         SearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<SearchResult<TResource>>(_options, cancellationToken);

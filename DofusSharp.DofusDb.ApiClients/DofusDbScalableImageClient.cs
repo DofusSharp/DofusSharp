@@ -1,0 +1,55 @@
+﻿using DofusSharp.DofusDb.ApiClients.Http;
+using DofusSharp.DofusDb.ApiClients.Models.Common;
+
+namespace DofusSharp.DofusDb.ApiClients;
+
+class DofusDbScalableImageClient : IDofusDbScalableImageClient
+{
+    public DofusDbScalableImageClient(Uri baseAddress, Uri? referrer = null)
+    {
+        BaseAddress = baseAddress;
+        Referrer = referrer;
+    }
+
+    public Uri BaseAddress { get; }
+    public Uri? Referrer { get; }
+    public IHttpClientFactory? HttpClientFactory { get; set; }
+
+    public Task<Stream> GetImageAsync(int id, CancellationToken cancellationToken = default) => GetImageAsync(id, ImageScale.Full, cancellationToken);
+
+    public async Task<Stream> GetImageAsync(int id, ImageScale scale, CancellationToken cancellationToken = default)
+    {
+        using HttpClient httpClient = CreateHttpClient();
+        string scaleString = scale switch
+        {
+            ImageScale.Full => "1",
+            ImageScale.ThreeQuarters => "0.75",
+            ImageScale.Half => "0.5",
+            ImageScale.Quarter => "0.25",
+            _ => throw new ArgumentOutOfRangeException(nameof(scale), scale, null)
+        };
+
+        // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
+        HttpResponseMessage response = await httpClient.GetAsync($"{scaleString}/{id}.jpg", cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        return await HttpResponseMessageStream.Create(response);
+    }
+
+    HttpClient CreateHttpClient()
+    {
+        HttpClient? httpClient = null;
+        try
+        {
+            httpClient = HttpClientFactory?.CreateClient("DofusSharp") ?? new HttpClient();
+            httpClient.BaseAddress = BaseAddress;
+            httpClient.DefaultRequestHeaders.Referrer = Referrer;
+            return httpClient;
+        }
+        catch
+        {
+            httpClient?.Dispose();
+            throw;
+        }
+    }
+}
