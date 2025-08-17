@@ -18,6 +18,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         BaseAddress = baseAddress;
         _options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
         {
+            AllowOutOfOrderMetadataProperties = true,
             Converters =
             {
                 new ValueOrFalseJsonConverterFactory(),
