@@ -2,18 +2,20 @@
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Moq;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
+[TestSubject(typeof(DofusDbQuery<>))]
 public class DofusDbQueryTest
 {
-    readonly Mock<IDofusDbApiClient<Item>> _clientMock;
+    readonly Mock<IDofusDbTableClient<Item>> _clientMock;
     readonly DofusDbQuery<Item> _builder;
 
     public DofusDbQueryTest()
     {
-        _clientMock = new Mock<IDofusDbApiClient<Item>>();
+        _clientMock = new Mock<IDofusDbTableClient<Item>>();
         _clientMock.Setup(c => c.SearchAsync(It.IsAny<SearchQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(
                 new SearchResult<Item>

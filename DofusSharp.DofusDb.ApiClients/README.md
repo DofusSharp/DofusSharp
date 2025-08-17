@@ -3,7 +3,9 @@
 > [!IMPORTANT]
 > This project is under active development. Note that not all available APIs have been implemented at this time.
 
-Provides API clients for the DofusDB API. It offers both a low-level client (`DofusDbApiClient<TResource>`) for maximum control and a high-level, fluent interface (`DofusDbQuery<TResource>`) for building requests using LINQ-like statements.
+Provides API clients for the DofusDB API.
+Most of the APIs are search APIs that allow you to query the DofusDB database for various resources such as items, monsters, spells, etc. For these APIs, the library providers both a low-level client (`IDofusDbTableClient<TResource>`) for maximum control and a high-level, fluent interface (`DofusDbQuery<TResource>`) for building requests using LINQ-like statements.
+The remaining APIs are simple GET APIs that return a single resource, such as the version of the game data or the map images at various scales.
 
 ## Installation
 
@@ -26,7 +28,8 @@ DofusDbQuery<Item> query = DofusDbQuery.Production().Items()
     .Select(i => i.Name)
     .OrderByDescending(i => i.RealWeight)
     .Where(i => i.Level >= 50 && i.Level <= 100 && i.Usable == false);
-Item[] items = await query.ExecuteAsync().ToArrayAsync();
+IAsyncEnumerable<Item> itemsEnumerable = await query.ExecuteAsync();
+Item[] items = itemsEnumerable.ToArrayAsync();
 ```
 
 > [!NOTE]
@@ -39,7 +42,7 @@ Item[] items = await query.ExecuteAsync().ToArrayAsync();
 The low-level client grants direct access to the request parameters exposed by `FeatherJS`.
 
 ```csharp
-IDofusDbApiClient<Item> client = DofusDbApiClient.Production().Items();
+IDofusDbTableClient<Item> client = DofusDbTableClient.Production().Items();
 SearchResult<Item> items = await client.SearchAsync(
     new SearchQuery
     {

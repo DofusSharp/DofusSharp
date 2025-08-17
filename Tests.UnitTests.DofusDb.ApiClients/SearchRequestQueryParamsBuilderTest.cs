@@ -1,8 +1,10 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
+using JetBrains.Annotations;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
+[TestSubject(typeof(SearchRequestQueryParamsBuilder))]
 public class SearchRequestQueryParamsBuilderTest
 {
     readonly SearchRequestQueryParamsBuilder _builder = new();
