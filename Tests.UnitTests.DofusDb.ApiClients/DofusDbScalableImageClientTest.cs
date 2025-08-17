@@ -25,7 +25,7 @@ public class DofusDbScalableImageClientTest
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
 
-        Stream imageStream = await client.GetImageAsync(123);
+        await using Stream imageStream = await client.GetImageAsync(123);
 
         imageStream.ReadToByteArray().Should().BeEquivalentTo(imageBytes);
     }
@@ -43,7 +43,7 @@ public class DofusDbScalableImageClientTest
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
 
-        Stream imageStream = await client.GetImageAsync(123, imageScale);
+        await using Stream imageStream = await client.GetImageAsync(123, imageScale);
 
         imageStream.ReadToByteArray().Should().BeEquivalentTo(imageBytes);
     }
@@ -52,13 +52,13 @@ public class DofusDbScalableImageClientTest
     public async Task GetImage_Should_SetHttpParameters()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/1/123.jpg").ReturnsResponse(HttpStatusCode.OK, "1.2.3.4");
+        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/1/123.jpg").ReturnsResponse(HttpStatusCode.OK, []);
         DofusDbScalableImageClient client = new(new Uri("http://base.com"), ImageFormat.Jpeg, new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
 
-        await client.GetImageAsync(123);
+        await using Stream _ = await client.GetImageAsync(123);
 
         httpHandlerMock.VerifyRequest(HttpMethod.Get, "http://base.com/1/123.jpg", req => req.Headers.Referrer == new Uri("http://referrer.com"));
     }

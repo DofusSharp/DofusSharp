@@ -25,7 +25,7 @@ public class DofusDbImageClientTest
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
 
-        Stream imageStream = await client.GetImageAsync(123);
+        await using Stream imageStream = await client.GetImageAsync(123);
 
         imageStream.ReadToByteArray().Should().BeEquivalentTo(imageBytes);
     }
@@ -40,7 +40,7 @@ public class DofusDbImageClientTest
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
 
-        await client.GetImageAsync(123);
+        await using Stream _ = await client.GetImageAsync(123);
 
         httpHandlerMock.VerifyRequest(HttpMethod.Get, "http://base.com/123.jpg", req => req.Headers.Referrer == new Uri("http://referrer.com"));
     }
