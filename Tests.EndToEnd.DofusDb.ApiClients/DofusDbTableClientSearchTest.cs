@@ -5,12 +5,12 @@ using FluentAssertions;
 
 namespace Tests.EndToEnd.DofusDb.ApiClients;
 
-public class DofusDbApiClientSearchTest
+public class DofusDbTableClientSearchTest
 {
     [Fact]
     public async Task ShouldLimitSearchResults()
     {
-        IDofusDbApiClient<Item> client = DofusDbApiClient.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
         SearchResult<Item> items = await client.SearchAsync(new SearchQuery { Limit = 12 });
         items.Data.Count.Should().Be(12);
     }
@@ -18,7 +18,7 @@ public class DofusDbApiClientSearchTest
     [Fact]
     public async Task ShouldSkipSearchResults()
     {
-        IDofusDbApiClient<Item> client = DofusDbApiClient.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
         SearchResult<Item> firstAndSecondItems = await client.SearchAsync(new SearchQuery { Limit = 2 });
 
         SearchResult<Item> secondItem = await client.SearchAsync(new SearchQuery { Limit = 1, Skip = 1 });
@@ -29,7 +29,7 @@ public class DofusDbApiClientSearchTest
     [Fact]
     public async Task ShouldSortSearchResults()
     {
-        IDofusDbApiClient<Item> client = DofusDbApiClient.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
 
         SearchResult<Item> sortedSearchResults = await client.SearchAsync(
             new SearchQuery { Limit = 50, Sort = new Dictionary<string, SearchQuerySortOrder> { { nameof(Item.RealWeight), SearchQuerySortOrder.Descending } } }
@@ -43,7 +43,7 @@ public class DofusDbApiClientSearchTest
     [Fact]
     public async Task ShouldSelectSearchResults()
     {
-        IDofusDbApiClient<Item> client = DofusDbApiClient.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
 
         SearchResult<Item> results = await client.SearchAsync(new SearchQuery { Limit = 1, Select = [nameof(Item.RealWeight)] });
 
@@ -125,7 +125,7 @@ public class DofusDbApiClientSearchTest
     [Fact]
     public async Task ShouldFilterSearchResults()
     {
-        IDofusDbApiClient<Item> client = DofusDbApiClient.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
 
         SearchResult<Item> sortedSearchResults = await client.SearchAsync(
             new SearchQuery

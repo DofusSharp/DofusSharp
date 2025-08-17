@@ -8,12 +8,12 @@ namespace Tests.UnitTests.DofusDb.ApiClients;
 
 public class DofusDbQueryTest
 {
-    readonly Mock<IDofusDbApiClient<Item>> _clientMock;
+    readonly Mock<IDofusDbTableClient<Item>> _clientMock;
     readonly DofusDbQuery<Item> _builder;
 
     public DofusDbQueryTest()
     {
-        _clientMock = new Mock<IDofusDbApiClient<Item>>();
+        _clientMock = new Mock<IDofusDbTableClient<Item>>();
         _clientMock.Setup(c => c.SearchAsync(It.IsAny<SearchQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(
                 new SearchResult<Item>

@@ -5,7 +5,7 @@ using DofusSharp.DofusDb.ApiClients.Search;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
-public static class DofusDbApiClientExtensions
+public static class DofusDbTableClientExtensions
 {
     /// <summary>
     ///     Fetch ressources matching the search query from the API.
@@ -17,7 +17,7 @@ public static class DofusDbApiClientExtensions
     /// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
     /// <returns>The search result containing all resources matching the query.</returns>
     public static async IAsyncEnumerable<TResource> MultiQuerySearchAsync<TResource>(
-        this IDofusDbApiClient<TResource> client,
+        this IDofusDbTableClient<TResource> client,
         SearchQuery query,
         [EnumeratorCancellation] CancellationToken cancellationToken = default
     ) where TResource: DofusDbEntity
@@ -58,7 +58,7 @@ public static class DofusDbApiClientExtensions
         }
     }
 
-    static async Task<SearchResult<TResource>> SearchImplAsync<TResource>(IDofusDbApiClient<TResource> client, SearchQuery currentQuery, CancellationToken cancellationToken)
+    static async Task<SearchResult<TResource>> SearchImplAsync<TResource>(IDofusDbTableClient<TResource> client, SearchQuery currentQuery, CancellationToken cancellationToken)
         where TResource: DofusDbEntity
     {
         try

@@ -6,11 +6,8 @@ using DofusSharp.DofusDb.ApiClients.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
-/// <summary>
-///     A client for interacting with the DofusDB API.
-/// </summary>
-/// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
-class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource: DofusDbEntity
+/// <inheritdoc />
+class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TResource: DofusDbEntity
 {
     readonly JsonSerializerOptions? _options;
     readonly SearchRequestQueryParamsBuilder _queryParamsBuilder = new();
@@ -21,7 +18,7 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     /// <param name="baseAddress">The base URL of the API to query.</param>
     /// <param name="referrer">The referer header to include in requests to the API.</param>
     /// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
-    public DofusDbApiClient(Uri baseAddress, Uri? referrer = null)
+    public DofusDbTableClient(Uri baseAddress, Uri? referrer = null)
     {
         Referrer = referrer;
         BaseAddress = baseAddress;

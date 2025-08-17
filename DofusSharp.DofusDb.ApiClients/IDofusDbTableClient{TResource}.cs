@@ -3,7 +3,11 @@ using DofusSharp.DofusDb.ApiClients.Search;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
-public interface IDofusDbApiClient<TResource> where TResource: DofusDbEntity
+/// <summary>
+///     A client for interacting with table data from the DofusDB API.
+/// </summary>
+/// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
+public interface IDofusDbTableClient<TResource> where TResource: DofusDbEntity
 {
     /// <summary>
     ///     Fetch the resource with the specified ID from the API.

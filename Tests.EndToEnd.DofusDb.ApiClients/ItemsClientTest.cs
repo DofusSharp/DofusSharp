@@ -10,7 +10,7 @@ public class ItemsClientTest
     [Fact]
     public async Task ItemsClient_Should_GetItem_Items()
     {
-        IDofusDbApiClient<Item> client = DofusDbApiClient.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
         Item value = await client.GetAsync(70);
         await Verify(value);
     }
@@ -18,7 +18,7 @@ public class ItemsClientTest
     [Fact]
     public async Task ItemsClient_Should_GetItem_Weapon()
     {
-        IDofusDbApiClient<Item> client = DofusDbApiClient.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
         Item value = await client.GetAsync(44);
         await Verify(value);
     }
@@ -26,7 +26,7 @@ public class ItemsClientTest
     [Fact]
     public async Task ItemsClient_Should_SearchItems()
     {
-        IDofusDbApiClient<Item> client = DofusDbApiClient.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search

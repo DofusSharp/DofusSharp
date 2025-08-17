@@ -8,7 +8,7 @@ using Moq.Contrib.HttpClient;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
-public class DofusDbApiClientTest
+public class DofusDbTableClientTest
 {
     [Fact]
     public async Task Count_Should_ReturnCount()
@@ -16,7 +16,7 @@ public class DofusDbApiClientTest
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com?$limit=0")
             .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 123, Limit = 0, Skip = 0, Data = [] });
-        DofusDbApiClient<EntityForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -32,7 +32,7 @@ public class DofusDbApiClientTest
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com?$limit=0")
             .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbApiClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -47,7 +47,7 @@ public class DofusDbApiClientTest
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123").ReturnsJsonResponse(HttpStatusCode.OK, new EntityForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true });
-        DofusDbApiClient<EntityForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -62,7 +62,7 @@ public class DofusDbApiClientTest
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123").ReturnsJsonResponse(HttpStatusCode.OK, new EntityForTest());
-        DofusDbApiClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -88,7 +88,7 @@ public class DofusDbApiClientTest
                     ]
                 }
             );
-        DofusDbApiClient<EntityForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -114,7 +114,7 @@ public class DofusDbApiClientTest
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com")
             .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbApiClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -137,7 +137,7 @@ public class DofusDbApiClientTest
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, requestUrl)
             .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbApiClient<EntityForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
