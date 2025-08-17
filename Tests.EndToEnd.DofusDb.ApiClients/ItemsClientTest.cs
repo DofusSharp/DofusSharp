@@ -20,6 +20,7 @@ public class ItemsClientTest
     {
         IDofusDbTableClient<Item> client = DofusDbClient.Beta(Constants.Referrer).Items();
         Item value = await client.GetAsync(44);
+        value.Should().BeOfType<Weapon>();
         await Verify(value);
     }
 

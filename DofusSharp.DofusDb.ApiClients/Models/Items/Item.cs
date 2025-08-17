@@ -6,7 +6,12 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 /// <summary>
 ///     An item in the game.
 /// </summary>
-[JsonDerivedType(typeof(Weapon))]
+[JsonPolymorphic(
+    TypeDiscriminatorPropertyName = "className",
+    IgnoreUnrecognizedTypeDiscriminators = true,
+    UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor
+)]
+[JsonDerivedType(typeof(Weapon), "Weapons")]
 public class Item : DofusDbEntity
 {
     /// <summary>
