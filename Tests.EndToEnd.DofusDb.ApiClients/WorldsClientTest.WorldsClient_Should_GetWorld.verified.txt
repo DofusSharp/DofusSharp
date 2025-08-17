@@ -1,0 +1,102 @@
+﻿{
+  OrigineX: 6480,
+  OrigineY: 4944,
+  MapWidth: 69.5,
+  MapHeight: 49.70000076293945,
+  ViewableEverywhere: true,
+  MinScale: 0.20000000298023224,
+  MaxScale: 1.0,
+  StartScale: 0.6000000238418579,
+  TotalWidth: 10000,
+  TotalHeight: 8000,
+  Zoom: [
+    1.0,
+    0.800000011920929,
+    0.6000000238418579,
+    0.4000000059604645,
+    0.20000000298023224
+  ],
+  VisibleOnMap: true,
+  Name: {
+    De: Die Welt der Zwölf,
+    En: World of Twelve,
+    Es: Mundo de los Doce,
+    Fr: Monde des Douze,
+    Pt: Mundo dos Doze
+  },
+  CustomScales: [
+    {
+      X: 17.323741007194243,
+      Y: 17.3038226719966,
+      Name: custom17
+    },
+    {
+      X: 15.283273381294963,
+      Y: 15.265844837997024,
+      Name: custom15
+    },
+    {
+      X: 12.222571942446042,
+      Y: 12.208878086997661,
+      Name: custom12
+    },
+    {
+      X: 9.161870503597122,
+      Y: 9.1519113359983,
+      Name: custom9
+    },
+    {
+      X: 7.121402877697841,
+      Y: 7.113933501998725,
+      Name: custom7
+    },
+    {
+      X: 5.080935251798561,
+      Y: 5.07595566799915,
+      Name: custom5
+    },
+    {
+      X: 4.060701438848921,
+      Y: 4.056966750999362,
+      Name: custom4
+    },
+    {
+      X: 3.0404676258992804,
+      Y: 3.037977833999575,
+      Name: custom3
+    },
+    {
+      X: 2.02023381294964,
+      Y: 2.0189889169997874,
+      Name: custom2
+    },
+    {
+      X: 1.0,
+      Y: 1.0,
+      Name: 1
+    },
+    {
+      X: 0.8,
+      Y: 0.8,
+      Name: 0.8
+    },
+    {
+      X: 0.6,
+      Y: 0.6,
+      Name: 0.6
+    },
+    {
+      X: 0.4,
+      Y: 0.4,
+      Name: 0.4
+    },
+    {
+      X: 0.2,
+      Y: 0.2,
+      Name: 0.2
+    }
+  ],
+  Id: 1,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

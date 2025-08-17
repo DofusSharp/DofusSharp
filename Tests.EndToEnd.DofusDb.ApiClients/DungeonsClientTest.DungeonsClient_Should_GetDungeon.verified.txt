@@ -1,0 +1,38 @@
+﻿{
+  OptimalPlayerLevel: 30,
+  MapIds: [
+    121373185,
+    121374209,
+    121375233,
+    121373187,
+    121374211
+  ],
+  EntranceMapId: 120063489,
+  ExitMapId: 120063489,
+  Name: {
+    De: Hof des Königlichen Fresssacks,
+    En: Royal Gobball's Court,
+    Es: Corte del Jalató Real,
+    Fr: Cour du Bouftou Royal,
+    Pt: Pátio do Papatudo Real
+  },
+  Slug: {
+    De: hof des koniglichen fresssacks koniglicher fresssack,
+    En: royal gobball's court royal gobball,
+    Es: corte del jalato real jalato real,
+    Fr: cour du bouftou royal bouftou royal,
+    Pt: patio do papatudo real papatudo real
+  },
+  Monsters: [
+    101,
+    134,
+    147,
+    148,
+    149,
+    4822
+  ],
+  Subarea: 82,
+  Id: 1,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
