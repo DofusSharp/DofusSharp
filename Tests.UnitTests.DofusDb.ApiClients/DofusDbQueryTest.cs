@@ -229,6 +229,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task ShouldSetPredicateParameter_Not_Eq()
     {
+        // ReSharper disable once NegativeEqualityExpression
         await _builder.Where(i => !(i.AppearanceId == 1)).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<SearchQuery>(), It.IsAny<CancellationToken>()));
@@ -240,6 +241,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task ShouldSetPredicateParameter_Not_Neq()
     {
+        // ReSharper disable once NegativeEqualityExpression
         await _builder.Where(i => !(i.AppearanceId != 1)).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<SearchQuery>(), It.IsAny<CancellationToken>()));
@@ -264,6 +266,7 @@ public class DofusDbQueryTest
     public async Task ShouldSetPredicateParameter_Not_Nin()
     {
         List<int?> collection = [1, 2];
+        // ReSharper disable once DoubleNegationOperator
         await _builder.Where(i => !!collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<SearchQuery>(), It.IsAny<CancellationToken>()));

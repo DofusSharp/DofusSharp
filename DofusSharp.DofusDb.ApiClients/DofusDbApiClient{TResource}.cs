@@ -13,19 +13,18 @@ namespace DofusSharp.DofusDb.ApiClients;
 class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource: DofusDbEntity
 {
     readonly JsonSerializerOptions? _options;
-    readonly Uri _baseUrl;
-
     readonly SearchRequestQueryParamsBuilder _queryParamsBuilder = new();
 
     /// <summary>
     ///     A client for interacting with the DofusDB API.
     /// </summary>
-    /// <param name="baseUrl">The base URL of the API to query.</param>
-    /// <param name="options">The JSON serializer options to use for serialization and deserialization.</param>
+    /// <param name="baseAddress">The base URL of the API to query.</param>
+    /// <param name="referrer">The referer header to include in requests to the API.</param>
     /// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
-    public DofusDbApiClient(Uri baseUrl)
+    public DofusDbApiClient(Uri baseAddress, Uri? referrer = null)
     {
-        _baseUrl = baseUrl;
+        Referrer = referrer;
+        BaseAddress = baseAddress;
         _options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
         {
             Converters =
@@ -37,6 +36,22 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     }
 
     /// <summary>
+    ///     The base URL of the API to query.
+    /// </summary>
+    public Uri BaseAddress { get; }
+
+    /// <summary>
+    ///     The referer header to include in requests to the API.
+    /// </summary>
+    /// <remarks>The DofusDB maintainers kindly ask to add the URI of the application using their APIs in the Referer header.</remarks>
+    public Uri? Referrer { get; }
+
+    /// <summary>
+    ///     The factory for creating HTTP clients used by this API client.
+    /// </summary>
+    public IHttpClientFactory? HttpClientFactory { get; set; }
+
+    /// <summary>
     ///     Fetch the resource with the specified ID from the API.
     /// </summary>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
@@ -44,8 +59,7 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     /// <returns>The resource with the specified ID.</returns>
     public async Task<TResource> GetAsync(int id, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = new();
-        httpClient.BaseAddress = _baseUrl;
+        using HttpClient httpClient = CreateHttpClient();
 
         HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -66,8 +80,7 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     /// <returns>The total count of resources.</returns>
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = new();
-        httpClient.BaseAddress = _baseUrl;
+        using HttpClient httpClient = CreateHttpClient();
 
         HttpResponseMessage response = await httpClient.GetAsync("?$limit=0", cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -89,8 +102,7 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     /// <returns>The search result containing the resources matching the query.</returns>
     public async Task<SearchResult<TResource>> SearchAsync(SearchQuery query, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = new();
-        httpClient.BaseAddress = _baseUrl;
+        using HttpClient httpClient = CreateHttpClient();
 
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
         string requestUri = string.IsNullOrWhiteSpace(queryParams) ? string.Empty : $"?{queryParams}";
@@ -105,5 +117,22 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
         }
 
         return result;
+    }
+
+    HttpClient CreateHttpClient()
+    {
+        HttpClient? httpClient = null;
+        try
+        {
+            httpClient = HttpClientFactory?.CreateClient("DofusSharp") ?? new HttpClient();
+            httpClient.BaseAddress = BaseAddress;
+            httpClient.DefaultRequestHeaders.Referrer = Referrer;
+            return httpClient;
+        }
+        catch
+        {
+            httpClient?.Dispose();
+            throw;
+        }
     }
 }
