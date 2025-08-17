@@ -14,7 +14,7 @@ public class DofusDbImageClientTest
 {
     [Theory]
     [InlineData(ImageFormat.Jpeg, "jpg")]
-    [InlineData(ImageFormat.Png, "jpg")]
+    [InlineData(ImageFormat.Png, "png")]
     public async Task GetImage_Should_ReturnImage(ImageFormat imageFormat, string extension)
     {
         byte[] imageBytes = [4, 5, 6];
