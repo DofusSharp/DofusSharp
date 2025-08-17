@@ -24,7 +24,7 @@ public class MapsClientTest
         // which means that no exception is thrown during the search
         SearchQuery query = new() { Predicates = [new SearchPredicate.Eq("subareaId", "10")] };
         Map[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
-        int count = await client.CountAsync();
+        int count = await client.CountAsync(query.Predicates);
 
         results.Length.Should().Be(count);
     }
