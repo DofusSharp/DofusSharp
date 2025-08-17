@@ -56,5 +56,28 @@ public class DofusDbApiClientTest
         httpHandlerMock.VerifyRequest(HttpMethod.Get, "http://base.com", req => req.Headers.Referrer == new Uri("http://referrer.com"));
     }
 
+    [Fact]
+    public async Task Search_Should_SetQueryParams()
+    {
+        SearchQuery query = new()
+        {
+            Limit = 123, Skip = 456, Sort = new Dictionary<string, SearchQuerySortOrder> { { "prop1", SearchQuerySortOrder.Ascending } }, Select = ["prop2"],
+            Predicates = [new SearchPredicate.Eq("prop3", "value")]
+        };
+        string requestUrl = $"http://base.com?{query.ToQueryString()}";
+
+        Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
+        httpHandlerMock.SetupRequest(HttpMethod.Get, requestUrl)
+            .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
+        DofusDbApiClient<EntityForTest> client = new(new Uri("http://base.com"))
+        {
+            HttpClientFactory = httpHandlerMock.CreateClientFactory()
+        };
+
+        await client.SearchAsync(query);
+
+        httpHandlerMock.VerifyRequest(HttpMethod.Get, requestUrl);
+    }
+
     class EntityForTest : DofusDbEntity;
 }
