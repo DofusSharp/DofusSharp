@@ -36,9 +36,10 @@ public interface IDofusDbTableClient<TResource> where TResource: DofusDbEntity
     /// <summary>
     ///     Fetch the number of resources available in the API.
     /// </summary>
+    /// <param name="predicates">The collection of predicates to filter the resources. If empty, all resources are counted.</param>
     /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>The total count of resources.</returns>
-    Task<int> CountAsync(CancellationToken cancellationToken = default);
+    Task<int> CountAsync(IReadOnlyCollection<SearchPredicate> predicates, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Fetch a paginated list of resources from the API based on the provided search query.

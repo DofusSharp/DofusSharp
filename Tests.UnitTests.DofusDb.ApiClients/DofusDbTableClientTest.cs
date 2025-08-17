@@ -45,6 +45,29 @@ public class DofusDbTableClientTest
     }
 
     [Fact]
+    public async Task Count_Should_SetQueryParams()
+    {
+        SearchQuery expectedQuery = new()
+        {
+            Limit = 0,
+            Predicates = [new SearchPredicate.Eq("prop3", "value")]
+        };
+        string requestUrl = $"http://base.com?{expectedQuery.ToQueryString()}";
+
+        Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
+        httpHandlerMock.SetupRequest(HttpMethod.Get, requestUrl)
+            .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
+        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
+        {
+            HttpClientFactory = httpHandlerMock.CreateClientFactory()
+        };
+
+        await client.CountAsync(expectedQuery.Predicates);
+
+        httpHandlerMock.VerifyRequest(HttpMethod.Get, requestUrl);
+    }
+
+    [Fact]
     public async Task Get_Should_ReturnEntity()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
