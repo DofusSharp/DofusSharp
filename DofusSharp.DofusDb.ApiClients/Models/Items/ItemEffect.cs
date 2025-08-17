@@ -23,13 +23,13 @@ public class ItemEffect
     /// <summary>
     ///     The unique identifier of the effect.
     /// </summary>
-    public int? EffectId { get; init; }
+    public long? EffectId { get; init; }
 
     /// <summary>
     ///     The unique identifier of the characteristic associated with the effect.
     ///     If no characteristic is associated, this will be -1.
     /// </summary>
-    public int? Characteristic { get; init; }
+    public long? Characteristic { get; init; }
 
     /// <summary>
     ///     The unique identifier of the category associated with the effect.

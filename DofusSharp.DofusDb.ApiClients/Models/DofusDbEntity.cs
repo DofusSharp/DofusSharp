@@ -5,7 +5,7 @@ public abstract class DofusDbEntity
     /// <summary>
     ///     The unique identifier of the entity.
     /// </summary>
-    public int? Id { get; init; }
+    public long? Id { get; init; }
 
     /// <summary>
     ///     The creation date of the entity in the database.

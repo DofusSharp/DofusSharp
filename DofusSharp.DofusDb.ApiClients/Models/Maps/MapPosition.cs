@@ -20,17 +20,17 @@ public class MapPosition : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the sub area for the map.
     /// </summary>
-    public int? SubAreaId { get; init; }
+    public long? SubAreaId { get; init; }
 
     /// <summary>
     ///     The unique identifier of the world map for the map.
     /// </summary>
-    public int? WorldMap { get; init; }
+    public long? WorldMap { get; init; }
 
     /// <summary>
     ///     The unique identifier of the tactical mode template for the map.
     /// </summary>
-    public int? TacticalModeTemplateId { get; init; }
+    public long? TacticalModeTemplateId { get; init; }
 
     /// <summary>
     ///     The name of the map.
