@@ -9,7 +9,7 @@
   Positions: [
     0
   ],
+  Id: 1,
   CreatedAt: DateTimeOffset_1,
-  UpdatedAt: DateTimeOffset_2,
-  Id: 1
+  UpdatedAt: DateTimeOffset_2
 }

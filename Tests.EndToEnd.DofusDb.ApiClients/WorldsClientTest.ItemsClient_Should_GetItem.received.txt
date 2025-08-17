@@ -1,6 +1,8 @@
 ﻿{
+  Id: 44,
   TypeId: 6,
   Type: {
+    Id: 6,
     Name: {
       De: Schwert,
       En: Sword,
@@ -10,6 +12,7 @@
     },
     SuperTypeId: 2,
     SuperType: {
+      Id: 2,
       Name: {
         De: Waffe,
         En: Weapon,
@@ -20,19 +23,15 @@
       Positions: [
         1
       ],
-      Id: 2,
       CreatedAt: DateTimeOffset_1,
       UpdatedAt: DateTimeOffset_2
     },
-    CategoryId: 0,
     IsInEncyclopedia: true,
     Plural: false,
     Gender: Feminine,
     RawZone: P,
     Mimickable: true,
     CraftXpRatio: -1,
-    EvolutiveTypeId: 0,
-    Id: 6,
     CreatedAt: DateTimeOffset_3,
     UpdatedAt: DateTimeOffset_4
   },
@@ -62,17 +61,26 @@
   RealWeight: 1,
   Price: 700,
   Criteria: ,
+  CreatedAt: DateTimeOffset_5,
+  UpdatedAt: DateTimeOffset_6,
   Img: https://api.beta.dofusdb.fr/img/items/6007.png,
+  ItemSet: false,
   ItemSetId: -1,
-  ItemSet: {
-    IsFalse: true
-  },
   HideEffects: false,
+  CriticalHitProbability: 30,
+  CriticalHitBonus: 5,
+  MinRange: 1,
+  Range: 1,
+  CastInLine: false,
+  CastInDiagonal: false,
+  CastTestLos: false,
+  MaxCastPerTurn: 1,
+  ApCost: 3,
+  TwoHanded: false,
   Effects: [
     {
       From: 8,
       To: 10,
-      ElementId: 0,
       EffectId: 100,
       Characteristic: -1,
       Category: 2
@@ -82,21 +90,16 @@
       To: 10,
       ElementId: 1,
       EffectId: 118,
-      Characteristic: 10,
-      Category: 0
+      Characteristic: 10
     },
     {
       From: 1,
-      To: 0,
       ElementId: 1,
       EffectId: 422,
-      Characteristic: 88,
-      Category: 0
+      Characteristic: 88
     }
   ],
-  FavoriteSubAreasBonus: 0,
   IconId: 6007,
-  AppearanceId: 0,
   IsColorable: false,
   HasLivingObjectSkinJntMood: false,
   HasRecipe: true,
@@ -113,9 +116,6 @@
   NonUsableOnAnother: false,
   NeedUseConfirm: false,
   UseAnimationId: 14,
-  RecyclingNuggets: 0.0,
-  StartLegendaryTreasureHunt: 0,
-  LegendaryTreasureHuntThatReward: 0,
   Flags: 24712,
   Cursed: false,
   Exchangeable: true,
@@ -126,8 +126,5 @@
   IsSaleable: true,
   IsLegendary: false,
   Visibility: ,
-  ChangeVersion: ,
-  Id: 44,
-  CreatedAt: DateTimeOffset_5,
-  UpdatedAt: DateTimeOffset_6
+  ChangeVersion: 
 }

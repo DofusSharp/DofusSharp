@@ -43,8 +43,6 @@
       RealWeight: 10,
       Price: 1,
       Criteria: ,
-      CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_2,
       Img: https://api.beta.dofusdb.fr/img/items/16041.png,
       ItemSetId: 1,
       HideEffects: false,
@@ -112,7 +110,9 @@
       IsLegendary: false,
       Visibility: ,
       ChangeVersion: ,
-      Id: 2411
+      Id: 2411,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_2
     },
     {
       TypeId: 17,
@@ -142,8 +142,6 @@
       RealWeight: 10,
       Price: 1,
       Criteria: ,
-      CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_3,
       Img: https://api.beta.dofusdb.fr/img/items/17044.png,
       ItemSetId: 1,
       HideEffects: false,
@@ -211,7 +209,9 @@
       IsLegendary: false,
       Visibility: ,
       ChangeVersion: ,
-      Id: 2414
+      Id: 2414,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_3
     },
     {
       TypeId: 7,
@@ -241,8 +241,6 @@
       RealWeight: 10,
       Price: 1,
       Criteria: ,
-      CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_4,
       Img: https://api.beta.dofusdb.fr/img/items/7023.png,
       ItemSetId: 1,
       HideEffects: false,
@@ -327,7 +325,9 @@
       IsLegendary: false,
       Visibility: ,
       ChangeVersion: ,
-      Id: 2416
+      Id: 2416,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_4
     },
     {
       TypeId: 9,
@@ -357,8 +357,6 @@
       RealWeight: 10,
       Price: 1,
       Criteria: ,
-      CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_5,
       Img: https://api.beta.dofusdb.fr/img/items/9044.png,
       ItemSetId: 1,
       HideEffects: false,
@@ -427,7 +425,9 @@
       IsLegendary: false,
       Visibility: ,
       ChangeVersion: ,
-      Id: 2419
+      Id: 2419,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_5
     },
     {
       TypeId: 11,
@@ -457,8 +457,6 @@
       RealWeight: 10,
       Price: 1,
       Criteria: ,
-      CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_6,
       Img: https://api.beta.dofusdb.fr/img/items/11026.png,
       ItemSetId: 1,
       HideEffects: false,
@@ -527,7 +525,9 @@
       IsLegendary: false,
       Visibility: ,
       ChangeVersion: ,
-      Id: 2422
+      Id: 2422,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_6
     },
     {
       TypeId: 1,
@@ -557,8 +557,6 @@
       RealWeight: 10,
       Price: 1,
       Criteria: ,
-      CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_7,
       Img: https://api.beta.dofusdb.fr/img/items/1048.png,
       ItemSetId: 1,
       HideEffects: false,
@@ -635,7 +633,9 @@
       IsLegendary: false,
       Visibility: ,
       ChangeVersion: ,
-      Id: 2425
+      Id: 2425,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_7
     },
     {
       TypeId: 10,
@@ -665,8 +665,6 @@
       RealWeight: 10,
       Price: 1,
       Criteria: ,
-      CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_7,
       Img: https://api.beta.dofusdb.fr/img/items/10029.png,
       ItemSetId: 1,
       HideEffects: false,
@@ -743,7 +741,9 @@
       IsLegendary: false,
       Visibility: ,
       ChangeVersion: ,
-      Id: 2428
+      Id: 2428,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_7
     },
     {
       TypeId: 82,
@@ -773,8 +773,6 @@
       RealWeight: 10,
       Price: 1,
       Criteria: ,
-      CreatedAt: DateTimeOffset_1,
-      UpdatedAt: DateTimeOffset_8,
       Img: https://api.beta.dofusdb.fr/img/items/82020.png,
       ItemSetId: 1,
       HideEffects: false,
@@ -846,7 +844,9 @@
       IsLegendary: false,
       Visibility: ,
       ChangeVersion: ,
-      Id: 18666
+      Id: 18666,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_8
     }
   ],
   TypeIds: [
@@ -1181,7 +1181,7 @@
     ]
   ],
   IsCosmetic: false,
+  Id: 1,
   CreatedAt: DateTimeOffset_9,
-  UpdatedAt: DateTimeOffset_10,
-  Id: 1
+  UpdatedAt: DateTimeOffset_10
 }

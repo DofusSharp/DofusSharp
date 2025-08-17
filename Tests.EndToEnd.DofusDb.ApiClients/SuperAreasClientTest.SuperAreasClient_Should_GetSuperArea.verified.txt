@@ -1,0 +1,14 @@
+﻿{
+  WorldMapId: 1,
+  HasWorldMap: true,
+  Name: {
+    De: Die Welt der Zwölf,
+    En: World of Twelve,
+    Es: Mundo de los Doce,
+    Fr: Monde des Douze,
+    Pt: Mundo dos Doze
+  },
+  Id: 0,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
