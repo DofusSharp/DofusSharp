@@ -43,7 +43,7 @@ public class Map : DofusDbEntity
     /// <summary>
     ///     The relative identifier of the map.
     /// </summary>
-    public int? RelativeId { get; init; }
+    public long? RelativeId { get; init; }
 
     /// <summary>
     ///     The type of the map.
@@ -53,7 +53,7 @@ public class Map : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the sub area that the map belongs to.
     /// </summary>
-    public int? SubAreaId { get; init; }
+    public long? SubAreaId { get; init; }
 
     /// <summary>
     ///     The shadow bonus on entities for the map.
@@ -108,7 +108,7 @@ public class Map : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the tactical mode template for the map.
     /// </summary>
-    public int? TacticalModeTemplateId { get; init; }
+    public long? TacticalModeTemplateId { get; init; }
 
     /// <summary>
     ///     The ground CRC value for the map.

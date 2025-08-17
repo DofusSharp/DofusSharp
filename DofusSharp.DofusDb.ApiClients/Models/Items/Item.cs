@@ -17,7 +17,7 @@ public class Item : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the type of the item.
     /// </summary>
-    public int? TypeId { get; init; }
+    public long? TypeId { get; init; }
 
     /// <summary>
     ///     The type of the item.
@@ -75,7 +75,7 @@ public class Item : DofusDbEntity
     ///     The unique identifier of the item set that the item belongs to.
     ///     If the item does not belong to any set, this will be -1.
     /// </summary>
-    public int? ItemSetId { get; init; }
+    public long? ItemSetId { get; init; }
 
     /// <summary>
     ///     Whether the item belongs to an item set.
@@ -99,12 +99,12 @@ public class Item : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of the evolutive effects of the item.
     /// </summary>
-    public IReadOnlyCollection<int>? EvolutiveEffectIds { get; init; }
+    public IReadOnlyCollection<long>? EvolutiveEffectIds { get; init; }
 
     /// <summary>
     ///     The unique identifiers of the sub-areas where the item has increased effects.
     /// </summary>
-    public IReadOnlyCollection<int>? FavoriteSubAreas { get; init; }
+    public IReadOnlyCollection<long>? FavoriteSubAreas { get; init; }
 
     /// <summary>
     ///     The bonus to the effects of the item when used in a favorite sub-area.
@@ -118,12 +118,12 @@ public class Item : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the icon of the item.
     /// </summary>
-    public int? IconId { get; init; }
+    public long? IconId { get; init; }
 
     /// <summary>
     ///     The unique identifier of the appearance of the item.
     /// </summary>
-    public int? AppearanceId { get; init; }
+    public long? AppearanceId { get; init; }
 
     /// <summary>
     ///     Whether the colors of the item change to match the colors of the player when equipped.
@@ -152,12 +152,12 @@ public class Item : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of the recipes that can be used to craft the item.
     /// </summary>
-    public IReadOnlyCollection<int>? RecipeIds { get; init; }
+    public IReadOnlyCollection<long>? RecipeIds { get; init; }
 
     /// <summary>
     ///     The unique identifiers of the recipes that use the item as a resource.
     /// </summary>
-    public IReadOnlyCollection<int>? RecipesThatUse { get; init; }
+    public IReadOnlyCollection<long>? RecipesThatUse { get; init; }
 
     /// <summary>
     ///     The ratio to apply to the experience gained from crafting the item.
@@ -222,7 +222,7 @@ public class Item : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the animation that should be played when a player uses the item.
     /// </summary>
-    public int? UseAnimationId { get; init; }
+    public long? UseAnimationId { get; init; }
 
     #endregion
 
@@ -240,17 +240,17 @@ public class Item : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of the monsters that can drop the item.
     /// </summary>
-    public IReadOnlyCollection<int>? DropMonsterIds { get; init; }
+    public IReadOnlyCollection<long>? DropMonsterIds { get; init; }
 
     /// <summary>
     ///     The unique identifiers of the monsters that can drop the item, when the server is in Temporis mode.
     /// </summary>
-    public IReadOnlyCollection<int>? DropTemporisMonsterIds { get; init; }
+    public IReadOnlyCollection<long>? DropTemporisMonsterIds { get; init; }
 
     /// <summary>
     ///     The unique identifiers of the sub-areas where the item can be dropped.
     /// </summary>
-    public IReadOnlyCollection<int>? DropSubAreaIds { get; init; }
+    public IReadOnlyCollection<long>? DropSubAreaIds { get; init; }
 
     #endregion
 
@@ -264,7 +264,7 @@ public class Item : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of the sub-areas where the recycling of the item yields more nuggets.
     /// </summary>
-    public IReadOnlyCollection<int>? FavoriteRecyclingSubareas { get; init; }
+    public IReadOnlyCollection<long>? FavoriteRecyclingSubareas { get; init; }
 
     #endregion
 
@@ -273,12 +273,12 @@ public class Item : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of the quests that require the item.
     /// </summary>
-    public IReadOnlyCollection<int>? QuestsThatUse { get; init; }
+    public IReadOnlyCollection<long>? QuestsThatUse { get; init; }
 
     /// <summary>
     ///     The unique identifiers of the quests that reward the item.
     /// </summary>
-    public IReadOnlyCollection<int>? QuestsThatReward { get; init; }
+    public IReadOnlyCollection<long>? QuestsThatReward { get; init; }
 
     #endregion
 
@@ -288,13 +288,13 @@ public class Item : DofusDbEntity
     ///     The unique identifier of the treasure hunt that can be started with the item.
     ///     If no treasure hunt can be started with the item, this will be 0.
     /// </summary>
-    public int? StartLegendaryTreasureHunt { get; init; }
+    public long? StartLegendaryTreasureHunt { get; init; }
 
     /// <summary>
     ///     The unique identifier of the treasure hunt that rewards the item.
     ///     If no treasure hunt can reward the item, this will be 0.
     /// </summary>
-    public int? LegendaryTreasureHuntThatReward { get; init; }
+    public long? LegendaryTreasureHuntThatReward { get; init; }
 
     #endregion
 

@@ -40,10 +40,10 @@ public class Dungeon : DofusDbEntity
     /// <summary>
     ///     The unique identifiers of monsters present in the dungeon.
     /// </summary>
-    public IReadOnlyCollection<int>? Monsters { get; init; }
+    public IReadOnlyCollection<long>? Monsters { get; init; }
 
     /// <summary>
     ///     The unique identifier of the subarea that the dungeon belongs to.
     /// </summary>
-    public int? Subarea { get; init; }
+    public long? Subarea { get; init; }
 }

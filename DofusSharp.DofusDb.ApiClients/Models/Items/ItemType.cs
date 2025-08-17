@@ -15,7 +15,7 @@ public class ItemType : DofusDbEntity
     /// <summary>
     ///     The unique identifier of the super type of the item type.
     /// </summary>
-    public int? SuperTypeId { get; init; }
+    public long? SuperTypeId { get; init; }
 
     /// <summary>
     ///     The super type of the item type.
@@ -66,5 +66,5 @@ public class ItemType : DofusDbEntity
     /// <summary>
     ///     ???
     /// </summary>
-    public int? EvolutiveTypeId { get; init; }
+    public long? EvolutiveTypeId { get; init; }
 }
