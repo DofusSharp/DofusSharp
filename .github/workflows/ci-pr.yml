@@ -12,6 +12,11 @@ env:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    
+    permissions:
+      checks: write
+      pull-requests: write
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,4 +35,12 @@ jobs:
         run: dotnet build --no-restore
         
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --no-build --verbosity normal --logger trx
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2.16.1
+        if: (!cancelled())
+        with:
+          # Test results are written to each test project's directory under the TestResults directory
+          trx_files: "**/TestResults/*.trx"
+
