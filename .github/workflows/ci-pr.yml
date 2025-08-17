@@ -35,11 +35,11 @@ jobs:
         run: dotnet build --no-restore
         
       - name: Test
-        run: dotnet test --no-build --verbosity normal --logger:"trx;LogFileName=TestResults/dotnet-test-results.xml"
+        run: dotnet test --no-build --verbosity normal --logger:"trx;LogFileName=TestResults/dotnet-test-results.trx"
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2.16.1
         if: (!cancelled())
         with:
-          trx_files: TestResults/dotnet-test-results.xml
+          trx_files: TestResults/dotnet-test-results.trx
 
