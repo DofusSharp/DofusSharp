@@ -1,7 +1,7 @@
 ﻿namespace DofusSharp.DofusDb.ApiClients.Models.Maps;
 
 /// <summary>
-///     A map in the game world.
+///     A map in the game.
 /// </summary>
 public class Map : DofusDbEntity
 {
