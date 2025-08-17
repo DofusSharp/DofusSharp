@@ -28,7 +28,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetLimitParameter()
+    public async Task Execute_ShouldSetLimitParameter()
     {
         await _builder.Take(123).ExecuteAsync().ToArrayAsync();
 
@@ -39,7 +39,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetSkipParameter()
+    public async Task Execute_ShouldSetSkipParameter()
     {
         await _builder.Skip(123).ExecuteAsync().ToArrayAsync();
 
@@ -50,7 +50,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetSortParameter_Ascending()
+    public async Task Execute_ShouldSetSortParameter_Ascending()
     {
         await _builder.SortByAscending(i => i.AppearanceId).ExecuteAsync().ToArrayAsync();
 
@@ -61,7 +61,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetSortParameter_Descending()
+    public async Task Execute_ShouldSetSortParameter_Descending()
     {
         await _builder.SortByDescending(i => i.AppearanceId).ExecuteAsync().ToArrayAsync();
 
@@ -72,7 +72,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetSortParameter_NestedProperty()
+    public async Task Execute_ShouldSetSortParameter_NestedProperty()
     {
         await _builder.SortByDescending(i => i.Name.Fr).ExecuteAsync().ToArrayAsync();
 
@@ -83,7 +83,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetSortParameter_ForMultipleFields()
+    public async Task Execute_ShouldSetSortParameter_ForMultipleFields()
     {
         await _builder.SortByAscending(i => i.Name).SortByDescending(i => i.AppearanceId).ExecuteAsync().ToArrayAsync();
 
@@ -95,7 +95,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetSelectParameter()
+    public async Task Execute_ShouldSetSelectParameter()
     {
         await _builder.Select(i => i.AppearanceId).ExecuteAsync().ToArrayAsync();
 
@@ -106,7 +106,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetSelectParameter_ForNestedFields()
+    public async Task Execute_ShouldSetSelectParameter_ForNestedFields()
     {
         await _builder.Select(i => i.Name.Fr).ExecuteAsync().ToArrayAsync();
 
@@ -117,7 +117,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Eq()
+    public async Task Execute_ShouldSetPredicateParameter_Eq()
     {
         await _builder.Where(i => i.AppearanceId == 1).ExecuteAsync().ToArrayAsync();
 
@@ -128,7 +128,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Neq()
+    public async Task Execute_ShouldSetPredicateParameter_Neq()
     {
         await _builder.Where(i => i.AppearanceId != 1).ExecuteAsync().ToArrayAsync();
 
@@ -139,7 +139,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_In()
+    public async Task Execute_ShouldSetPredicateParameter_In()
     {
         List<int?> collection = [1, 2];
         await _builder.Where(i => collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
@@ -151,7 +151,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Nin()
+    public async Task Execute_ShouldSetPredicateParameter_Nin()
     {
         List<int?> collection = [1, 2];
         await _builder.Where(i => !collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
@@ -163,7 +163,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Gt()
+    public async Task Execute_ShouldSetPredicateParameter_Gt()
     {
         await _builder.Where(i => i.AppearanceId > 1).ExecuteAsync().ToArrayAsync();
 
@@ -174,7 +174,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Gte()
+    public async Task Execute_ShouldSetPredicateParameter_Gte()
     {
         await _builder.Where(i => i.AppearanceId >= 1).ExecuteAsync().ToArrayAsync();
 
@@ -185,7 +185,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Lt()
+    public async Task Execute_ShouldSetPredicateParameter_Lt()
     {
         await _builder.Where(i => i.AppearanceId < 1).ExecuteAsync().ToArrayAsync();
 
@@ -196,7 +196,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Lte()
+    public async Task Execute_ShouldSetPredicateParameter_Lte()
     {
         await _builder.Where(i => i.AppearanceId <= 1).ExecuteAsync().ToArrayAsync();
 
@@ -207,7 +207,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_And()
+    public async Task Execute_ShouldSetPredicateParameter_And()
     {
         await _builder.Where(i => i.AppearanceId == 1 && i.AppearanceId != 2).ExecuteAsync().ToArrayAsync();
 
@@ -218,7 +218,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Or()
+    public async Task Execute_ShouldSetPredicateParameter_Or()
     {
         await _builder.Where(i => i.AppearanceId == 1 || i.AppearanceId != 2).ExecuteAsync().ToArrayAsync();
 
@@ -229,7 +229,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_Eq()
+    public async Task Execute_ShouldSetPredicateParameter_Not_Eq()
     {
         // ReSharper disable once NegativeEqualityExpression
         await _builder.Where(i => !(i.AppearanceId == 1)).ExecuteAsync().ToArrayAsync();
@@ -241,7 +241,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_Neq()
+    public async Task Execute_ShouldSetPredicateParameter_Not_Neq()
     {
         // ReSharper disable once NegativeEqualityExpression
         await _builder.Where(i => !(i.AppearanceId != 1)).ExecuteAsync().ToArrayAsync();
@@ -253,7 +253,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_In()
+    public async Task Execute_ShouldSetPredicateParameter_Not_In()
     {
         List<int?> collection = [1, 2];
         await _builder.Where(i => !collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
@@ -265,7 +265,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_Nin()
+    public async Task Execute_ShouldSetPredicateParameter_Not_Nin()
     {
         List<int?> collection = [1, 2];
         // ReSharper disable once DoubleNegationOperator
@@ -278,7 +278,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_Gt()
+    public async Task Execute_ShouldSetPredicateParameter_Not_Gt()
     {
         await _builder.Where(i => !(i.AppearanceId > 1)).ExecuteAsync().ToArrayAsync();
 
@@ -289,7 +289,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_Gte()
+    public async Task Execute_ShouldSetPredicateParameter_Not_Gte()
     {
         await _builder.Where(i => i.AppearanceId >= 1).ExecuteAsync().ToArrayAsync();
 
@@ -300,7 +300,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_Lt()
+    public async Task Execute_ShouldSetPredicateParameter_Not_Lt()
     {
         await _builder.Where(i => i.AppearanceId < 1).ExecuteAsync().ToArrayAsync();
 
@@ -311,7 +311,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_Lte()
+    public async Task Execute_ShouldSetPredicateParameter_Not_Lte()
     {
         await _builder.Where(i => i.AppearanceId <= 1).ExecuteAsync().ToArrayAsync();
 
@@ -322,7 +322,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_And()
+    public async Task Execute_ShouldSetPredicateParameter_Not_And()
     {
         await _builder.Where(i => !(i.AppearanceId == 1 && i.AppearanceId != 2)).ExecuteAsync().ToArrayAsync();
 
@@ -333,7 +333,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Not_Or()
+    public async Task Execute_ShouldSetPredicateParameter_Not_Or()
     {
         await _builder.Where(i => !(i.AppearanceId == 1 || i.AppearanceId != 2)).ExecuteAsync().ToArrayAsync();
 
@@ -344,7 +344,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_MultiplePredicates()
+    public async Task Execute_ShouldSetPredicateParameter_MultiplePredicates()
     {
         await _builder.Where(i => i.AppearanceId == 1).Where(i => i.AppearanceId == 2).ExecuteAsync().ToArrayAsync();
 
@@ -355,7 +355,7 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task ShouldSetPredicateParameter_Complex()
+    public async Task Execute_ShouldSetPredicateParameter_Complex()
     {
         List<int?> firstContainer = [1, 2];
         List<string?> secondContainer = ["value1", "value2"];
@@ -370,6 +370,37 @@ public class DofusDbQueryTest
 
         SearchQuery query = (SearchQuery)_clientMock.Invocations.Single().Arguments[0];
         query.Predicates.Should()
+            .BeEquivalentTo<SearchPredicate>(
+                [
+                    new SearchPredicate.Or(
+                        new SearchPredicate.In("appearanceId", "1", "2"),
+                        new SearchPredicate.And(
+                            new SearchPredicate.Eq("bonusIsSecret", "true"),
+                            new SearchPredicate.GreaterThan("level", "50"),
+                            new SearchPredicate.NotIn("name.fr", "value1", "value2")
+                        )
+                    ),
+                    new SearchPredicate.In("criteria", "value3", "value4")
+                ],
+                opt => opt.RespectingRuntimeTypes()
+            );
+    }
+
+    [Fact]
+    public async Task Count_ShouldSetPredicateParameter_Complex()
+    {
+        List<int?> firstContainer = [1, 2];
+        List<string?> secondContainer = ["value1", "value2"];
+        List<string?> thirdContainer = ["value3", "value4"];
+
+        await _builder.Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name.Fr))
+            .Where(i => thirdContainer.Contains(i.Criteria))
+            .CountAsync();
+
+        _clientMock.Verify(c => c.CountAsync(It.IsAny<IReadOnlyCollection<SearchPredicate>>(), It.IsAny<CancellationToken>()));
+
+        IReadOnlyCollection<SearchPredicate> predicates = (IReadOnlyCollection<SearchPredicate>)_clientMock.Invocations.Single().Arguments[0];
+        predicates.Should()
             .BeEquivalentTo<SearchPredicate>(
                 [
                     new SearchPredicate.Or(
