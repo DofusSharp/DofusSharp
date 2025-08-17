@@ -1,1 +1,20 @@
-﻿
+﻿{
+  SuperAreaId: 0,
+  Bounds: {
+    Y: -17,
+    Width: 31,
+    Height: 18
+  },
+  WorldMapId: 0,
+  HasWorldMap: false,
+  Name: {
+    De: Wabbit-Insel,
+    En: Wabbit Islands,
+    Es: Archipiélago wabbit,
+    Fr: Île des Wabbits,
+    Pt: Ilha dos Wabbits
+  },
+  Id: 1,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
