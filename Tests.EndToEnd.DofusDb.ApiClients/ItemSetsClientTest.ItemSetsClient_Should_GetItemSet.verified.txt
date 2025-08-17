@@ -214,6 +214,17 @@
       UpdatedAt: DateTimeOffset_3
     },
     {
+      CriticalHitProbability: 30,
+      CriticalHitBonus: 5,
+      CriticalFailureProbability: 0,
+      MinRange: 1,
+      Range: 1,
+      CastInLine: false,
+      CastInDiagonal: false,
+      CastTestLos: true,
+      MaxCastPerTurn: 1,
+      ApCost: 4,
+      TwoHanded: false,
       TypeId: 7,
       Name: {
         De: Hammer des Fresssacks,

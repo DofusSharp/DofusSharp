@@ -1,4 +1,15 @@
 ﻿{
+  CriticalHitProbability: 30,
+  CriticalHitBonus: 5,
+  CriticalFailureProbability: 0,
+  MinRange: 1,
+  Range: 1,
+  CastInLine: false,
+  CastInDiagonal: false,
+  CastTestLos: false,
+  MaxCastPerTurn: 1,
+  ApCost: 3,
+  TwoHanded: false,
   TypeId: 6,
   Type: {
     Name: {

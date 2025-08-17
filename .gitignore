@@ -1,4 +1,5 @@
 artifacts-dotnet-releaser
+*.received.*
 
 # Created by https://www.toptal.com/developers/gitignore/api/csharp,rider
 # Edit at https://www.toptal.com/developers/gitignore?templates=csharp,rider
