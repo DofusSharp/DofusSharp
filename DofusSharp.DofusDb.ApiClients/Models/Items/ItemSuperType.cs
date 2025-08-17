@@ -16,14 +16,4 @@ public class ItemSuperType : DofusDbEntity
     ///     The possible slots where items of this super type can be equipped.
     /// </summary>
     public IReadOnlyCollection<int>? Positions { get; init; }
-
-    /// <summary>
-    ///     The creation date of the item in the database.
-    /// </summary>
-    public DateTimeOffset? CreatedAt { get; init; }
-
-    /// <summary>
-    ///     The last update date of the item in the database.
-    /// </summary>
-    public DateTimeOffset? UpdatedAt { get; init; }
 }

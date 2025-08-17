@@ -47,14 +47,4 @@ public class ItemSet : DofusDbEntity
     ///     Whether the items in the item set are cosmetic only.
     /// </summary>
     public bool? IsCosmetic { get; init; }
-
-    /// <summary>
-    ///     The creation date of the item in the database.
-    /// </summary>
-    public DateTimeOffset? CreatedAt { get; init; }
-
-    /// <summary>
-    ///     The last update date of the item in the database.
-    /// </summary>
-    public DateTimeOffset? UpdatedAt { get; init; }
 }

@@ -60,16 +60,6 @@ public class Item : DofusDbEntity
     public string? Criteria { get; init; }
 
     /// <summary>
-    ///     The creation date of the item in the database.
-    /// </summary>
-    public DateTimeOffset? CreatedAt { get; init; }
-
-    /// <summary>
-    ///     The last update date of the item in the database.
-    /// </summary>
-    public DateTimeOffset? UpdatedAt { get; init; }
-
-    /// <summary>
     ///     The URL of the icon of the item.
     /// </summary>
     public string? Img { get; init; }
