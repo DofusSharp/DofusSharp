@@ -54,9 +54,7 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     /// <returns>The resource with the specified ID.</returns>
     public async Task<TResource> GetAsync(int id, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = new();
-        httpClient.BaseAddress = BaseAddress;
-        httpClient.DefaultRequestHeaders.Referrer = Referrer;
+        using HttpClient httpClient = CreateHttpClient();
 
         HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -77,9 +75,7 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     /// <returns>The total count of resources.</returns>
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = new();
-        httpClient.BaseAddress = BaseAddress;
-        httpClient.DefaultRequestHeaders.Referrer = Referrer;
+        using HttpClient httpClient = CreateHttpClient();
 
         HttpResponseMessage response = await httpClient.GetAsync("?$limit=0", cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -101,9 +97,7 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
     /// <returns>The search result containing the resources matching the query.</returns>
     public async Task<SearchResult<TResource>> SearchAsync(SearchQuery query, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = new();
-        httpClient.BaseAddress = BaseAddress;
-        httpClient.DefaultRequestHeaders.Referrer = Referrer;
+        using HttpClient httpClient = CreateHttpClient();
 
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
         string requestUri = string.IsNullOrWhiteSpace(queryParams) ? string.Empty : $"?{queryParams}";
@@ -118,5 +112,22 @@ class DofusDbApiClient<TResource> : IDofusDbApiClient<TResource> where TResource
         }
 
         return result;
+    }
+
+    HttpClient CreateHttpClient()
+    {
+        HttpClient? httpClient = null;
+        try
+        {
+            httpClient = new HttpClient();
+            httpClient.BaseAddress = BaseAddress;
+            httpClient.DefaultRequestHeaders.Referrer = Referrer;
+            return httpClient;
+        }
+        catch
+        {
+            httpClient?.Dispose();
+            throw;
+        }
     }
 }
