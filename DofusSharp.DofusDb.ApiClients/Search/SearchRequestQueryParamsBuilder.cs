@@ -50,7 +50,7 @@ class SearchRequestQueryParamsBuilder
         switch (queryPredicate)
         {
             case SearchPredicate.Eq p:
-                builder.Add(FormatNestedFieldName([..path, p.Field, "$eq"]), p.Value);
+                builder.Add(FormatNestedFieldName([..path, p.Field]), p.Value);
                 break;
             case SearchPredicate.NotEq p:
                 builder.Add(FormatNestedFieldName([..path, p.Field, "$neq"]), p.Value);
