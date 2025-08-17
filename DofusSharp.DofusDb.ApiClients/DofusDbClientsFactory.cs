@@ -9,6 +9,8 @@ namespace DofusSharp.DofusDb.ApiClients;
 /// <param name="referrer">The referer header to include in requests to the API.</param>
 public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
 {
+    public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
+
     public IDofusDbTableClient<Item> Items() => new DofusDbTableClient<Item>(new Uri(baseAddress, "items/"), referrer);
     public IDofusDbTableClient<ItemType> ItemTypes() => new DofusDbTableClient<ItemType>(new Uri(baseAddress, "item-types/"), referrer);
     public IDofusDbTableClient<ItemSuperType> ItemSuperTypes() => new DofusDbTableClient<ItemSuperType>(new Uri(baseAddress, "item-super-types/"), referrer);

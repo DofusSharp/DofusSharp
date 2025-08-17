@@ -6,6 +6,7 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="7.2.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Include="Verify.Xunit" Version="30.5.0" />
         <PackageReference Include="xunit" Version="2.9.3" />

@@ -3,11 +3,13 @@ using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Moq;
 using Moq.Contrib.HttpClient;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
+[TestSubject(typeof(DofusDbTableClient<>))]
 public class DofusDbTableClientTest
 {
     [Fact]

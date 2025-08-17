@@ -12,12 +12,6 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     readonly JsonSerializerOptions? _options;
     readonly SearchRequestQueryParamsBuilder _queryParamsBuilder = new();
 
-    /// <summary>
-    ///     A client for interacting with the DofusDB API.
-    /// </summary>
-    /// <param name="baseAddress">The base URL of the API to query.</param>
-    /// <param name="referrer">The referer header to include in requests to the API.</param>
-    /// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
     public DofusDbTableClient(Uri baseAddress, Uri? referrer = null)
     {
         Referrer = referrer;
@@ -32,28 +26,10 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         };
     }
 
-    /// <summary>
-    ///     The base URL of the API to query.
-    /// </summary>
     public Uri BaseAddress { get; }
-
-    /// <summary>
-    ///     The referer header to include in requests to the API.
-    /// </summary>
-    /// <remarks>The DofusDB maintainers kindly ask to add the URI of the application using their APIs in the Referer header.</remarks>
     public Uri? Referrer { get; }
-
-    /// <summary>
-    ///     The factory for creating HTTP clients used by this API client.
-    /// </summary>
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
-    /// <summary>
-    ///     Fetch the resource with the specified ID from the API.
-    /// </summary>
-    /// <param name="id">The unique identifier of the resource to fetch.</param>
-    /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
-    /// <returns>The resource with the specified ID.</returns>
     public async Task<TResource> GetAsync(int id, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = CreateHttpClient();
@@ -70,11 +46,6 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         return result;
     }
 
-    /// <summary>
-    ///     Fetch the number of resources available in the API.
-    /// </summary>
-    /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
-    /// <returns>The total count of resources.</returns>
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = CreateHttpClient();
@@ -91,12 +62,6 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         return result.Total;
     }
 
-    /// <summary>
-    ///     Fetch a paginated list of resources from the API based on the provided search query.
-    /// </summary>
-    /// <param name="query">The search query containing pagination parameters.</param>
-    /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
-    /// <returns>The search result containing the resources matching the query.</returns>
     public async Task<SearchResult<TResource>> SearchAsync(SearchQuery query, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = CreateHttpClient();

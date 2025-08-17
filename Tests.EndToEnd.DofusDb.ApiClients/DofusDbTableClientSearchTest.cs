@@ -2,15 +2,17 @@
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
+using JetBrains.Annotations;
 
 namespace Tests.EndToEnd.DofusDb.ApiClients;
 
+[TestSubject(typeof(DofusDbClient))]
 public class DofusDbTableClientSearchTest
 {
     [Fact]
     public async Task ShouldLimitSearchResults()
     {
-        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClient.Beta().Items();
         SearchResult<Item> items = await client.SearchAsync(new SearchQuery { Limit = 12 });
         items.Data.Count.Should().Be(12);
     }
@@ -18,7 +20,7 @@ public class DofusDbTableClientSearchTest
     [Fact]
     public async Task ShouldSkipSearchResults()
     {
-        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClient.Beta().Items();
         SearchResult<Item> firstAndSecondItems = await client.SearchAsync(new SearchQuery { Limit = 2 });
 
         SearchResult<Item> secondItem = await client.SearchAsync(new SearchQuery { Limit = 1, Skip = 1 });
@@ -29,7 +31,7 @@ public class DofusDbTableClientSearchTest
     [Fact]
     public async Task ShouldSortSearchResults()
     {
-        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClient.Beta().Items();
 
         SearchResult<Item> sortedSearchResults = await client.SearchAsync(
             new SearchQuery { Limit = 50, Sort = new Dictionary<string, SearchQuerySortOrder> { { nameof(Item.RealWeight), SearchQuerySortOrder.Descending } } }
@@ -43,7 +45,7 @@ public class DofusDbTableClientSearchTest
     [Fact]
     public async Task ShouldSelectSearchResults()
     {
-        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClient.Beta().Items();
 
         SearchResult<Item> results = await client.SearchAsync(new SearchQuery { Limit = 1, Select = [nameof(Item.RealWeight)] });
 
@@ -125,7 +127,7 @@ public class DofusDbTableClientSearchTest
     [Fact]
     public async Task ShouldFilterSearchResults()
     {
-        IDofusDbTableClient<Item> client = DofusDbClients.Beta().Items();
+        IDofusDbTableClient<Item> client = DofusDbClient.Beta().Items();
 
         SearchResult<Item> sortedSearchResults = await client.SearchAsync(
             new SearchQuery

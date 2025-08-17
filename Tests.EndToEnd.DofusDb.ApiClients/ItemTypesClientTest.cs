@@ -10,7 +10,7 @@ public class ItemTypesClientTest
     [Fact]
     public async Task ItemTypesClient_Should_GetItemType()
     {
-        IDofusDbTableClient<ItemType> client = DofusDbClients.Beta().ItemTypes();
+        IDofusDbTableClient<ItemType> client = DofusDbClient.Beta().ItemTypes();
         ItemType value = await client.GetAsync(1);
         await Verify(value);
     }
@@ -18,7 +18,7 @@ public class ItemTypesClientTest
     [Fact]
     public async Task ItemTypesClient_Should_SearchItemTypes()
     {
-        IDofusDbTableClient<ItemType> client = DofusDbClients.Beta().ItemTypes();
+        IDofusDbTableClient<ItemType> client = DofusDbClient.Beta().ItemTypes();
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search

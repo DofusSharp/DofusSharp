@@ -1,6 +1,6 @@
 ﻿namespace DofusSharp.DofusDb.ApiClients;
 
-public static class DofusDbClients
+public static class DofusDbClient
 {
     /// <summary>
     ///     Create a factory for DofusDb API clients that connects to the production API.

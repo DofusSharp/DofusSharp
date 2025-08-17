@@ -2,10 +2,12 @@
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Moq;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
+[TestSubject(typeof(DofusDbQuery<>))]
 public class DofusDbQueryTest
 {
     readonly Mock<IDofusDbTableClient<Item>> _clientMock;
