@@ -387,6 +387,54 @@ public class DofusDbQueryTest
     }
 
     [Fact]
+    public async Task Count_ShouldReturnNumberOfResults()
+    {
+        _clientMock.Setup(c => c.CountAsync(It.IsAny<IReadOnlyCollection<SearchPredicate>>(), It.IsAny<CancellationToken>())).ReturnsAsync(123);
+
+        int result = await _builder.CountAsync();
+
+        _clientMock.Verify(c => c.CountAsync(Array.Empty<SearchPredicate>(), It.IsAny<CancellationToken>()));
+
+        result.Should().Be(123);
+    }
+
+    [Fact]
+    public async Task Count_ShouldReturnNumberOfResults_MinusSkippedOnes()
+    {
+        _clientMock.Setup(c => c.CountAsync(It.IsAny<IReadOnlyCollection<SearchPredicate>>(), It.IsAny<CancellationToken>())).ReturnsAsync(123);
+
+        int result = await _builder.Skip(10).CountAsync();
+
+        _clientMock.Verify(c => c.CountAsync(Array.Empty<SearchPredicate>(), It.IsAny<CancellationToken>()));
+
+        result.Should().Be(113);
+    }
+
+    [Fact]
+    public async Task Count_ShouldReturnLimit()
+    {
+        _clientMock.Setup(c => c.CountAsync(It.IsAny<IReadOnlyCollection<SearchPredicate>>(), It.IsAny<CancellationToken>())).ReturnsAsync(123);
+
+        int result = await _builder.Take(10).CountAsync();
+
+        _clientMock.Verify(c => c.CountAsync(Array.Empty<SearchPredicate>(), It.IsAny<CancellationToken>()));
+
+        result.Should().Be(10);
+    }
+
+    [Fact]
+    public async Task Count_ShouldReturnNumberOfResults_WhenLimitIsBiggerThanTotal()
+    {
+        _clientMock.Setup(c => c.CountAsync(It.IsAny<IReadOnlyCollection<SearchPredicate>>(), It.IsAny<CancellationToken>())).ReturnsAsync(123);
+
+        int result = await _builder.Take(456).CountAsync();
+
+        _clientMock.Verify(c => c.CountAsync(Array.Empty<SearchPredicate>(), It.IsAny<CancellationToken>()));
+
+        result.Should().Be(123);
+    }
+
+    [Fact]
     public async Task Count_ShouldSetPredicateParameter_Complex()
     {
         List<int?> firstContainer = [1, 2];
