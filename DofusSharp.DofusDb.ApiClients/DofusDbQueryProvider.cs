@@ -13,6 +13,7 @@ public class DofusDbQueryProvider(DofusDbClientsFactory factory)
 
     public DofusDbQuery<Job> Jobs() => new(factory.Jobs());
     public DofusDbQuery<Recipe> Recipes() => new(factory.Recipes());
+    public DofusDbQuery<Skill> Skills() => new(factory.Skills());
 
     public DofusDbQuery<World> Worlds() => new(factory.Worlds());
     public DofusDbQuery<SuperArea> SuperAreas() => new(factory.SuperAreas());

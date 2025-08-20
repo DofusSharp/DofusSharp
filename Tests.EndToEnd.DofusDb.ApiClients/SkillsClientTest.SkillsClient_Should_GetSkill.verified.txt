@@ -1,0 +1,23 @@
+﻿{
+  ParentJobId: 1,
+  IsForgemagus: false,
+  InteractiveId: 16,
+  Range: 1,
+  UseRangeInClient: false,
+  UseAnimation: AnimStatique,
+  Cursor: 0,
+  ElementActionId: 3,
+  AvailableInHouse: false,
+  ClientDisplay: true,
+  LevelMin: 1,
+  Name: {
+    De: Sichern,
+    En: Save,
+    Es: Guardar la posición,
+    Fr: Sauvegarder,
+    Pt: Salvar
+  },
+  Id: 44,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

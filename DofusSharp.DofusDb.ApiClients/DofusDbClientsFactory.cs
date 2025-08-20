@@ -24,6 +24,7 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
     public IDofusDbTableClient<Job> Jobs() => new DofusDbTableClient<Job>(new Uri(baseAddress, "jobs/"), referrer);
     public IDofusDbImageClient JobImages() => new DofusDbImageClient(new Uri(baseAddress, "img/jobs/"), ImageFormat.Jpeg, referrer);
     public IDofusDbTableClient<Recipe> Recipes() => new DofusDbTableClient<Recipe>(new Uri(baseAddress, "recipes/"), referrer);
+    public IDofusDbTableClient<Skill> Skills() => new DofusDbTableClient<Skill>(new Uri(baseAddress, "skills/"), referrer);
 
     public IDofusDbTableClient<World> Worlds() => new DofusDbTableClient<World>(new Uri(baseAddress, "worlds/"), referrer);
     public IDofusDbTableClient<SuperArea> SuperAreas() => new DofusDbTableClient<SuperArea>(new Uri(baseAddress, "super-areas/"), referrer);
