@@ -1,4 +1,5 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 
 namespace DofusSharp.DofusDb.ApiClients;
@@ -9,6 +10,9 @@ public class DofusDbQueryProvider(DofusDbClientsFactory factory)
     public DofusDbQuery<ItemType> ItemTypes() => new(factory.ItemTypes());
     public DofusDbQuery<ItemSuperType> ItemSuperTypes() => new(factory.ItemSuperTypes());
     public DofusDbQuery<ItemSet> ItemSets() => new(factory.ItemSets());
+
+    public DofusDbQuery<Job> Jobs() => new(factory.Jobs());
+    public DofusDbQuery<Recipe> Recipes() => new(factory.Recipes());
 
     public DofusDbQuery<World> Worlds() => new(factory.Worlds());
     public DofusDbQuery<SuperArea> SuperAreas() => new(factory.SuperAreas());
