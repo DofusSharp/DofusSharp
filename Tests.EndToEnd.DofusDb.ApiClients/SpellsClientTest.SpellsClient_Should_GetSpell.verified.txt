@@ -1,0 +1,76 @@
+﻿{
+  TypeId: 3555,
+  Order: 0,
+  ScriptParams: ,
+  ScriptParamsCritical: ,
+  ScriptId: 0,
+  ScriptIdCritical: 0,
+  IconId: 13201,
+  SpellLevels: [
+    1006
+  ],
+  BoundScriptUsageData: [
+    {
+      Id: 9372,
+      Order: 1,
+      ScriptId: 9366,
+      Criterion: ,
+      CasterMask: ,
+      TargetMask: ,
+      TargetZone: P1,
+      ActivationMask: ,
+      ActivationZone: P1,
+      Random: 0.0,
+      RandomGroup: 0,
+      SequenceGroup: 0,
+      IsTargetTreatedAsCaster: false
+    }
+  ],
+  CriticalHitBoundScriptUsageData: [
+    {
+      Id: 9372,
+      Order: 1,
+      ScriptId: 9366,
+      Criterion: ,
+      CasterMask: ,
+      TargetMask: ,
+      TargetZone: P1,
+      ActivationMask: ,
+      ActivationZone: P1,
+      Random: 0.0,
+      RandomGroup: 0,
+      SequenceGroup: 0,
+      IsTargetTreatedAsCaster: false
+    }
+  ],
+  BasePreviewZoneDescr: {
+    Shape: 0,
+    Param1: 0,
+    Param2: 0,
+    DamageDecreaseStepPercent: 0,
+    MaxDamageDecreaseApplyCount: 0,
+    IsStopAtTarget: false
+  },
+  AdminName: ,
+  Name: {
+    De: Biss des Fresssacks,
+    En: Gobball Bite,
+    Es: Mordedura de Jalató,
+    Fr: Morsure du Bouftou,
+    Pt: Mordida do Papatudo
+  },
+  Description: {
+    De: Fresssack,
+    En: Gobball,
+    Es: Jalató,
+    Fr: ,
+    Pt: Papatudo
+  },
+  VerboseCast: true,
+  BypassSummoningLimit: false,
+  CanAlwaysTriggerSpells: false,
+  HideCastConditions: false,
+  Id: 202,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

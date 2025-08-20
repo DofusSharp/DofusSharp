@@ -1,0 +1,10 @@
+﻿{
+  BreedId: 9,
+  SpellIds: [
+    13058,
+    13073
+  ],
+  Id: 16,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_1
+}

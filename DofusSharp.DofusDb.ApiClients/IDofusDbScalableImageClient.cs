@@ -5,7 +5,8 @@ namespace DofusSharp.DofusDb.ApiClients;
 /// <summary>
 ///     A client for interacting with a DofusDB API that provides image resources.
 /// </summary>
-public interface IDofusDbScalableImageClient : IDofusDbImageClient
+/// <typeparam name="TId">The type of the unique identifier for the images.</typeparam>
+public interface IDofusDbScalableImageClient<in TId> : IDofusDbImageClient<TId>
 {
     /// <summary>
     ///     Fetches the image resource from the DofusDB API by its unique identifier.
@@ -14,5 +15,5 @@ public interface IDofusDbScalableImageClient : IDofusDbImageClient
     /// <param name="id">The unique identifier of the resource to fetch.</param>
     /// <param name="scale">The scale of the image to fetch.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    Task<Stream> GetImageAsync(int id, ImageScale scale, CancellationToken cancellationToken = default);
+    Task<Stream> GetImageAsync(TId id, ImageScale scale, CancellationToken cancellationToken = default);
 }
