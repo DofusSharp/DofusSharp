@@ -20,7 +20,7 @@
       TargetZone: P1,
       ActivationMask: ,
       ActivationZone: P1,
-      Random: 0,
+      Random: 0.0,
       RandomGroup: 0,
       SequenceGroup: 0,
       IsTargetTreatedAsCaster: false
@@ -37,7 +37,7 @@
       TargetZone: P1,
       ActivationMask: ,
       ActivationZone: P1,
-      Random: 0,
+      Random: 0.0,
       RandomGroup: 0,
       SequenceGroup: 0,
       IsTargetTreatedAsCaster: false
