@@ -1,6 +1,7 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Clients;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 
 namespace DofusSharp.DofusDb.ApiClients;
@@ -19,6 +20,9 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
     public IDofusDbTableClient<ItemType> ItemTypes() => new DofusDbTableClient<ItemType>(new Uri(baseAddress, "item-types/"), referrer);
     public IDofusDbTableClient<ItemSuperType> ItemSuperTypes() => new DofusDbTableClient<ItemSuperType>(new Uri(baseAddress, "item-super-types/"), referrer);
     public IDofusDbTableClient<ItemSet> ItemSets() => new DofusDbTableClient<ItemSet>(new Uri(baseAddress, "item-sets/"), referrer);
+
+    public IDofusDbTableClient<Job> Jobs() => new DofusDbTableClient<Job>(new Uri(baseAddress, "jobs/"), referrer);
+    public IDofusDbImageClient JobImages() => new DofusDbImageClient(new Uri(baseAddress, "img/jobs/"), ImageFormat.Jpeg, referrer);
 
     public IDofusDbTableClient<World> Worlds() => new DofusDbTableClient<World>(new Uri(baseAddress, "worlds/"), referrer);
     public IDofusDbTableClient<SuperArea> SuperAreas() => new DofusDbTableClient<SuperArea>(new Uri(baseAddress, "super-areas/"), referrer);

@@ -1,0 +1,15 @@
+﻿{
+  IconId: 10,
+  Img: https://api.beta.dofusdb.fr/img/jobs/10.jpg,
+  HasLegendaryCraft: true,
+  Name: {
+    De: Schmied,
+    En: Smith,
+    Es: Herrero,
+    Fr: Forgeron,
+    Pt: Ferreiro
+  },
+  Id: 11,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
