@@ -1,0 +1,659 @@
+﻿{
+  ResultId: 44,
+  ResultTypeId: 6,
+  ResultLevel: 7,
+  IngredientIds: [
+    16512,
+    303
+  ],
+  Quantities: [
+    3,
+    3
+  ],
+  JobId: 11,
+  SkillId: 20,
+  ChangeVersion: ,
+  ResultName: {
+    De: Hölzernes Schwert,
+    En: Twiggy Sword,
+    Es: Espada de maderucha,
+    Fr: Épée de Boisaille,
+    Pt: Espada de graveto
+  },
+  Result: {
+    CriticalHitProbability: 30,
+    CriticalHitBonus: 5,
+    CriticalFailureProbability: 0,
+    MinRange: 1,
+    Range: 1,
+    CastInLine: false,
+    CastInDiagonal: false,
+    CastTestLos: false,
+    MaxCastPerTurn: 1,
+    ApCost: 3,
+    TwoHanded: false,
+    TypeId: 6,
+    Type: {
+      Name: {
+        De: Schwert,
+        En: Sword,
+        Es: Espada,
+        Fr: Épée,
+        Pt: Espada
+      },
+      SuperTypeId: 2,
+      CategoryId: 0,
+      IsInEncyclopedia: true,
+      Plural: false,
+      Gender: Feminine,
+      RawZone: P,
+      Mimickable: true,
+      CraftXpRatio: -1,
+      EvolutiveTypeId: 0,
+      Id: 6,
+      CreatedAt: DateTimeOffset_1,
+      UpdatedAt: DateTimeOffset_2
+    },
+    Name: {
+      De: Hölzernes Schwert,
+      En: Twiggy Sword,
+      Es: Espada de maderucha,
+      Fr: Épée de Boisaille,
+      Pt: Espada de graveto
+    },
+    Slug: {
+      De: holzernes schwert,
+      En: twiggy sword,
+      Es: espada de maderucha,
+      Fr: epee de boisaille,
+      Pt: espada de graveto
+    },
+    Description: {
+      De: Dieses Schwert einfachster Machart wird aus eurem Charakter bestimmt keinen Helden machen.,
+      En: This basic sword won't make a hero out of you, that's for sure.,
+      Es: Espada de sencilla factura, no convertirá a tu héroe en leyenda.,
+      Fr: Épée de simple facture, elle ne fera pas de votre héros une légende.,
+      Pt: Uma espada simples que não transformará seu herói em uma lenda.
+    },
+    ImportantNotice: {},
+    Level: 7,
+    RealWeight: 1,
+    Price: 700,
+    Criteria: ,
+    Img: https://api.beta.dofusdb.fr/img/items/6007.png,
+    ItemSetId: -1,
+    HideEffects: false,
+    Effects: [
+      {
+        From: 8,
+        To: 10,
+        ElementId: 0,
+        EffectId: 100,
+        Characteristic: -1,
+        Category: 2
+      },
+      {
+        From: 7,
+        To: 10,
+        ElementId: 1,
+        EffectId: 118,
+        Characteristic: 10,
+        Category: 0
+      },
+      {
+        From: 1,
+        To: 0,
+        ElementId: 1,
+        EffectId: 422,
+        Characteristic: 88,
+        Category: 0
+      }
+    ],
+    FavoriteSubAreasBonus: 0,
+    IconId: 6007,
+    AppearanceId: 0,
+    IsColorable: false,
+    HasLivingObjectSkinJntMood: false,
+    HasRecipe: true,
+    RecipeSlots: 2,
+    CraftXpRatio: -1.0,
+    CraftVisible: SC!5|ST!5,
+    CraftConditional: ,
+    CraftFeasible: SC!5|ST!5,
+    SecretRecipe: false,
+    BonusIsSecret: false,
+    Usable: false,
+    Targetable: false,
+    CriteriaTarget: ,
+    NonUsableOnAnother: false,
+    NeedUseConfirm: false,
+    UseAnimationId: 14,
+    RecyclingNuggets: 0.0,
+    StartLegendaryTreasureHunt: 0,
+    LegendaryTreasureHuntThatReward: 0,
+    Flags: 24712,
+    Cursed: false,
+    Exchangeable: true,
+    Etheral: false,
+    Enhanceable: true,
+    ObjectIsDisplayOnWeb: false,
+    IsDestructible: true,
+    IsSaleable: true,
+    IsLegendary: false,
+    Visibility: ,
+    ChangeVersion: ,
+    Id: 44,
+    CreatedAt: DateTimeOffset_3,
+    UpdatedAt: DateTimeOffset_4
+  },
+  Ingredients: [
+    {
+      TypeId: 53,
+      Type: {
+        Name: {
+          De: Feder,
+          En: Feather,
+          Es: Pluma,
+          Fr: Plume,
+          Pt: Pena
+        },
+        SuperTypeId: 9,
+        CategoryId: 2,
+        IsInEncyclopedia: true,
+        Plural: false,
+        Gender: Feminine,
+        RawZone: ,
+        Mimickable: false,
+        CraftXpRatio: -1,
+        EvolutiveTypeId: 0,
+        Id: 53,
+        CreatedAt: DateTimeOffset_1,
+        UpdatedAt: DateTimeOffset_5
+      },
+      Name: {
+        De: Chimärische Feder,
+        En: Chimeric Feather,
+        Es: Pluma quimérica,
+        Fr: Plume Chimérique,
+        Pt: Pena quimérica
+      },
+      Slug: {
+        De: chimarische feder,
+        En: chimeric feather,
+        Es: pluma quimerica,
+        Fr: plume chimerique,
+        Pt: pena quimerica
+      },
+      Description: {
+        De: Versucht ruhig, einem chimärischen Tofu die Federn auszureißen, indem ihr ihm hinterherlauft. Das ist ein gutes Training für die Beine!,
+        En: Trying to get a feather from the Chimeric Tofu by running after it will build up your legs real quick!,
+        Es: Corre tras un tofu quimérico para atrapar la pluma... ¡Verás que buenas piernas se te ponen!,
+        Fr: Tentez donc d'attraper la plume d'un Tofu Chimérique en lui courant après, ça vous fera les jambes !,
+        Pt: Tente correr atrás de um Tofu quimérico para pegar uma pena. Você nunca mais precisará malhar as pernas!
+      },
+      ImportantNotice: {},
+      Level: 1,
+      RealWeight: 1,
+      Price: 1,
+      Criteria: ,
+      Img: https://api.beta.dofusdb.fr/img/items/53661.png,
+      ItemSetId: -1,
+      HideEffects: false,
+      FavoriteSubAreasBonus: 0,
+      IconId: 53661,
+      AppearanceId: 0,
+      IsColorable: false,
+      HasLivingObjectSkinJntMood: false,
+      HasRecipe: false,
+      RecipeSlots: 0,
+      RecipeIds: [
+        256,
+        14609,
+        1624,
+        164,
+        16500,
+        24430,
+        6921,
+        16504,
+        8538,
+        841,
+        144,
+        864,
+        14613,
+        44,
+        892,
+        937,
+        935,
+        862,
+        904,
+        903,
+        12756,
+        17524,
+        14589,
+        787,
+        1698,
+        902
+      ],
+      RecipesThatUse: [
+        44,
+        787,
+        841,
+        862,
+        864,
+        892,
+        937,
+        1624,
+        1698,
+        6921,
+        8538,
+        12756,
+        14589,
+        14609,
+        14613,
+        16500,
+        16504,
+        17524
+      ],
+      CraftXpRatio: -1.0,
+      CraftVisible: ,
+      CraftConditional: ,
+      CraftFeasible: ,
+      SecretRecipe: false,
+      BonusIsSecret: false,
+      Usable: false,
+      Targetable: false,
+      CriteriaTarget: ,
+      NonUsableOnAnother: false,
+      NeedUseConfirm: false,
+      UseAnimationId: 0,
+      DropMonsterIds: [
+        970
+      ],
+      DropSubAreaIds: [
+        444
+      ],
+      RecyclingNuggets: 0.004246000200510025,
+      FavoriteRecyclingSubareas: [
+        444
+      ],
+      QuestsThatUse: [
+        826
+      ],
+      QuestsThatReward: [
+        1655,
+        2512
+      ],
+      StartLegendaryTreasureHunt: 0,
+      LegendaryTreasureHuntThatReward: 0,
+      Flags: 24712,
+      Cursed: false,
+      Exchangeable: true,
+      Etheral: false,
+      Enhanceable: true,
+      ObjectIsDisplayOnWeb: false,
+      IsDestructible: true,
+      IsSaleable: true,
+      IsLegendary: false,
+      Visibility: ,
+      ChangeVersion: ,
+      Id: 16512,
+      CreatedAt: DateTimeOffset_3,
+      UpdatedAt: DateTimeOffset_6
+    },
+    {
+      TypeId: 38,
+      Type: {
+        Name: {
+          De: Holz,
+          En: Wood,
+          Es: Madera,
+          Fr: Bois,
+          Pt: Madeira
+        },
+        SuperTypeId: 9,
+        CategoryId: 2,
+        IsInEncyclopedia: true,
+        Plural: false,
+        Gender: Masculine,
+        RawZone: ,
+        Mimickable: false,
+        CraftXpRatio: -1,
+        EvolutiveTypeId: 0,
+        Id: 38,
+        CreatedAt: DateTimeOffset_1,
+        UpdatedAt: DateTimeOffset_7
+      },
+      Name: {
+        De: Eschenholz,
+        En: Ash Wood,
+        Es: Madera de fresno,
+        Fr: Bois de Frêne,
+        Pt: Madeira de freixo
+      },
+      Slug: {
+        De: eschenholz,
+        En: ash wood,
+        Es: madera de fresno,
+        Fr: bois de frene,
+        Pt: madeira de freixo
+      },
+      Description: {
+        De: Eschenholz steht zwar nicht gerade für gute Qualität, doch dafür findet man es in Hülle und Fülle. Außerdem wächst es schnell wieder nach. Man darf es nur nicht in der Nähe von Feuer aufbewahren, da es sehr leicht brennt.,
+        En: Ash Wood is a low-quality wood but it is very common - it grows fast too.,
+        Es: La madera de fresno no es una madera de calidad, pero es abundante y crece relativamente rápido. Sin embargo, ten cuidado, no la almacenes cerca de una fuente de calor ya que es inflamable.,
+        Fr: Le Bois de Frêne n'est pas un bois de qualité, mais il est abondant et pousse relativement vite. Attention tout de même à ne pas le stocker près d'une forte source de chaleur, il est inflammable.,
+        Pt: A madeira de freixo não é uma madeira de qualidade, mas você pode achá-la em qualquer lugar e cresce em um ritmo relativamente rápido. Seja cuidadoso, não a armazene próxima a uma fonte forte de calor, ela é inflamável.
+      },
+      ImportantNotice: {},
+      Level: 1,
+      RealWeight: 5,
+      Price: 0,
+      Criteria: ,
+      Img: https://api.beta.dofusdb.fr/img/items/38017.png,
+      ItemSetId: -1,
+      HideEffects: false,
+      FavoriteSubAreasBonus: 0,
+      IconId: 38017,
+      AppearanceId: 0,
+      IsColorable: false,
+      HasLivingObjectSkinJntMood: false,
+      HasRecipe: false,
+      RecipeSlots: 0,
+      RecipeIds: [
+        145,
+        94,
+        83,
+        96,
+        144,
+        24440,
+        90,
+        84,
+        785,
+        81,
+        42,
+        16489,
+        1093,
+        138,
+        496,
+        499,
+        14644,
+        88,
+        2376,
+        182,
+        7493,
+        500,
+        1094,
+        493,
+        454,
+        495,
+        24501,
+        7607,
+        1439,
+        112,
+        19622,
+        24819,
+        12663,
+        139,
+        1092,
+        146,
+        132,
+        133,
+        498,
+        491,
+        82,
+        40,
+        43,
+        16492,
+        784,
+        14625,
+        12730,
+        89,
+        44,
+        7759,
+        7590,
+        7775,
+        14617,
+        16491,
+        153,
+        14803,
+        1560,
+        16490,
+        259,
+        494,
+        941,
+        24562,
+        851,
+        9961,
+        150,
+        24551,
+        852,
+        24521,
+        151,
+        1942,
+        152
+      ],
+      RecipesThatUse: [
+        44,
+        84,
+        112,
+        153,
+        259,
+        784,
+        785,
+        851,
+        852,
+        941,
+        1439,
+        1942,
+        2376,
+        7590,
+        7607,
+        7759,
+        7775,
+        9961,
+        14617,
+        14625,
+        14644,
+        14803,
+        16489,
+        16490,
+        16491,
+        16492,
+        19622
+      ],
+      CraftXpRatio: -1.0,
+      CraftVisible: ,
+      CraftConditional: ,
+      CraftFeasible: ,
+      SecretRecipe: false,
+      BonusIsSecret: false,
+      Usable: false,
+      Targetable: false,
+      CriteriaTarget: ,
+      NonUsableOnAnother: false,
+      NeedUseConfirm: false,
+      UseAnimationId: -1,
+      ResourcesBySubarea: [
+        {
+          Item1: 1,
+          Item2: 1
+        },
+        {
+          Item1: 449,
+          Item2: 2
+        },
+        {
+          Item1: 450,
+          Item2: 2
+        },
+        {
+          Item1: 3,
+          Item2: 28
+        },
+        {
+          Item1: 4,
+          Item2: 34
+        },
+        {
+          Item1: 5,
+          Item2: 109
+        },
+        {
+          Item1: 69,
+          Item2: 37
+        },
+        {
+          Item1: 10,
+          Item2: 1
+        },
+        {
+          Item1: 12,
+          Item2: 25
+        },
+        {
+          Item1: 22,
+          Item2: 8
+        },
+        {
+          Item1: 23,
+          Item2: 2
+        },
+        {
+          Item1: 536,
+          Item2: 1
+        },
+        {
+          Item1: 95,
+          Item2: 18
+        },
+        {
+          Item1: 481,
+          Item2: 1
+        },
+        {
+          Item1: 97,
+          Item2: 152
+        },
+        {
+          Item1: 482,
+          Item2: 24
+        },
+        {
+          Item1: 98,
+          Item2: 1
+        },
+        {
+          Item1: 485,
+          Item2: 22
+        },
+        {
+          Item1: 102,
+          Item2: 4
+        },
+        {
+          Item1: 103,
+          Item2: 39
+        },
+        {
+          Item1: 170,
+          Item2: 30
+        },
+        {
+          Item1: 43,
+          Item2: 24
+        },
+        {
+          Item1: 173,
+          Item2: 14
+        },
+        {
+          Item1: 306,
+          Item2: 7
+        },
+        {
+          Item1: 442,
+          Item2: 2
+        },
+        {
+          Item1: 443,
+          Item2: 44
+        },
+        {
+          Item1: 1021,
+          Item2: 1
+        },
+        {
+          Item1: 445,
+          Item2: 2
+        }
+      ],
+      DropMonsterIds: [
+        982,
+        4105,
+        4106
+      ],
+      DropSubAreaIds: [
+        443
+      ],
+      RecyclingNuggets: 0.003000000026077032,
+      QuestsThatUse: [
+        281,
+        1110
+      ],
+      StartLegendaryTreasureHunt: 0,
+      LegendaryTreasureHuntThatReward: 0,
+      Flags: 24712,
+      Cursed: false,
+      Exchangeable: true,
+      Etheral: false,
+      Enhanceable: true,
+      ObjectIsDisplayOnWeb: false,
+      IsDestructible: true,
+      IsSaleable: true,
+      IsLegendary: false,
+      Visibility: ,
+      ChangeVersion: ,
+      Id: 303,
+      CreatedAt: DateTimeOffset_3,
+      UpdatedAt: DateTimeOffset_8
+    }
+  ],
+  Job: {
+    IconId: 10,
+    Img: https://api.beta.dofusdb.fr/img/jobs/10.jpg,
+    HasLegendaryCraft: true,
+    Name: {
+      De: Schmied,
+      En: Smith,
+      Es: Herrero,
+      Fr: Forgeron,
+      Pt: Ferreiro
+    },
+    Id: 11,
+    CreatedAt: DateTimeOffset_9,
+    UpdatedAt: DateTimeOffset_10
+  },
+  ResultType: {
+    Name: {
+      De: Schwert,
+      En: Sword,
+      Es: Espada,
+      Fr: Épée,
+      Pt: Espada
+    },
+    SuperTypeId: 2,
+    CategoryId: 0,
+    IsInEncyclopedia: true,
+    Plural: false,
+    Gender: Feminine,
+    RawZone: P,
+    Mimickable: true,
+    CraftXpRatio: -1,
+    EvolutiveTypeId: 0,
+    Id: 6,
+    CreatedAt: DateTimeOffset_1,
+    UpdatedAt: DateTimeOffset_2
+  },
+  CreatedAt: DateTimeOffset_11,
+  UpdatedAt: DateTimeOffset_12
+}
