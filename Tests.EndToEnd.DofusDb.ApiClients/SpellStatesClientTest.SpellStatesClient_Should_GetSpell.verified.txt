@@ -1,0 +1,27 @@
+﻿{
+  PreventsFight: false,
+  IsSilent: false,
+  CantBeMoved: false,
+  CantBePushed: false,
+  CantDealDamage: false,
+  Invulnerable: false,
+  CantSwitchPosition: false,
+  Incurable: false,
+  Icon: ,
+  IconVisibilityMask: 0,
+  InvulnerableMelee: false,
+  InvulnerableRange: false,
+  CantTackle: false,
+  CantBeTackled: false,
+  DisplayTurnRemaining: false,
+  Name: {
+    De: Geschwächt,
+    En: Vulnerable,
+    Es: Fragilizado,
+    Fr: Fragilisé,
+    Pt: Fragilizado
+  },
+  Id: 16,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

@@ -2,7 +2,7 @@
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
-class DofusDbScalableImageClient : IDofusDbScalableImageClient
+class DofusDbScalableImageClient<TId> : IDofusDbScalableImageClient<TId>
 {
     public DofusDbScalableImageClient(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null)
     {
@@ -16,9 +16,9 @@ class DofusDbScalableImageClient : IDofusDbScalableImageClient
     public Uri? Referrer { get; }
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
-    public Task<Stream> GetImageAsync(int id, CancellationToken cancellationToken = default) => GetImageAsync(id, ImageScale.Full, cancellationToken);
+    public Task<Stream> GetImageAsync(TId id, CancellationToken cancellationToken = default) => GetImageAsync(id, ImageScale.Full, cancellationToken);
 
-    public async Task<Stream> GetImageAsync(int id, ImageScale scale, CancellationToken cancellationToken = default)
+    public async Task<Stream> GetImageAsync(TId id, ImageScale scale, CancellationToken cancellationToken = default)
     {
         string scaleString = scale switch
         {

@@ -9,7 +9,7 @@ using Tests.UnitTests.DofusDb.ApiClients.Extensions;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
-[TestSubject(typeof(DofusDbImageClient))]
+[TestSubject(typeof(DofusDbImageClient<>))]
 public class DofusDbScalableImageClientTest
 {
     [Theory]
@@ -20,7 +20,7 @@ public class DofusDbScalableImageClientTest
         byte[] imageBytes = [4, 5, 6];
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, $"http://base.com/1/123.{extension}").ReturnsResponse(HttpStatusCode.OK, imageBytes);
-        DofusDbScalableImageClient client = new(new Uri("http://base.com"), imageFormat)
+        DofusDbScalableImageClient<int> client = new(new Uri("http://base.com"), imageFormat)
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -38,7 +38,7 @@ public class DofusDbScalableImageClientTest
         byte[] imageBytes = [4, 5, 6];
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, $"http://base.com/{scaleString}/123.jpg").ReturnsResponse(HttpStatusCode.OK, imageBytes);
-        DofusDbScalableImageClient client = new(new Uri("http://base.com"), ImageFormat.Jpeg)
+        DofusDbScalableImageClient<int> client = new(new Uri("http://base.com"), ImageFormat.Jpeg)
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -53,7 +53,7 @@ public class DofusDbScalableImageClientTest
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/1/123.jpg").ReturnsResponse(HttpStatusCode.OK, []);
-        DofusDbScalableImageClient client = new(new Uri("http://base.com"), ImageFormat.Jpeg, new Uri("http://referrer.com"))
+        DofusDbScalableImageClient<int> client = new(new Uri("http://base.com"), ImageFormat.Jpeg, new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };

@@ -5,7 +5,8 @@ namespace DofusSharp.DofusDb.ApiClients;
 /// <summary>
 ///     A client for interacting with a DofusDB API that provides image resources.
 /// </summary>
-public interface IDofusDbImageClient : IDofusDbClient
+/// <typeparam name="TId">The type of the unique identifier for the images.</typeparam>
+public interface IDofusDbImageClient<in TId> : IDofusDbClient
 {
     /// <summary>
     ///     The format of the images that this client fetches from the DofusDB API.
@@ -18,5 +19,5 @@ public interface IDofusDbImageClient : IDofusDbClient
     /// </summary>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    Task<Stream> GetImageAsync(int id, CancellationToken cancellationToken = default);
+    Task<Stream> GetImageAsync(TId id, CancellationToken cancellationToken = default);
 }
