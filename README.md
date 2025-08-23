@@ -9,3 +9,4 @@ WIP
 ## Libraries
 
 - [DofusDb.ApiClients](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.DofusDb.ApiClients): API clients for the DofusDB APIs.
+- [Dofocus.ApiClients](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.Dofocus.ApiClients): API clients for the Dofocus APIs.
