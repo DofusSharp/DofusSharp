@@ -35,5 +35,5 @@ public class DofocusItemMinimal
     /// <summary>
     ///     The minimal characteristics of the item.
     /// </summary>
-    public required IReadOnlyCollection<DofocusItemCharacteristicsMinimal> Characteristics { get; init; }
+    public required IReadOnlyCollection<DofocusItemCharacteristicMinimal> Characteristics { get; init; }
 }

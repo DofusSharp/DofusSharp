@@ -26,4 +26,8 @@ public class DofocusItemCharacteristic
     ///     The maximum value of the characteristic.
     /// </summary>
     public required int To { get; init; }
+
+    public static implicit operator DofocusItemCharacteristicMinimal(DofocusItemCharacteristic item) => item.AsMinimal();
+
+    public DofocusItemCharacteristicMinimal AsMinimal() => new() { Id = Id };
 }
