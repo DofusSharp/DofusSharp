@@ -1,6 +1,7 @@
 ﻿/*#if (SampleContent)*/
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #474747;
 }
 
 a, .btn-link {
