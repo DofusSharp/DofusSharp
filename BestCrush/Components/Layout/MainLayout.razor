@@ -9,10 +9,23 @@
         <div class="col-md-3 mb-2 mb-md-0">
             <img src="img/logo-48.png" width="48" height="48" alt="Logo"/>
         </div>
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li>Crush</li>
-            <li>Hôtel des ventes</li>
-        </ul>
+        @if (_currentServer is null)
+        {
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        }
+        else
+        {
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li>
+                    <NavLink class="nav-link px-2" ActiveClass="link-secondary" href="@KnownRoutes.Crush(_currentServer)">Crush</NavLink>
+                </li>
+                <li>
+                    <NavLink class="nav-link px-2" ActiveClass="link-secondary" href="@KnownRoutes.SalesHouse(_currentServer)">Hôtel des ventes</NavLink>
+                </li>
+            </ul>
+        }
         <div class="col-md-3 text-end">
             @if (_currentServer is null || _servers is null)
             {
