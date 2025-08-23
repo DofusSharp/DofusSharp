@@ -2,7 +2,6 @@
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Common;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
-using DofusSharp.Dofocus.ApiClients.Models.Runes;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Moq;
@@ -92,14 +91,14 @@ public class DofocusItemsClientTest
                     ImageUrl = "http://image1.com",
                     Characteristics =
                     [
-                        new DofocusItemCharacteristics
+                        new DofocusItemCharacteristic
                         {
                             Id = 123,
                             Name = new DofocusMultiLangString { Fr = "CHAR FR 1", En = "CHAR EN 1", Es = "CHAR ES 1" },
                             From = 456,
                             To = 789
                         },
-                        new DofocusItemCharacteristics
+                        new DofocusItemCharacteristic
                         {
                             Id = 147,
                             Name = new DofocusMultiLangString { Fr = "CHAR FR 2", En = "CHAR EN 2", Es = "CHAR ES 2" },
@@ -114,8 +113,8 @@ public class DofocusItemsClientTest
                     ],
                     Prices =
                     [
-                        new DofocusPriceRecord { ServerName = "SERVER 3", Price = 1472, DateUpdated = new DateTimeOffset(3, 4, 5, 6, 7, 8, TimeSpan.Zero) },
-                        new DofocusPriceRecord { ServerName = "SERVER 4", Price = 5836, DateUpdated = new DateTimeOffset(4, 5, 6, 7, 8, 9, TimeSpan.Zero) }
+                        new DofocusItemPriceRecord { ServerName = "SERVER 3", Price = 1472, LastUpdate = new DateTimeOffset(3, 4, 5, 6, 7, 8, TimeSpan.Zero) },
+                        new DofocusItemPriceRecord { ServerName = "SERVER 4", Price = 5836, LastUpdate = new DateTimeOffset(4, 5, 6, 7, 8, 9, TimeSpan.Zero) }
                     ]
                 }
             );
@@ -138,14 +137,14 @@ public class DofocusItemsClientTest
                     ImageUrl = "http://image1.com",
                     Characteristics =
                     [
-                        new DofocusItemCharacteristics
+                        new DofocusItemCharacteristic
                         {
                             Id = 123,
                             Name = new DofocusMultiLangString { Fr = "CHAR FR 1", En = "CHAR EN 1", Es = "CHAR ES 1" },
                             From = 456,
                             To = 789
                         },
-                        new DofocusItemCharacteristics
+                        new DofocusItemCharacteristic
                         {
                             Id = 147,
                             Name = new DofocusMultiLangString { Fr = "CHAR FR 2", En = "CHAR EN 2", Es = "CHAR ES 2" },
@@ -160,8 +159,8 @@ public class DofocusItemsClientTest
                     ],
                     Prices =
                     [
-                        new DofocusPriceRecord { ServerName = "SERVER 3", Price = 1472, DateUpdated = new DateTimeOffset(3, 4, 5, 6, 7, 8, TimeSpan.Zero) },
-                        new DofocusPriceRecord { ServerName = "SERVER 4", Price = 5836, DateUpdated = new DateTimeOffset(4, 5, 6, 7, 8, 9, TimeSpan.Zero) }
+                        new DofocusItemPriceRecord { ServerName = "SERVER 3", Price = 1472, LastUpdate = new DateTimeOffset(3, 4, 5, 6, 7, 8, TimeSpan.Zero) },
+                        new DofocusItemPriceRecord { ServerName = "SERVER 4", Price = 5836, LastUpdate = new DateTimeOffset(4, 5, 6, 7, 8, 9, TimeSpan.Zero) }
                     ]
                 }
             );

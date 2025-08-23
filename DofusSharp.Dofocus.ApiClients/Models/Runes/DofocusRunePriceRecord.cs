@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a price record for a rune on a specific server.
 /// </summary>
-public class DofocusPriceRecord
+public class DofocusRunePriceRecord
 {
     /// <summary>
     ///     The name of the server where the price was recorded.

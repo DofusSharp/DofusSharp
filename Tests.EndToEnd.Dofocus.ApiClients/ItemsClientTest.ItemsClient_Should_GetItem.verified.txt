@@ -1,0 +1,261 @@
+﻿{
+  Id: 14097,
+  Name: {
+    Fr: Amulette du Nocturlabe,
+    En: Nocturnowl Amulet,
+    Es: Amuleto de nocturlabiúho
+  },
+  Level: 200,
+  SuperType: {
+    Id: 1,
+    Name: {
+      Fr: Amulette,
+      En: Amulet,
+      Es: Amuleto
+    }
+  },
+  Type: {
+    Id: 1,
+    Name: {
+      Fr: Amulette,
+      En: Amulet,
+      Es: Amuleto
+    }
+  },
+  ImageUrl: https://api.dofusdb.fr/img/items/1236.png,
+  Characteristics: [
+    {
+      Id: 11,
+      Name: {
+        Fr: Vitalité,
+        En: Vitality,
+        Es: Vitalidad
+      },
+      From: 301,
+      To: 350
+    },
+    {
+      Id: 10,
+      Name: {
+        Fr: Force,
+        En: Strength,
+        Es: Fuerza
+      },
+      From: 71,
+      To: 100
+    },
+    {
+      Id: 12,
+      Name: {
+        Fr: Sagesse,
+        En: Wisdom,
+        Es: Sabiduría
+      },
+      From: 31,
+      To: 40
+    },
+    {
+      Id: 18,
+      Name: {
+        Fr: Coups Critiques (%),
+        En: Critical Hits (%),
+        Es: Golpes Críticos (%)
+      },
+      From: -5,
+      To: -7
+    },
+    {
+      Id: 1,
+      Name: {
+        Fr: Points d'action (PA),
+        En: Action Points (AP),
+        Es: Puntos de Acción (PA)
+      },
+      From: 1
+    },
+    {
+      Id: 48,
+      Name: {
+        Fr: Prospection,
+        En: Prospecting,
+        Es: Prospección
+      },
+      From: 16,
+      To: 20
+    },
+    {
+      Id: 88,
+      Name: {
+        Fr: Dommages Terre (fixe),
+        En: Earth Damage (fixed),
+        Es: Daños de Tierra (fijos)
+      },
+      From: 11,
+      To: 15
+    },
+    {
+      Id: 56,
+      Name: {
+        Fr: Résistances Eau (fixe),
+        En: Water Resistance (fixed),
+        Es: Resistencia a Agua (fija)
+      },
+      From: 16,
+      To: 20
+    },
+    {
+      Id: 36,
+      Name: {
+        Fr: Résistances Air (%),
+        En: Air Resistance (%),
+        Es: Resistencia a Aire (%)
+      },
+      From: 7,
+      To: 10
+    },
+    {
+      Id: 86,
+      Name: {
+        Fr: Dommages Critiques,
+        En: Critical Damage,
+        Es: Daños Críticos
+      },
+      From: 11,
+      To: 15
+    }
+  ],
+  Coefficients: [
+    {
+      ServerName: Mikhal,
+      Coefficient: 2300,
+      LastUpdate: DateTimeOffset_1
+    },
+    {
+      ServerName: Tylezia,
+      Coefficient: 500,
+      LastUpdate: DateTimeOffset_2
+    },
+    {
+      ServerName: Ombre,
+      Coefficient: 1500,
+      LastUpdate: DateTimeOffset_3
+    },
+    {
+      ServerName: Orukam,
+      Coefficient: 1000,
+      LastUpdate: DateTimeOffset_4
+    },
+    {
+      ServerName: Salar,
+      Coefficient: 800,
+      LastUpdate: DateTimeOffset_5
+    },
+    {
+      ServerName: HellMina,
+      Coefficient: 100,
+      LastUpdate: DateTimeOffset_6
+    },
+    {
+      ServerName: Imagiro,
+      Coefficient: 946,
+      LastUpdate: DateTimeOffset_7
+    },
+    {
+      ServerName: Dakal,
+      Coefficient: 1429,
+      LastUpdate: DateTimeOffset_8
+    },
+    {
+      ServerName: Draconiros,
+      Coefficient: 1111,
+      LastUpdate: DateTimeOffset_9
+    },
+    {
+      ServerName: Brial,
+      Coefficient: 2000,
+      LastUpdate: DateTimeOffset_10
+    },
+    {
+      ServerName: Rafal,
+      Coefficient: 1000,
+      LastUpdate: DateTimeOffset_11
+    },
+    {
+      ServerName: TalKasha,
+      Coefficient: 100,
+      LastUpdate: DateTimeOffset_6
+    },
+    {
+      ServerName: Kourial,
+      Coefficient: 1000,
+      LastUpdate: DateTimeOffset_12
+    }
+  ],
+  Prices: [
+    {
+      ServerName: Mikhal,
+      Price: 3900000.0,
+      LastUpdate: DateTimeOffset_13
+    },
+    {
+      ServerName: Tylezia,
+      Price: 2000000.0,
+      LastUpdate: DateTimeOffset_14
+    },
+    {
+      ServerName: Ombre,
+      Price: 100.0,
+      LastUpdate: DateTimeOffset_15
+    },
+    {
+      ServerName: Orukam,
+      Price: 1.0,
+      LastUpdate: DateTimeOffset_16
+    },
+    {
+      ServerName: Salar,
+      Price: 3000000.0,
+      LastUpdate: DateTimeOffset_17
+    },
+    {
+      ServerName: HellMina,
+      Price: 3700000.0,
+      LastUpdate: DateTimeOffset_18
+    },
+    {
+      ServerName: Imagiro,
+      Price: 2199999.0,
+      LastUpdate: DateTimeOffset_19
+    },
+    {
+      ServerName: Brial,
+      Price: 4000005.0,
+      LastUpdate: DateTimeOffset_20
+    },
+    {
+      ServerName: Dakal,
+      Price: 4000000.0,
+      LastUpdate: DateTimeOffset_21
+    },
+    {
+      ServerName: Draconiros,
+      Price: 4444000.0,
+      LastUpdate: DateTimeOffset_22
+    },
+    {
+      ServerName: Rafal,
+      Price: 3200000.0,
+      LastUpdate: DateTimeOffset_23
+    },
+    {
+      ServerName: TalKasha,
+      Price: 1.0,
+      LastUpdate: DateTimeOffset_24
+    },
+    {
+      ServerName: Kourial,
+      Price: 2000000.0,
+      LastUpdate: DateTimeOffset_25
+    }
+  ]
+}
