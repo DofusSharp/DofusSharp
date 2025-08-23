@@ -24,12 +24,12 @@ In both the examples below we will fetch the items from level 50 to 100, that ar
 The query interface returns an `IAsyncEnumerable<TResource>` that will fetch all the available pages automatically while iterating over the results.
 
 ```csharp
-DofusDbQuery<Item> query = DofusDbQuery.Production().Items()
+DofusDbQuery<DofusDbItem> query = DofusDbQuery.Production().Items()
     .Select(i => i.Name)
     .OrderByDescending(i => i.RealWeight)
     .Where(i => i.Level >= 50 && i.Level <= 100 && i.Usable == false);
-IAsyncEnumerable<Item> itemsEnumerable = await query.ExecuteAsync();
-Item[] items = itemsEnumerable.ToArrayAsync();
+IAsyncEnumerable<DofusDbItem> itemsEnumerable = await query.ExecuteAsync();
+DofusDbItem[] items = itemsEnumerable.ToArrayAsync();
 ```
 
 > [!NOTE]
@@ -42,18 +42,18 @@ Item[] items = itemsEnumerable.ToArrayAsync();
 The low-level client grants direct access to the request parameters exposed by `FeatherJS`.
 
 ```csharp
-IDofusDbTableClient<Item> client = DofusDbTableClient.Production().Items();
-SearchResult<Item> items = await client.SearchAsync(
-    new SearchQuery
+IDofusDbTableClient<DofusDbItem> client = DofusDbTableClient.Production().Items();
+SearchResult<DofusDbItem> items = await client.SearchAsync(
+    new DofusDbSearchQuery
     {
         Limit = 50,
         Select = ["name"],
-        Sort = new Dictionary<string, SearchQuerySortOrder> { { "realWeight", SearchQuerySortOrder.Descending } }, 
+        Sort = new Dictionary<string, DofusDbSearchQuerySortOrder> { { "realWeight", DofusDbSearchQuerySortOrder.Descending } }, 
         Predicates =
         [
-            new SearchPredicate.GreaterThanOrEqual("level", "50"),
-            new SearchPredicate.LessThanOrEqual("level", "100"),
-            new SearchPredicate.Eq("usable", "false")
+            new DofusDbSearchPredicate.GreaterThanOrEqual("level", "50"),
+            new DofusDbSearchPredicate.LessThanOrEqual("level", "100"),
+            new DofusDbSearchPredicate.Eq("usable", "false")
         ]
     }
 );
