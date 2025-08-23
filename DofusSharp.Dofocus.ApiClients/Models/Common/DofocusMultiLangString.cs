@@ -1,4 +1,4 @@
-﻿namespace DofusSharp.Dofocus.ApiClients.Models;
+﻿namespace DofusSharp.Dofocus.ApiClients.Models.Common;
 
 /// <summary>
 ///     Localized string for multiple languages.

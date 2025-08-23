@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using DofusSharp.Dofocus.ApiClients;
-using DofusSharp.Dofocus.ApiClients.Models;
+using DofusSharp.Dofocus.ApiClients.Models.Common;
+using DofusSharp.Dofocus.ApiClients.Models.Items;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Moq;

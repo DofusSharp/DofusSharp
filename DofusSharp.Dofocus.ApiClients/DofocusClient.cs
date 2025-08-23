@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using DofusSharp.Common;
-using DofusSharp.Dofocus.ApiClients.Models;
+using DofusSharp.Dofocus.ApiClients.Models.Items;
 
 namespace DofusSharp.Dofocus.ApiClients;
 

@@ -1,4 +1,6 @@
-﻿namespace DofusSharp.Dofocus.ApiClients.Models;
+﻿using DofusSharp.Dofocus.ApiClients.Models.Common;
+
+namespace DofusSharp.Dofocus.ApiClients.Models.Items;
 
 /// <summary>
 ///     Minimal representation of an item in Dofocus.
