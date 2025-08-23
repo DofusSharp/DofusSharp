@@ -173,7 +173,7 @@ public class DofocusItemsClientTest
     public async Task PutItemCoefficient_Should_ReturnResponse()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456")
+        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456/coefficient")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new PutItemCoefficientResponse
@@ -192,7 +192,7 @@ public class DofocusItemsClientTest
 
         httpHandlerMock.VerifyRequest(
             HttpMethod.Put,
-            "http://base.com/123456",
+            "http://base.com/123456/coefficient",
             message =>
             {
                 PutItemCoefficientRequest? request = message.Content!.ReadFromJsonAsync<PutItemCoefficientRequest>().Result;

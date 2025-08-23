@@ -37,7 +37,7 @@ public class DofocusRunesClient(Uri baseAddress)
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
 
-        using HttpResponseMessage response = await httpClient.PutAsync($"{runeId}", JsonContent.Create(request, options: _options), cancellationToken);
+        using HttpResponseMessage response = await httpClient.PutAsync($"{runeId}/prices", JsonContent.Create(request, options: _options), cancellationToken);
         response.EnsureSuccessStatusCode();
 
         PutRunePriceResponse? result = await response.Content.ReadFromJsonAsync<PutRunePriceResponse>(_options, cancellationToken);

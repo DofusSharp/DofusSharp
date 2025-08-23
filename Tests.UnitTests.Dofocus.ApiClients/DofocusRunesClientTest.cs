@@ -85,7 +85,7 @@ public class DofocusRunesClientTest
     public async Task PutRunePrice_Should_ReturnResponse()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456")
+        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456/prices")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new PutRunePriceResponse
@@ -103,7 +103,7 @@ public class DofocusRunesClientTest
 
         httpHandlerMock.VerifyRequest(
             HttpMethod.Put,
-            "http://base.com/123456",
+            "http://base.com/123456/prices",
             message =>
             {
                 PutRunePriceRequest? request = message.Content!.ReadFromJsonAsync<PutRunePriceRequest>().Result;
