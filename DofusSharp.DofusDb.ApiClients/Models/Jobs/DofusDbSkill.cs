@@ -6,7 +6,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Jobs;
 /// <summary>
 ///     A skill associated with a job in the game.
 /// </summary>
-public class DofusDbSkill : DofusDbEntity
+public class DofusDbSkill : DofusDbResource
 {
     /// <summary>
     ///     The unique identifier of the parent job for this skill.

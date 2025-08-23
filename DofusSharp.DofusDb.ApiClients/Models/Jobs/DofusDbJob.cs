@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Jobs;
 /// <summary>
 ///     A job in the game.
 /// </summary>
-public class DofusDbJob : DofusDbEntity
+public class DofusDbJob : DofusDbResource
 {
     /// <summary>
     ///     The ID of the icon associated with the job.

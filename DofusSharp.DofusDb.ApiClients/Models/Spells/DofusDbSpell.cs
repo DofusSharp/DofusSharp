@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Spells;
 /// <summary>
 ///     A spell in the game.
 /// </summary>
-public class DofusDbSpell : DofusDbEntity
+public class DofusDbSpell : DofusDbResource
 {
     /// <summary>
     ///     The unique identifier of the type of the spell.

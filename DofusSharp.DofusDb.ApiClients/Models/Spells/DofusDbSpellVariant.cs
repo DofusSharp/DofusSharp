@@ -3,7 +3,7 @@
 /// <summary>
 ///     A pair of spells that are variants of each other for a given breed.
 /// </summary>
-public class DofusDbSpellVariant : DofusDbEntity
+public class DofusDbSpellVariant : DofusDbResource
 {
     /// <summary>
     ///     The unique identifier of the breed associated with this spell variants.

@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 /// <summary>
 ///     A set of items that can be equipped together to gain bonuses.
 /// </summary>
-public class DofusDbItemSet : DofusDbEntity
+public class DofusDbItemSet : DofusDbResource
 {
     /// <summary>
     ///     The name of the item set.

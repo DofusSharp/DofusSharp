@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Maps;
 /// <summary>
 ///     A dungeon in the game.
 /// </summary>
-public class DofusDbDungeon : DofusDbEntity
+public class DofusDbDungeon : DofusDbResource
 {
     /// <summary>
     ///     The optimal player level for the dungeon.

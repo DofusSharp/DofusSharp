@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 /// <summary>
 ///     A type of item, used for categorization.
 /// </summary>
-public class DofusDbItemType : DofusDbEntity
+public class DofusDbItemType : DofusDbResource
 {
     /// <summary>
     ///     The name of the item type.

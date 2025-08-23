@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Spells;
 /// <summary>
 ///     A type of spell in the game.
 /// </summary>
-public class DofusDbSpellType : DofusDbEntity
+public class DofusDbSpellType : DofusDbResource
 {
     /// <summary>
     ///     The localized long name of the spell type.

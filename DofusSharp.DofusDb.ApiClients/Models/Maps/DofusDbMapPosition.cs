@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Maps;
 /// <summary>
 ///     Position information about a map in the game.
 /// </summary>
-public class DofusDbMapPosition : DofusDbEntity
+public class DofusDbMapPosition : DofusDbResource
 {
     /// <summary>
     ///     The X coordinate of the map.

@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Spells;
 /// <summary>
 ///     A state that can be applied by spells in the game.
 /// </summary>
-public class DofusDbSpellState : DofusDbEntity
+public class DofusDbSpellState : DofusDbResource
 {
     /// <summary>
     ///     Indicates whether the state prevents spell casting.

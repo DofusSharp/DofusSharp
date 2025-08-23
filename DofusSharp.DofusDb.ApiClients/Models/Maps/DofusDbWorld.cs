@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Maps;
 /// <summary>
 ///     A world in the game.
 /// </summary>
-public class DofusDbWorld : DofusDbEntity
+public class DofusDbWorld : DofusDbResource
 {
     /// <summary>
     ///     The X coordinate of the origin of the world.

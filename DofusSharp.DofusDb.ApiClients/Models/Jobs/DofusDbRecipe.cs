@@ -3,7 +3,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 
 namespace DofusSharp.DofusDb.ApiClients.Models.Jobs;
 
-public class DofusDbRecipe : DofusDbEntity
+public class DofusDbRecipe : DofusDbResource
 {
     public long? ResultId { get; init; }
     public long? ResultTypeId { get; init; }

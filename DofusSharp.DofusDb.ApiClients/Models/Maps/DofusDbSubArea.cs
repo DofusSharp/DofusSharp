@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Maps;
 /// <summary>
 ///     A sub area within an area.
 /// </summary>
-public class DofusDbSubArea : DofusDbEntity
+public class DofusDbSubArea : DofusDbResource
 {
     /// <summary>
     ///     The unique identifier of the area that the sub area belongs to.

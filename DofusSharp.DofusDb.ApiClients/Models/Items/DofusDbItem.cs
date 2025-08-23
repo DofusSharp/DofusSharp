@@ -12,7 +12,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Items;
     UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor
 )]
 [JsonDerivedType(typeof(DofusDbWeapon), "Weapons")]
-public class DofusDbItem : DofusDbEntity
+public class DofusDbItem : DofusDbResource
 {
     /// <summary>
     ///     The unique identifier of the type of the item.

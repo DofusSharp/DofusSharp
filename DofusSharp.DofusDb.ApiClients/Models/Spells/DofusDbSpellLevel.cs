@@ -3,7 +3,7 @@
 /// <summary>
 ///     A spell level in the game. Each spell has multiple levels with different properties.
 /// </summary>
-public class DofusDbSpellLevel : DofusDbEntity
+public class DofusDbSpellLevel : DofusDbResource
 {
     /// <summary>
     ///     The unique identifier of the spell associated with this level.

@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Items;
 /// <summary>
 ///     A super type of item, used for categorization.
 /// </summary>
-public class DofusDbItemSuperType : DofusDbEntity
+public class DofusDbItemSuperType : DofusDbResource
 {
     /// <summary>
     ///     The name of the item super type.

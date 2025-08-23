@@ -3,7 +3,7 @@
 /// <summary>
 ///     A map in the game.
 /// </summary>
-public class DofusDbMap : DofusDbEntity
+public class DofusDbMap : DofusDbResource
 {
     /// <summary>
     ///     The unique identifiers of background fixtures for the map.

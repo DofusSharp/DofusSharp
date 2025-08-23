@@ -6,7 +6,7 @@ using DofusSharp.DofusDb.ApiClients.Search;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
-public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) where TResource: DofusDbEntity
+public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) where TResource: DofusDbResource
 {
     int? _limit;
     int? _skip;
