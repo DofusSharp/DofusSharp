@@ -14,10 +14,10 @@ namespace Tests.UnitTests.Dofocus.ApiClients;
 public class DofocusItemsClientTest
 {
     [Fact]
-    public async Task GetItemById_ReturnsExpectedItem()
+    public async Task GetItems_Should_ReturnItems()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/items")
+        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new[]
