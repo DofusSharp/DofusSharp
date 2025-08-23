@@ -30,7 +30,7 @@ public class DofocusRunesClientTest
                         CharacteristicName = new DofocusMultiLangString { Fr = "CHAR NAME FR 1", En = "CHAR NAME EN 1", Es = "CHAR NAME ES 1" },
                         Value = 56,
                         Weight = 78,
-                        LatestPrices = [new DofocusPriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
+                        LatestPrices = [new DofocusRunePriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
                     },
                     new DofocusRune
                     {
@@ -40,7 +40,7 @@ public class DofocusRunesClientTest
                         CharacteristicName = new DofocusMultiLangString { Fr = "CHAR NAME FR 1", En = "CHAR NAME EN 1", Es = "CHAR NAME ES 1" },
                         Value = 58,
                         Weight = 36,
-                        LatestPrices = [new DofocusPriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
+                        LatestPrices = [new DofocusRunePriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
                     }
                 }
             );
@@ -62,7 +62,7 @@ public class DofocusRunesClientTest
                         CharacteristicName = new DofocusMultiLangString { Fr = "CHAR NAME FR 1", En = "CHAR NAME EN 1", Es = "CHAR NAME ES 1" },
                         Value = 56,
                         Weight = 78,
-                        LatestPrices = [new DofocusPriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
+                        LatestPrices = [new DofocusRunePriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
                     },
                     new DofocusRune
                     {
@@ -72,7 +72,7 @@ public class DofocusRunesClientTest
                         CharacteristicName = new DofocusMultiLangString { Fr = "CHAR NAME FR 1", En = "CHAR NAME EN 1", Es = "CHAR NAME ES 1" },
                         Value = 58,
                         Weight = 36,
-                        LatestPrices = [new DofocusPriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
+                        LatestPrices = [new DofocusRunePriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
                     }
                 ]
             );

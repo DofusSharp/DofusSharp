@@ -1,5 +1,4 @@
 ﻿using DofusSharp.Dofocus.ApiClients.Models.Common;
-using DofusSharp.Dofocus.ApiClients.Models.Runes;
 
 namespace DofusSharp.Dofocus.ApiClients.Models.Items;
 
@@ -41,7 +40,7 @@ public class DofocusItem
     /// <summary>
     ///     The minimal characteristics of the item.
     /// </summary>
-    public required IReadOnlyCollection<DofocusItemCharacteristics> Characteristics { get; init; }
+    public required IReadOnlyCollection<DofocusItemCharacteristic> Characteristics { get; init; }
 
     /// <summary>
     ///     The coefficients recorded for the item across different servers.
@@ -51,5 +50,5 @@ public class DofocusItem
     /// <summary>
     ///     The price recorded for the item across different servers.
     /// </summary>
-    public required IReadOnlyCollection<DofocusPriceRecord> Prices { get; init; }
+    public required IReadOnlyCollection<DofocusItemPriceRecord> Prices { get; init; }
 }

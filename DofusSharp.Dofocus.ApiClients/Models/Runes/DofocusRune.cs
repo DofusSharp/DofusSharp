@@ -40,5 +40,5 @@ public class DofocusRune
     /// <summary>
     ///     The latest price records for the rune across different servers.
     /// </summary>
-    public required IReadOnlyCollection<DofocusPriceRecord> LatestPrices { get; init; }
+    public required IReadOnlyCollection<DofocusRunePriceRecord> LatestPrices { get; init; }
 }
