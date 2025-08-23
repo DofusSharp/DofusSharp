@@ -4,7 +4,7 @@
 @inject ServersService ServersService
 @inject NavigationManager NavigationManager
 
-<div class="container">
+<div class="container" data-bs-theme="@_theme">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-md-3 mb-2 mb-md-0">
             <img src="img/logo-48.png" width="48" height="48" alt="Logo"/>
@@ -46,6 +46,7 @@
 
 @code {
 
+    readonly string _theme = Application.Current?.RequestedTheme is AppTheme.Dark ? "dark" : "light";
     IReadOnlyCollection<DofocusServer>? _servers;
     DofocusServer? _currentServer;
 
