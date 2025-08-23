@@ -1,6 +1,6 @@
-﻿namespace DofusSharp.DofusDb.ApiClients.Clients;
+﻿namespace DofusSharp.Common;
 
-static class DofusDbClientUtils
+public static class HttpClientUtils
 {
     public static HttpClient CreateHttpClient(IHttpClientFactory? clientFactory, Uri baseAddress, Uri? referrer = null)
     {

@@ -1,11 +1,11 @@
-namespace DofusSharp.DofusDb.ApiClients.Clients;
+namespace DofusSharp.Common;
 
 /// <summary>
 ///     A stream that wraps an <see cref="HttpResponseMessage" /> to ensure it is disposed when the stream is disposed.
 ///     This allows to return the content of the response as a stream without copying to a new stream.
 /// </summary>
 /// <remarks>https://stackoverflow.com/a/75668203/26358508</remarks>
-class HttpResponseMessageStream : Stream
+public class HttpResponseMessageStream : Stream
 {
     readonly HttpResponseMessage _response;
     readonly Stream _inner;

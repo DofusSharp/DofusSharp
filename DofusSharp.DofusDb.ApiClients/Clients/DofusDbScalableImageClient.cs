@@ -1,4 +1,5 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
+﻿using DofusSharp.Common;
+using DofusSharp.DofusDb.ApiClients.Models.Common;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
@@ -29,7 +30,7 @@ class DofusDbScalableImageClient<TId> : IDofusDbScalableImageClient<TId>
             _ => throw new ArgumentOutOfRangeException(nameof(scale), scale, null)
         };
         string extension = ImageFormat.ToExtension();
-        using HttpClient httpClient = DofusDbClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
 
         // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
         HttpResponseMessage response = await httpClient.GetAsync($"{scaleString}/{id}.{extension}", cancellationToken);
