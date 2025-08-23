@@ -192,6 +192,10 @@
             _rankedItems.RemoveAll(m => m.Item.Id == item.Id);
             _rankedItems.Add(result.Value);
         }
+        catch (Exception exn)
+        {
+            Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name.En, item.Id);
+        }
         finally
         {
             _searching = false;
