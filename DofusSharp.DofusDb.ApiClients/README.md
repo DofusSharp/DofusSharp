@@ -1,4 +1,4 @@
-﻿# DofusDB API Clients
+﻿# [DofusDB](https://dofusdb.fr) API Clients
 
 > [!IMPORTANT]
 > This project is under active development. Note that not all available APIs have been implemented at this time.

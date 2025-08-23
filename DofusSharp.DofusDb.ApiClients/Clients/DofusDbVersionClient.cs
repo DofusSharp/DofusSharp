@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using DofusSharp.Common;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
@@ -17,7 +18,7 @@ class DofusDbVersionClient : IDofusDbVersionClient
 
     public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = DofusDbClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(string.Empty, cancellationToken);
         response.EnsureSuccessStatusCode();
 

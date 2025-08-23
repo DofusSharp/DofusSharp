@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using DofusSharp.Common;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 using DofusSharp.DofusDb.ApiClients.Serialization;
@@ -32,7 +33,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
 
     public async Task<TResource> GetAsync(int id, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = DofusDbClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
@@ -50,7 +51,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         DofusDbSearchQuery query = new() { Limit = 0, Predicates = predicates };
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
 
-        using HttpClient httpClient = DofusDbClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync($"?{queryParams}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
@@ -68,7 +69,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
         string requestUri = string.IsNullOrWhiteSpace(queryParams) ? string.Empty : $"?{queryParams}";
 
-        using HttpClient httpClient = DofusDbClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(requestUri, cancellationToken);
         response.EnsureSuccessStatusCode();
 
