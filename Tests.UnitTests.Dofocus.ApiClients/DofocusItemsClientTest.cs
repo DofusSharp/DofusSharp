@@ -32,7 +32,7 @@ public class DofocusItemsClientTest
                         Level = 34,
                         SuperType = new DofocusSuperTypeMinimal { Id = 56 },
                         ImageUrl = "http://image1.com",
-                        Characteristics = [new DofocusItemCharacteristicsMinimal { Id = 78 }, new DofocusItemCharacteristicsMinimal { Id = 90 }]
+                        Characteristics = [new DofocusItemCharacteristicMinimal { Id = 78 }, new DofocusItemCharacteristicMinimal { Id = 90 }]
                     },
                     new DofocusItemMinimal
                     {
@@ -41,7 +41,7 @@ public class DofocusItemsClientTest
                         Level = 72,
                         SuperType = new DofocusSuperTypeMinimal { Id = 58 },
                         ImageUrl = "http://image1.com",
-                        Characteristics = [new DofocusItemCharacteristicsMinimal { Id = 36 }, new DofocusItemCharacteristicsMinimal { Id = 90 }]
+                        Characteristics = [new DofocusItemCharacteristicMinimal { Id = 36 }, new DofocusItemCharacteristicMinimal { Id = 90 }]
                     }
                 }
             );
@@ -62,7 +62,7 @@ public class DofocusItemsClientTest
                         Level = 34,
                         SuperType = new DofocusSuperTypeMinimal { Id = 56 },
                         ImageUrl = "http://image1.com",
-                        Characteristics = [new DofocusItemCharacteristicsMinimal { Id = 78 }, new DofocusItemCharacteristicsMinimal { Id = 90 }]
+                        Characteristics = [new DofocusItemCharacteristicMinimal { Id = 78 }, new DofocusItemCharacteristicMinimal { Id = 90 }]
                     },
                     new DofocusItemMinimal
                     {
@@ -71,7 +71,7 @@ public class DofocusItemsClientTest
                         Level = 72,
                         SuperType = new DofocusSuperTypeMinimal { Id = 58 },
                         ImageUrl = "http://image1.com",
-                        Characteristics = [new DofocusItemCharacteristicsMinimal { Id = 36 }, new DofocusItemCharacteristicsMinimal { Id = 90 }]
+                        Characteristics = [new DofocusItemCharacteristicMinimal { Id = 36 }, new DofocusItemCharacteristicMinimal { Id = 90 }]
                     }
                 ]
             );
