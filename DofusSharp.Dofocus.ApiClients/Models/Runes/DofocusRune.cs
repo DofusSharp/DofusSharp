@@ -20,7 +20,7 @@ public class DofocusRune
     /// <summary>
     ///     The unique identifier of the characteristic affected by the rune.
     /// </summary>
-    public required long CharacteristicId { get; init; }
+    public required long? CharacteristicId { get; init; }
 
     /// <summary>
     ///     The localized name of the characteristic affected by the rune.
