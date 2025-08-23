@@ -2,6 +2,7 @@
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Common;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
+using DofusSharp.Dofocus.ApiClients.Models.Runes;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Moq;
@@ -71,6 +72,98 @@ public class DofocusItemsClientTest
                         Characteristics = [new DofocusItemCharacteristicsMinimal { Id = 36 }, new DofocusItemCharacteristicsMinimal { Id = 90 }]
                     }
                 ]
+            );
+    }
+
+    [Fact]
+    public async Task GetItem_Should_ReturnItem()
+    {
+        Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
+        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123456")
+            .ReturnsJsonResponse(
+                HttpStatusCode.OK,
+                new DofocusItem
+                {
+                    Id = 12,
+                    Name = new DofocusMultiLangString { Fr = "NAME FR 1", En = "NAME EN 1", Es = "NAME ES 1" },
+                    Level = 34,
+                    SuperType = new DofocusSuperType { Id = 56, Name = new DofocusMultiLangString { Fr = "SUPERTYPE FR 1", En = "SUPERTYPE EN 1", Es = "SUPERTYPE ES 1" } },
+                    Type = new DofocusType { Id = 78, Name = new DofocusMultiLangString { Fr = "TYPE FR 1", En = "TYPE EN 1", Es = "TYPE ES 1" } },
+                    ImageUrl = "http://image1.com",
+                    Characteristics =
+                    [
+                        new DofocusItemCharacteristics
+                        {
+                            Id = 123,
+                            Name = new DofocusMultiLangString { Fr = "CHAR FR 1", En = "CHAR EN 1", Es = "CHAR ES 1" },
+                            From = 456,
+                            To = 789
+                        },
+                        new DofocusItemCharacteristics
+                        {
+                            Id = 147,
+                            Name = new DofocusMultiLangString { Fr = "CHAR FR 2", En = "CHAR EN 2", Es = "CHAR ES 2" },
+                            From = 258,
+                            To = 369
+                        }
+                    ],
+                    Coefficients =
+                    [
+                        new DofocusCoefficientRecord { ServerName = "SERVER 1", Coefficient = 1234, LastUpdate = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) },
+                        new DofocusCoefficientRecord { ServerName = "SERVER 2", Coefficient = 5678, LastUpdate = new DateTimeOffset(2, 3, 4, 5, 6, 7, TimeSpan.Zero) }
+                    ],
+                    Prices =
+                    [
+                        new DofocusPriceRecord { ServerName = "SERVER 3", Price = 1472, DateUpdated = new DateTimeOffset(3, 4, 5, 6, 7, 8, TimeSpan.Zero) },
+                        new DofocusPriceRecord { ServerName = "SERVER 4", Price = 5836, DateUpdated = new DateTimeOffset(4, 5, 6, 7, 8, 9, TimeSpan.Zero) }
+                    ]
+                }
+            );
+        DofocusItemsClient client = new(new Uri("http://base.com"))
+        {
+            HttpClientFactory = httpHandlerMock.CreateClientFactory()
+        };
+
+        DofocusItem result = await client.GetItemAsync(123456);
+
+        result.Should()
+            .BeEquivalentTo(
+                new DofocusItem
+                {
+                    Id = 12,
+                    Name = new DofocusMultiLangString { Fr = "NAME FR 1", En = "NAME EN 1", Es = "NAME ES 1" },
+                    Level = 34,
+                    SuperType = new DofocusSuperType { Id = 56, Name = new DofocusMultiLangString { Fr = "SUPERTYPE FR 1", En = "SUPERTYPE EN 1", Es = "SUPERTYPE ES 1" } },
+                    Type = new DofocusType { Id = 78, Name = new DofocusMultiLangString { Fr = "TYPE FR 1", En = "TYPE EN 1", Es = "TYPE ES 1" } },
+                    ImageUrl = "http://image1.com",
+                    Characteristics =
+                    [
+                        new DofocusItemCharacteristics
+                        {
+                            Id = 123,
+                            Name = new DofocusMultiLangString { Fr = "CHAR FR 1", En = "CHAR EN 1", Es = "CHAR ES 1" },
+                            From = 456,
+                            To = 789
+                        },
+                        new DofocusItemCharacteristics
+                        {
+                            Id = 147,
+                            Name = new DofocusMultiLangString { Fr = "CHAR FR 2", En = "CHAR EN 2", Es = "CHAR ES 2" },
+                            From = 258,
+                            To = 369
+                        }
+                    ],
+                    Coefficients =
+                    [
+                        new DofocusCoefficientRecord { ServerName = "SERVER 1", Coefficient = 1234, LastUpdate = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) },
+                        new DofocusCoefficientRecord { ServerName = "SERVER 2", Coefficient = 5678, LastUpdate = new DateTimeOffset(2, 3, 4, 5, 6, 7, TimeSpan.Zero) }
+                    ],
+                    Prices =
+                    [
+                        new DofocusPriceRecord { ServerName = "SERVER 3", Price = 1472, DateUpdated = new DateTimeOffset(3, 4, 5, 6, 7, 8, TimeSpan.Zero) },
+                        new DofocusPriceRecord { ServerName = "SERVER 4", Price = 5836, DateUpdated = new DateTimeOffset(4, 5, 6, 7, 8, 9, TimeSpan.Zero) }
+                    ]
+                }
             );
     }
 }

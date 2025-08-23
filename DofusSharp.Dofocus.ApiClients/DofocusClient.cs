@@ -8,8 +8,8 @@ namespace DofusSharp.Dofocus.ApiClients;
 
 public static class DofocusClient
 {
-    public static DofocusItemsClient Items() => new(new Uri("https://dofocus.fr/api/items"));
-    public static DofocusRunesClient Runes() => new(new Uri("https://dofocus.fr/api/runes"));
+    public static DofocusItemsClient Items() => new(new Uri("https://dofocus.fr/api/items/"));
+    public static DofocusRunesClient Runes() => new(new Uri("https://dofocus.fr/api/runes/"));
 }
 
 public class DofocusItemsClient(Uri baseAddress)
@@ -26,6 +26,21 @@ public class DofocusItemsClient(Uri baseAddress)
         response.EnsureSuccessStatusCode();
 
         IReadOnlyCollection<DofocusItemMinimal>? result = await response.Content.ReadFromJsonAsync<IReadOnlyCollection<DofocusItemMinimal>>(_options, cancellationToken);
+        if (result == null)
+        {
+            throw new InvalidOperationException("Could not deserialize the results.");
+        }
+
+        return result;
+    }
+
+    public async Task<DofocusItem> GetItemAsync(long id, CancellationToken cancellationToken = default)
+    {
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
+        using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        DofocusItem? result = await response.Content.ReadFromJsonAsync<DofocusItem>(_options, cancellationToken);
         if (result == null)
         {
             throw new InvalidOperationException("Could not deserialize the results.");
