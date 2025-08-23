@@ -1,9 +1,10 @@
 ﻿@inject ServersService ServersService
+@inject ItemsService ItemsService
+@inject RunesService RunesService
 @inject NavigationManager NavigationManager
 @inject ILogger<Server> Logger
 @page "/servers/{ServerName}"
 @using BestCrush.Services
-@using DofusSharp.Dofocus.ApiClients
 @using DofusSharp.Dofocus.ApiClients.Models.Items
 @using DofusSharp.Dofocus.ApiClients.Models.Runes
 @using Microsoft.Extensions.Logging
@@ -30,25 +31,26 @@
 
     @if (_unrankedItems is not null && _rankedItems is not null)
     {
-        <div class="row align-items-start">
-            @if (_rankedItems.Count > 0)
-            {
-                <div class="col">
-                    <ul>
-                        @foreach (ItemCrushResult item in _rankedItems.Values.Take(10))
-                        {
-                            <li>
+        @if (_rankedItems.Count > 0)
+        {
+            <ul class="list-group list-group-flush">
+                @foreach (ItemCrushResult item in _rankedItems.OrderByDescending(r => r.Benefits))
+                {
+                    <li class="list-group-item">
+                        <div class="d-flex gap-4">
+                            <div class="d-flex align-items-start justify-content-center">
+                                <div class="item-icon rounded">
+                                    @if (item.ItemIcon is not null)
+                                    {
+                                        <img src="data:@item.ItemIcon" width="32" height="32" alt="Item icon"/>
+                                    }
+                                </div>
+                            </div>
+                            <div>
                                 <div>@item.Item.Name.En Lv. @item.Item.Level</div>
+                                <div>Cost: @item.Cost <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></div>
                                 <div>
-                                    @if (item.Benefits >= 0)
-                                    {
-                                        <span class="text-success">+@item.Benefits K</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">@item.Benefits K</span>
-                                    }
-
+                                    Price: @item.Price <img src="img/kama-20.png" alt="Kama" width="20" height="20"/>
                                     @if (item.FocusedCharacteristic is null)
                                     {
                                         <span class="text-secondary ms-1">(without focus)</span>
@@ -59,24 +61,37 @@
                                         <span class="text-secondary ms-1">(with focus: @characteristic.Name.En)</span>
                                     }
                                 </div>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            }
-            @if (_unrankedItems.Count > 0)
-            {
-                <p>Could not compute results for items:</p>
-                <div class="col">
-                    <ul class="text-secondary">
-                        @foreach (DofocusItemMinimal item in _unrankedItems.Take(10))
-                        {
-                            <li>@item.Name.En Lv. @item.Level</li>
-                        }
-                    </ul>
-                </div>
-            }
-        </div>
+                                <div>
+                                    @if (item.Benefits >= 0)
+                                    {
+                                        <span class="text-success">+@item.Benefits <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">@item.Benefits <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="flex-grow-1"></div>
+                            <div class="d-flex align-items-start justify-content-center">
+                                <button class="btn btn-outline-secondary" @onclick="() => RefreshBenefits(item.Item)" disabled="@_searching">Refresh</button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+
+        @if (_unrankedItems.Count > 0)
+        {
+            <p>Could not compute results for items:</p>
+            <ul class="text-secondary">
+                @foreach (DofocusItemMinimal item in _unrankedItems.Take(10))
+                {
+                    <li>@item.Name.En Lv. @item.Level</li>
+                }
+            </ul>
+        }
     }
 
     @if (_searching)
@@ -97,7 +112,7 @@
 
     private bool _searching;
     DofocusItemMinimal[]? _allItems;
-    SortedList<double, ItemCrushResult>? _rankedItems;
+    List<ItemCrushResult>? _rankedItems;
     List<DofocusItemMinimal>? _unrankedItems;
 
     protected override void OnInitialized() => Model ??= new Request();
@@ -110,65 +125,111 @@
         }
 
         _searching = true;
-        _rankedItems = null;
-        _unrankedItems = null;
-
-        DofocusItemsClient itemsClient = DofocusClient.Items();
-        DofocusRunesClient runesClient = DofocusClient.Runes();
-
-        Task<IReadOnlyCollection<DofocusItemMinimal>> itemsTask = itemsClient.GetItemsAsync();
-        Task<IReadOnlyCollection<DofocusRune>> runesTask = runesClient.GetRunesAsync();
-
-        await Task.WhenAll(itemsTask, runesTask);
-
-        DofocusItemMinimal[] items = FilterItems(itemsTask.Result).ToArray();
-        IReadOnlyCollection<DofocusRune> runes = runesTask.Result;
-
-        SortedList<double, ItemCrushResult> rankedItems = new();
-        List<DofocusItemMinimal> unrankedItems = [];
-
-        foreach (DofocusItemMinimal item in items)
+        try
         {
-            try
+            _rankedItems = null;
+            _unrankedItems = null;
+
+            Task<IReadOnlyCollection<DofocusItemMinimal>> itemsTask = ItemsService.GetItemsAsync();
+            Task<IReadOnlyCollection<DofocusRune>> runesTask = RunesService.GetRunesAsync();
+
+            await Task.WhenAll(itemsTask, runesTask);
+
+            DofocusItemMinimal[] items = FilterItems(itemsTask.Result).ToArray();
+            IReadOnlyCollection<DofocusRune> runes = runesTask.Result;
+
+            List<ItemCrushResult> rankedItems = new();
+            List<DofocusItemMinimal> unrankedItems = [];
+
+            foreach (DofocusItemMinimal item in items)
             {
-                DofocusItem detailedItem = await itemsClient.GetItemAsync(item.Id);
-                DofocusItemPriceRecord? itemCost = detailedItem.Prices.Where(r => r.ServerName == ServerName).OrderByDescending(r => r.LastUpdate).FirstOrDefault();
-                if (itemCost is null)
+                try
+                {
+                    ItemCrushResult? result = await ComputeBenefit(item, runes, false);
+                    if (!result.HasValue)
+                    {
+                        unrankedItems.Add(item);
+                    }
+                    else
+                    {
+                        rankedItems.Add(result.Value);
+                    }
+                }
+                catch (Exception exn)
                 {
                     unrankedItems.Add(item);
-                    continue;
+                    Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name.En, item.Id);
                 }
-
-                CrushedItemPrice crushedPrice = ComputeCrushedItemCost(detailedItem, runes);
-                KeyValuePair<long, double> maxPriceWithFocus = crushedPrice.WithFocus.OrderByDescending(kv => kv.Value).FirstOrDefault();
-
-                long? focusedCharacteristic;
-                double price;
-                if (maxPriceWithFocus.Value > crushedPrice.WithoutFocus)
-                {
-                    focusedCharacteristic = maxPriceWithFocus.Key;
-                    price = maxPriceWithFocus.Value;
-                }
-                else
-                {
-                    focusedCharacteristic = null;
-                    price = crushedPrice.WithoutFocus;
-                }
-
-                double benefits = price - itemCost.Price;
-                rankedItems.Add(benefits, new ItemCrushResult(detailedItem, itemCost.Price, price, benefits, focusedCharacteristic));
             }
-            catch (Exception exn)
-            {
-                unrankedItems.Add(item);
-                Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name.En, item.Id);
-            }
+
+            _allItems = items;
+            _rankedItems = rankedItems;
+            _unrankedItems = unrankedItems;
+        }
+        finally
+        {
+            _searching = false;
+        }
+    }
+
+    async Task RefreshBenefits(DofocusItemMinimal item)
+    {
+        if (_rankedItems is null || _searching)
+        {
+            return;
         }
 
-        _searching = false;
-        _allItems = items;
-        _rankedItems = rankedItems;
-        _unrankedItems = unrankedItems;
+        _searching = true;
+        try
+        {
+            IReadOnlyCollection<DofocusRune> runes = await RunesService.GetRunesAsync(true);
+            ItemCrushResult? result = await ComputeBenefit(item, runes, true);
+            if (!result.HasValue)
+            {
+                return;
+            }
+
+            _rankedItems.RemoveAll(m => m.Item.Id == item.Id);
+            _rankedItems.Add(result.Value);
+
+            StateHasChanged();
+        }
+        finally
+        {
+            _searching = false;
+        }
+    }
+
+    async Task<ItemCrushResult?> ComputeBenefit(DofocusItemMinimal item, IReadOnlyCollection<DofocusRune> runes, bool forceRefresh)
+    {
+        DofocusItem detailedItem = await ItemsService.GetItemAsync(item.Id, forceRefresh);
+        DofocusItemPriceRecord? itemCost = detailedItem.Prices.Where(r => r.ServerName == ServerName).OrderByDescending(r => r.LastUpdate).FirstOrDefault();
+        if (itemCost is null)
+        {
+            return null;
+        }
+
+        CrushedItemPrice crushedPrice = ComputeCrushedItemCost(detailedItem, runes);
+        KeyValuePair<long, double> maxPriceWithFocus = crushedPrice.WithFocus.OrderByDescending(kv => kv.Value).FirstOrDefault();
+
+        long? focusedCharacteristic;
+        double price;
+        if (maxPriceWithFocus.Value > crushedPrice.WithoutFocus)
+        {
+            focusedCharacteristic = maxPriceWithFocus.Key;
+            price = maxPriceWithFocus.Value;
+        }
+        else
+        {
+            focusedCharacteristic = null;
+            price = crushedPrice.WithoutFocus;
+        }
+
+        double benefits = price - itemCost.Price;
+
+        string? icon = await ItemsService.GetItemIconAsync(detailedItem);
+        ItemCrushResult result = new(detailedItem, icon, itemCost.Price, price, benefits, focusedCharacteristic);
+        return result;
     }
 
     IEnumerable<DofocusItemMinimal> FilterItems(IReadOnlyCollection<DofocusItemMinimal> items)
@@ -217,7 +278,7 @@
 
     readonly record struct CrushedItemPrice(double WithoutFocus, IReadOnlyDictionary<long, double> WithFocus);
 
-    readonly record struct ItemCrushResult(DofocusItem Item, double Cost, double Price, double Benefits, long? FocusedCharacteristic);
+    readonly record struct ItemCrushResult(DofocusItem Item, string? ItemIcon, double Cost, double Price, double Benefits, long? FocusedCharacteristic);
 
     public class Request
     {

@@ -78,7 +78,7 @@
     {
         await ServersService.SetCurrentServerAsync(server);
         _currentServer = server;
-        NavigationManager.NavigateTo(KnownRoutes.Server(server));
+        NavigationManager.NavigateTo(KnownRoutes.Server(server), true);
     }
 
 }
