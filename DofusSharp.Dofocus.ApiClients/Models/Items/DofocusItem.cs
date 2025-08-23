@@ -51,4 +51,17 @@ public class DofocusItem
     ///     The price recorded for the item across different servers.
     /// </summary>
     public required IReadOnlyCollection<DofocusItemPriceRecord> Prices { get; init; }
+
+    public static implicit operator DofocusItemMinimal(DofocusItem item) => item.AsMinimal();
+
+    public DofocusItemMinimal AsMinimal() =>
+        new()
+        {
+            Id = Id,
+            Name = Name,
+            Level = Level,
+            SuperType = SuperType,
+            ImageUrl = ImageUrl,
+            Characteristics = Characteristics.Select(c => c.AsMinimal()).ToArray()
+        };
 }

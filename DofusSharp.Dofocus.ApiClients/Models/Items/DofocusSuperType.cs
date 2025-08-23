@@ -16,4 +16,8 @@ public class DofocusSuperType
     ///     The localized name of the super type.
     /// </summary>
     public required DofocusMultiLangString Name { get; init; }
+
+    public static implicit operator DofocusSuperTypeMinimal(DofocusSuperType item) => item.AsMinimal();
+
+    public DofocusSuperTypeMinimal AsMinimal() => new() { Id = Id };
 }

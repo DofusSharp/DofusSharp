@@ -3,7 +3,7 @@
 /// <summary>
 ///     Minimal representation of an item's characteristic.
 /// </summary>
-public class DofocusItemCharacteristicsMinimal
+public class DofocusItemCharacteristicMinimal
 {
     /// <summary>
     ///     The unique identifier of the characteristic.
