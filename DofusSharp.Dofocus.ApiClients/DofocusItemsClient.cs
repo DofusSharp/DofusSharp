@@ -16,6 +16,8 @@ public class DofocusItemsClient(Uri baseAddress)
     public async Task<IReadOnlyCollection<DofocusItemMinimal>> GetItemsAsync(CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
+        httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
+        
         using HttpResponseMessage response = await httpClient.GetAsync("", cancellationToken);
         response.EnsureSuccessStatusCode();
 
