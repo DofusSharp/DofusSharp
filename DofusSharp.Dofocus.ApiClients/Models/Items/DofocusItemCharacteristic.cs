@@ -5,7 +5,7 @@ namespace DofusSharp.Dofocus.ApiClients.Models.Items;
 /// <summary>
 ///     A characteristic of an item.
 /// </summary>
-public class DofocusItemCharacteristics
+public class DofocusItemCharacteristic
 {
     /// <summary>
     ///     The unique identifier of the characteristic.
