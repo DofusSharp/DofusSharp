@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject ILogger<Server> Logger
 @page "/servers/{ServerName}"
+@using BestCrush.Extensions
 @using BestCrush.Services
 @using DofusSharp.Dofocus.ApiClients.Models.Items
 @using DofusSharp.Dofocus.ApiClients.Models.Runes
@@ -47,7 +48,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div>@item.Item.Name.En Lv. @item.Item.Level</div>
+                                <div>@item.Item.Name.Localize() Lv. @item.Item.Level</div>
                                 <div>Cost: @item.Cost <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></div>
                                 <div>
                                     Price: @item.Price <img src="img/kama-20.png" alt="Kama" width="20" height="20"/>
@@ -88,7 +89,7 @@
             <ul class="text-secondary">
                 @foreach (DofocusItemMinimal item in _unrankedItems.Take(10))
                 {
-                    <li>@item.Name.En Lv. @item.Level</li>
+                    <li>@item.Name.Localize() Lv. @item.Level</li>
                 }
             </ul>
         }
@@ -138,7 +139,7 @@
             DofocusItemMinimal[] items = FilterItems(itemsTask.Result).ToArray();
             IReadOnlyCollection<DofocusRune> runes = runesTask.Result;
 
-            List<ItemCrushResult> rankedItems = new();
+            List<ItemCrushResult> rankedItems = [];
             List<DofocusItemMinimal> unrankedItems = [];
 
             foreach (DofocusItemMinimal item in items)
@@ -284,8 +285,54 @@
 
     public class Request
     {
-        public int LevelMin { get; set; }
-        public int LevelMax { get; set; }
+        public int? LevelMin { get; set; }
+        public int? LevelMax { get; set; }
+
+        public Dictionary<string, object?> ToQueryParameters()
+        {
+            Dictionary<string, object?> result = new();
+
+            if (LevelMin is not null)
+            {
+                result["levelMin"] = LevelMin.ToString()!;
+            }
+
+            if (LevelMax is not null)
+            {
+                result["levelMax"] = LevelMax.ToString()!;
+            }
+
+            return result;
+        }
+
+        public static Request? FromQuery(string query)
+        {
+            Request request = new();
+
+            string[] parts = query.Split('&', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string part in parts)
+            {
+                string[] kv = part.Split('=', 2);
+                if (kv.Length != 2)
+                {
+                    continue;
+                }
+
+                string key = kv[0].Trim();
+                string value = kv[1].Trim();
+
+                if (string.Equals(key, "levelMin", StringComparison.OrdinalIgnoreCase) && int.TryParse(value, out int levelMin))
+                {
+                    request.LevelMin = levelMin;
+                }
+                else if (string.Equals(key, "levelMax", StringComparison.OrdinalIgnoreCase) && int.TryParse(value, out int levelMax))
+                {
+                    request.LevelMax = levelMax;
+                }
+            }
+
+            return request;
+        }
     }
 
 }
