@@ -1,7 +1,10 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Common;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
+using DofusSharp.Dofocus.ApiClients.Requests;
+using DofusSharp.Dofocus.ApiClients.Responses;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Moq;
@@ -162,6 +165,49 @@ public class DofocusItemsClientTest
                         new DofocusItemPriceRecord { ServerName = "SERVER 3", Price = 1472, LastUpdate = new DateTimeOffset(3, 4, 5, 6, 7, 8, TimeSpan.Zero) },
                         new DofocusItemPriceRecord { ServerName = "SERVER 4", Price = 5836, LastUpdate = new DateTimeOffset(4, 5, 6, 7, 8, 9, TimeSpan.Zero) }
                     ]
+                }
+            );
+    }
+
+    [Fact]
+    public async Task PutItemCoefficient_Should_ReturnResponse()
+    {
+        Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
+        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456")
+            .ReturnsJsonResponse(
+                HttpStatusCode.OK,
+                new PutItemCoefficientResponse
+                {
+                    Message = "MESSAGE",
+                    Coefficient = new NewItemCoefficient
+                        { ItemId = 123, ServerName = "RESPONSE SERVER", Coefficient = 456, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }
+                }
+            );
+        DofocusItemsClient client = new(new Uri("http://base.com"))
+        {
+            HttpClientFactory = httpHandlerMock.CreateClientFactory()
+        };
+
+        PutItemCoefficientResponse result = await client.PutItemCoefficientAsync(123456, new PutItemCoefficientRequest { ServerName = "REQUEST SERVER", Coefficient = 987 });
+
+        httpHandlerMock.VerifyRequest(
+            HttpMethod.Put,
+            "http://base.com/123456",
+            message =>
+            {
+                PutItemCoefficientRequest? request = message.Content!.ReadFromJsonAsync<PutItemCoefficientRequest>().Result;
+                request.Should().BeEquivalentTo(new PutItemCoefficientRequest { ServerName = "REQUEST SERVER", Coefficient = 987 });
+                return true;
+            }
+        );
+
+        result.Should()
+            .BeEquivalentTo(
+                new PutItemCoefficientResponse
+                {
+                    Message = "MESSAGE",
+                    Coefficient = new NewItemCoefficient
+                        { ItemId = 123, ServerName = "RESPONSE SERVER", Coefficient = 456, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }
                 }
             );
     }
