@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using DofusSharp.Common;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
@@ -30,6 +31,8 @@ public class DofocusItemsClient(Uri baseAddress)
     public async Task<DofocusItem> GetItemAsync(long id, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
+        httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
+
         using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
