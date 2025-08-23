@@ -6,20 +6,20 @@ namespace DofusSharp.DofusDb.ApiClients;
 
 public class DofusDbQueryProvider(DofusDbClientsFactory factory)
 {
-    public DofusDbQuery<Item> Items() => new(factory.Items());
-    public DofusDbQuery<ItemType> ItemTypes() => new(factory.ItemTypes());
-    public DofusDbQuery<ItemSuperType> ItemSuperTypes() => new(factory.ItemSuperTypes());
-    public DofusDbQuery<ItemSet> ItemSets() => new(factory.ItemSets());
+    public DofusDbQuery<DofusDbItem> Items() => new(factory.Items());
+    public DofusDbQuery<DofusDbItemType> ItemTypes() => new(factory.ItemTypes());
+    public DofusDbQuery<DofusDbItemSuperType> ItemSuperTypes() => new(factory.ItemSuperTypes());
+    public DofusDbQuery<DofusDbItemSet> ItemSets() => new(factory.ItemSets());
 
-    public DofusDbQuery<Job> Jobs() => new(factory.Jobs());
-    public DofusDbQuery<Recipe> Recipes() => new(factory.Recipes());
-    public DofusDbQuery<Skill> Skills() => new(factory.Skills());
+    public DofusDbQuery<DofusDbJob> Jobs() => new(factory.Jobs());
+    public DofusDbQuery<DofusDbRecipe> Recipes() => new(factory.Recipes());
+    public DofusDbQuery<DofusDbSkill> Skills() => new(factory.Skills());
 
-    public DofusDbQuery<World> Worlds() => new(factory.Worlds());
-    public DofusDbQuery<SuperArea> SuperAreas() => new(factory.SuperAreas());
-    public DofusDbQuery<Area> Areas() => new(factory.Areas());
-    public DofusDbQuery<SubArea> SubAreas() => new(factory.SubAreas());
-    public DofusDbQuery<Map> Maps() => new(factory.Maps());
-    public DofusDbQuery<MapPosition> MapPositions() => new(factory.MapPositions());
-    public DofusDbQuery<Dungeon> Dungeons() => new(factory.Dungeons());
+    public DofusDbQuery<DofusDbWorld> Worlds() => new(factory.Worlds());
+    public DofusDbQuery<DofusDbSuperArea> SuperAreas() => new(factory.SuperAreas());
+    public DofusDbQuery<DofusDbArea> Areas() => new(factory.Areas());
+    public DofusDbQuery<DofusDbSubArea> SubAreas() => new(factory.SubAreas());
+    public DofusDbQuery<DofusDbMap> Maps() => new(factory.Maps());
+    public DofusDbQuery<DofusDbMapPosition> MapPositions() => new(factory.MapPositions());
+    public DofusDbQuery<DofusDbDungeon> Dungeons() => new(factory.Dungeons());
 }

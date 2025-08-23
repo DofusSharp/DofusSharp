@@ -32,8 +32,8 @@ public class DofusDbScalableImageClientTest
 
 
     [Theory]
-    [InlineData(ImageScale.Full, "1")]
-    public async Task GetImage_Should_ReturnImage_WithScale(ImageScale imageScale, string scaleString)
+    [InlineData(DofusDbImageScale.Full, "1")]
+    public async Task GetImage_Should_ReturnImage_WithScale(DofusDbImageScale imageScale, string scaleString)
     {
         byte[] imageBytes = [4, 5, 6];
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);

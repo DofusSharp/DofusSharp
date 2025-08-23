@@ -18,8 +18,8 @@ public class DofusDbTableClientTest
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com?$limit=0")
-            .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 123, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
+            .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 123, Limit = 0, Skip = 0, Data = [] });
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -34,8 +34,8 @@ public class DofusDbTableClientTest
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com?$limit=0")
-            .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+            .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -48,17 +48,17 @@ public class DofusDbTableClientTest
     [Fact]
     public async Task Count_Should_SetQueryParams()
     {
-        SearchQuery expectedQuery = new()
+        DofusDbSearchQuery expectedQuery = new()
         {
             Limit = 0,
-            Predicates = [new SearchPredicate.Eq("prop3", "value")]
+            Predicates = [new DofusDbSearchPredicate.Eq("prop3", "value")]
         };
         string requestUrl = $"http://base.com?{expectedQuery.ToQueryString()}";
 
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, requestUrl)
-            .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
+            .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -72,23 +72,24 @@ public class DofusDbTableClientTest
     public async Task Get_Should_ReturnEntity()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123").ReturnsJsonResponse(HttpStatusCode.OK, new EntityForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true });
-        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
+        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123")
+            .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true });
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
 
-        EntityForTest result = await client.GetAsync(123);
+        DofusDbResourceForTest result = await client.GetAsync(123);
 
-        result.Should().BeEquivalentTo(new EntityForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true });
+        result.Should().BeEquivalentTo(new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true });
     }
 
     [Fact]
     public async Task Get_Should_SetHttpParameters()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123").ReturnsJsonResponse(HttpStatusCode.OK, new EntityForTest());
-        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123").ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbResourceForTest());
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -105,30 +106,30 @@ public class DofusDbTableClientTest
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
-                new SearchResult<EntityForTest>
+                new DofusDbSearchResult<DofusDbResourceForTest>
                 {
                     Total = 123, Limit = 456, Skip = 789, Data =
                     [
-                        new EntityForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true },
-                        new EntityForTest { Prop1 = "Another Test", Prop2 = 24, Prop3 = false }
+                        new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true },
+                        new DofusDbResourceForTest { Prop1 = "Another Test", Prop2 = 24, Prop3 = false }
                     ]
                 }
             );
-        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
 
-        SearchResult<EntityForTest> result = await client.SearchAsync(new SearchQuery());
+        DofusDbSearchResult<DofusDbResourceForTest> result = await client.SearchAsync(new DofusDbSearchQuery());
 
         result.Should()
             .BeEquivalentTo(
-                new SearchResult<EntityForTest>
+                new DofusDbSearchResult<DofusDbResourceForTest>
                 {
                     Total = 123, Limit = 456, Skip = 789, Data =
                     [
-                        new EntityForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true },
-                        new EntityForTest { Prop1 = "Another Test", Prop2 = 24, Prop3 = false }
+                        new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true },
+                        new DofusDbResourceForTest { Prop1 = "Another Test", Prop2 = 24, Prop3 = false }
                     ]
                 }
             );
@@ -139,13 +140,13 @@ public class DofusDbTableClientTest
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com")
-            .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+            .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
 
-        await client.SearchAsync(new SearchQuery());
+        await client.SearchAsync(new DofusDbSearchQuery());
 
         httpHandlerMock.VerifyRequest(HttpMethod.Get, "http://base.com", req => req.Headers.Referrer == new Uri("http://referrer.com"));
     }
@@ -153,17 +154,17 @@ public class DofusDbTableClientTest
     [Fact]
     public async Task Search_Should_SetQueryParams()
     {
-        SearchQuery query = new()
+        DofusDbSearchQuery query = new()
         {
-            Limit = 123, Skip = 456, Sort = new Dictionary<string, SearchQuerySortOrder> { { "prop1", SearchQuerySortOrder.Ascending } }, Select = ["prop2"],
-            Predicates = [new SearchPredicate.Eq("prop3", "value")]
+            Limit = 123, Skip = 456, Sort = new Dictionary<string, DofusDbSearchQuerySortOrder> { { "prop1", DofusDbSearchQuerySortOrder.Ascending } }, Select = ["prop2"],
+            Predicates = [new DofusDbSearchPredicate.Eq("prop3", "value")]
         };
         string requestUrl = $"http://base.com?{query.ToQueryString()}";
 
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, requestUrl)
-            .ReturnsJsonResponse(HttpStatusCode.OK, new SearchResult<EntityForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<EntityForTest> client = new(new Uri("http://base.com"))
+            .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -173,7 +174,7 @@ public class DofusDbTableClientTest
         httpHandlerMock.VerifyRequest(HttpMethod.Get, requestUrl);
     }
 
-    class EntityForTest : DofusDbEntity
+    class DofusDbResourceForTest : DofusDbResource
     {
         public string Prop1 { get; set; } = "";
         public int Prop2 { get; set; }

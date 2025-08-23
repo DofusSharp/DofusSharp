@@ -10,20 +10,20 @@ public class JobsClientTest
     [Fact]
     public async Task JobsClient_Should_GetJob()
     {
-        IDofusDbTableClient<Job> client = DofusDbClient.Beta(Constants.Referrer).Jobs();
-        Job value = await client.GetAsync(11);
+        IDofusDbTableClient<DofusDbJob> client = DofusDbClient.Beta(Constants.Referrer).Jobs();
+        DofusDbJob value = await client.GetAsync(11);
         await Verify(value);
     }
 
     [Fact]
     public async Task JobsClient_Should_SearchJobs()
     {
-        IDofusDbTableClient<Job> client = DofusDbClient.Beta(Constants.Referrer).Jobs();
+        IDofusDbTableClient<DofusDbJob> client = DofusDbClient.Beta(Constants.Referrer).Jobs();
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search
-        SearchQuery query = new();
-        Job[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
+        DofusDbSearchQuery query = new();
+        DofusDbJob[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
         int count = await client.CountAsync(query.Predicates);
 
         results.Length.Should().Be(count);
