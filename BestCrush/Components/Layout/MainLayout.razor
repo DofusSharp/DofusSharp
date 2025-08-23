@@ -1,3 +1,76 @@
-﻿@inherits LayoutComponentBase
+﻿@using BestCrush.Services
+@using DofusSharp.Dofocus.ApiClients.Models.Servers
+@inherits LayoutComponentBase
+@inject ServersService ServersService
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-3 mb-2 mb-md-0">
+            <img src="img/logo-48.png" width="48" height="48" alt="Logo"/>
+        </div>
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li>Crush</li>
+            <li>Hôtel des ventes</li>
+        </ul>
+        <div class="col-md-3 text-end">
+            @if (_currentServer is null || _servers is null)
+            {
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            }
+            else
+            {
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Server: @_currentServer.Name
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        @foreach (DofocusServer server in _servers)
+                        {
+                            <li>
+                                <a class="dropdown-item @(server.Name == _currentServer?.Name ? "active" : null)" @onclick="() => SelectServer(server)">
+                                    @server.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </header>
+</div>
 
 @Body
+
+@code {
+
+    IReadOnlyCollection<DofocusServer>? _servers;
+    DofocusServer? _currentServer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Task<IReadOnlyCollection<DofocusServer>> serversTask = ServersService.GetServers();
+        Task<DofocusServer?> currentServerTask = ServersService.GetCurrentServer();
+
+        await Task.WhenAll(serversTask, currentServerTask);
+
+        if (currentServerTask.Result is null)
+        {
+            NavigationManager.NavigateTo(KnownRoutes.Servers());
+            return;
+        }
+
+        _servers = serversTask.Result;
+        _currentServer = currentServerTask.Result;
+    }
+
+    async Task SelectServer(DofocusServer server)
+    {
+        await ServersService.SetCurrentServerAsync(server);
+        _currentServer = server;
+        NavigationManager.NavigateTo(KnownRoutes.Server(server));
+    }
+
+}

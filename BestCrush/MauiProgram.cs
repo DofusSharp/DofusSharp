@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using BestCrush.Services;
+using Microsoft.Extensions.Logging;
 
 namespace BestCrush;
 
@@ -15,6 +16,8 @@ public static class MauiProgram
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();
 #endif
+
+        builder.Services.AddSingleton<ServersService>();
 
         return builder.Build();
     }

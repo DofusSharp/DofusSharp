@@ -1,7 +1,11 @@
 ﻿@using BestCrush.Components.Layout
+@using BestCrush.Components.Pages
 <Router AppAssembly="@typeof(MauiProgram).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
         <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
     </Found>
+    <NotFound>
+        <NotFound/>
+    </NotFound>
 </Router>

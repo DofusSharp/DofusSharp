@@ -1,0 +1,30 @@
+﻿@inject ServersService ServersService
+@inject NavigationManager NavigationManager
+@page "/"
+@using BestCrush.Components.Layout
+@using BestCrush.Services
+@using DofusSharp.Dofocus.ApiClients.Models.Servers
+@layout EmptyLayout
+
+<div class="d-flex flex-column align-items-center justify-content-center min-vh-100">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        DofocusServer? currentServer = await ServersService.GetCurrentServer();
+        if (currentServer is not null)
+        {
+            NavigationManager.NavigateTo(KnownRoutes.Server(currentServer));
+        }
+        else
+        {
+            NavigationManager.NavigateTo(KnownRoutes.Servers());
+        }
+    }
+
+}

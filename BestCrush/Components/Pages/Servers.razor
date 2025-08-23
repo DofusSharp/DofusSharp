@@ -1,0 +1,43 @@
+﻿@inject ServersService ServersService
+@inject NavigationManager NavigationManager
+@page "/servers"
+@using BestCrush.Components.Layout
+@using BestCrush.Services
+@using DofusSharp.Dofocus.ApiClients.Models.Servers
+@layout EmptyLayout
+
+<div class="container">
+    @if (_servers is null)
+    {
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    }
+    else
+    {
+        <h3 class="text-center">Choose a server</h3>
+        <div class="d-flex flex-wrap justify-content-center gap-4 my-4">
+            @foreach (DofocusServer server in _servers)
+            {
+                <a class="btn text-center" @onclick="() => SelectServer(server)">
+                    <div class="servers__tile-image border">
+                    </div>
+                    @server.Name
+                </a>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    IReadOnlyCollection<DofocusServer>? _servers;
+
+    protected override async Task OnInitializedAsync() => _servers = await ServersService.GetServers();
+
+    async Task SelectServer(DofocusServer server)
+    {
+        await ServersService.SetCurrentServerAsync(server);
+        NavigationManager.NavigateTo(KnownRoutes.Server(server));
+    }
+
+}
