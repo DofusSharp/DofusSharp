@@ -170,10 +170,51 @@ public class DofocusItemsClientTest
     }
 
     [Fact]
+    public async Task PutItemPrice_Should_ReturnResponse()
+    {
+        Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
+        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456/prices")
+            .ReturnsJsonResponse(
+                HttpStatusCode.OK,
+                new PutItemPriceResponse
+                {
+                    Message = "MESSAGE",
+                    NewItemPrice = new NewItemPrice { ItemId = 123, ServerName = "RESPONSE SERVER", Price = 456, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }
+                }
+            );
+        DofocusItemsClient client = new(new Uri("http://base.com"))
+        {
+            HttpClientFactory = httpHandlerMock.CreateClientFactory()
+        };
+
+        PutItemPriceResponse result = await client.PutItemPriceAsync(123456, new PutItemPriceRequest { ServerName = "REQUEST SERVER", Price = 987 });
+
+        httpHandlerMock.VerifyRequest(
+            HttpMethod.Put,
+            "http://base.com/123456/prices",
+            message =>
+            {
+                PutItemPriceRequest? request = message.Content!.ReadFromJsonAsync<PutItemPriceRequest>().Result;
+                request.Should().BeEquivalentTo(new PutItemPriceRequest { ServerName = "REQUEST SERVER", Price = 987 });
+                return true;
+            }
+        );
+
+        result.Should()
+            .BeEquivalentTo(
+                new PutItemPriceResponse
+                {
+                    Message = "MESSAGE",
+                    NewItemPrice = new NewItemPrice { ItemId = 123, ServerName = "RESPONSE SERVER", Price = 456, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }
+                }
+            );
+    }
+
+    [Fact]
     public async Task PutItemCoefficient_Should_ReturnResponse()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456/coefficient")
+        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456/coefficients")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new PutItemCoefficientResponse
@@ -192,7 +233,7 @@ public class DofocusItemsClientTest
 
         httpHandlerMock.VerifyRequest(
             HttpMethod.Put,
-            "http://base.com/123456/coefficient",
+            "http://base.com/123456/coefficients",
             message =>
             {
                 PutItemCoefficientRequest? request = message.Content!.ReadFromJsonAsync<PutItemCoefficientRequest>().Result;

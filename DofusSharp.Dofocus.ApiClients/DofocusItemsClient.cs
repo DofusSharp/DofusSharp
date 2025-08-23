@@ -49,12 +49,29 @@ public class DofocusItemsClient(Uri baseAddress)
         return result;
     }
 
+    public async Task<PutItemPriceResponse> PutItemPriceAsync(long itemId, PutItemPriceRequest request, CancellationToken cancellationToken = default)
+    {
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
+        httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
+
+        using HttpResponseMessage response = await httpClient.PutAsync($"{itemId}/prices", JsonContent.Create(request, options: _options), cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        PutItemPriceResponse? result = await response.Content.ReadFromJsonAsync<PutItemPriceResponse>(_options, cancellationToken);
+        if (result == null)
+        {
+            throw new InvalidOperationException("Could not deserialize the results.");
+        }
+
+        return result;
+    }
+
     public async Task<PutItemCoefficientResponse> PutItemCoefficientAsync(long itemId, PutItemCoefficientRequest request, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
 
-        using HttpResponseMessage response = await httpClient.PutAsync($"{itemId}/coefficient", JsonContent.Create(request, options: _options), cancellationToken);
+        using HttpResponseMessage response = await httpClient.PutAsync($"{itemId}/coefficients", JsonContent.Create(request, options: _options), cancellationToken);
         response.EnsureSuccessStatusCode();
 
         PutItemCoefficientResponse? result = await response.Content.ReadFromJsonAsync<PutItemCoefficientResponse>(_options, cancellationToken);
