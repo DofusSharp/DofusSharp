@@ -17,7 +17,7 @@ public class DofocusItemsClient(Uri baseAddress)
     {
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
-        
+
         using HttpResponseMessage response = await httpClient.GetAsync("", cancellationToken);
         response.EnsureSuccessStatusCode();
 
@@ -30,12 +30,12 @@ public class DofocusItemsClient(Uri baseAddress)
         return result;
     }
 
-    public async Task<DofocusItem> GetItemAsync(long id, CancellationToken cancellationToken = default)
+    public async Task<DofocusItem> GetItemAsync(long itemId, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
 
-        using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
+        using HttpResponseMessage response = await httpClient.GetAsync($"{itemId}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
         DofocusItem? result = await response.Content.ReadFromJsonAsync<DofocusItem>(_options, cancellationToken);

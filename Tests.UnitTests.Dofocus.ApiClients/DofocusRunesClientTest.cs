@@ -1,7 +1,10 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Common;
 using DofusSharp.Dofocus.ApiClients.Models.Runes;
+using DofusSharp.Dofocus.ApiClients.Requests;
+using DofusSharp.Dofocus.ApiClients.Responses;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Moq;
@@ -75,6 +78,47 @@ public class DofocusRunesClientTest
                         LatestPrices = [new DofocusRunePriceRecord { ServerName = "SERVER 1", Price = 90, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }]
                     }
                 ]
+            );
+    }
+
+    [Fact]
+    public async Task PutRunePrice_Should_ReturnResponse()
+    {
+        Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
+        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456")
+            .ReturnsJsonResponse(
+                HttpStatusCode.OK,
+                new PutRunePriceResponse
+                {
+                    Message = "MESSAGE",
+                    NewRunePrice = new NewRunePrice { RuneId = 123, ServerName = "RESPONSE SERVER", Price = 456, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }
+                }
+            );
+        DofocusRunesClient client = new(new Uri("http://base.com"))
+        {
+            HttpClientFactory = httpHandlerMock.CreateClientFactory()
+        };
+
+        PutRunePriceResponse result = await client.PutRunePriceAsync(123456, new PutRunePriceRequest { ServerName = "REQUEST SERVER", Price = 987 });
+
+        httpHandlerMock.VerifyRequest(
+            HttpMethod.Put,
+            "http://base.com/123456",
+            message =>
+            {
+                PutRunePriceRequest? request = message.Content!.ReadFromJsonAsync<PutRunePriceRequest>().Result;
+                request.Should().BeEquivalentTo(new PutRunePriceRequest { ServerName = "REQUEST SERVER", Price = 987 });
+                return true;
+            }
+        );
+
+        result.Should()
+            .BeEquivalentTo(
+                new PutRunePriceResponse
+                {
+                    Message = "MESSAGE",
+                    NewRunePrice = new NewRunePrice { RuneId = 123, ServerName = "RESPONSE SERVER", Price = 456, DateUpdated = new DateTimeOffset(1, 2, 3, 4, 5, 6, TimeSpan.Zero) }
+                }
             );
     }
 }
