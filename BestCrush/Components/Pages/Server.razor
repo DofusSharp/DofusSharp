@@ -191,8 +191,6 @@
 
             _rankedItems.RemoveAll(m => m.Item.Id == item.Id);
             _rankedItems.Add(result.Value);
-
-            StateHasChanged();
         }
         finally
         {
