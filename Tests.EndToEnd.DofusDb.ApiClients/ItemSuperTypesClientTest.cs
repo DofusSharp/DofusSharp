@@ -10,20 +10,20 @@ public class ItemSuperTypesClientTest
     [Fact]
     public async Task ItemSuperTypesClient_Should_GetItemSuperType()
     {
-        IDofusDbTableClient<ItemSuperType> client = DofusDbClient.Beta(Constants.Referrer).ItemSuperTypes();
-        ItemSuperType value = await client.GetAsync(1);
+        IDofusDbTableClient<DofusDbItemSuperType> client = DofusDbClient.Beta(Constants.Referrer).ItemSuperTypes();
+        DofusDbItemSuperType value = await client.GetAsync(1);
         await Verify(value);
     }
 
     [Fact]
     public async Task ItemSuperTypesClient_Should_SearchItemSuperTypes()
     {
-        IDofusDbTableClient<ItemSuperType> client = DofusDbClient.Beta(Constants.Referrer).ItemSuperTypes();
+        IDofusDbTableClient<DofusDbItemSuperType> client = DofusDbClient.Beta(Constants.Referrer).ItemSuperTypes();
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search
-        SearchQuery query = new();
-        ItemSuperType[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync().AsTask();
+        DofusDbSearchQuery query = new();
+        DofusDbItemSuperType[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync().AsTask();
         int count = await client.CountAsync();
 
         results.Length.Should().Be(count);

@@ -15,5 +15,5 @@ public interface IDofusDbScalableImageClient<in TId> : IDofusDbImageClient<TId>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
     /// <param name="scale">The scale of the image to fetch.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    Task<Stream> GetImageAsync(TId id, ImageScale scale, CancellationToken cancellationToken = default);
+    Task<Stream> GetImageAsync(TId id, DofusDbImageScale scale, CancellationToken cancellationToken = default);
 }

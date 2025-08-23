@@ -16,16 +16,16 @@ class DofusDbScalableImageClient<TId> : IDofusDbScalableImageClient<TId>
     public Uri? Referrer { get; }
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
-    public Task<Stream> GetImageAsync(TId id, CancellationToken cancellationToken = default) => GetImageAsync(id, ImageScale.Full, cancellationToken);
+    public Task<Stream> GetImageAsync(TId id, CancellationToken cancellationToken = default) => GetImageAsync(id, DofusDbImageScale.Full, cancellationToken);
 
-    public async Task<Stream> GetImageAsync(TId id, ImageScale scale, CancellationToken cancellationToken = default)
+    public async Task<Stream> GetImageAsync(TId id, DofusDbImageScale scale, CancellationToken cancellationToken = default)
     {
         string scaleString = scale switch
         {
-            ImageScale.Full => "1",
-            ImageScale.ThreeQuarters => "0.75",
-            ImageScale.Half => "0.5",
-            ImageScale.Quarter => "0.25",
+            DofusDbImageScale.Full => "1",
+            DofusDbImageScale.ThreeQuarters => "0.75",
+            DofusDbImageScale.Half => "0.5",
+            DofusDbImageScale.Quarter => "0.25",
             _ => throw new ArgumentOutOfRangeException(nameof(scale), scale, null)
         };
         string extension = ImageFormat.ToExtension();

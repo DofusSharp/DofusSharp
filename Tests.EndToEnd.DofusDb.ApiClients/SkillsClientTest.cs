@@ -10,20 +10,20 @@ public class SkillsClientTest
     [Fact]
     public async Task SkillsClient_Should_GetSkill()
     {
-        IDofusDbTableClient<Skill> client = DofusDbClient.Beta(Constants.Referrer).Skills();
-        Skill value = await client.GetAsync(44);
+        IDofusDbTableClient<DofusDbSkill> client = DofusDbClient.Beta(Constants.Referrer).Skills();
+        DofusDbSkill value = await client.GetAsync(44);
         await Verify(value);
     }
 
     [Fact]
     public async Task SkillsClient_Should_SearchSkills()
     {
-        IDofusDbTableClient<Skill> client = DofusDbClient.Beta(Constants.Referrer).Skills();
+        IDofusDbTableClient<DofusDbSkill> client = DofusDbClient.Beta(Constants.Referrer).Skills();
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search
-        SearchQuery query = new() { Predicates = [new SearchPredicate.GreaterThanOrEqual("level", "190")] };
-        Skill[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
+        DofusDbSearchQuery query = new() { Predicates = [new DofusDbSearchPredicate.GreaterThanOrEqual("level", "190")] };
+        DofusDbSkill[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
         int count = await client.CountAsync(query.Predicates);
 
         results.Length.Should().Be(count);

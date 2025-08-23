@@ -10,20 +10,20 @@ public class RecipesClientTest
     [Fact]
     public async Task RecipesClient_Should_GetRecipe()
     {
-        IDofusDbTableClient<Recipe> client = DofusDbClient.Beta(Constants.Referrer).Recipes();
-        Recipe value = await client.GetAsync(44);
+        IDofusDbTableClient<DofusDbRecipe> client = DofusDbClient.Beta(Constants.Referrer).Recipes();
+        DofusDbRecipe value = await client.GetAsync(44);
         await Verify(value);
     }
 
     [Fact]
     public async Task RecipesClient_Should_SearchRecipes()
     {
-        IDofusDbTableClient<Recipe> client = DofusDbClient.Beta(Constants.Referrer).Recipes();
+        IDofusDbTableClient<DofusDbRecipe> client = DofusDbClient.Beta(Constants.Referrer).Recipes();
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search
-        SearchQuery query = new() { Predicates = [new SearchPredicate.GreaterThanOrEqual("level", "190")] };
-        Recipe[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
+        DofusDbSearchQuery query = new() { Predicates = [new DofusDbSearchPredicate.GreaterThanOrEqual("level", "190")] };
+        DofusDbRecipe[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
         int count = await client.CountAsync(query.Predicates);
 
         results.Length.Should().Be(count);

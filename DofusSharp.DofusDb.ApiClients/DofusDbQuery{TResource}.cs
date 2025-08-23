@@ -10,9 +10,9 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
 {
     int? _limit;
     int? _skip;
-    readonly Dictionary<string, SearchQuerySortOrder> _sort = [];
+    readonly Dictionary<string, DofusDbSearchQuerySortOrder> _sort = [];
     readonly List<string> _select = [];
-    readonly List<SearchPredicate> _predicates = [];
+    readonly List<DofusDbSearchPredicate> _predicates = [];
 
     /// <summary>
     ///     Sets the maximum number of items to return in the result set.
@@ -44,7 +44,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     public DofusDbQuery<TResource> SortByAscending(Expression<Func<TResource, object?>> expression)
     {
         string propertyName = ExtractPropertyName(expression);
-        _sort[propertyName] = SearchQuerySortOrder.Ascending;
+        _sort[propertyName] = DofusDbSearchQuerySortOrder.Ascending;
         return this;
     }
 
@@ -56,7 +56,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     public DofusDbQuery<TResource> SortByDescending(Expression<Func<TResource, object?>> expression)
     {
         string propertyName = ExtractPropertyName(expression);
-        _sort[propertyName] = SearchQuerySortOrder.Descending;
+        _sort[propertyName] = DofusDbSearchQuerySortOrder.Descending;
         return this;
     }
 
@@ -78,7 +78,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     /// <returns>The current builder, for chaining.</returns>
     public DofusDbQuery<TResource> Where(Expression<Func<TResource, bool>> expression)
     {
-        SearchPredicate predicate = ExtractPredicate(expression);
+        DofusDbSearchPredicate predicate = ExtractPredicate(expression);
         _predicates.Add(predicate);
         return this;
     }
@@ -90,7 +90,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     /// <returns>The search result containing all resources matching the query.</returns>
     public IAsyncEnumerable<TResource> ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        SearchQuery query = BuildQuery();
+        DofusDbSearchQuery query = BuildQuery();
         return client.MultiQuerySearchAsync(query, cancellationToken);
     }
 
@@ -106,7 +106,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
         return Math.Clamp(countMinusSkipped, 0, _limit ?? int.MaxValue);
     }
 
-    SearchQuery BuildQuery() =>
+    DofusDbSearchQuery BuildQuery() =>
         new()
         {
             Limit = _limit,
@@ -143,9 +143,9 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
         }
     }
 
-    static SearchPredicate ExtractPredicate(Expression<Func<TResource, bool>> expression) => ExtractPredicate(expression.Parameters.Single(), expression.Body);
+    static DofusDbSearchPredicate ExtractPredicate(Expression<Func<TResource, bool>> expression) => ExtractPredicate(expression.Parameters.Single(), expression.Body);
 
-    static SearchPredicate ExtractPredicate(ParameterExpression root, Expression expression)
+    static DofusDbSearchPredicate ExtractPredicate(ParameterExpression root, Expression expression)
     {
         switch (expression)
         {
@@ -153,13 +153,13 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
             {
                 string left = ExtractPropertyChain(root, e.Left);
                 string right = ExtractValueAsString(e.Right);
-                return new SearchPredicate.Eq(left, right);
+                return new DofusDbSearchPredicate.Eq(left, right);
             }
             case BinaryExpression { NodeType: ExpressionType.NotEqual } e:
             {
                 string left = ExtractPropertyChain(root, e.Left);
                 string right = ExtractValueAsString(e.Right);
-                return new SearchPredicate.NotEq(left, right);
+                return new DofusDbSearchPredicate.NotEq(left, right);
             }
             case MethodCallExpression { Method.Name: "Contains" } e:
             {
@@ -170,75 +170,75 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
 
                 string left = ExtractPropertyChain(root, e.Arguments.Single());
                 string[] right = ExtractCollectionValuesAsString(e.Object);
-                return new SearchPredicate.In(left, right);
+                return new DofusDbSearchPredicate.In(left, right);
             }
             case UnaryExpression { NodeType: ExpressionType.Not } e:
             {
-                SearchPredicate predicate = ExtractPredicate(root, e.Operand);
+                DofusDbSearchPredicate predicate = ExtractPredicate(root, e.Operand);
                 return NegatePredicate(predicate);
             }
             case BinaryExpression { NodeType: ExpressionType.GreaterThan } e:
             {
                 string left = ExtractPropertyChain(root, e.Left);
                 string right = ExtractValueAsString(e.Right);
-                return new SearchPredicate.GreaterThan(left, right);
+                return new DofusDbSearchPredicate.GreaterThan(left, right);
             }
             case BinaryExpression { NodeType: ExpressionType.GreaterThanOrEqual } e:
             {
                 string left = ExtractPropertyChain(root, e.Left);
                 string right = ExtractValueAsString(e.Right);
-                return new SearchPredicate.GreaterThanOrEqual(left, right);
+                return new DofusDbSearchPredicate.GreaterThanOrEqual(left, right);
             }
             case BinaryExpression { NodeType: ExpressionType.LessThan } e:
             {
                 string left = ExtractPropertyChain(root, e.Left);
                 string right = ExtractValueAsString(e.Right);
-                return new SearchPredicate.LessThan(left, right);
+                return new DofusDbSearchPredicate.LessThan(left, right);
             }
             case BinaryExpression { NodeType: ExpressionType.LessThanOrEqual } e:
             {
                 string left = ExtractPropertyChain(root, e.Left);
                 string right = ExtractValueAsString(e.Right);
-                return new SearchPredicate.LessThanOrEquals(left, right);
+                return new DofusDbSearchPredicate.LessThanOrEquals(left, right);
             }
             case BinaryExpression { NodeType: ExpressionType.AndAlso } e:
             {
-                SearchPredicate left = ExtractPredicate(root, e.Left);
-                IReadOnlyList<SearchPredicate> flattenedLeft = left is SearchPredicate.And andLeft ? andLeft.Predicates : [left];
+                DofusDbSearchPredicate left = ExtractPredicate(root, e.Left);
+                IReadOnlyList<DofusDbSearchPredicate> flattenedLeft = left is DofusDbSearchPredicate.And andLeft ? andLeft.Predicates : [left];
 
-                SearchPredicate right = ExtractPredicate(root, e.Right);
-                IReadOnlyList<SearchPredicate> flattenedRight = right is SearchPredicate.And andRight ? andRight.Predicates : [right];
+                DofusDbSearchPredicate right = ExtractPredicate(root, e.Right);
+                IReadOnlyList<DofusDbSearchPredicate> flattenedRight = right is DofusDbSearchPredicate.And andRight ? andRight.Predicates : [right];
 
-                return new SearchPredicate.And([..flattenedLeft, ..flattenedRight]);
+                return new DofusDbSearchPredicate.And([..flattenedLeft, ..flattenedRight]);
             }
             case BinaryExpression { NodeType: ExpressionType.OrElse } e:
             {
-                SearchPredicate left = ExtractPredicate(root, e.Left);
-                IReadOnlyList<SearchPredicate> flattenedLeft = left is SearchPredicate.Or orLeft ? orLeft.Predicates : [left];
+                DofusDbSearchPredicate left = ExtractPredicate(root, e.Left);
+                IReadOnlyList<DofusDbSearchPredicate> flattenedLeft = left is DofusDbSearchPredicate.Or orLeft ? orLeft.Predicates : [left];
 
-                SearchPredicate right = ExtractPredicate(root, e.Right);
-                IReadOnlyList<SearchPredicate> flattenedRight = left is SearchPredicate.Or orRight ? orRight.Predicates : [right];
+                DofusDbSearchPredicate right = ExtractPredicate(root, e.Right);
+                IReadOnlyList<DofusDbSearchPredicate> flattenedRight = left is DofusDbSearchPredicate.Or orRight ? orRight.Predicates : [right];
 
-                return new SearchPredicate.Or([..flattenedLeft, ..flattenedRight]);
+                return new DofusDbSearchPredicate.Or([..flattenedLeft, ..flattenedRight]);
             }
         }
 
         throw new ArgumentException($"Could not extract predicate from expression {expression}.", nameof(expression));
     }
 
-    static SearchPredicate NegatePredicate(SearchPredicate predicate) =>
+    static DofusDbSearchPredicate NegatePredicate(DofusDbSearchPredicate predicate) =>
         predicate switch
         {
-            SearchPredicate.Eq p => new SearchPredicate.NotEq(p.Field, p.Value),
-            SearchPredicate.NotEq p => new SearchPredicate.Eq(p.Field, p.Value),
-            SearchPredicate.In p => new SearchPredicate.NotIn(p.Field, p.Value),
-            SearchPredicate.NotIn p => new SearchPredicate.In(p.Field, p.Value),
-            SearchPredicate.GreaterThan p => new SearchPredicate.LessThanOrEquals(p.Field, p.Value),
-            SearchPredicate.GreaterThanOrEqual p => new SearchPredicate.LessThan(p.Field, p.Value),
-            SearchPredicate.LessThan p => new SearchPredicate.GreaterThanOrEqual(p.Field, p.Value),
-            SearchPredicate.LessThanOrEquals p => new SearchPredicate.GreaterThan(p.Field, p.Value),
-            SearchPredicate.And p => new SearchPredicate.Or(p.Predicates.Select(NegatePredicate).ToArray()),
-            SearchPredicate.Or p => new SearchPredicate.And(p.Predicates.Select(NegatePredicate).ToArray()),
+            DofusDbSearchPredicate.Eq p => new DofusDbSearchPredicate.NotEq(p.Field, p.Value),
+            DofusDbSearchPredicate.NotEq p => new DofusDbSearchPredicate.Eq(p.Field, p.Value),
+            DofusDbSearchPredicate.In p => new DofusDbSearchPredicate.NotIn(p.Field, p.Value),
+            DofusDbSearchPredicate.NotIn p => new DofusDbSearchPredicate.In(p.Field, p.Value),
+            DofusDbSearchPredicate.GreaterThan p => new DofusDbSearchPredicate.LessThanOrEquals(p.Field, p.Value),
+            DofusDbSearchPredicate.GreaterThanOrEqual p => new DofusDbSearchPredicate.LessThan(p.Field, p.Value),
+            DofusDbSearchPredicate.LessThan p => new DofusDbSearchPredicate.GreaterThanOrEqual(p.Field, p.Value),
+            DofusDbSearchPredicate.LessThanOrEquals p => new DofusDbSearchPredicate.GreaterThan(p.Field, p.Value),
+            DofusDbSearchPredicate.And p => new DofusDbSearchPredicate.Or(p.Predicates.Select(NegatePredicate).ToArray()),
+            DofusDbSearchPredicate.Or p => new DofusDbSearchPredicate.And(p.Predicates.Select(NegatePredicate).ToArray()),
             _ => throw new ArgumentOutOfRangeException(nameof(predicate))
         };
 
