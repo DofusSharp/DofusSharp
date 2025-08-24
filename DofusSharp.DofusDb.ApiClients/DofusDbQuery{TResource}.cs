@@ -176,6 +176,8 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
                 {
                     case 1:
                     {
+                        // when the Contains method is a class method, e.g. when called on a List<>
+
                         if (e.Object is null)
                         {
                             throw new ArgumentException("The 'Contains' method must be called on a collection.", nameof(expression));
@@ -187,6 +189,8 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
                     }
                     case 2:
                     {
+                        // when the Contains method is an extension method, e.g. when called on an IEnumerable
+
                         string left = ExtractPropertyChain(root, e.Arguments[1]);
                         string[] right = ExtractCollectionValuesAsString(e.Arguments[0]);
                         return new DofusDbSearchPredicate.In(left, right);
@@ -296,22 +300,10 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
 
     static IEnumerable ExtractCollectionValues(Expression expression)
     {
-        switch (expression)
+        object? value = ExtractValue(expression);
+        if (value is IEnumerable enumerableValue)
         {
-            case MemberExpression memberExpression:
-                if (memberExpression.Expression is ConstantExpression constantExpression)
-                {
-                    if (memberExpression.Member is PropertyInfo property && property.GetValue(constantExpression.Value) is IEnumerable propertyValue)
-                    {
-                        return propertyValue;
-                    }
-
-                    if (memberExpression.Member is FieldInfo field && field.GetValue(constantExpression.Value) is IEnumerable fieldValue)
-                    {
-                        return fieldValue;
-                    }
-                }
-                break;
+            return enumerableValue;
         }
 
         throw new ArgumentException($"Could not evaluate collection {expression}.", nameof(expression));
