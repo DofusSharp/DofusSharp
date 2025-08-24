@@ -42,7 +42,7 @@
 
             @if (_searching)
             {
-                int ranked = _rankedItems?.Count ?? 0;
+                int ranked = _rankedItems?.GroupBy(i => i.Item).Count() ?? 0;
                 int unranked = _unrankedItems?.Count ?? 0;
                 int done = ranked + unranked;
                 double ratio = (double)done / _allItems.Length;
