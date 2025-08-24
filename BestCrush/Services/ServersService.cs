@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Servers;
 
@@ -10,7 +9,6 @@ public class ServersService(ImageCache imageCache)
     IReadOnlyCollection<DofocusServer>? _servers;
     readonly SemaphoreSlim _serversLock = new(1, 1);
     DofocusServer? _currentServer;
-    readonly ConcurrentDictionary<string, string> _cachedIcons = [];
 
     public async Task<IReadOnlyCollection<DofocusServer>> GetServers()
     {
@@ -56,7 +54,7 @@ public class ServersService(ImageCache imageCache)
             await imageCache.StoreImageAsync(cacheKey, content);
         }
 
-        return $"image/png;base64,{Convert.ToBase64String(content)}";
+        return $"image/webp;base64,{Convert.ToBase64String(content)}";
     }
 
     public Task<DofocusServer?> GetCurrentServer() => Task.FromResult(_currentServer);
