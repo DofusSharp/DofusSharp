@@ -12,7 +12,6 @@
 
 <div class="container">
     <form method="post" @onsubmit="Search" @formname="search-form">
-        Filters
         <div class="input-group mb-3">
             <span class="input-group-text">Level</span>
             <InputNumber @bind-Value="Model!.LevelMin" class="form-control" placeholder="Min" aria-label="Min" disabled="@_searching"/>
@@ -20,86 +19,110 @@
             <InputNumber @bind-Value="Model!.LevelMax" class="form-control" placeholder="Max" aria-label="Max" disabled="@_searching"/>
         </div>
 
-        <div class="d-flex justify-content-center">
-            <button class="btn btn-primary" type="submit" disabled="@_searching">Find the Best Crush</button>
+        <div class="d-flex justify-content-center mb-4">
+            @if (_allItems is null)
+            {
+                <button class="btn btn-primary" type="submit" @onclick="Count" disabled="@_searching">Search items</button>
+            }
+            else
+            {
+                <button class="btn btn-outline-primary" type="button" @onclick="Count" disabled="@_searching">Search items</button>
+            }
         </div>
+
+        @if (_allItems is not null)
+        {
+            <div class="text-center">Found a total of @_allItems.Length items.</div>
+
+            <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-primary" type="submit" disabled="@_searching">Find the <span class="fw-semibold">Best Crush</span></button>
+            </div>
+
+            @if (_searching)
+            {
+                int ranked = _rankedItems?.Count ?? 0;
+                int unranked = _unrankedItems?.Count ?? 0;
+                int done = ranked + unranked;
+                double ratio = (double)done / _allItems.Length;
+                int percent = (int)(ratio * 100);
+
+                {
+                    <div class="progress mb-4" role="progressbar" aria-label="Basic example" aria-valuenow="@done" aria-valuemin="0" aria-valuemax="@_allItems.Length">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated text-bg-warning" style="width: @percent%">@done / @_allItems.Length</div>
+                    </div>
+                }
+            }
+        }
     </form>
 
-    @if (_allItems is not null)
-    {
-        <p>Found a total of @_allItems.Length items.</p>
-    }
 
     @if (_unrankedItems is not null && _rankedItems is not null)
     {
         @if (_rankedItems.Count > 0)
         {
-            <ul class="list-group list-group-flush">
-                @foreach (ItemCrushResult item in _rankedItems.OrderByDescending(r => r.Benefits))
-                {
-                    <li class="list-group-item">
-                        <div class="d-flex gap-4">
-                            <div class="d-flex align-items-start justify-content-center">
-                                <div class="item-icon rounded">
-                                    @if (item.ItemIcon is not null)
-                                    {
-                                        <img src="data:@item.ItemIcon" width="32" height="32" alt="Item icon"/>
-                                    }
-                                </div>
-                            </div>
-                            <div>
-                                <div>@item.Item.Name.Localize() Lv. @item.Item.Level</div>
-                                <div>Cost: @item.Cost <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></div>
-                                <div>
-                                    Price: @item.Price <img src="img/kama-20.png" alt="Kama" width="20" height="20"/>
-                                    @if (item.FocusedCharacteristic is null)
-                                    {
-                                        <span class="text-secondary ms-1">(without focus)</span>
-                                    }
-                                    else
-                                    {
-                                        DofocusItemCharacteristic characteristic = item.Item.Characteristics.Single(c => c.Id == item.FocusedCharacteristic.Value);
-                                        <span class="text-secondary ms-1">(with focus: @characteristic.Name.En)</span>
-                                    }
+            <div class="my-4">
+                <ul class="list-group list-group-flush">
+                    @foreach (ItemCrushResult item in _rankedItems.OrderByDescending(r => r.Benefits))
+                    {
+                        <li class="list-group-item">
+                            <div class="d-flex gap-4">
+                                <div class="d-flex align-items-start justify-content-center">
+                                    <div class="item-icon rounded">
+                                        @if (item.ItemIcon is not null)
+                                        {
+                                            <img src="data:@item.ItemIcon" width="32" height="32" alt="Item icon"/>
+                                        }
+                                    </div>
                                 </div>
                                 <div>
-                                    @if (item.Benefits >= 0)
-                                    {
-                                        <span class="text-success">+@item.Benefits <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">@item.Benefits <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></span>
-                                    }
+                                    <div>@item.Item.Name.Localize() Lv. @item.Item.Level</div>
+                                    <div>Cost: @item.Cost <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></div>
+                                    <div>
+                                        Price: @item.Price <img src="img/kama-20.png" alt="Kama" width="20" height="20"/>
+                                        @if (item.FocusedCharacteristic is null)
+                                        {
+                                            <span class="text-secondary ms-1">(without focus)</span>
+                                        }
+                                        else
+                                        {
+                                            DofocusItemCharacteristic characteristic = item.Item.Characteristics.Single(c => c.Id == item.FocusedCharacteristic.Value);
+                                            <span class="text-secondary ms-1">(with focus: @characteristic.Name.En)</span>
+                                        }
+                                    </div>
+                                    <div>
+                                        @if (item.Benefits >= 0)
+                                        {
+                                            <span class="text-success">+@item.Benefits <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">@item.Benefits <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1"></div>
+                                <div class="d-flex align-items-start justify-content-center">
+                                    <button class="btn btn-outline-secondary" @onclick="() => RefreshBenefits(item.Item)" disabled="@_searching">Refresh</button>
                                 </div>
                             </div>
-                            <div class="flex-grow-1"></div>
-                            <div class="d-flex align-items-start justify-content-center">
-                                <button class="btn btn-outline-secondary" @onclick="() => RefreshBenefits(item.Item)" disabled="@_searching">Refresh</button>
-                            </div>
-                        </div>
-                    </li>
-                }
-            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
         }
 
         @if (_unrankedItems.Count > 0)
         {
-            <p>Could not compute results for items:</p>
-            <ul class="text-secondary">
-                @foreach (DofocusItemMinimal item in _unrankedItems.Take(10))
-                {
-                    <li>@item.Name.Localize() Lv. @item.Level</li>
-                }
-            </ul>
+            <div class="my-4">
+                <p>Could not compute results for items:</p>
+                <ul class="text-secondary">
+                    @foreach (DofocusItemMinimal item in _unrankedItems.Take(10))
+                    {
+                        <li>@item.Name.Localize() Lv. @item.Level</li>
+                    }
+                </ul>
+            </div>
         }
-    }
-
-    @if (_searching)
-    {
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
     }
 </div>
 
@@ -117,6 +140,21 @@
     List<DofocusItemMinimal>? _unrankedItems;
 
     protected override void OnInitialized() => Model ??= new Request();
+
+    async Task Count()
+    {
+        if (_searching)
+        {
+            return;
+        }
+
+        _rankedItems = null;
+        _unrankedItems = null;
+
+        IReadOnlyCollection<DofocusItemMinimal> allItems = await ItemsService.GetItemsAsync();
+        DofocusItemMinimal[] items = FilterItems(allItems).ToArray();
+        _allItems = items;
+    }
 
     async Task Search()
     {
@@ -137,10 +175,14 @@
             await Task.WhenAll(itemsTask, runesTask);
 
             DofocusItemMinimal[] items = FilterItems(itemsTask.Result).ToArray();
+            _allItems = items;
+
+            StateHasChanged();
+
             IReadOnlyCollection<DofocusRune> runes = runesTask.Result;
 
-            List<ItemCrushResult> rankedItems = [];
-            List<DofocusItemMinimal> unrankedItems = [];
+            _rankedItems = [];
+            _unrankedItems = [];
 
             foreach (DofocusItemMinimal item in items)
             {
@@ -149,23 +191,22 @@
                     ItemCrushResult? result = await ComputeBenefit(item, runes, false);
                     if (!result.HasValue)
                     {
-                        unrankedItems.Add(item);
+                        _unrankedItems.Add(item);
                     }
                     else
                     {
-                        rankedItems.Add(result.Value);
+                        _rankedItems.Add(result.Value);
                     }
+
+                    StateHasChanged();
                 }
                 catch (Exception exn)
                 {
-                    unrankedItems.Add(item);
+                    _unrankedItems.Add(item);
                     Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name.En, item.Id);
                 }
             }
 
-            _allItems = items;
-            _rankedItems = rankedItems;
-            _unrankedItems = unrankedItems;
         }
         finally
         {
