@@ -3,7 +3,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 using FluentAssertions;
 using JetBrains.Annotations;
 
-namespace Tests.EndToEnd.DofusDb.ApiClients;
+namespace Tests.Live.DofusDb.ApiClients;
 
 [TestSubject(typeof(DofusDbQuery))]
 public class DofusDbQuerySearchTest

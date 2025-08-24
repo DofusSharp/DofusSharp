@@ -3,7 +3,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
 
-namespace Tests.EndToEnd.DofusDb.ApiClients;
+namespace Tests.Live.DofusDb.ApiClients;
 
 public class RecipesClientTest
 {

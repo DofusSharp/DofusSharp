@@ -1,7 +1,7 @@
 ﻿using DofusSharp.Dofocus.ApiClients;
 using FluentAssertions;
 
-namespace Tests.EndToEnd.Dofocus.ApiClients;
+namespace Tests.Live.Dofocus.ApiClients;
 
 public class ServersClientTest
 {

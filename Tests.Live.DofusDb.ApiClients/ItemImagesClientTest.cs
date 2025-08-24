@@ -1,6 +1,6 @@
 ﻿using DofusSharp.DofusDb.ApiClients;
 
-namespace Tests.EndToEnd.DofusDb.ApiClients;
+namespace Tests.Live.DofusDb.ApiClients;
 
 public class ItemImagesClientTest
 {

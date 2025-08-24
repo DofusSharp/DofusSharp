@@ -1,7 +1,7 @@
 ﻿using DofusSharp.DofusDb.ApiClients;
 using FluentAssertions;
 
-namespace Tests.EndToEnd.DofusDb.ApiClients;
+namespace Tests.Live.DofusDb.ApiClients;
 
 public class VersionClientTest
 {

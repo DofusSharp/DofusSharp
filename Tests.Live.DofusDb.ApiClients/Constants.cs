@@ -1,4 +1,4 @@
-﻿namespace Tests.EndToEnd.DofusDb.ApiClients;
+﻿namespace Tests.Live.DofusDb.ApiClients;
 
 class Constants
 {

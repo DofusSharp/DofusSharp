@@ -3,7 +3,7 @@ using DofusSharp.Dofocus.ApiClients.Models.Common;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
 using FluentAssertions;
 
-namespace Tests.EndToEnd.Dofocus.ApiClients;
+namespace Tests.Live.Dofocus.ApiClients;
 
 public class ItemsClientTest
 {

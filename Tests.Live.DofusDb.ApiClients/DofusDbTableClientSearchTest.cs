@@ -4,7 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
 using JetBrains.Annotations;
 
-namespace Tests.EndToEnd.DofusDb.ApiClients;
+namespace Tests.Live.DofusDb.ApiClients;
 
 [TestSubject(typeof(DofusDbClient))]
 public class DofusDbTableClientSearchTest
