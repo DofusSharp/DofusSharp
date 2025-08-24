@@ -1,0 +1,19 @@
+﻿{
+  Keyword: vitality,
+  Asset: tx_vitality,
+  CategoryId: 2,
+  Visible: true,
+  Order: 4,
+  ScaleFormulaId: 4,
+  Upgradable: true,
+  Name: {
+    De: Vitalität,
+    En: Vitality,
+    Es: Vitalidad,
+    Fr: Vitalité,
+    Pt: Vitalidade
+  },
+  Id: 11,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
