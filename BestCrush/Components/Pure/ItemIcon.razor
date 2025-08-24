@@ -1,0 +1,95 @@
+﻿@using BestCrush.Domain.Models
+@using BestCrush.Domain.Services
+@using BestCrush.Models
+@inject ItemsService ItemsService
+
+<div class="d-flex align-items-center justify-content-center position-relative" style="width:@(BackgroundSizeInPx)px; height:@(BackgroundSizeInPx)px">
+    @if (_loadingIcon)
+    {
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    }
+    else if (_icon is not null)
+    {
+        @switch (Background)
+        {
+            case IconBackground.Slot:
+                <img class="position-absolute top-0 bottom-0 start-0 end-0" src="img/slot_bg.png" width="@BackgroundSizeInPx" height="@BackgroundSizeInPx" alt="Item icon"/>
+                break;
+        }
+
+        <img class="z-1" src="data:@_icon" width="@IconSizeInPx" height="@IconSizeInPx" alt="Item icon"/>
+    }
+    else
+    {
+        @switch (Size)
+        {
+            case IconSize.Small:
+                <span class="fw-bold small">?</span>
+                break;
+            case IconSize.Medium:
+                <span class="fw-bold fs-3">?</span>
+                break;
+            case IconSize.Large:
+                <span class="fw-bold fs-1">?</span>
+                break;
+        }
+    }
+</div>
+
+@code {
+    string? _icon;
+    bool _loadingIcon;
+
+    int BackgroundSizeInPx =>
+        Size switch
+        {
+            IconSize.Small => 32,
+            IconSize.Medium => 64,
+            IconSize.Large => 128,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+    int IconSizeInPx =>
+        Background == IconBackground.None
+            ? BackgroundSizeInPx
+            : Size switch
+            {
+                IconSize.Small => 24,
+                IconSize.Medium => 48,
+                IconSize.Large => 96,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+    [Parameter]
+    public IItem? Item { get; init; }
+
+    [Parameter]
+    public IconSize Size { get; init; } = IconSize.Medium;
+
+    [Parameter]
+    public IconBackground Background { get; init; } = IconBackground.None;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Item is null)
+        {
+            _icon = null;
+            _loadingIcon = false;
+            return;
+        }
+
+        _loadingIcon = true;
+        try
+        {
+            _icon = await ItemsService.GetItemIconAsync(Item);
+        }
+        finally
+        {
+            _loadingIcon = false;
+        }
+    }
+
+
+}

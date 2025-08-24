@@ -24,6 +24,22 @@ namespace BestCrush.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Equipments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DofusDbId = table.Column<long>(type: "INTEGER", nullable: false),
+                    DofusDbIconId = table.Column<long>(type: "INTEGER", nullable: true),
+                    Level = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Equipments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ItemCoefficientRecords",
                 columns: table => new
                 {
@@ -54,7 +70,7 @@ namespace BestCrush.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Items",
+                name: "Resources",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -65,7 +81,7 @@ namespace BestCrush.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Items", x => x.Id);
+                    table.PrimaryKey("PK_Resources", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,22 +107,47 @@ namespace BestCrush.Domain.Migrations
                     Characteristic = table.Column<int>(type: "INTEGER", nullable: false),
                     From = table.Column<int>(type: "INTEGER", nullable: false),
                     To = table.Column<int>(type: "INTEGER", nullable: false),
-                    ItemId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    EquipmentId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ItemCharacteristicLine", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ItemCharacteristicLine_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
+                        name: "FK_ItemCharacteristicLine_Equipments_EquipmentId",
+                        column: x => x.EquipmentId,
+                        principalTable: "Equipments",
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RecipeEntry",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ResourceId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false),
+                    EquipmentId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeEntry", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipeEntry_Equipments_EquipmentId",
+                        column: x => x.EquipmentId,
+                        principalTable: "Equipments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RecipeEntry_Resources_ResourceId",
+                        column: x => x.ResourceId,
+                        principalTable: "Resources",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_ItemCharacteristicLine_ItemId",
+                name: "IX_ItemCharacteristicLine_EquipmentId",
                 table: "ItemCharacteristicLine",
-                column: "ItemId");
+                column: "EquipmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ItemCoefficientRecords_ItemId",
@@ -127,6 +168,16 @@ namespace BestCrush.Domain.Migrations
                 name: "IX_ItemPriceRecords_ServerName",
                 table: "ItemPriceRecords",
                 column: "ServerName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeEntry_EquipmentId",
+                table: "RecipeEntry",
+                column: "EquipmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeEntry_ResourceId",
+                table: "RecipeEntry",
+                column: "ResourceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RunePriceRecords_RuneId",
@@ -155,10 +206,16 @@ namespace BestCrush.Domain.Migrations
                 name: "ItemPriceRecords");
 
             migrationBuilder.DropTable(
+                name: "RecipeEntry");
+
+            migrationBuilder.DropTable(
                 name: "RunePriceRecords");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "Equipments");
+
+            migrationBuilder.DropTable(
+                name: "Resources");
         }
     }
 }

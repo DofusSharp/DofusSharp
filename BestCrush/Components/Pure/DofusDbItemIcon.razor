@@ -1,0 +1,48 @@
+﻿@using BestCrush.Domain.Services
+@using DofusSharp.DofusDb.ApiClients.Models.Items
+@inject ItemsService ItemsService
+
+<div class="d-flex align-items-center justify-content-center" style="width:64px; height:64px">
+    @if (_loadingIcon)
+    {
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    }
+    else if (_icon is not null)
+    {
+        <img src="data:@_icon" width="64" height="64" alt="Item icon"/>
+    }
+    else
+    {
+        <span class="fw-bold fs-1">?</span>
+    }
+</div>
+
+@code {
+    string? _icon;
+    bool _loadingIcon;
+
+    [Parameter]
+    public required DofusDbItem Item { get; init; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Item.IconId is null)
+        {
+            _icon = null;
+            return;
+        }
+
+        _loadingIcon = true;
+        try
+        {
+            _icon = await ItemsService.GetItemIconAsync(Item.IconId.Value);
+        }
+        finally
+        {
+            _loadingIcon = false;
+        }
+    }
+
+}

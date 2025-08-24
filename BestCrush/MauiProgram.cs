@@ -2,6 +2,7 @@
 using BestCrush.Domain;
 using BestCrush.Domain.Services;
 using BestCrush.Services;
+using DofusSharp.DofusDb.ApiClients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -41,15 +42,16 @@ public static class MauiProgram
 
             ConfigureDatabase(builder, logger);
 
-            builder.Services.AddSingleton(new ImageCache(Path.Combine(FileSystem.AppDataDirectory, "images")));
+            builder.Services.AddSingleton(new ImageCache(Path.Combine(FileSystem.CacheDirectory, "images")));
             builder.Services.AddSingleton<ServersService>();
             builder.Services.AddSingleton<RunesService>();
             builder.Services.AddSingleton<CharacteristicsService>();
             builder.Services.AddSingleton<CrushService>();
+            builder.Services.AddSingleton<InitializationStateManager>();
+            builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("http://localhost/BestCrush")));
+            builder.Services.AddSingleton(DofusDbClient.Production(new Uri("http://localhost/BestCrush")));
             builder.Services.AddScoped<ItemsService>();
             builder.Services.AddScoped<DofusDbDataService>();
-
-            builder.Services.AddSingleton<InitializationStateManager>();
 
             MauiApp app = builder.Build();
 

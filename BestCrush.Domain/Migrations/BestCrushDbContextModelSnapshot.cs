@@ -33,7 +33,7 @@ namespace BestCrush.Domain.Migrations
                     b.ToTable("CurrentVersions");
                 });
 
-            modelBuilder.Entity("BestCrush.Domain.Models.Item", b =>
+            modelBuilder.Entity("BestCrush.Domain.Models.Equipment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,9 +53,12 @@ namespace BestCrush.Domain.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Items");
+                    b.ToTable("Equipments");
                 });
 
             modelBuilder.Entity("BestCrush.Domain.Models.ItemCharacteristicLine", b =>
@@ -67,18 +70,18 @@ namespace BestCrush.Domain.Migrations
                     b.Property<int>("Characteristic")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("EquipmentId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("From")
                         .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("ItemId")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("To")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("EquipmentId");
 
                     b.ToTable("ItemCharacteristicLine");
                 });
@@ -139,6 +142,55 @@ namespace BestCrush.Domain.Migrations
                     b.ToTable("ItemPriceRecords");
                 });
 
+            modelBuilder.Entity("BestCrush.Domain.Models.RecipeEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("EquipmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("RecipeEntry");
+                });
+
+            modelBuilder.Entity("BestCrush.Domain.Models.Resource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("DofusDbIconId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("DofusDbId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Resources");
+                });
+
             modelBuilder.Entity("BestCrush.Domain.Models.RunePriceRecord", b =>
                 {
                     b.Property<Guid>("Id")
@@ -169,14 +221,31 @@ namespace BestCrush.Domain.Migrations
 
             modelBuilder.Entity("BestCrush.Domain.Models.ItemCharacteristicLine", b =>
                 {
-                    b.HasOne("BestCrush.Domain.Models.Item", null)
+                    b.HasOne("BestCrush.Domain.Models.Equipment", null)
                         .WithMany("Characteristics")
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("EquipmentId");
                 });
 
-            modelBuilder.Entity("BestCrush.Domain.Models.Item", b =>
+            modelBuilder.Entity("BestCrush.Domain.Models.RecipeEntry", b =>
+                {
+                    b.HasOne("BestCrush.Domain.Models.Equipment", null)
+                        .WithMany("Recipe")
+                        .HasForeignKey("EquipmentId");
+
+                    b.HasOne("BestCrush.Domain.Models.Resource", "Resource")
+                        .WithMany()
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+                });
+
+            modelBuilder.Entity("BestCrush.Domain.Models.Equipment", b =>
                 {
                     b.Navigation("Characteristics");
+
+                    b.Navigation("Recipe");
                 });
 #pragma warning restore 612, 618
         }

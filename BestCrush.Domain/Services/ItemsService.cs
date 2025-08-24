@@ -8,11 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BestCrush.Domain.Services;
 
-public class ItemsService(BestCrushDbContext context, ImageCache imageCache)
+public class ItemsService(BestCrushDbContext context, DofusDbClientsFactory dofusDbClientsFactory, ImageCache imageCache)
 {
     readonly ConcurrentDictionary<long, DofocusItem> _cachedItems = [];
 
-    public async Task<IReadOnlyCollection<Item>> GetItemsAsync() => await context.Items.Include(i => i.Characteristics).AsNoTracking().ToArrayAsync();
+    public async Task<IReadOnlyCollection<Equipment>> GetEquipmentsAsync() =>
+        await context.Equipments.Include(i => i.Characteristics).Include(i => i.Recipe).ThenInclude(i => i.Resource).AsNoTracking().ToArrayAsync();
 
     public async Task<DofocusItem> GetItemAsync(long id, bool forceRefresh = false)
     {
@@ -28,7 +29,7 @@ public class ItemsService(BestCrushDbContext context, ImageCache imageCache)
         return item;
     }
 
-    public Task<string?> GetItemIconAsync(Item item)
+    public Task<string?> GetItemIconAsync(IItem item)
     {
         if (item.DofusDbIconId is null)
         {
@@ -40,7 +41,7 @@ public class ItemsService(BestCrushDbContext context, ImageCache imageCache)
 
     public async Task<string?> GetItemIconAsync(long iconId)
     {
-        IDofusDbImageClient<long> client = DofusDbClient.Production(Constants.Referrer).ItemImages();
+        IDofusDbImageClient<long> client = dofusDbClientsFactory.ItemImages();
         string cacheKey = $"item-icon-{iconId}.png";
         byte[] content = await imageCache.GetOrAddAsync(
             cacheKey,
