@@ -1,4 +1,6 @@
 ﻿using BestCrush.Domain.Models;
+using DofusSharp.Dofocus.ApiClients;
+using DofusSharp.Dofocus.ApiClients.Models.Runes;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
@@ -7,12 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BestCrush.Domain.Services;
 
-public class DofusDbDataService(
-    BestCrushDbContext context,
-    DofusDbQueryProvider dofusDbQueryProvider,
-    DofusDbClientsFactory dofusDbClientsFactory,
-    ILogger<DofusDbDataService> logger
-)
+public class DofusDbDataService(BestCrushDbContext context, DofusDbQueryProvider dofusDbQueryProvider, ILogger<DofusDbDataService> logger)
 {
     public async Task PrepareLocalDatabaseAsync()
     {
@@ -42,6 +39,7 @@ public class DofusDbDataService(
         logger.LogInformation("Fetching DofusDB data for version {NewVersion}...", version);
 
         await CreateOrUpdateEquipments();
+        await CreateOrUpdateRunesAsync();
         CurrentVersion currentVersion = new(version.ToString());
         context.Add(currentVersion);
 
@@ -53,6 +51,7 @@ public class DofusDbDataService(
         logger.LogInformation("Upgrading DofusDB data from version {CurrentVersion} to {NewVersion}...", currentVersion, newVersion);
 
         await CreateOrUpdateEquipments();
+        await CreateOrUpdateRunesAsync();
         currentVersionEntity.DofusDbVersion = newVersion.ToString();
 
         logger.LogInformation("DofusDB data upgraded.");
@@ -81,7 +80,7 @@ public class DofusDbDataService(
             Equipment? equipment = context.Equipments.OfType<Equipment>().SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id.Value);
             if (equipment is null)
             {
-                equipment = await CreateEquipmentAsync(dofusDbItem, characteristicsDict, recipesDict);
+                equipment = CreateEquipment(dofusDbItem, characteristicsDict, recipesDict);
                 if (equipment is null)
                 {
                     logger.LogWarning("Could not map equipment {Name} ({Id}).", dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???", dofusDbItem.Id?.ToString() ?? "???");
@@ -92,12 +91,12 @@ public class DofusDbDataService(
             }
             else
             {
-                await UpdateEquipmentAsync(dofusDbItem, equipment, characteristicsDict, recipesDict);
+                UpdateEquipment(dofusDbItem, equipment, characteristicsDict, recipesDict);
             }
         }
     }
 
-    async Task<Equipment?> CreateEquipmentAsync(DofusDbItem dofusDbItem, Dictionary<long, DofusDbCharacteristic> characteristics, Dictionary<long, DofusDbRecipe> recipes)
+    Equipment? CreateEquipment(DofusDbItem dofusDbItem, Dictionary<long, DofusDbCharacteristic> characteristics, Dictionary<long, DofusDbRecipe> recipes)
     {
         if (dofusDbItem.Id is null)
         {
@@ -105,19 +104,19 @@ public class DofusDbDataService(
         }
 
         Equipment equipment = new(dofusDbItem.Id.Value);
-        await UpdateEquipmentAsync(dofusDbItem, equipment, characteristics, recipes);
+        UpdateEquipment(dofusDbItem, equipment, characteristics, recipes);
 
         return equipment;
     }
 
-    async Task UpdateEquipmentAsync(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbCharacteristic> characteristics, Dictionary<long, DofusDbRecipe> recipes)
+    void UpdateEquipment(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbCharacteristic> characteristics, Dictionary<long, DofusDbRecipe> recipes)
     {
         equipment.DofusDbIconId = dofusDbItem.IconId;
         equipment.Level = dofusDbItem.Level ?? 0;
         equipment.Name = dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???";
         equipment.Type = EquipmentTypeExtensions.EquipmentTypeFromDofusDbTypeId(dofusDbItem.TypeId ?? 0) ?? EquipmentType.MagicWeapon;
         UpdateCharacteristics(dofusDbItem, equipment, characteristics);
-        await UpdateRecipeAsync(dofusDbItem, equipment, recipes);
+        UpdateRecipe(dofusDbItem, equipment, recipes);
     }
 
     static void UpdateCharacteristics(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbCharacteristic> characteristics)
@@ -159,7 +158,7 @@ public class DofusDbDataService(
         }
     }
 
-    async Task UpdateRecipeAsync(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbRecipe> recipes)
+    void UpdateRecipe(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbRecipe> recipes)
     {
         if (dofusDbItem.HasRecipe != true)
         {
@@ -186,7 +185,7 @@ public class DofusDbDataService(
                     DofusDbItem ingredient = recipe.Ingredients[index];
                     int quantity = recipe.Quantities[index];
 
-                    Resource? item = UpdateOrCreateItem(ingredient);
+                    Resource? item = UpdateOrCreateResource(ingredient);
                     if (item is null)
                     {
                         continue;
@@ -210,19 +209,19 @@ public class DofusDbDataService(
         }
     }
 
-    Resource? UpdateOrCreateItem(DofusDbItem dofusDbItem)
+    Resource? UpdateOrCreateResource(DofusDbItem dofusDbItem)
     {
         Resource? item = context.Resources.SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id);
         if (item is null)
         {
-            return CreateItem(dofusDbItem);
+            return CreateResource(dofusDbItem);
         }
 
         UpdateResource(dofusDbItem, item);
         return item;
     }
 
-    static Resource? CreateItem(DofusDbItem dofusDbItem)
+    static Resource? CreateResource(DofusDbItem dofusDbItem)
     {
         if (dofusDbItem.Id is null)
         {
@@ -240,5 +239,81 @@ public class DofusDbDataService(
         resource.DofusDbIconId = dofusDbItem.IconId;
         resource.Level = dofusDbItem.Level ?? 0;
         resource.Name = dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???";
+    }
+
+    async Task CreateOrUpdateRunesAsync()
+    {
+        DofocusRunesClient dofocusClient = DofocusClient.Runes();
+        IReadOnlyCollection<DofocusRune> dofocusRunes = await dofocusClient.GetRunesAsync();
+
+        Dictionary<long, DofusDbItem> dofusDbRunes =
+            await dofusDbQueryProvider.Items().Where(i => i.TypeId == 78).ExecuteAsync().Where(i => i.Id.HasValue).ToDictionaryAsync(i => i.Id!.Value, i => i);
+
+        Dictionary<long, DofusDbCharacteristic> dofusDbCharacteristics =
+            await dofusDbQueryProvider.Characteristics().ExecuteAsync().Where(i => i.Id.HasValue).ToDictionaryAsync(i => i.Id!.Value, i => i);
+
+        foreach (DofocusRune dofocusRune in dofocusRunes)
+        {
+            if (dofocusRune.CharacteristicId is null)
+            {
+                continue;
+            }
+
+            DofusDbItem? dofusDbRune = dofusDbRunes.GetValueOrDefault(dofocusRune.Id);
+            if (dofusDbRune is null)
+            {
+                continue;
+            }
+
+            DofusDbCharacteristic? dofusDbCharacteristic = dofusDbCharacteristics.GetValueOrDefault(dofocusRune.CharacteristicId.Value);
+            if (dofusDbCharacteristic is null)
+            {
+                continue;
+            }
+
+            Characteristic? characteristic = CharacteristicExtensions.CharacteristicFromDofusDbKeyword(dofusDbCharacteristic.Keyword ?? "");
+            if (characteristic is null)
+            {
+                continue;
+            }
+
+            Rune? rune = context.Runes.SingleOrDefault(r => r.DofusDbId == dofocusRune.Id);
+            if (rune is null)
+            {
+                rune = CreateRune(dofusDbRune);
+                if (rune is null)
+                {
+                    continue;
+                }
+
+                context.Runes.Add(rune);
+            }
+            else
+            {
+                UpdateRune(dofusDbRune, rune);
+            }
+
+            rune.Characteristic = characteristic.Value;
+        }
+    }
+
+    static Rune? CreateRune(DofusDbItem dofusDbItem)
+    {
+        if (dofusDbItem.Id is null)
+        {
+            return null;
+        }
+
+        Rune resource = new(dofusDbItem.Id.Value);
+        UpdateRune(dofusDbItem, resource);
+
+        return resource;
+    }
+
+    static void UpdateRune(DofusDbItem dofusDbItem, Rune rune)
+    {
+        rune.DofusDbIconId = dofusDbItem.IconId;
+        rune.Level = dofusDbItem.Level ?? 0;
+        rune.Name = dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???";
     }
 }

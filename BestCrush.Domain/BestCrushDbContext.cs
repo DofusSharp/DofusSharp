@@ -9,6 +9,7 @@ public class BestCrushDbContext : DbContext
 
     public DbSet<CurrentVersion> CurrentVersions { get; set; }
     public DbSet<Equipment> Equipments { get; set; }
+    public DbSet<Rune> Runes { get; set; }
     public DbSet<Resource> Resources { get; set; }
     public DbSet<ItemPriceRecord> ItemPriceRecords { get; set; }
     public DbSet<ItemCoefficientRecord> ItemCoefficientRecords { get; set; }

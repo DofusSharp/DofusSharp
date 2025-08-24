@@ -2,11 +2,11 @@
 
 namespace BestCrush.Domain.Services;
 
-public class CrushService
+public class CrushService(BestCrushDbContext context)
 {
-    public IReadOnlyDictionary<Characteristic, double> GetCrushResult(Dictionary<Characteristic, double> itemLines, int itemLevel, double coefficient)
+    public IReadOnlyDictionary<Rune, double> GetCrushResult(Dictionary<Characteristic, double> itemLines, int itemLevel, double coefficient)
     {
-        Dictionary<Characteristic, double> result = new();
+        Dictionary<Rune, double> result = new();
 
         foreach ((Characteristic characteristic, double value) in itemLines)
         {
@@ -15,17 +15,29 @@ public class CrushService
                 continue;
             }
 
+            Rune? rune = context.Runes.SingleOrDefault(r => r.Characteristic == characteristic);
+            if (rune is null)
+            {
+                continue;
+            }
+
             double crushWeight = GetCrushWeight(characteristic, value, itemLevel);
             double boostedCrushWeight = crushWeight * coefficient;
             double runeYield = boostedCrushWeight / characteristic.GetBasicRuneWeight();
-            result.Add(characteristic, runeYield);
+            result.Add(rune, runeYield);
         }
 
         return result;
     }
 
-    public double GetFocusedCrushResult(Dictionary<Characteristic, double> itemLines, Characteristic focus, int itemLevel, double coefficient)
+    public IReadOnlyDictionary<Rune, double> GetFocusedCrushResult(Dictionary<Characteristic, double> itemLines, Characteristic focus, int itemLevel, double coefficient)
     {
+        Rune? rune = context.Runes.SingleOrDefault(r => r.Characteristic == focus);
+        if (rune is null)
+        {
+            return new Dictionary<Rune, double>();
+        }
+
         double totalCrushWeight = 0;
         foreach ((Characteristic characteristic, double value) in itemLines)
         {
@@ -48,7 +60,7 @@ public class CrushService
         double boostedCrushWeight = totalCrushWeight * coefficient;
         double runeYield = boostedCrushWeight / focus.GetBasicRuneWeight();
 
-        return runeYield;
+        return new Dictionary<Rune, double> { { rune, runeYield } };
     }
 
     static double GetCrushWeight(Characteristic characteristic, double lineValue, int itemLevel) => 3 * lineValue * characteristic.GetWeight() * itemLevel / 200 + 1;

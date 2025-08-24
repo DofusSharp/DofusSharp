@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BestCrush.Domain.Migrations
 {
     [DbContext(typeof(BestCrushDbContext))]
-    [Migration("20250824175901_InitialCreate")]
+    [Migration("20250824210508_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -192,6 +192,34 @@ namespace BestCrush.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Resources");
+                });
+
+            modelBuilder.Entity("BestCrush.Domain.Models.Rune", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Characteristic")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("DofusDbIconId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("DofusDbId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Runes");
                 });
 
             modelBuilder.Entity("BestCrush.Domain.Models.RunePriceRecord", b =>

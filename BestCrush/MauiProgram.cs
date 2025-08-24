@@ -48,10 +48,16 @@ public static class MauiProgram
             builder.Services.AddSingleton<CharacteristicsService>();
             builder.Services.AddSingleton<CrushService>();
             builder.Services.AddSingleton<InitializationStateManager>();
-            builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("http://localhost/BestCrush")));
-            builder.Services.AddSingleton(DofusDbClient.Production(new Uri("http://localhost/BestCrush")));
             builder.Services.AddScoped<ItemsService>();
             builder.Services.AddScoped<DofusDbDataService>();
+
+#if DEBUG
+            builder.Services.AddSingleton(DofusDbQuery.Beta(new Uri("http://localhost/BestCrush")));
+            builder.Services.AddSingleton(DofusDbClient.Beta(new Uri("http://localhost/BestCrush")));
+#else
+            builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("http://localhost/BestCrush")));
+            builder.Services.AddSingleton(DofusDbClient.Production(new Uri("http://localhost/BestCrush")));
+#endif
 
             MauiApp app = builder.Build();
 

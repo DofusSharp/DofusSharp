@@ -100,6 +100,22 @@ namespace BestCrush.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Runes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DofusDbId = table.Column<long>(type: "INTEGER", nullable: false),
+                    DofusDbIconId = table.Column<long>(type: "INTEGER", nullable: true),
+                    Level = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false),
+                    Characteristic = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Runes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ItemCharacteristicLine",
                 columns: table => new
                 {
@@ -210,6 +226,9 @@ namespace BestCrush.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "RunePriceRecords");
+
+            migrationBuilder.DropTable(
+                name: "Runes");
 
             migrationBuilder.DropTable(
                 name: "Equipments");

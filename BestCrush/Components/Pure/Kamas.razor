@@ -2,7 +2,13 @@
 <div class="d-flex gap-1">
     @if (Amount.HasValue)
     {
-        <span class="fw-semibold" style="font-size: @(TextSizeInPx)px;line-height: @(TextSizeInPx)px">@Amount.Value.ToString("N0")</span>
+        <span class="fw-semibold @TextColorClass" style="font-size: @(TextSizeInPx)px;line-height: @(TextSizeInPx)px">
+            @if (DisplayPlusSign && Amount > 0)
+            {
+                @("+")
+            }
+            @Amount.Value.ToString("N0")
+        </span>
     }
 
     <img src="img/kama-@(IconSizeInPx).png" width="@IconSizeInPx" height="@IconSizeInPx" alt="Kamas icon"/>
@@ -28,10 +34,25 @@
             _ => throw new ArgumentOutOfRangeException()
         };
 
+    string TextColorClass =>
+        Color switch
+        {
+            TextColor.Default => "",
+            TextColor.Danger => "text-danger",
+            TextColor.Success => "text-success",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
     [Parameter]
     public double? Amount { get; init; }
 
     [Parameter]
     public IconSize Size { get; init; }
+
+    [Parameter]
+    public TextColor Color { get; init; }
+
+    [Parameter]
+    public bool DisplayPlusSign { get; init; }
 
 }

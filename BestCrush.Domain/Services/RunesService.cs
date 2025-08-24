@@ -5,7 +5,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 
 namespace BestCrush.Domain.Services;
 
-public class RunesService(CharacteristicsService characteristicsService)
+public class RunesService(CharacteristicsService characteristicsService, BestCrushDbContext context)
 {
     IReadOnlyCollection<DofocusRune>? _runes;
     readonly SemaphoreSlim _runesSemaphore = new(1, 1);
@@ -34,6 +34,29 @@ public class RunesService(CharacteristicsService characteristicsService)
         {
             _runesByCharacteristicsSemaphore.Release();
         }
+    }
+
+    public async Task<IReadOnlyDictionary<Rune, DofocusRunePriceRecord>> GetRunePricesAsync(string serverName)
+    {
+        IReadOnlyCollection<DofocusRune> runes = await GetRunesAsync();
+        Dictionary<Rune, DofocusRunePriceRecord> result = new();
+        foreach (DofocusRune dofocusRune in runes)
+        {
+            Rune? rune = context.Runes.SingleOrDefault(r => r.DofusDbId == dofocusRune.Id);
+            if (rune is null)
+            {
+                continue;
+            }
+
+            DofocusRunePriceRecord? price = dofocusRune.LatestPrices.Where(p => p.ServerName == serverName).OrderByDescending(p => p.DateUpdated).FirstOrDefault();
+            if (price is null)
+            {
+                continue;
+            }
+
+            result.Add(rune, price);
+        }
+        return result;
     }
 
     public async Task<IReadOnlyCollection<DofocusRune>> GetRunesAsync(bool forceRefresh = false)
@@ -110,11 +133,5 @@ public class RunesService(CharacteristicsService characteristicsService)
         {
             _runesByCharacteristicsSemaphore.Release();
         }
-    }
-
-    public async Task<Dictionary<long, double>> GetRunePricesAsync(string serverName, bool forceRefresh = false)
-    {
-        IReadOnlyCollection<DofocusRune> runes = await GetRunesAsync(forceRefresh);
-        return runes.ToDictionary(r => r.Id, r => r.LatestPrices.Where(c => c.ServerName == serverName).OrderByDescending(c => c.DateUpdated).FirstOrDefault()?.Price ?? 0);
     }
 }

@@ -7,10 +7,8 @@
 @using BestCrush.Components.Pure
 @using BestCrush.Domain.Models
 @using BestCrush.Domain.Services
-@using BestCrush.Extensions
 @using DofusSharp.Dofocus.ApiClients.Models.Items
 @using DofusSharp.Dofocus.ApiClients.Models.Runes
-@using DofusSharp.DofusDb.ApiClients.Models.Characteristics
 @using Microsoft.Extensions.Logging
 
 <div class="container">
@@ -67,77 +65,11 @@
                 <ul class="list-group list-group-flush rounded">
                     @foreach (ItemCrushResult item in _rankedItems.GroupBy(i => i.Equipment).Select(g => g.MaxBy(i => i.Benefits)).OrderByDescending(r => r.Benefits))
                     {
-                        {
-                            <li class="list-group-item">
-                                <CrushResultLine Equipment="item.Equipment" Cost="item.Cost.Price" CostDate="item.Cost.LastUpdate"></CrushResultLine>
-                            </li>
-                        }
-
-                        double yield = item.Benefits / item.Cost.Price;
-
-                        {
-                            <li class="list-group-item">
-                                <div class="d-flex gap-4">
-                                    <div class="d-flex flex-column align-items-center justify-content-center">
-                                        @if (item.ItemIcon is not null)
-                                        {
-                                            <img src="data:@item.ItemIcon" width="64" height="64" alt="Item icon"/>
-                                        }
-                                        else
-                                        {
-                                            <div class="d-flex align-items-center justify-content-center fw-bold fs-1" style="width:64px;height:64px">
-                                                ?
-                                            </div>
-                                        }
-                                        <div>@item.Coefficient.ToString("P0")</div>
-                                    </div>
-                                    <div>
-                                        <div>@item.Equipment.Name Lv. @item.Equipment.Level</div>
-                                        <div>Cost: @item.Cost.Price.ToString("N0") <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></div>
-                                        <div>
-                                            Price: @item.Price.ToString("N0") <img src="img/kama-20.png" alt="Kama" width="20" height="20"/>
-                                            @if (item.FocusedCharacteristic is null)
-                                            {
-                                                <span class="text-secondary ms-1">(without focus)</span>
-                                            }
-                                            else
-                                            {
-                                                DofusDbCharacteristic? characteristic = _allCharacteristics.TryGetValue(item.FocusedCharacteristic.Value, out DofusDbCharacteristic? c) ? c : null;
-                                                string characteristicStr = characteristic?.Name?.Localize() ?? item.FocusedCharacteristic.Value.ToDisplayName();
-                                                <span class="text-secondary ms-1">(with focus: @characteristicStr)</span>
-                                            }
-                                        </div>
-                                        <div>
-                                            @if (item.Benefits >= 0)
-                                            {
-                                                <span class="text-success">
-                                                    +@item.Benefits.ToString("N0") <img src="img/kama-20.png" alt="Kama" width="20" height="20"/> (+@yield.ToString("P0"))
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-danger">
-                                                    @item.Benefits.ToString("N0") <img src="img/kama-20.png" alt="Kama" width="20" height="20"/> (@yield.ToString("P0"))
-                                                </span>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 d-flex flex-wrap align-items-center justify-content-center gap-4">
-                                        @foreach ((Characteristic characteristic, double value) in item.Runes)
-                                        {
-                                            <div class="text-center">
-                                                @(value.ToString("0.00"))x
-                                                <br/>
-                                                @characteristic.ToDisplayName()
-                                            </div>
-                                        }
-                                    </div>
-                                    <div class="d-flex align-items-start justify-content-center">
-                                        <button class="btn btn-outline-secondary" @onclick="() => RefreshBenefits(item.Equipment)" disabled="@_searching">Refresh</button>
-                                    </div>
-                                </div>
-                            </li>
-                        }
+                        <li class="list-group-item">
+                            <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
+                                             Runes="item.Runes"
+                                             RunePrices="_runePrices"/>
+                        </li>
                     }
                 </ul>
             </div>
@@ -167,17 +99,12 @@
     private Request? Model { get; set; }
 
     private bool _searching;
-    Dictionary<Characteristic, DofusDbCharacteristic> _allCharacteristics = [];
     Equipment[]? _allItems;
     List<ItemCrushResult>? _rankedItems;
     List<Equipment>? _unrankedItems;
+    IReadOnlyDictionary<Rune, DofocusRunePriceRecord> _runePrices = new Dictionary<Rune, DofocusRunePriceRecord>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        Model ??= new Request();
-        IReadOnlyDictionary<long, DofusDbCharacteristic> dofusDbCharacteristics = await CharacteristicsService.GetDofusDbCharacteristicsAsync();
-        _allCharacteristics = dofusDbCharacteristics.Select(kv => (Characteristic: CharacteristicsService.GetCharacteristicFromDofusDb(kv.Value), DofusDbCharacteristic: kv.Value)).Where(kv => kv.Characteristic.HasValue).ToDictionary(kv => kv.Characteristic!.Value, kv => kv.DofusDbCharacteristic);
-    }
+    protected override void OnInitialized() => Model ??= new Request();
 
     async Task Count()
     {
@@ -209,7 +136,7 @@
 
             Task<IReadOnlyCollection<Equipment>> itemsTask = ItemsService.GetEquipmentsAsync();
             Task<IReadOnlyDictionary<Characteristic, DofocusRune>> runesByCharacteristicAsync = RunesService.GetRunesByCharacteristicAsync();
-            Task<Dictionary<long, double>> runePricesTask = RunesService.GetRunePricesAsync(ServerName);
+            Task<IReadOnlyDictionary<Rune, DofocusRunePriceRecord>> runePricesTask = RunesService.GetRunePricesAsync(ServerName);
 
             await Task.WhenAll(itemsTask, runesByCharacteristicAsync, runePricesTask);
 
@@ -218,11 +145,7 @@
 
             StateHasChanged();
 
-            IReadOnlyDictionary<Characteristic, DofocusRune> runeByCharacteristic = runesByCharacteristicAsync.Result;
-            Dictionary<long, double> runePrices = runePricesTask.Result;
-            Dictionary<long, Characteristic> characteristicByRune = runeByCharacteristic.ToDictionary(kv => kv.Value.Id, kv => kv.Key);
-            Dictionary<Characteristic, double> characteristicPrices = runePrices.Select(kv => (Characteristic: characteristicByRune.TryGetValue(kv.Key, out Characteristic characteristic) ? characteristic : (Characteristic?)null, Price: kv.Value)).Where(kv => kv.Characteristic.HasValue).ToDictionary(kv => kv.Characteristic!.Value, kv => kv.Price);
-
+            _runePrices = runePricesTask.Result;
             _rankedItems = [];
             _unrankedItems = [];
 
@@ -230,7 +153,7 @@
             {
                 try
                 {
-                    IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(item, characteristicPrices, false);
+                    IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(item, _runePrices, false);
                     if (result.Count == 0)
                     {
                         _unrankedItems.Add(item);
@@ -256,38 +179,7 @@
         }
     }
 
-    async Task RefreshBenefits(Equipment equipment)
-    {
-        if (_rankedItems is null || _searching)
-        {
-            return;
-        }
-
-        _searching = true;
-        try
-        {
-            await RunesService.ClearCachesAsync();
-
-            IReadOnlyDictionary<Characteristic, DofocusRune> runeByCharacteristic = await RunesService.GetRunesByCharacteristicAsync();
-            Dictionary<long, double> runePrices = await RunesService.GetRunePricesAsync(ServerName);
-            Dictionary<long, Characteristic> characteristicByRune = runeByCharacteristic.ToDictionary(kv => kv.Value.Id, kv => kv.Key);
-            Dictionary<Characteristic, double> characteristicPrices = runePrices.Select(kv => (Characteristic: characteristicByRune.TryGetValue(kv.Key, out Characteristic characteristic) ? characteristic : (Characteristic?)null, Price: kv.Value)).Where(kv => kv.Characteristic.HasValue).ToDictionary(kv => kv.Characteristic!.Value, kv => kv.Price);
-            IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(equipment, characteristicPrices, true);
-
-            _rankedItems.RemoveAll(m => m.Equipment.Id == equipment.Id);
-            _rankedItems.AddRange(result);
-        }
-        catch (Exception exn)
-        {
-            Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", equipment.Name, equipment.DofusDbId);
-        }
-        finally
-        {
-            _searching = false;
-        }
-    }
-
-    async Task<IReadOnlyCollection<ItemCrushResult>> ComputeBenefit(Equipment equipment, Dictionary<Characteristic, double> characteristicPrices, bool forceRefresh)
+    async Task<IReadOnlyCollection<ItemCrushResult>> ComputeBenefit(Equipment equipment, IReadOnlyDictionary<Rune, DofocusRunePriceRecord> runePrices, bool forceRefresh)
     {
         DofocusItem detailedItem = await ItemsService.GetItemAsync(equipment.DofusDbId, forceRefresh);
 
@@ -308,9 +200,9 @@
         string? icon = await ItemsService.GetItemIconAsync(equipment);
         List<ItemCrushResult> result = [];
         Dictionary<Characteristic, double> averageLines = equipment.Characteristics.ToDictionary(c => c.Characteristic, c => (double)(c.From + c.To) / 2);
-        IReadOnlyDictionary<Characteristic, double> runesWithoutFocus = CrushService.GetCrushResult(averageLines, equipment.Level, coefficient);
-        double priceWithoutFocus = runesWithoutFocus.Sum(kv => characteristicPrices.GetValueOrDefault(kv.Key) * kv.Value);
-        result.Add(new ItemCrushResult(equipment, icon, coefficient, itemCost, priceWithoutFocus, priceWithoutFocus - cost, null, runesWithoutFocus));
+        IReadOnlyDictionary<Rune, double> runesWithoutFocus = CrushService.GetCrushResult(averageLines, equipment.Level, coefficient);
+        double priceWithoutFocus = runesWithoutFocus.Sum(kv => (runePrices.GetValueOrDefault(kv.Key)?.Price ?? 0) * kv.Value);
+        result.Add(new ItemCrushResult(equipment, itemCoefficient, itemCost, priceWithoutFocus - cost, null, runesWithoutFocus));
 
         foreach ((Characteristic characteristic, double value) in averageLines)
         {
@@ -319,9 +211,9 @@
                 continue;
             }
 
-            double runesWithFocus = CrushService.GetFocusedCrushResult(averageLines, characteristic, equipment.Level, coefficient);
-            double priceWithFocus = characteristicPrices.GetValueOrDefault(characteristic) * runesWithFocus;
-            result.Add(new ItemCrushResult(equipment, icon, coefficient, itemCost, priceWithFocus, priceWithFocus - cost, characteristic, new Dictionary<Characteristic, double> { { characteristic, runesWithFocus } }));
+            IReadOnlyDictionary<Rune, double> runesWithFocus = CrushService.GetFocusedCrushResult(averageLines, characteristic, equipment.Level, coefficient);
+            double priceWithFocus = runesWithFocus.Sum(kv => (runePrices.GetValueOrDefault(kv.Key)?.Price ?? 0) * kv.Value);
+            result.Add(new ItemCrushResult(equipment, itemCoefficient, itemCost, priceWithFocus - cost, characteristic, runesWithFocus));
         }
 
         return result;
@@ -344,7 +236,7 @@
         return result;
     }
 
-    readonly record struct ItemCrushResult(Equipment Equipment, string? ItemIcon, double Coefficient, DofocusItemPriceRecord Cost, double Price, double Benefits, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Characteristic, double> Runes);
+    readonly record struct ItemCrushResult(Equipment Equipment, DofocusCoefficientRecord Coefficient, DofocusItemPriceRecord Cost, double Benefits, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Rune, double> Runes);
 
     public class Request
     {
