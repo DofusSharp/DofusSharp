@@ -1,9 +1,9 @@
-﻿using BestCrush.EfCore.Models;
+﻿using BestCrush.Domain.Models;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Runes;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 
-namespace BestCrush.Services;
+namespace BestCrush.Domain.Services;
 
 public class RunesService(CharacteristicsService characteristicsService)
 {

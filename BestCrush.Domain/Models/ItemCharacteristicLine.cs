@@ -1,4 +1,4 @@
-﻿namespace BestCrush.EfCore.Models;
+﻿namespace BestCrush.Domain.Models;
 
 public class ItemCharacteristicLine
 {

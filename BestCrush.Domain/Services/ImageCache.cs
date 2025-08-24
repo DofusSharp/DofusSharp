@@ -1,9 +1,7 @@
-﻿namespace BestCrush.Services;
+﻿namespace BestCrush.Domain.Services;
 
-public class ImageCache
+public class ImageCache(string imageCacheDirectory)
 {
-    const string CacheFolderName = "images";
-
     public Task<bool> HasImageAsync(string key)
     {
         string path = GetPath(key);
@@ -28,5 +26,5 @@ public class ImageCache
         return File.WriteAllBytesAsync(path, data);
     }
 
-    string GetPath(string key) => Path.Combine(FileSystem.CacheDirectory, CacheFolderName, key);
+    string GetPath(string key) => Path.Combine(imageCacheDirectory, key);
 }

@@ -2,7 +2,7 @@
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Servers;
 
-namespace BestCrush.Services;
+namespace BestCrush.Domain.Services;
 
 public class ServersService(ImageCache imageCache)
 {
@@ -14,7 +14,7 @@ public class ServersService(ImageCache imageCache)
     {
         if (_servers is not null)
         {
-            return _servers;
+            return _servers; 
         }
 
         await _serversLock.WaitAsync();

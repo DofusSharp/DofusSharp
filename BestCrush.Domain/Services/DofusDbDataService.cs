@@ -1,10 +1,10 @@
-﻿using BestCrush.EfCore.Models;
+﻿using BestCrush.Domain.Models;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using Microsoft.Extensions.Logging;
 
-namespace BestCrush.EfCore;
+namespace BestCrush.Domain.Services;
 
 public class DofusDbDataService(BestCrushDbContext context, ILogger<DofusDbDataService> logger)
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BestCrush.EfCore.Models;
+namespace BestCrush.Domain.Models;
 
 public class CurrentVersion
 {

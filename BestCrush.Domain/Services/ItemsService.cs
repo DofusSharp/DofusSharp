@@ -1,12 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Http.Headers;
-using BestCrush.EfCore.Models;
+using BestCrush.Domain.Models;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 
-namespace BestCrush.Services;
+namespace BestCrush.Domain.Services;
 
 public class ItemsService(ImageCache imageCache)
 {

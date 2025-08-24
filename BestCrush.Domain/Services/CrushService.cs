@@ -1,6 +1,6 @@
 ﻿using DofusSharp.Dofocus.ApiClients.Models.Items;
 
-namespace BestCrush.Services;
+namespace BestCrush.Domain.Services;
 
 public class CrushService(CharacteristicsService characteristicsService)
 {

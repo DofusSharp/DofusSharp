@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using BestCrush.EfCore;
+using BestCrush.Domain;
+using BestCrush.Domain.Services;
 using BestCrush.Models;
-using BestCrush.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -42,7 +42,7 @@ public static class MauiProgram
 
             ConfigureDatabase(builder, logger);
 
-            builder.Services.AddSingleton<ImageCache>();
+            builder.Services.AddSingleton(new ImageCache(Path.Combine(FileSystem.AppDataDirectory, "images")));
             builder.Services.AddSingleton<ServersService>();
             builder.Services.AddSingleton<RunesService>();
             builder.Services.AddSingleton<ItemsService>();

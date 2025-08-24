@@ -1,7 +1,7 @@
-﻿using BestCrush.EfCore.Models;
+﻿using BestCrush.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BestCrush.EfCore;
+namespace BestCrush.Domain;
 
 public class BestCrushDbContext : DbContext
 {
