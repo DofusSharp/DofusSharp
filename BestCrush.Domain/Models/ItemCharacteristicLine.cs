@@ -1,8 +1,6 @@
-﻿using BestCrush.Models;
+﻿namespace BestCrush.EfCore.Models;
 
-namespace BestCrush.Persistence.Models;
-
-class ItemCharacteristicLine
+public class ItemCharacteristicLine
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     // EF ctor

@@ -1,17 +1,17 @@
-﻿namespace BestCrush.Persistence.Models;
+﻿namespace BestCrush.EfCore.Models;
 
-class ItemPriceRecord
+public class RunePriceRecord
 {
-    public ItemPriceRecord(long itemId, string serverName, double price)
+    public RunePriceRecord(long runeId, string serverName, double price)
     {
-        ItemId = itemId;
+        RuneId = runeId;
         ServerName = serverName;
         Price = price;
         Date = DateTimeOffset.Now;
     }
 
     public Guid Id { get; private set; }
-    public long ItemId { get; private set; }
+    public long RuneId { get; private set; }
     public string ServerName { get; private set; }
     public double Price { get; private set; }
     public DateTimeOffset Date { get; private set; }

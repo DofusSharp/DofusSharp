@@ -1,4 +1,4 @@
-﻿using BestCrush.Models;
+﻿using BestCrush.EfCore.Models;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Runes;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;

@@ -1,6 +1,8 @@
 ﻿using System.Text;
-using BestCrush.Persistence;
+using BestCrush.EfCore;
+using BestCrush.Models;
 using BestCrush.Services;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -50,8 +52,17 @@ public static class MauiProgram
 
             MauiApp app = builder.Build();
 
-            MigrateDatabaseAsync(app, logger).GetAwaiter().GetResult();
-            PrepareDatabaseAsync(app).GetAwaiter().GetResult();
+            Task.Run(async () =>
+                {
+                    WeakReferenceMessenger.Default.Send(new InitializationState("Migrating database...", false));
+                    await MigrateDatabaseAsync(app, logger);
+
+                    WeakReferenceMessenger.Default.Send(new InitializationState("Loading data...", false));
+                    await PrepareDatabaseAsync(app);
+
+                    WeakReferenceMessenger.Default.Send(new InitializationState("Done.", true));
+                }
+            );
 
             logger.LogInformation("Application started.");
 

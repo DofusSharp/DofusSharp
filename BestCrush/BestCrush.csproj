@@ -55,7 +55,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.8" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)"/>
@@ -65,12 +65,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BestCrush.Domain\BestCrush.Domain.csproj" />
       <ProjectReference Include="..\DofusSharp.Dofocus.ApiClients\DofusSharp.Dofocus.ApiClients.csproj" />
       <ProjectReference Include="..\DofusSharp.DofusDb.ApiClients\DofusSharp.DofusDb.ApiClients.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Cache\" />
     </ItemGroup>
     
 </Project>

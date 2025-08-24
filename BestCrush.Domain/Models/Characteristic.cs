@@ -1,4 +1,4 @@
-﻿namespace BestCrush.Models;
+﻿namespace BestCrush.EfCore.Models;
 
 public enum Characteristic
 {

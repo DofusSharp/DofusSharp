@@ -1,9 +1,9 @@
-﻿using BestCrush.Persistence.Models;
+﻿using BestCrush.EfCore.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BestCrush.Persistence;
+namespace BestCrush.EfCore;
 
-class BestCrushDbContext : DbContext
+public class BestCrushDbContext : DbContext
 {
     public BestCrushDbContext(DbContextOptions<BestCrushDbContext> options) : base(options) { }
 

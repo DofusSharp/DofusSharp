@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Http.Headers;
-using BestCrush.Models;
+using BestCrush.EfCore.Models;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients;
@@ -31,7 +31,7 @@ public class ItemsService(ImageCache imageCache)
             }
 
             long[] equipmentTypes = Enum.GetValues<EquipmentType>().Select(t => t.ToDofusDbItemTypeId()).ToArray();
-            _items = await DofusDbQuery.Production(Constants.Referrer).Items().Where(i => equipmentTypes.Contains(i.TypeId.Value)).ExecuteAsync().ToArrayAsync();
+            _items = await DofusDbQuery.Production().Items().Where(i => equipmentTypes.Contains(i.TypeId.Value)).ExecuteAsync().ToArrayAsync();
             return _items;
         }
         finally

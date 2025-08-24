@@ -1,19 +1,20 @@
-﻿using BestCrush.Models;
-using BestCrush.Persistence;
-using BestCrush.Persistence.Models;
+﻿using BestCrush.EfCore.Models;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using Microsoft.Extensions.Logging;
 
-namespace BestCrush.Services;
+namespace BestCrush.EfCore;
 
-class DofusDbDataService(BestCrushDbContext context, ILogger<DofusDbDataService> logger)
+public class DofusDbDataService(BestCrushDbContext context, ILogger<DofusDbDataService> logger)
 {
     public async Task PrepareLocalDatabaseAsync()
     {
         CurrentVersion? currentVersionEntity = context.CurrentVersions.FirstOrDefault();
+        logger.LogInformation("Local version: DofusDB={Version}", currentVersionEntity?.DofusDbVersion ?? "NULL");
+
         Version version = await DofusDbClient.Production().Version().GetVersionAsync();
+        logger.LogInformation("Remote DofusDB version: {Version}", version);
 
         if (currentVersionEntity is not null && Version.TryParse(currentVersionEntity.DofusDbVersion, out Version? currentVersion))
         {

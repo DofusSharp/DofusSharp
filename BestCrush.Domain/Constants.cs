@@ -1,4 +1,4 @@
-﻿namespace BestCrush;
+﻿namespace BestCrush.EfCore;
 
 static class Constants
 {

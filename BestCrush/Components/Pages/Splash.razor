@@ -2,28 +2,41 @@
 @inject NavigationManager NavigationManager
 @page "/"
 @using BestCrush.Components.Layout
+@using BestCrush.Models
 @using BestCrush.Services
+@using CommunityToolkit.Mvvm.Messaging
 @using DofusSharp.Dofocus.ApiClients.Models.Servers
 @layout EmptyLayout
 
-<div class="d-flex flex-column align-items-center justify-content-center min-vh-100">
+<div class="d-flex flex-column align-items-center justify-content-center text-center min-vh-100">
     <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
+
+    @_message;
 </div>
 
 @code {
 
-    protected override async Task OnInitializedAsync()
+    string? _message;
+
+    protected override void OnInitialized() => WeakReferenceMessenger.Default.Register<InitializationState>(this, OnInitializationState);
+
+    public void OnInitializationState(object _, InitializationState state)
     {
-        DofocusServer? currentServer = await ServersService.GetCurrentServer();
-        if (currentServer is not null)
+        _message = state.Message;
+
+        if (state.Done)
         {
-            NavigationManager.NavigateTo(KnownRoutes.Server(currentServer));
-        }
-        else
-        {
-            NavigationManager.NavigateTo(KnownRoutes.Servers());
+            DofocusServer? currentServer = ServersService.GetCurrentServer().GetAwaiter().GetResult();
+            if (currentServer is not null)
+            {
+                NavigationManager.NavigateTo(KnownRoutes.Server(currentServer));
+            }
+            else
+            {
+                NavigationManager.NavigateTo(KnownRoutes.Servers());
+            }
         }
     }
 

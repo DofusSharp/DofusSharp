@@ -1,18 +1,18 @@
-﻿namespace BestCrush.Persistence.Models;
+﻿namespace BestCrush.EfCore.Models;
 
-class ItemCoefficientRecord
+public class ItemPriceRecord
 {
-    public ItemCoefficientRecord(long itemId, string serverName, int coefficient)
+    public ItemPriceRecord(long itemId, string serverName, double price)
     {
         ItemId = itemId;
         ServerName = serverName;
-        Coefficient = coefficient;
+        Price = price;
         Date = DateTimeOffset.Now;
     }
 
     public Guid Id { get; private set; }
     public long ItemId { get; private set; }
     public string ServerName { get; private set; }
-    public int Coefficient { get; private set; }
+    public double Price { get; private set; }
     public DateTimeOffset Date { get; private set; }
 }
