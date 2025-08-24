@@ -1,61 +1,66 @@
 ﻿using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
 using JetBrains.Annotations;
 
 namespace Tests.EndToEnd.DofusDb.ApiClients;
 
-[TestSubject(typeof(DofusDbQuery))]
-public class DofusDbQuerySearchTest
+[TestSubject(typeof(DofusDbClient))]
+public class DofusDbTableClientSearchTest
 {
     [Fact]
     public async Task ShouldCountWithPredicate()
     {
-        DofusDbQuery<DofusDbItemSet> query = DofusDbQuery.Beta(Constants.Referrer).ItemSets();
-        int level20SetsCount = await query.Where(s => s.Level == 20).CountAsync();
-        List<DofusDbItemSet> allSets = await query.ExecuteAsync().ToListAsync();
+        IDofusDbTableClient<DofusDbItemSet> client = DofusDbClient.Beta(Constants.Referrer).ItemSets();
+        int level20SetsCount = await client.CountAsync(new DofusDbSearchPredicate.Eq("level", "20"));
+        List<DofusDbItemSet> allSets = await client.MultiQuerySearchAsync().ToListAsync();
         level20SetsCount.Should().Be(allSets.Count(s => s.Level == 20));
     }
-    
+
     [Fact]
     public async Task ShouldLimitSearchResults()
     {
-        DofusDbQuery<DofusDbItem> query = DofusDbQuery.Beta(Constants.Referrer).Items();
-        DofusDbItem[] items = await query.Take(12).ExecuteAsync().ToArrayAsync();
-        items.Length.Should().Be(12);
+        IDofusDbTableClient<DofusDbItem> client = DofusDbClient.Beta(Constants.Referrer).Items();
+        DofusDbSearchResult<DofusDbItem> items = await client.SearchAsync(new DofusDbSearchQuery { Limit = 12 });
+        items.Data.Count.Should().Be(12);
     }
 
     [Fact]
     public async Task ShouldSkipSearchResults()
     {
-        DofusDbQuery<DofusDbItem> query = DofusDbQuery.Beta(Constants.Referrer).Items();
-        DofusDbItem[] firstAndSecondItems = await query.Take(2).ExecuteAsync().ToArrayAsync();
+        IDofusDbTableClient<DofusDbItem> client = DofusDbClient.Beta(Constants.Referrer).Items();
+        DofusDbSearchResult<DofusDbItem> firstAndSecondItems = await client.SearchAsync(new DofusDbSearchQuery { Limit = 2 });
 
-        DofusDbItem[] secondItem = await query.Skip(1).Take(1).ExecuteAsync().ToArrayAsync();
+        DofusDbSearchResult<DofusDbItem> secondItem = await client.SearchAsync(new DofusDbSearchQuery { Limit = 1, Skip = 1 });
 
-        secondItem.Should().BeEquivalentTo([firstAndSecondItems[1]]);
+        secondItem.Data.Should().BeEquivalentTo([firstAndSecondItems.Data[1]]);
     }
 
     [Fact]
     public async Task ShouldSortSearchResults()
     {
-        DofusDbQuery<DofusDbItem> query = DofusDbQuery.Beta(Constants.Referrer).Items();
+        IDofusDbTableClient<DofusDbItem> client = DofusDbClient.Beta(Constants.Referrer).Items();
 
-        DofusDbItem[] sortedSearchResults = await query.Take(50).SortByDescending(i => i.RealWeight).ExecuteAsync().ToArrayAsync();
+        DofusDbSearchResult<DofusDbItem> sortedSearchResults = await client.SearchAsync(
+            new DofusDbSearchQuery
+                { Limit = 50, Sort = new Dictionary<string, DofusDbSearchQuerySortOrder> { { nameof(DofusDbItem.RealWeight), DofusDbSearchQuerySortOrder.Descending } } }
+        );
 
         // expect the results to be sorted by name.fr in descending order
-        IOrderedEnumerable<DofusDbItem> sortedData = sortedSearchResults.OrderByDescending(d => d.RealWeight);
-        sortedSearchResults.Should().BeEquivalentTo(sortedData, opt => opt.WithStrictOrdering());
+        IOrderedEnumerable<DofusDbItem> sortedData = sortedSearchResults.Data.OrderByDescending(d => d.RealWeight);
+        sortedSearchResults.Data.Should().BeEquivalentTo(sortedData, opt => opt.WithStrictOrdering());
     }
 
     [Fact]
     public async Task ShouldSelectSearchResults()
     {
-        DofusDbQuery<DofusDbItem> query = DofusDbQuery.Beta(Constants.Referrer).Items();
+        IDofusDbTableClient<DofusDbItem> client = DofusDbClient.Beta(Constants.Referrer).Items();
 
-        DofusDbItem[] results = await query.Take(1).Select(i => i.RealWeight).ExecuteAsync().ToArrayAsync();
+        DofusDbSearchResult<DofusDbItem> results = await client.SearchAsync(new DofusDbSearchQuery { Limit = 1, Select = [nameof(DofusDbItem.RealWeight)] });
 
-        results[0]
+        results
+            .Data[0]
             .Should()
             .BeEquivalentTo(
                 new DofusDbItem
@@ -133,11 +138,16 @@ public class DofusDbQuerySearchTest
     [Fact]
     public async Task ShouldFilterSearchResults()
     {
-        DofusDbQuery<DofusDbItem> query = DofusDbQuery.Beta(Constants.Referrer).Items();
+        IDofusDbTableClient<DofusDbItem> client = DofusDbClient.Beta(Constants.Referrer).Items();
 
-        DofusDbItem[] sortedSearchResults = await query.Where(i => i.Level > 27 && i.Level < 29).ExecuteAsync().ToArrayAsync();
+        DofusDbSearchResult<DofusDbItem> sortedSearchResults = await client.SearchAsync(
+            new DofusDbSearchQuery
+            {
+                Predicates = [new DofusDbSearchPredicate.GreaterThan("level", "27"), new DofusDbSearchPredicate.LessThan("level", "29")]
+            }
+        );
 
         // expect the results to be sorted by name.fr in descending order
-        sortedSearchResults.Should().AllSatisfy(d => d.Level.Should().Be(28));
+        sortedSearchResults.Data.Should().AllSatisfy(d => d.Level.Should().Be(28));
     }
 }

@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <IsPackable>false</IsPackable>
+        <RootNamespace>Tests.EndToEnd.DofusDb.ApiClients</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
