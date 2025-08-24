@@ -15,25 +15,25 @@ public class DofocusItemMinimal
     /// <summary>
     ///     The localized name of the item.
     /// </summary>
-    public required DofocusMultiLangString Name { get; init; }
+    public DofocusMultiLangString? Name { get; init; }
 
     /// <summary>
     ///     The level of the item.
     /// </summary>
-    public required int Level { get; init; }
+    public int? Level { get; init; }
 
     /// <summary>
     ///     The super type of the item.
     /// </summary>
-    public required DofocusSuperTypeMinimal SuperType { get; init; }
+    public DofocusSuperTypeMinimal? SuperType { get; init; }
 
     /// <summary>
     ///     The URL of the item's image.
     /// </summary>
-    public required string ImageUrl { get; init; }
+    public string? ImageUrl { get; init; }
 
     /// <summary>
     ///     The minimal characteristics of the item.
     /// </summary>
-    public required IReadOnlyCollection<DofocusItemCharacteristicMinimal> Characteristics { get; init; }
+    public IReadOnlyCollection<DofocusItemCharacteristicMinimal>? Characteristics { get; init; }
 }
