@@ -28,3 +28,19 @@ public class ImageCache(string imageCacheDirectory)
 
     string GetPath(string key) => Path.Combine(imageCacheDirectory, key);
 }
+
+public static class ImageCacheExtensions
+{
+    public static async Task<byte[]> GetOrAddAsync(this ImageCache cache, string key, Func<Task<byte[]>> getAsync)
+    {
+        if (await cache.HasImageAsync(key))
+        {
+            return await cache.LoadImageAsync(key);
+        }
+
+        byte[] image = await getAsync();
+        await cache.StoreImageAsync(key, image);
+
+        return image;
+    }
+}

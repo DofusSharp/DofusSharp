@@ -9,18 +9,18 @@ public class Item
     public Item() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-    public Item(long dofusDbId, string name, IReadOnlyCollection<ItemCharacteristicLine> characteristicLines)
+    public Item(long dofusDbId)
     {
         DofusDbId = dofusDbId;
-        Name = name;
-        Characteristics = characteristicLines.ToArray();
     }
 
     public Guid Id { get; private set; }
     public long DofusDbId { get; private set; }
+    public long? DofusDbIconId { get; set; }
+    public int Level { get; set; }
 
     [MaxLength(256)]
-    public string Name { get; set; }
+    public string Name { get; set; } = "???";
 
-    public ICollection<ItemCharacteristicLine> Characteristics { get; set; }
+    public ICollection<ItemCharacteristicLine> Characteristics { get; set; } = [];
 }

@@ -100,44 +100,23 @@ public class DofusDbDataService(BestCrushDbContext context, ILogger<DofusDbDataS
         logger.LogInformation("DofusDB data upgraded.");
     }
 
-    static Item? CreateItem(DofusDbItem item, Dictionary<long, DofusDbCharacteristic> characteristics)
+    static Item? CreateItem(DofusDbItem dofusDbItem, Dictionary<long, DofusDbCharacteristic> characteristics)
     {
-        if (item.Id is null)
+        if (dofusDbItem.Id is null)
         {
             return null;
         }
 
-        List<ItemCharacteristicLine> itemCharacteristics = new();
-        if (item.Effects is not null)
-        {
-            foreach (DofusDbItemEffect effect in item.Effects)
-            {
-                if (!effect.Characteristic.HasValue)
-                {
-                    continue;
-                }
+        Item item = new(dofusDbItem.Id.Value);
+        UpdateItem(dofusDbItem, item, characteristics);
 
-                DofusDbCharacteristic? dofusDbCharacteristic = characteristics.GetValueOrDefault(effect.Characteristic.Value);
-                if (dofusDbCharacteristic?.Keyword is null)
-                {
-                    continue;
-                }
-
-                Characteristic? characteristic = CharacteristicExtensions.CharacteristicFromDofusDbKeyword(dofusDbCharacteristic.Keyword);
-                if (!characteristic.HasValue)
-                {
-                    continue;
-                }
-
-                itemCharacteristics.Add(new ItemCharacteristicLine(characteristic.Value, effect.From ?? 0, effect.To is null or 0 ? effect.From ?? 0 : effect.To.Value));
-            }
-        }
-
-        return new Item(item.Id.Value, item.Name?.En ?? item.Name?.Fr ?? "???", itemCharacteristics);
+        return item;
     }
 
     static void UpdateItem(DofusDbItem dofusDbItem, Item item, Dictionary<long, DofusDbCharacteristic> characteristics)
     {
+        item.DofusDbIconId = dofusDbItem.IconId;
+        item.Level = dofusDbItem.Level ?? 0;
         item.Name = dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???";
 
         if (dofusDbItem.Effects is not null)

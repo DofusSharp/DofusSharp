@@ -45,9 +45,9 @@ public static class MauiProgram
             builder.Services.AddSingleton(new ImageCache(Path.Combine(FileSystem.AppDataDirectory, "images")));
             builder.Services.AddSingleton<ServersService>();
             builder.Services.AddSingleton<RunesService>();
-            builder.Services.AddSingleton<ItemsService>();
             builder.Services.AddSingleton<CharacteristicsService>();
             builder.Services.AddSingleton<CrushService>();
+            builder.Services.AddScoped<ItemsService>();
             builder.Services.AddScoped<DofusDbDataService>();
 
             MauiApp app = builder.Build();

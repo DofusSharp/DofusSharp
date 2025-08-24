@@ -14,7 +14,7 @@ public class ServersService(ImageCache imageCache)
     {
         if (_servers is not null)
         {
-            return _servers; 
+            return _servers;
         }
 
         await _serversLock.WaitAsync();
@@ -36,24 +36,10 @@ public class ServersService(ImageCache imageCache)
 
     public async Task<string> GetServerIconAsync(DofocusServer server)
     {
-        byte[] content;
-
+        using HttpClient httpClient = new();
+        httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
         string cacheKey = $"server-icon-{server.Name}.webp";
-        if (await imageCache.HasImageAsync(cacheKey))
-        {
-            content = await imageCache.LoadImageAsync(cacheKey);
-        }
-        else
-        {
-            string url = $"https://dofocus.fr/servers/{server.Name.ToLower()}.webp";
-
-            using HttpClient httpClient = new();
-            httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
-            content = await httpClient.GetByteArrayAsync(url);
-
-            await imageCache.StoreImageAsync(cacheKey, content);
-        }
-
+        byte[] content = await imageCache.GetOrAddAsync(cacheKey, async () => await httpClient.GetByteArrayAsync($"https://dofocus.fr/servers/{server.Name.ToLower()}.webp"));
         return $"image/webp;base64,{Convert.ToBase64String(content)}";
     }
 
