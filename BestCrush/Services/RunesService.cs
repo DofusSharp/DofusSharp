@@ -32,4 +32,13 @@ public class RunesService
             _runesSemaphore.Release();
         }
     }
+
+    public async Task<Dictionary<long, double>> GetRunePricesAsync(string serverName, bool forceRefresh = false)
+    {
+        IReadOnlyCollection<DofocusRune> runes = await GetRunesAsync(forceRefresh);
+        return runes.ToDictionary(
+            r => r.CharacteristicId ?? -1,
+            r => r.LatestPrices.Where(c => c.ServerName == serverName).OrderByDescending(c => c.DateUpdated).FirstOrDefault()?.Price ?? 0
+        );
+    }
 }

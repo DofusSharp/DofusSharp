@@ -1,6 +1,7 @@
 ﻿@inject ServersService ServersService
 @inject ItemsService ItemsService
 @inject RunesService RunesService
+@inject CrushService CrushService
 @inject NavigationManager NavigationManager
 @inject ILogger<Server> Logger
 @page "/servers/{ServerName}"
@@ -195,7 +196,8 @@
             {
                 try
                 {
-                    ItemCrushResult? result = await ComputeBenefit(item, runes, false);
+                    Dictionary<long, double> runePrices = runes.ToDictionary(r => r.CharacteristicId ?? -1, r => r.LatestPrices.Where(c => c.ServerName == ServerName).OrderByDescending(c => c.DateUpdated).FirstOrDefault()?.Price ?? 0);
+                    ItemCrushResult? result = await ComputeBenefit(item, runePrices, false);
                     if (!result.HasValue)
                     {
                         _unrankedItems.Add(item);
@@ -232,7 +234,8 @@
         try
         {
             IReadOnlyCollection<DofocusRune> runes = await RunesService.GetRunesAsync(true);
-            ItemCrushResult? result = await ComputeBenefit(item, runes, true);
+            Dictionary<long, double> runePrices = runes.ToDictionary(r => r.CharacteristicId ?? -1, r => r.LatestPrices.Where(c => c.ServerName == ServerName).OrderByDescending(c => c.DateUpdated).FirstOrDefault()?.Price ?? 0);
+            ItemCrushResult? result = await ComputeBenefit(item, runePrices, true);
             if (!result.HasValue)
             {
                 return;
@@ -251,16 +254,23 @@
         }
     }
 
-    async Task<ItemCrushResult?> ComputeBenefit(DofocusItemMinimal item, IReadOnlyCollection<DofocusRune> runes, bool forceRefresh)
+    async Task<ItemCrushResult?> ComputeBenefit(DofocusItemMinimal item, Dictionary<long, double> runePrices, bool forceRefresh)
     {
         DofocusItem detailedItem = await ItemsService.GetItemAsync(item.Id, forceRefresh);
+
+        DofocusCoefficientRecord? itemCoefficient = detailedItem.Coefficients.Where(c => c.ServerName == ServerName).OrderByDescending(c => c.LastUpdate).FirstOrDefault();
+        if (itemCoefficient == null)
+        {
+            return null;
+        }
+
         DofocusItemPriceRecord? itemCost = detailedItem.Prices.Where(r => r.ServerName == ServerName).OrderByDescending(r => r.LastUpdate).FirstOrDefault();
         if (itemCost is null)
         {
             return null;
         }
 
-        CrushedItemPrice crushedPrice = ComputeCrushedItemCost(detailedItem, runes);
+        CrushedItemPrice crushedPrice = ComputeCrushedItemPrice(detailedItem, itemCoefficient.Coefficient, runePrices);
         KeyValuePair<long, double> maxPriceWithFocus = crushedPrice.WithFocus.OrderByDescending(kv => kv.Value).FirstOrDefault();
 
         long? focusedCharacteristic;
@@ -300,32 +310,15 @@
         return result;
     }
 
-    CrushedItemPrice ComputeCrushedItemCost(DofocusItem item, IReadOnlyCollection<DofocusRune> runes)
+    CrushedItemPrice ComputeCrushedItemPrice(DofocusItem item, double coefficient, Dictionary<long, double> runePrices)
     {
-        double withoutFocus = 0;
-        Dictionary<long, double> withFocus = new();
+        Dictionary<long, double> runesWithoutFocus = CrushService.GetRunesWithoutFocus(item, coefficient);
+        double priceWithoutFocus = runesWithoutFocus.Sum(kv => runePrices.TryGetValue(kv.Key, out double runePrice) ? runePrice * kv.Value : 0);
 
-        foreach (DofocusItemCharacteristic characteristic in item.Characteristics)
-        {
-            DofocusRune? rune = runes.SingleOrDefault(r => r.CharacteristicId == characteristic.Id);
-            if (rune is null)
-            {
-                continue;
-            }
+        Dictionary<long, double> runesWithFocus = item.Characteristics.Select(c => c.Id).Select(id => (CharacteristicId: id, Runes: CrushService.GetRunesWithFocus(item, id, coefficient))).ToDictionary(kv => kv.CharacteristicId, kv => runePrices.TryGetValue(kv.CharacteristicId, out double runePrice) ? runePrice * kv.Runes : 0);
 
-            double yieldWithoutFocus = ComputeYieldWithoutFocus(item, characteristic);
-            double yieldWithFocus = ComputeYieldWithFocus(item, characteristic);
-
-            withoutFocus += yieldWithoutFocus;
-            withFocus[characteristic.Id] = yieldWithFocus;
-        }
-
-        return new CrushedItemPrice(withoutFocus, withFocus);
+        return new CrushedItemPrice(priceWithoutFocus, runesWithFocus);
     }
-
-    double ComputeYieldWithoutFocus(DofocusItem item, DofocusItemCharacteristic characteristic) => 0.5;
-
-    double ComputeYieldWithFocus(DofocusItem item, DofocusItemCharacteristic characteristic) => 1;
 
     readonly record struct CrushedItemPrice(double WithoutFocus, IReadOnlyDictionary<long, double> WithFocus);
 
