@@ -362,6 +362,52 @@ public class DofusDbQueryTest
     }
 
     [Fact]
+    public async Task ShouldSetPredicateParameter_DynamicValueInExpression()
+    {
+        int id = 2;
+        await _builder.Where(i => i.Type.SuperType.Id == id).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.Eq("type.superType.id", "2")]);
+    }
+
+    [Fact]
+    public async Task ShouldSetPredicateParameter_NestedDynamicValueInExpression()
+    {
+        var value = new { Content = new { Id = 2 } };
+        await _builder.Where(i => i.Type.SuperType.Id == value.Content.Id).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.Eq("type.superType.id", "2")]);
+    }
+
+    [Fact]
+    public async Task ShouldSetPredicateParameter_MemberChain()
+    {
+        await _builder.Where(i => i.Type.SuperType.Id == 2).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.Eq("type.superType.id", "2")]);
+    }
+
+    [Fact]
+    public async Task ShouldSetPredicateParameter_MemberChain_ShouldIgnoreValuePropertyOfNullableField()
+    {
+        await _builder.Where(i => i.Type.SuperType.Id.Value == 2).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.Eq("type.superType.id", "2")]);
+    }
+
+    [Fact]
     public async Task Execute_ShouldSetPredicateParameter_Complex()
     {
         List<long?> firstContainer = [1, 2];
