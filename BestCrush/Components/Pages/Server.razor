@@ -121,62 +121,72 @@
         _allItems = items;
     }
 
-    async Task Search()
+    void Search()
     {
         if (_searching)
         {
             return;
         }
 
-        _searching = true;
-        try
-        {
-            _rankedItems = null;
-            _unrankedItems = null;
-
-            Task<IReadOnlyCollection<Equipment>> itemsTask = ItemsService.GetEquipmentsAsync();
-            Task<IReadOnlyDictionary<Characteristic, DofocusRune>> runesByCharacteristicAsync = RunesService.GetRunesByCharacteristicAsync();
-            Task<IReadOnlyDictionary<Rune, DofocusRunePriceRecord>> runePricesTask = RunesService.GetRunePricesAsync(ServerName);
-
-            await Task.WhenAll(itemsTask, runesByCharacteristicAsync, runePricesTask);
-
-            Equipment[] items = FilterItems(itemsTask.Result).ToArray();
-            _allItems = items;
-
-            StateHasChanged();
-
-            _runePrices = runePricesTask.Result;
-            _rankedItems = [];
-            _unrankedItems = [];
-
-            foreach (Equipment item in items)
+        _ = Task.Run(async () =>
             {
+                _searching = true;
+                await InvokeAsync(StateHasChanged);
+
                 try
                 {
-                    IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(item, _runePrices, false);
-                    if (result.Count == 0)
-                    {
-                        _unrankedItems.Add(item);
-                    }
-                    else
-                    {
-                        _rankedItems.AddRange(result);
-                    }
+                    _rankedItems = null;
+                    _unrankedItems = null;
 
-                    StateHasChanged();
+                    Task<IReadOnlyCollection<Equipment>> itemsTask = ItemsService.GetEquipmentsAsync();
+                    Task<IReadOnlyDictionary<Characteristic, DofocusRune>> runesByCharacteristicAsync = RunesService.GetRunesByCharacteristicAsync();
+                    Task<IReadOnlyDictionary<Rune, DofocusRunePriceRecord>> runePricesTask = RunesService.GetRunePricesAsync(ServerName);
+
+                    await Task.WhenAll(itemsTask, runesByCharacteristicAsync, runePricesTask);
+
+                    Equipment[] items = FilterItems(itemsTask.Result).ToArray();
+                    _allItems = items;
+
+                    await InvokeAsync(StateHasChanged);
+
+                    _runePrices = runePricesTask.Result;
+                    _rankedItems = [];
+                    _unrankedItems = [];
+
+                    foreach (Equipment item in items)
+                    {
+                        try
+                        {
+                            IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(item, _runePrices, false);
+                            if (result.Count == 0)
+                            {
+                                _unrankedItems.Add(item);
+                            }
+                            else
+                            {
+                                _rankedItems.AddRange(result);
+                            }
+
+                            await InvokeAsync(StateHasChanged);
+                        }
+                        catch (Exception exn)
+                        {
+                            _unrankedItems.Add(item);
+                            Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name, item.DofusDbId);
+                        }
+                    }
                 }
                 catch (Exception exn)
                 {
-                    _unrankedItems.Add(item);
-                    Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name, item.DofusDbId);
+                    Logger.LogError(exn, "An error occured while searching for best crush.");
+                }
+                finally
+                {
+                    _searching = false;
+                    await InvokeAsync(StateHasChanged);
                 }
             }
-
-        }
-        finally
-        {
-            _searching = false;
-        }
+        );
     }
 
     async Task<IReadOnlyCollection<ItemCrushResult>> ComputeBenefit(Equipment equipment, IReadOnlyDictionary<Rune, DofocusRunePriceRecord> runePrices, bool forceRefresh)
