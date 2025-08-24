@@ -16,7 +16,8 @@ public class DofusDbQueryTest
     public DofusDbQueryTest()
     {
         _clientMock = new Mock<IDofusDbTableClient<DofusDbItem>>();
-        _clientMock.Setup(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()))
+        _clientMock
+            .Setup(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(
                 new DofusDbSearchResult<DofusDbItem>
                 {
@@ -90,10 +91,10 @@ public class DofusDbQueryTest
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
         DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
-        query.Sort.Should()
+        query
+            .Sort.Should()
             .BeEquivalentTo(
-                new Dictionary<string, DofusDbSearchQuerySortOrder>
-                    { { "name", DofusDbSearchQuerySortOrder.Ascending }, { "appearanceId", DofusDbSearchQuerySortOrder.Descending } }
+                new Dictionary<string, DofusDbSearchQuerySortOrder> { { "name", DofusDbSearchQuerySortOrder.Ascending }, { "appearanceId", DofusDbSearchQuerySortOrder.Descending } }
             );
     }
 
@@ -142,10 +143,70 @@ public class DofusDbQueryTest
     }
 
     [Fact]
-    public async Task Execute_ShouldSetPredicateParameter_In()
+    public async Task Execute_ShouldSetPredicateParameter_In_List()
     {
         List<long?> collection = [1, 2];
         await _builder.Where(i => collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.In("appearanceId", "1", "2")]);
+    }
+
+    [Fact]
+    public async Task Execute_ShouldSetPredicateParameter_In_Array()
+    {
+        long?[] collection = [1, 2];
+        await _builder.Where(i => collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.In("appearanceId", "1", "2")]);
+    }
+
+    [Fact]
+    public async Task Execute_ShouldSetPredicateParameter_In_HashSet()
+    {
+        HashSet<long?> collection = [1, 2];
+        await _builder.Where(i => collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.In("appearanceId", "1", "2")]);
+    }
+
+    [Fact]
+    public async Task Execute_ShouldSetPredicateParameter_In_InlineEnumerable()
+    {
+        Dictionary<long, long?> collection = new() { { 1, 1 }, { 2, 2 } };
+        await _builder.Where(i => collection.Values.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.In("appearanceId", "1", "2")]);
+    }
+
+    [Fact]
+    public async Task Execute_ShouldSetPredicateParameter_In_Enumerable()
+    {
+        IEnumerable<long?> collection = [1, 2];
+        await _builder.Where(i => collection.Contains(i.AppearanceId)).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.In("appearanceId", "1", "2")]);
+    }
+
+    [Fact]
+    public async Task Execute_ShouldSetPredicateParameter_In_CollectionIsNotNullable()
+    {
+        IEnumerable<long> collection = [1, 2];
+        await _builder.Where(i => collection.Contains(i.AppearanceId.Value)).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
@@ -217,7 +278,8 @@ public class DofusDbQueryTest
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
         DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
-        query.Predicates.Should()
+        query
+            .Predicates.Should()
             .BeEquivalentTo([new DofusDbSearchPredicate.And(new DofusDbSearchPredicate.Eq("appearanceId", "1"), new DofusDbSearchPredicate.NotEq("appearanceId", "2"))]);
     }
 
@@ -229,7 +291,8 @@ public class DofusDbQueryTest
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
         DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
-        query.Predicates.Should()
+        query
+            .Predicates.Should()
             .BeEquivalentTo([new DofusDbSearchPredicate.Or(new DofusDbSearchPredicate.Eq("appearanceId", "1"), new DofusDbSearchPredicate.NotEq("appearanceId", "2"))]);
     }
 
@@ -334,7 +397,8 @@ public class DofusDbQueryTest
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
         DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
-        query.Predicates.Should()
+        query
+            .Predicates.Should()
             .BeEquivalentTo([new DofusDbSearchPredicate.Or(new DofusDbSearchPredicate.NotEq("appearanceId", "1"), new DofusDbSearchPredicate.Eq("appearanceId", "2"))]);
     }
 
@@ -346,7 +410,8 @@ public class DofusDbQueryTest
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
         DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
-        query.Predicates.Should()
+        query
+            .Predicates.Should()
             .BeEquivalentTo([new DofusDbSearchPredicate.And(new DofusDbSearchPredicate.NotEq("appearanceId", "1"), new DofusDbSearchPredicate.Eq("appearanceId", "2"))]);
     }
 
@@ -362,13 +427,60 @@ public class DofusDbQueryTest
     }
 
     [Fact]
+    public async Task ShouldSetPredicateParameter_DynamicValueInExpression()
+    {
+        int id = 2;
+        await _builder.Where(i => i.Type.SuperType.Id == id).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.Eq("type.superType.id", "2")]);
+    }
+
+    [Fact]
+    public async Task ShouldSetPredicateParameter_NestedDynamicValueInExpression()
+    {
+        var value = new { Content = new { Id = 2 } };
+        await _builder.Where(i => i.Type.SuperType.Id == value.Content.Id).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.Eq("type.superType.id", "2")]);
+    }
+
+    [Fact]
+    public async Task ShouldSetPredicateParameter_MemberChain()
+    {
+        await _builder.Where(i => i.Type.SuperType.Id == 2).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.Eq("type.superType.id", "2")]);
+    }
+
+    [Fact]
+    public async Task ShouldSetPredicateParameter_MemberChain_ShouldIgnoreValuePropertyOfNullableField()
+    {
+        await _builder.Where(i => i.Type.SuperType.Id.Value == 2).ExecuteAsync().ToArrayAsync();
+
+        _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
+
+        DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
+        query.Predicates.Should().BeEquivalentTo([new DofusDbSearchPredicate.Eq("type.superType.id", "2")]);
+    }
+
+    [Fact]
     public async Task Execute_ShouldSetPredicateParameter_Complex()
     {
         List<long?> firstContainer = [1, 2];
         List<string?> secondContainer = ["value1", "value2"];
         List<string?> thirdContainer = ["value3", "value4"];
 
-        await _builder.Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name.Fr))
+        await _builder
+            .Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name.Fr))
             .Where(i => thirdContainer.Contains(i.Criteria))
             .ExecuteAsync()
             .ToArrayAsync();
@@ -376,7 +488,8 @@ public class DofusDbQueryTest
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
         DofusDbSearchQuery query = (DofusDbSearchQuery)_clientMock.Invocations.Single().Arguments[0];
-        query.Predicates.Should()
+        query
+            .Predicates.Should()
             .BeEquivalentTo<DofusDbSearchPredicate>(
                 [
                     new DofusDbSearchPredicate.Or(
@@ -448,14 +561,16 @@ public class DofusDbQueryTest
         List<string?> secondContainer = ["value1", "value2"];
         List<string?> thirdContainer = ["value3", "value4"];
 
-        await _builder.Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name.Fr))
+        await _builder
+            .Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name.Fr))
             .Where(i => thirdContainer.Contains(i.Criteria))
             .CountAsync();
 
         _clientMock.Verify(c => c.CountAsync(It.IsAny<IReadOnlyCollection<DofusDbSearchPredicate>>(), It.IsAny<CancellationToken>()));
 
         IReadOnlyCollection<DofusDbSearchPredicate> predicates = (IReadOnlyCollection<DofusDbSearchPredicate>)_clientMock.Invocations.Single().Arguments[0];
-        predicates.Should()
+        predicates
+            .Should()
             .BeEquivalentTo<DofusDbSearchPredicate>(
                 [
                     new DofusDbSearchPredicate.Or(

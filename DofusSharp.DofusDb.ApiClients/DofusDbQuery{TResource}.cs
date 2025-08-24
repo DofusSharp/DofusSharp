@@ -135,6 +135,15 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
                 case UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression:
                     return ExtractPropertyChainRecursive(root, unaryExpression.Operand, path);
                 case MemberExpression memberExpression:
+                    if (memberExpression.Expression is not null
+                        && memberExpression.Expression.Type.IsGenericType
+                        && memberExpression.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>)
+                        && memberExpression.Member.Name == "Value")
+                    {
+                        // Skip the .Value part of the expression chain when it is used on a nullable type.
+                        return ExtractPropertyChainRecursive(root, memberExpression.Expression, path);
+                    }
+
                     string[] newPath = [memberExpression.Member.Name, ..path];
                     return memberExpression.Expression == null ? newPath : ExtractPropertyChainRecursive(root, memberExpression.Expression, newPath);
             }
@@ -163,14 +172,32 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
             }
             case MethodCallExpression { Method.Name: "Contains" } e:
             {
-                if (e.Object is null)
+                switch (e.Arguments.Count)
                 {
-                    throw new ArgumentException("The 'Contains' method must be called on a collection.", nameof(expression));
-                }
+                    case 1:
+                    {
+                        // when the Contains method is a class method, e.g. when called on a List<>
 
-                string left = ExtractPropertyChain(root, e.Arguments.Single());
-                string[] right = ExtractCollectionValuesAsString(e.Object);
-                return new DofusDbSearchPredicate.In(left, right);
+                        if (e.Object is null)
+                        {
+                            throw new ArgumentException("The 'Contains' method must be called on a collection.", nameof(expression));
+                        }
+
+                        string left = ExtractPropertyChain(root, e.Arguments[0]);
+                        string[] right = ExtractCollectionValuesAsString(e.Object);
+                        return new DofusDbSearchPredicate.In(left, right);
+                    }
+                    case 2:
+                    {
+                        // when the Contains method is an extension method, e.g. when called on an IEnumerable
+
+                        string left = ExtractPropertyChain(root, e.Arguments[1]);
+                        string[] right = ExtractCollectionValuesAsString(e.Arguments[0]);
+                        return new DofusDbSearchPredicate.In(left, right);
+                    }
+                    default:
+                        throw new ArgumentException("Invalid call to method 'Contains'.", nameof(expression));
+                }
             }
             case UnaryExpression { NodeType: ExpressionType.Not } e:
             {
@@ -256,6 +283,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
         expression switch
         {
             ConstantExpression constantExpression => constantExpression.Value,
+            MemberExpression { Expression: not null } memberExpression => GetMemberValue(ExtractValue(memberExpression.Expression), memberExpression.Member.Name),
             UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression => ExtractValue(unaryExpression.Operand),
             _ => throw new ArgumentException($"Could not evaluate expression {expression}.", nameof(expression))
         };
@@ -272,24 +300,36 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
 
     static IEnumerable ExtractCollectionValues(Expression expression)
     {
-        switch (expression)
+        object? value = ExtractValue(expression);
+        if (value is IEnumerable enumerableValue)
         {
-            case MemberExpression memberExpression:
-                if (memberExpression.Expression is ConstantExpression constantExpression)
-                {
-                    if (memberExpression.Member is PropertyInfo property && property.GetValue(constantExpression.Value) is IEnumerable propertyValue)
-                    {
-                        return propertyValue;
-                    }
-
-                    if (memberExpression.Member is FieldInfo field && field.GetValue(constantExpression.Value) is IEnumerable fieldValue)
-                    {
-                        return fieldValue;
-                    }
-                }
-                break;
+            return enumerableValue;
         }
 
         throw new ArgumentException($"Could not evaluate collection {expression}.", nameof(expression));
+    }
+
+    static object? GetMemberValue(object? value, string member)
+    {
+        if (value is null)
+        {
+            return null;
+        }
+
+        Type type = value.GetType();
+
+        FieldInfo? field = type.GetField(member);
+        if (field is not null)
+        {
+            return field.GetValue(value);
+        }
+
+        PropertyInfo? property = type.GetProperty(member);
+        if (property is not null)
+        {
+            return property.GetValue(value);
+        }
+
+        return null;
     }
 }
