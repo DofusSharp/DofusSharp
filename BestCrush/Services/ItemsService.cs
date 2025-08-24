@@ -1,18 +1,21 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Http.Headers;
+using BestCrush.Models;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
 
 namespace BestCrush.Services;
 
 public class ItemsService(ImageCache imageCache)
 {
-    IReadOnlyCollection<DofocusItemMinimal>? _items;
+    IReadOnlyCollection<DofusDbItem>? _items;
     readonly SemaphoreSlim _itemsSemaphore = new(1, 1);
 
     readonly ConcurrentDictionary<long, DofocusItem> _cachedItems = [];
 
-    public async Task<IReadOnlyCollection<DofocusItemMinimal>> GetItemsAsync()
+    public async Task<IReadOnlyCollection<DofusDbItem>> GetItemsAsync()
     {
         if (_items != null)
         {
@@ -27,8 +30,8 @@ public class ItemsService(ImageCache imageCache)
                 return _items;
             }
 
-            DofocusItemsClient client = DofocusClient.Items();
-            _items = await client.GetItemsAsync();
+            long[] equipmentTypes = Enum.GetValues<EquipmentType>().Select(t => t.ToDofusDbItemTypeId()).ToArray();
+            _items = await DofusDbQuery.Production(Constants.Referrer).Items().Where(i => equipmentTypes.Contains(i.TypeId.Value)).ExecuteAsync().ToArrayAsync();
             return _items;
         }
         finally

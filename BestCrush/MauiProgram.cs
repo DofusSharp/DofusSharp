@@ -18,7 +18,7 @@ public static class MauiProgram
 
     public static MauiApp CreateMauiApp()
     {
-        LoggerConfiguration loggerConfiguration = SetupSerilog();
+        SetupSerilog();
 
         try
         {
@@ -44,6 +44,8 @@ public static class MauiProgram
             builder.Services.AddSingleton<ServersService>();
             builder.Services.AddSingleton<RunesService>();
             builder.Services.AddSingleton<ItemsService>();
+            builder.Services.AddSingleton<CharacteristicsService>();
+            builder.Services.AddSingleton<CrushService>();
 
             MauiApp app = builder.Build();
 
@@ -68,7 +70,8 @@ public static class MauiProgram
     {
         TimeSpan flushInterval = new(0, 0, 1);
 
-        LoggerConfiguration configuration = new LoggerConfiguration().MinimumLevel.Verbose()
+        LoggerConfiguration configuration = new LoggerConfiguration()
+            .MinimumLevel.Verbose()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .WriteTo.File(LogPath, flushToDiskInterval: flushInterval, encoding: Encoding.UTF8, rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 100_000_000);

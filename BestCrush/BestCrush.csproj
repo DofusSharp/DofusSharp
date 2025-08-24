@@ -66,6 +66,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DofusSharp.Dofocus.ApiClients\DofusSharp.Dofocus.ApiClients.csproj" />
+      <ProjectReference Include="..\DofusSharp.DofusDb.ApiClients\DofusSharp.DofusDb.ApiClients.csproj" />
     </ItemGroup>
 
     <ItemGroup>

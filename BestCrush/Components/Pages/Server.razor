@@ -1,14 +1,16 @@
-﻿@inject ServersService ServersService
-@inject ItemsService ItemsService
+﻿@inject ItemsService ItemsService
 @inject RunesService RunesService
 @inject CrushService CrushService
-@inject NavigationManager NavigationManager
+@inject CharacteristicsService CharacteristicsService
 @inject ILogger<Server> Logger
 @page "/servers/{ServerName}"
 @using BestCrush.Extensions
+@using BestCrush.Models
 @using BestCrush.Services
 @using DofusSharp.Dofocus.ApiClients.Models.Items
 @using DofusSharp.Dofocus.ApiClients.Models.Runes
+@using DofusSharp.DofusDb.ApiClients.Models.Characteristics
+@using DofusSharp.DofusDb.ApiClients.Models.Items
 @using Microsoft.Extensions.Logging
 
 <div class="container">
@@ -78,7 +80,7 @@
                                         }
                                     </div>
                                     <div>
-                                        <div>@item.Item.Name.Localize() Lv. @item.Item.Level</div>
+                                        <div>@item.Item.Name?.Localize() Lv. @item.Item.Level</div>
                                         <div>Cost: @item.Cost <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></div>
                                         <div>
                                             Price: @item.Price <img src="img/kama-20.png" alt="Kama" width="20" height="20"/>
@@ -88,8 +90,9 @@
                                             }
                                             else
                                             {
-                                                DofocusItemCharacteristic characteristic = item.Item.Characteristics.Single(c => c.Id == item.FocusedCharacteristic.Value);
-                                                <span class="text-secondary ms-1">(with focus: @characteristic.Name.Localize())</span>
+                                                DofusDbCharacteristic? characteristic = _allCharacteristics.TryGetValue(item.FocusedCharacteristic.Value, out DofusDbCharacteristic? c) ? c : null;
+                                                string characteristicStr = characteristic?.Name?.Localize() ?? item.FocusedCharacteristic.Value.ToDisplayName();
+                                                <span class="text-secondary ms-1">(with focus: @characteristicStr)</span>
                                             }
                                         </div>
                                         <div>
@@ -124,9 +127,9 @@
             <div class="my-4">
                 <p>Could not compute results for items:</p>
                 <ul class="text-secondary">
-                    @foreach (DofocusItemMinimal item in _unrankedItems.Take(10))
+                    @foreach (DofusDbItem item in _unrankedItems.Take(10))
                     {
-                        <li>@item.Name.Localize() Lv. @item.Level</li>
+                        <li>@item.Name?.Localize() Lv. @item.Level</li>
                     }
                 </ul>
             </div>
@@ -143,11 +146,17 @@
     private Request? Model { get; set; }
 
     private bool _searching;
-    DofocusItemMinimal[]? _allItems;
+    Dictionary<Characteristic, DofusDbCharacteristic> _allCharacteristics = [];
+    DofusDbItem[]? _allItems;
     List<ItemCrushResult>? _rankedItems;
-    List<DofocusItemMinimal>? _unrankedItems;
+    List<DofusDbItem>? _unrankedItems;
 
-    protected override void OnInitialized() => Model ??= new Request();
+    protected override async Task OnInitializedAsync()
+    {
+        Model ??= new Request();
+        IReadOnlyDictionary<long, DofusDbCharacteristic> dofusDbCharacteristics = await CharacteristicsService.GetDofusDbCharacteristicsAsync();
+        _allCharacteristics = dofusDbCharacteristics.Select(kv => (Characteristic: CharacteristicsService.GetCharacteristicFromDofusDb(kv.Value), DofusDbCharacteristic: kv.Value)).Where(kv => kv.Characteristic.HasValue).ToDictionary(kv => kv.Characteristic!.Value, kv => kv.DofusDbCharacteristic);
+    }
 
     async Task Count()
     {
@@ -159,8 +168,8 @@
         _rankedItems = null;
         _unrankedItems = null;
 
-        IReadOnlyCollection<DofocusItemMinimal> allItems = await ItemsService.GetItemsAsync();
-        DofocusItemMinimal[] items = FilterItems(allItems).ToArray();
+        IReadOnlyCollection<DofusDbItem> allItems = await ItemsService.GetItemsAsync();
+        DofusDbItem[] items = FilterItems(allItems).ToArray();
         _allItems = items;
     }
 
@@ -177,27 +186,30 @@
             _rankedItems = null;
             _unrankedItems = null;
 
-            Task<IReadOnlyCollection<DofocusItemMinimal>> itemsTask = ItemsService.GetItemsAsync();
-            Task<IReadOnlyCollection<DofocusRune>> runesTask = RunesService.GetRunesAsync();
+            Task<IReadOnlyCollection<DofusDbItem>> itemsTask = ItemsService.GetItemsAsync();
+            Task<IReadOnlyDictionary<Characteristic, DofocusRune>> runesByCharacteristicAsync = RunesService.GetRunesByCharacteristicAsync();
+            Task<Dictionary<long, double>> runePricesTask = RunesService.GetRunePricesAsync(ServerName);
 
-            await Task.WhenAll(itemsTask, runesTask);
+            await Task.WhenAll(itemsTask, runesByCharacteristicAsync, runePricesTask);
 
-            DofocusItemMinimal[] items = FilterItems(itemsTask.Result).ToArray();
+            DofusDbItem[] items = FilterItems(itemsTask.Result).ToArray();
             _allItems = items;
 
             StateHasChanged();
 
-            IReadOnlyCollection<DofocusRune> runes = runesTask.Result;
+            IReadOnlyDictionary<Characteristic, DofocusRune> runeByCharacteristic = runesByCharacteristicAsync.Result;
+            Dictionary<long, double> runePrices = runePricesTask.Result;
+            Dictionary<long, Characteristic> characteristicByRune = runeByCharacteristic.ToDictionary(kv => kv.Value.Id, kv => kv.Key);
+            Dictionary<Characteristic, double> characteristicPrices = runePrices.Select(kv => (Characteristic: characteristicByRune.TryGetValue(kv.Key, out Characteristic characteristic) ? characteristic : (Characteristic?)null, Price: kv.Value)).Where(kv => kv.Characteristic.HasValue).ToDictionary(kv => kv.Characteristic!.Value, kv => kv.Price);
 
             _rankedItems = [];
             _unrankedItems = [];
 
-            foreach (DofocusItemMinimal item in items)
+            foreach (DofusDbItem item in items)
             {
                 try
                 {
-                    Dictionary<long, double> runePrices = runes.ToDictionary(r => r.CharacteristicId ?? -1, r => r.LatestPrices.Where(c => c.ServerName == ServerName).OrderByDescending(c => c.DateUpdated).FirstOrDefault()?.Price ?? 0);
-                    ItemCrushResult? result = await ComputeBenefit(item, runePrices, false);
+                    ItemCrushResult? result = await ComputeBenefit(item, characteristicPrices, false);
                     if (!result.HasValue)
                     {
                         _unrankedItems.Add(item);
@@ -212,7 +224,7 @@
                 catch (Exception exn)
                 {
                     _unrankedItems.Add(item);
-                    Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name.En, item.Id);
+                    Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name?.En ?? item.Slug?.En ?? "???", item.Id);
                 }
             }
 
@@ -223,7 +235,7 @@
         }
     }
 
-    async Task RefreshBenefits(DofocusItemMinimal item)
+    async Task RefreshBenefits(DofusDbItem item)
     {
         if (_rankedItems is null || _searching)
         {
@@ -233,9 +245,13 @@
         _searching = true;
         try
         {
-            IReadOnlyCollection<DofocusRune> runes = await RunesService.GetRunesAsync(true);
-            Dictionary<long, double> runePrices = runes.ToDictionary(r => r.CharacteristicId ?? -1, r => r.LatestPrices.Where(c => c.ServerName == ServerName).OrderByDescending(c => c.DateUpdated).FirstOrDefault()?.Price ?? 0);
-            ItemCrushResult? result = await ComputeBenefit(item, runePrices, true);
+            await RunesService.ClearCachesAsync();
+
+            IReadOnlyDictionary<Characteristic, DofocusRune> runeByCharacteristic = await RunesService.GetRunesByCharacteristicAsync();
+            Dictionary<long, double> runePrices = await RunesService.GetRunePricesAsync(ServerName);
+            Dictionary<long, Characteristic> characteristicByRune = runeByCharacteristic.ToDictionary(kv => kv.Value.Id, kv => kv.Key);
+            Dictionary<Characteristic, double> characteristicPrices = runePrices.Select(kv => (Characteristic: characteristicByRune.TryGetValue(kv.Key, out Characteristic characteristic) ? characteristic : (Characteristic?)null, Price: kv.Value)).Where(kv => kv.Characteristic.HasValue).ToDictionary(kv => kv.Characteristic!.Value, kv => kv.Price);
+            ItemCrushResult? result = await ComputeBenefit(item, characteristicPrices, true);
             if (!result.HasValue)
             {
                 return;
@@ -246,7 +262,7 @@
         }
         catch (Exception exn)
         {
-            Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name.En, item.Id);
+            Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name?.En ?? item.Slug?.En ?? "???", item.Id);
         }
         finally
         {
@@ -254,9 +270,14 @@
         }
     }
 
-    async Task<ItemCrushResult?> ComputeBenefit(DofocusItemMinimal item, Dictionary<long, double> runePrices, bool forceRefresh)
+    async Task<ItemCrushResult?> ComputeBenefit(DofusDbItem item, Dictionary<Characteristic, double> characteristicPrices, bool forceRefresh)
     {
-        DofocusItem detailedItem = await ItemsService.GetItemAsync(item.Id, forceRefresh);
+        if (item.Id is null)
+        {
+            return null;
+        }
+
+        DofocusItem detailedItem = await ItemsService.GetItemAsync(item.Id.Value, forceRefresh);
 
         DofocusCoefficientRecord? itemCoefficient = detailedItem.Coefficients.Where(c => c.ServerName == ServerName).OrderByDescending(c => c.LastUpdate).FirstOrDefault();
         if (itemCoefficient == null)
@@ -270,32 +291,32 @@
             return null;
         }
 
-        CrushedItemPrice crushedPrice = ComputeCrushedItemPrice(detailedItem, itemCoefficient.Coefficient, runePrices);
-        KeyValuePair<long, double> maxPriceWithFocus = crushedPrice.WithFocus.OrderByDescending(kv => kv.Value).FirstOrDefault();
+        CrushedItemPrice crushedPrice = await ComputeCrushedItemPriceAsync(detailedItem, itemCoefficient.Coefficient, characteristicPrices);
+        KeyValuePair<Characteristic, (double Min, double Max)> maxPriceWithFocus = crushedPrice.WithFocus.OrderByDescending(kv => kv.Value.Max).FirstOrDefault();
 
-        long? focusedCharacteristic;
+        Characteristic? focusedCharacteristic;
         double price;
-        if (maxPriceWithFocus.Value > crushedPrice.WithoutFocus)
+        if (maxPriceWithFocus.Value.Max > crushedPrice.WithoutFocus.Max)
         {
             focusedCharacteristic = maxPriceWithFocus.Key;
-            price = maxPriceWithFocus.Value;
+            price = maxPriceWithFocus.Value.Max;
         }
         else
         {
             focusedCharacteristic = null;
-            price = crushedPrice.WithoutFocus;
+            price = crushedPrice.WithoutFocus.Max;
         }
 
         double benefits = price - itemCost.Price;
 
         string? icon = await ItemsService.GetItemIconAsync(detailedItem);
-        ItemCrushResult result = new(detailedItem, icon, itemCost.Price, price, benefits, focusedCharacteristic);
+        ItemCrushResult result = new(item, icon, itemCost.Price, price, benefits, focusedCharacteristic);
         return result;
     }
 
-    IEnumerable<DofocusItemMinimal> FilterItems(IReadOnlyCollection<DofocusItemMinimal> items)
+    IEnumerable<DofusDbItem> FilterItems(IReadOnlyCollection<DofusDbItem> items)
     {
-        IEnumerable<DofocusItemMinimal> result = items;
+        IEnumerable<DofusDbItem> result = items;
 
         if (Model?.LevelMin is not null)
         {
@@ -310,19 +331,48 @@
         return result;
     }
 
-    CrushedItemPrice ComputeCrushedItemPrice(DofocusItem item, double coefficient, Dictionary<long, double> runePrices)
+    async Task<CrushedItemPrice> ComputeCrushedItemPriceAsync(DofocusItem item, double coefficient, Dictionary<Characteristic, double> runePrices)
     {
-        Dictionary<long, double> runesWithoutFocus = CrushService.GetRunesWithoutFocus(item, coefficient);
-        double priceWithoutFocus = runesWithoutFocus.Sum(kv => runePrices.TryGetValue(kv.Key, out double runePrice) ? runePrice * kv.Value : 0);
+        IReadOnlyDictionary<long, (DofocusItemCharacteristic Characteristic, double Min, double Max)> runesWithoutFocus = CrushService.GetRunesWithoutFocus(item, coefficient);
+        double minPriceWithoutFocus = 0;
+        double maxPriceWithoutFocus = 0;
+        foreach ((DofocusItemCharacteristic Characteristic, double Min, double Max) line in runesWithoutFocus.Values)
+        {
+            Characteristic? characteristic = await CharacteristicsService.GetCharacteristicFromDofocusAsync(line.Characteristic);
+            if (characteristic is null)
+            {
+                continue;
+            }
 
-        Dictionary<long, double> runesWithFocus = item.Characteristics.Select(c => c.Id).Select(id => (CharacteristicId: id, Runes: CrushService.GetRunesWithFocus(item, id, coefficient))).ToDictionary(kv => kv.CharacteristicId, kv => runePrices.TryGetValue(kv.CharacteristicId, out double runePrice) ? runePrice * kv.Runes : 0);
+            double runePrice = runePrices.GetValueOrDefault(characteristic.Value);
+            minPriceWithoutFocus += runePrice * line.Min;
+            maxPriceWithoutFocus += runePrice * line.Max;
+        }
+        (double minPriceWithoutFocus, double maxPriceWithoutFocus) priceWithoutFocus = (minPriceWithoutFocus, maxPriceWithoutFocus);
 
-        return new CrushedItemPrice(priceWithoutFocus, runesWithFocus);
+        Dictionary<Characteristic, (double, double)> pricesWithFocus = new();
+        foreach (DofocusItemCharacteristic dofocusCharacteristic in item.Characteristics)
+        {
+            Characteristic? characteristic = await CharacteristicsService.GetCharacteristicFromDofocusAsync(dofocusCharacteristic);
+            if (characteristic is null)
+            {
+                continue;
+            }
+
+            double runePrice = runePrices.GetValueOrDefault(characteristic.Value);
+            int from = dofocusCharacteristic.From;
+            int to = dofocusCharacteristic.To == 0 ? dofocusCharacteristic.From : dofocusCharacteristic.To;
+            (double, double) priceWithFocus = (runePrice * from, runePrice * to);
+
+            pricesWithFocus.Add(characteristic.Value, priceWithFocus);
+        }
+
+        return new CrushedItemPrice(priceWithoutFocus, pricesWithFocus);
     }
 
-    readonly record struct CrushedItemPrice(double WithoutFocus, IReadOnlyDictionary<long, double> WithFocus);
+    readonly record struct CrushedItemPrice((double Min, double Max) WithoutFocus, IReadOnlyDictionary<Characteristic, (double Min, double Max)> WithFocus);
 
-    readonly record struct ItemCrushResult(DofocusItem Item, string? ItemIcon, double Cost, double Price, double Benefits, long? FocusedCharacteristic);
+    readonly record struct ItemCrushResult(DofusDbItem Item, string? ItemIcon, double Cost, double Price, double Benefits, Characteristic? FocusedCharacteristic);
 
     public class Request
     {

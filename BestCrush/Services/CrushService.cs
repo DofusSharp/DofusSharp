@@ -2,9 +2,11 @@
 
 namespace BestCrush.Services;
 
-public class CrushService
+public class CrushService(CharacteristicsService characteristicsService)
 {
-    public Dictionary<long, double> GetRunesWithoutFocus(DofocusItem item, double coefficient) => item.Characteristics.ToDictionary(c => c.Id, c => 0.5);
+    public IReadOnlyDictionary<long, (DofocusItemCharacteristic Characteristic, double Min, double Max)> GetRunesWithoutFocus(DofocusItem item, double coefficient) =>
+        item.Characteristics.ToDictionary(c => c.Id, c => (c, (double)c.From, (double)(c.To == 0 ? c.From : c.To)));
 
-    public double GetRunesWithFocus(DofocusItem item, long focusedCharacteristic, double coefficient) => 1;
+    public (double Min, double Max) GetRunesWithFocus(DofocusItem item, long focusedCharacteristic, double coefficient) =>
+        (item.Characteristics.Sum(c => c.From), item.Characteristics.Sum(c => c.To == 0 ? c.From : c.To));
 }
