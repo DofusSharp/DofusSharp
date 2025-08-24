@@ -17,7 +17,7 @@ public interface IDofusDbTableClient<TResource> : IDofusDbClient where TResource
     /// <param name="id">The unique identifier of the resource to fetch.</param>
     /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>The resource with the specified ID.</returns>
-    Task<TResource> GetAsync(int id, CancellationToken cancellationToken = default);
+    Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Fetch the number of resources available in the API.
