@@ -1,4 +1,5 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Items;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 
@@ -6,6 +7,8 @@ namespace DofusSharp.DofusDb.ApiClients;
 
 public class DofusDbQueryProvider(DofusDbClientsFactory factory)
 {
+    public DofusDbQuery<DofusDbCharacteristic> Characteristics() => new(factory.Characteristics());
+    
     public DofusDbQuery<DofusDbItem> Items() => new(factory.Items());
     public DofusDbQuery<DofusDbItemType> ItemTypes() => new(factory.ItemTypes());
     public DofusDbQuery<DofusDbItemSuperType> ItemSuperTypes() => new(factory.ItemSuperTypes());
