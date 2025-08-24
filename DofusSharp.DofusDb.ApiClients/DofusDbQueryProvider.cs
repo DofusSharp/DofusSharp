@@ -2,6 +2,7 @@
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
+using DofusSharp.DofusDb.ApiClients.Models.Spells;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
@@ -17,6 +18,11 @@ public class DofusDbQueryProvider(DofusDbClientsFactory factory)
     public DofusDbQuery<DofusDbJob> Jobs() => new(factory.Jobs());
     public DofusDbQuery<DofusDbRecipe> Recipes() => new(factory.Recipes());
     public DofusDbQuery<DofusDbSkill> Skills() => new(factory.Skills());
+
+    public DofusDbQuery<DofusDbSpell> Spells() => new(factory.Spells());
+    public DofusDbQuery<DofusDbSpellLevel> SpellLevels() => new(factory.SpellLevels());
+    public DofusDbQuery<DofusDbSpellState> SpellStates() => new(factory.SpellStates());
+    public DofusDbQuery<DofusDbSpellVariant> SpellVariants() => new(factory.SpellVariants());
 
     public DofusDbQuery<DofusDbWorld> Worlds() => new(factory.Worlds());
     public DofusDbQuery<DofusDbSuperArea> SuperAreas() => new(factory.SuperAreas());
