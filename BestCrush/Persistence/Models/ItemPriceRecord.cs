@@ -10,7 +10,7 @@ class ItemPriceRecord
         Date = DateTimeOffset.Now;
     }
 
-    public long Id { get; private set; }
+    public Guid Id { get; private set; }
     public long ItemId { get; private set; }
     public string ServerName { get; private set; }
     public double Price { get; private set; }

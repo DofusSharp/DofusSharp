@@ -46,10 +46,12 @@ public static class MauiProgram
             builder.Services.AddSingleton<ItemsService>();
             builder.Services.AddSingleton<CharacteristicsService>();
             builder.Services.AddSingleton<CrushService>();
+            builder.Services.AddScoped<DofusDbDataService>();
 
             MauiApp app = builder.Build();
 
             MigrateDatabaseAsync(app, logger).GetAwaiter().GetResult();
+            PrepareDatabaseAsync(app).GetAwaiter().GetResult();
 
             logger.LogInformation("Application started.");
 
@@ -96,9 +98,17 @@ public static class MauiProgram
     {
         logger.LogInformation("Migrating database...");
 
-        await using BestCrushDbContext context = app.Services.GetRequiredService<BestCrushDbContext>();
+        await using AsyncServiceScope scope = app.Services.CreateAsyncScope();
+        await using BestCrushDbContext context = scope.ServiceProvider.GetRequiredService<BestCrushDbContext>();
         await context.Database.MigrateAsync();
 
         logger.LogInformation("Done migrating database.");
+    }
+
+    static async Task PrepareDatabaseAsync(MauiApp app)
+    {
+        await using AsyncServiceScope scope = app.Services.CreateAsyncScope();
+        DofusDbDataService dofusDbDataService = scope.ServiceProvider.GetRequiredService<DofusDbDataService>();
+        await dofusDbDataService.PrepareLocalDatabaseAsync();
     }
 }

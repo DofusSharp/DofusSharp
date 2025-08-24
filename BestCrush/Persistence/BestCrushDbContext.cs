@@ -7,6 +7,8 @@ class BestCrushDbContext : DbContext
 {
     public BestCrushDbContext(DbContextOptions<BestCrushDbContext> options) : base(options) { }
 
+    public DbSet<CurrentVersion> CurrentVersions { get; set; }
+    public DbSet<Item> Items { get; set; }
     public DbSet<ItemPriceRecord> ItemPriceRecords { get; set; }
     public DbSet<ItemCoefficientRecord> ItemCoefficientRecords { get; set; }
     public DbSet<RunePriceRecord> RunePriceRecords { get; set; }
