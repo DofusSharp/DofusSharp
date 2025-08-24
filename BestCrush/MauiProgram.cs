@@ -1,8 +1,7 @@
 ﻿using System.Text;
 using BestCrush.Domain;
 using BestCrush.Domain.Services;
-using BestCrush.Models;
-using CommunityToolkit.Mvvm.Messaging;
+using BestCrush.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -50,17 +49,25 @@ public static class MauiProgram
             builder.Services.AddScoped<ItemsService>();
             builder.Services.AddScoped<DofusDbDataService>();
 
+            builder.Services.AddSingleton<InitializationStateManager>();
+
             MauiApp app = builder.Build();
 
             Task.Run(async () =>
                 {
-                    WeakReferenceMessenger.Default.Send(new InitializationState("Migrating database...", false));
+                    InitializationStateManager initializationStateManager = app.Services.GetRequiredService<InitializationStateManager>();
+
+                    initializationStateManager.UpdateState("Migrating database...");
                     await MigrateDatabaseAsync(app, logger);
 
-                    WeakReferenceMessenger.Default.Send(new InitializationState("Loading data...", false));
+                    initializationStateManager.UpdateState("Loading data...");
                     await PrepareDatabaseAsync(app);
 
-                    WeakReferenceMessenger.Default.Send(new InitializationState("Done.", true));
+                    initializationStateManager.UpdateState("Loading servers...");
+                    ServersService serversService = app.Services.GetRequiredService<ServersService>();
+                    _ = await serversService.GetServers();
+
+                    initializationStateManager.UpdateState("Done.", true);
                 }
             );
 

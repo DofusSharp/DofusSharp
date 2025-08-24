@@ -1,34 +1,37 @@
 ﻿@inject ServersService ServersService
+@inject InitializationStateManager InitializationStateManager
 @inject NavigationManager NavigationManager
 @page "/"
 @using BestCrush.Components.Layout
 @using BestCrush.Domain.Services
-@using BestCrush.Models
-@using CommunityToolkit.Mvvm.Messaging
+@using BestCrush.Services
 @using DofusSharp.Dofocus.ApiClients.Models.Servers
 @layout EmptyLayout
 
-<div class="d-flex flex-column align-items-center justify-content-center text-center min-vh-100">
-    <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-
-    @_message;
+<div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-4 text-center my-5 py-5">
+    <img src="img/logo-684.png" width="684" height="684" alt="Logo"/>
+    @_message
 </div>
 
 @code {
 
     string? _message;
 
-    protected override void OnInitialized() => WeakReferenceMessenger.Default.Register<InitializationState>(this, OnInitializationState);
+    protected override async Task OnInitializedAsync()
+    {
+        InitializationState state = InitializationStateManager.GetState();
+        await Update(state);
 
-    public void OnInitializationState(object _, InitializationState state)
+        InitializationStateManager.RegisterCallback(OnInitializationState);
+    }
+
+    async Task Update(InitializationState state)
     {
         _message = state.Message;
 
         if (state.Done)
         {
-            DofocusServer? currentServer = ServersService.GetCurrentServer().GetAwaiter().GetResult();
+            DofocusServer? currentServer = await ServersService.GetCurrentServer();
             if (currentServer is not null)
             {
                 NavigationManager.NavigateTo(KnownRoutes.Server(currentServer));
@@ -38,6 +41,11 @@
                 NavigationManager.NavigateTo(KnownRoutes.Servers());
             }
         }
+        else
+        {
+            StateHasChanged();
+        }
     }
 
+    async void OnInitializationState(InitializationState state) => await InvokeAsync(() => Update(state));
 }
