@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DofusSharp.DofusDb.ApiClients", "DofusSharp.DofusDb.ApiClients\DofusSharp.DofusDb.ApiClients.csproj", "{4DB3FF4F-2C86-43D0-9D2C-7791D721C167}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.EndToEnd.DofusDb.ApiClients", "Tests.EndToEnd.DofusDb.ApiClients\Tests.EndToEnd.DofusDb.ApiClients.csproj", "{A3DE0CCE-6B15-413D-AE71-3BB8360C4FC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Live.DofusDb.ApiClients", "Tests.Live.DofusDb.ApiClients\Tests.Live.DofusDb.ApiClients.csproj", "{A3DE0CCE-6B15-413D-AE71-3BB8360C4FC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.UnitTests.DofusDb.ApiClients", "Tests.UnitTests.DofusDb.ApiClients\Tests.UnitTests.DofusDb.ApiClients.csproj", "{D6FF4731-AE7C-4EF1-A67B-94C556AE7108}"
 EndProject
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{EA03AD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.UnitTests.Dofocus.ApiClients", "Tests.UnitTests.Dofocus.ApiClients\Tests.UnitTests.Dofocus.ApiClients.csproj", "{B2D2DE39-5D71-42C6-9EAC-34574AB82C96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.EndToEnd.Dofocus.ApiClients", "Tests.EndToEnd.Dofocus.ApiClients\Tests.EndToEnd.Dofocus.ApiClients.csproj", "{6584E059-6B3D-4743-BA83-18F8E2E400D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Live.Dofocus.ApiClients", "Tests.Live.Dofocus.ApiClients\Tests.Live.Dofocus.ApiClients.csproj", "{6584E059-6B3D-4743-BA83-18F8E2E400D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BestCrush", "BestCrush", "{4C55A816-EA26-473B-B7E0-7059CA09D651}"
 EndProject
