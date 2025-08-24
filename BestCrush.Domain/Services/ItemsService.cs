@@ -12,7 +12,7 @@ public class ItemsService(BestCrushDbContext context, ImageCache imageCache)
 {
     readonly ConcurrentDictionary<long, DofocusItem> _cachedItems = [];
 
-    public async Task<IReadOnlyCollection<Item>> GetItemsAsync() => await context.Items.ToArrayAsync();
+    public async Task<IReadOnlyCollection<Item>> GetItemsAsync() => await context.Items.Include(i => i.Characteristics).AsNoTracking().ToArrayAsync();
 
     public async Task<DofocusItem> GetItemAsync(long id, bool forceRefresh = false)
     {
