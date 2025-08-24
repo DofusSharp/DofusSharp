@@ -61,7 +61,7 @@
         @if (_rankedItems.Count > 0)
         {
             <div class="my-4">
-                <ul class="list-group list-group-flush">
+                <ul class="list-group list-group-flush rounded">
                     @foreach (ItemCrushResult item in _rankedItems.OrderByDescending(r => r.Benefits))
                     {
                         double yield = item.Benefits / item.Cost;
@@ -71,12 +71,10 @@
                             <li class="list-group-item">
                                 <div class="d-flex gap-4">
                                     <div class="d-flex align-items-start justify-content-center">
-                                        <div class="item-icon rounded">
-                                            @if (item.ItemIcon is not null)
-                                            {
-                                                <img src="data:@item.ItemIcon" width="32" height="32" alt="Item icon"/>
-                                            }
-                                        </div>
+                                        @if (item.ItemIcon is not null)
+                                        {
+                                            <img src="data:@item.ItemIcon" width="64" height="64" alt="Item icon"/>
+                                        }
                                     </div>
                                     <div>
                                         <div>@item.Item.Name.Localize() Lv. @item.Item.Level</div>
@@ -90,7 +88,7 @@
                                             else
                                             {
                                                 DofocusItemCharacteristic characteristic = item.Item.Characteristics.Single(c => c.Id == item.FocusedCharacteristic.Value);
-                                                <span class="text-secondary ms-1">(with focus: @characteristic.Name.En)</span>
+                                                <span class="text-secondary ms-1">(with focus: @characteristic.Name.Localize())</span>
                                             }
                                         </div>
                                         <div>
