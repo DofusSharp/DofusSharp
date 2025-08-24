@@ -10,7 +10,6 @@
 @using DofusSharp.Dofocus.ApiClients.Models.Items
 @using DofusSharp.Dofocus.ApiClients.Models.Runes
 @using DofusSharp.DofusDb.ApiClients.Models.Characteristics
-@using DofusSharp.DofusDb.ApiClients.Models.Items
 @using Microsoft.Extensions.Logging
 
 <div class="container">
@@ -80,7 +79,7 @@
                                         }
                                     </div>
                                     <div>
-                                        <div>@item.Item.Name?.Localize() Lv. @item.Item.Level</div>
+                                        <div>@item.Item.Name Lv. @item.Item.Level</div>
                                         <div>Cost: @item.Cost <img src="img/kama-20.png" alt="Kama" width="20" height="20"/></div>
                                         <div>
                                             Price: @item.Price <img src="img/kama-20.png" alt="Kama" width="20" height="20"/>
@@ -127,9 +126,9 @@
             <div class="my-4">
                 <p>Could not compute results for items:</p>
                 <ul class="text-secondary">
-                    @foreach (DofusDbItem item in _unrankedItems.Take(10))
+                    @foreach (Item item in _unrankedItems.Take(10))
                     {
-                        <li>@item.Name?.Localize() Lv. @item.Level</li>
+                        <li>@item.Name Lv. @item.Level</li>
                     }
                 </ul>
             </div>
@@ -147,9 +146,9 @@
 
     private bool _searching;
     Dictionary<Characteristic, DofusDbCharacteristic> _allCharacteristics = [];
-    DofusDbItem[]? _allItems;
+    Item[]? _allItems;
     List<ItemCrushResult>? _rankedItems;
-    List<DofusDbItem>? _unrankedItems;
+    List<Item>? _unrankedItems;
 
     protected override async Task OnInitializedAsync()
     {
@@ -168,8 +167,8 @@
         _rankedItems = null;
         _unrankedItems = null;
 
-        IReadOnlyCollection<DofusDbItem> allItems = await ItemsService.GetItemsAsync();
-        DofusDbItem[] items = FilterItems(allItems).ToArray();
+        IReadOnlyCollection<Item> allItems = await ItemsService.GetItemsAsync();
+        Item[] items = FilterItems(allItems).ToArray();
         _allItems = items;
     }
 
@@ -186,13 +185,13 @@
             _rankedItems = null;
             _unrankedItems = null;
 
-            Task<IReadOnlyCollection<DofusDbItem>> itemsTask = ItemsService.GetItemsAsync();
+            Task<IReadOnlyCollection<Item>> itemsTask = ItemsService.GetItemsAsync();
             Task<IReadOnlyDictionary<Characteristic, DofocusRune>> runesByCharacteristicAsync = RunesService.GetRunesByCharacteristicAsync();
             Task<Dictionary<long, double>> runePricesTask = RunesService.GetRunePricesAsync(ServerName);
 
             await Task.WhenAll(itemsTask, runesByCharacteristicAsync, runePricesTask);
 
-            DofusDbItem[] items = FilterItems(itemsTask.Result).ToArray();
+            Item[] items = FilterItems(itemsTask.Result).ToArray();
             _allItems = items;
 
             StateHasChanged();
@@ -205,7 +204,7 @@
             _rankedItems = [];
             _unrankedItems = [];
 
-            foreach (DofusDbItem item in items)
+            foreach (Item item in items)
             {
                 try
                 {
@@ -224,7 +223,7 @@
                 catch (Exception exn)
                 {
                     _unrankedItems.Add(item);
-                    Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name?.En ?? item.Slug?.En ?? "???", item.Id);
+                    Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name, item.DofusDbId);
                 }
             }
 
@@ -235,7 +234,7 @@
         }
     }
 
-    async Task RefreshBenefits(DofusDbItem item)
+    async Task RefreshBenefits(Item item)
     {
         if (_rankedItems is null || _searching)
         {
@@ -262,7 +261,7 @@
         }
         catch (Exception exn)
         {
-            Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name?.En ?? item.Slug?.En ?? "???", item.Id);
+            Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name, item.DofusDbId);
         }
         finally
         {
@@ -270,14 +269,9 @@
         }
     }
 
-    async Task<ItemCrushResult?> ComputeBenefit(DofusDbItem item, Dictionary<Characteristic, double> characteristicPrices, bool forceRefresh)
+    async Task<ItemCrushResult?> ComputeBenefit(Item item, Dictionary<Characteristic, double> characteristicPrices, bool forceRefresh)
     {
-        if (item.Id is null)
-        {
-            return null;
-        }
-
-        DofocusItem detailedItem = await ItemsService.GetItemAsync(item.Id.Value, forceRefresh);
+        DofocusItem detailedItem = await ItemsService.GetItemAsync(item.DofusDbId, forceRefresh);
 
         DofocusCoefficientRecord? itemCoefficient = detailedItem.Coefficients.Where(c => c.ServerName == ServerName).OrderByDescending(c => c.LastUpdate).FirstOrDefault();
         if (itemCoefficient == null)
@@ -309,14 +303,14 @@
 
         double benefits = price - itemCost.Price;
 
-        string? icon = await ItemsService.GetItemIconAsync(detailedItem);
+        string? icon = await ItemsService.GetItemIconAsync(detailedItem.Id);
         ItemCrushResult result = new(item, icon, itemCost.Price, price, benefits, focusedCharacteristic);
         return result;
     }
 
-    IEnumerable<DofusDbItem> FilterItems(IReadOnlyCollection<DofusDbItem> items)
+    IEnumerable<Item> FilterItems(IReadOnlyCollection<Item> items)
     {
-        IEnumerable<DofusDbItem> result = items;
+        IEnumerable<Item> result = items;
 
         if (Model?.LevelMin is not null)
         {
@@ -372,7 +366,7 @@
 
     readonly record struct CrushedItemPrice((double Min, double Max) WithoutFocus, IReadOnlyDictionary<Characteristic, (double Min, double Max)> WithFocus);
 
-    readonly record struct ItemCrushResult(DofusDbItem Item, string? ItemIcon, double Cost, double Price, double Benefits, Characteristic? FocusedCharacteristic);
+    readonly record struct ItemCrushResult(Item Item, string? ItemIcon, double Cost, double Price, double Benefits, Characteristic? FocusedCharacteristic);
 
     public class Request
     {

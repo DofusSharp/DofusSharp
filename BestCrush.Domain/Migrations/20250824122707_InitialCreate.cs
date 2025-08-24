@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BestCrush.EfCore.Migrations
+namespace BestCrush.Domain.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -59,6 +59,8 @@ namespace BestCrush.EfCore.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     DofusDbId = table.Column<long>(type: "INTEGER", nullable: false),
+                    DofusDbIconId = table.Column<long>(type: "INTEGER", nullable: true),
+                    Level = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false)
                 },
                 constraints: table =>

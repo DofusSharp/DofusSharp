@@ -28,24 +28,29 @@ public class ItemsService(BestCrushDbContext context, ImageCache imageCache)
         return item;
     }
 
-    public async Task<string?> GetItemIconAsync(Item item)
+    public Task<string?> GetItemIconAsync(Item item)
     {
         if (item.DofusDbIconId is null)
         {
-            return null;
+            return Task.FromResult<string?>(null);
         }
 
+        return GetItemIconAsync(item.DofusDbIconId.Value);
+    }
+
+    public async Task<string?> GetItemIconAsync(long iconId)
+    {
         IDofusDbImageClient<long> client = DofusDbClient.Production(Constants.Referrer).ItemImages();
-        string cacheKey = $"item-icon-{item.DofusDbIconId}.png";
+        string cacheKey = $"item-icon-{iconId}.png";
         byte[] content = await imageCache.GetOrAddAsync(
             cacheKey,
             async () =>
             {
-                await using Stream stream = await client.GetImageAsync(item.DofusDbIconId.Value);
+                await using Stream stream = await client.GetImageAsync(iconId);
                 return stream.ReadToByteArray();
             }
         );
-        return $"image/png;base64,{Convert.ToBase64String(content)}";
 
+        return $"image/png;base64,{Convert.ToBase64String(content)}";
     }
 }
