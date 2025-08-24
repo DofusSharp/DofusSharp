@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Net.Http.Headers;
 using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Items;
 
@@ -65,6 +66,7 @@ public class ItemsService
         }
 
         using HttpClient httpClient = new();
+        httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
         byte[] iconBytes = await httpClient.GetByteArrayAsync(item.ImageUrl);
         icon = $"image/png;base64,{Convert.ToBase64String(iconBytes)}";
 

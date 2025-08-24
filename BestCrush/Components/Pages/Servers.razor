@@ -16,12 +16,20 @@
     else
     {
         <div class="d-flex flex-wrap justify-content-center gap-4 my-4">
-            @foreach (DofocusServer server in _servers)
+            @foreach (ServerAndIcon server in _servers)
             {
-                <a class="btn text-center" @onclick="() => SelectServer(server)">
-                    <div class="servers__tile-image border">
+                <a class="btn text-center" @onclick="() => SelectServer(server.Server)">
+                    <div class="rounded">
+                        @if (server.Icon is not null)
+                        {
+                            <img src="data:@server.Icon" width="auto" height="200" alt="Server icon"/>
+                        }
+                        else
+                        {
+                            <img src="img/server.webp" width="auto" height="200" alt="Server icon"/>
+                        }
                     </div>
-                    @server.Name
+                    <span class="fw-semibold">@server.Server.Name</span>
                 </a>
             }
         </div>
@@ -29,14 +37,27 @@
 </div>
 
 @code {
-    IReadOnlyCollection<DofocusServer>? _servers;
+    List<ServerAndIcon>? _servers;
 
-    protected override async Task OnInitializedAsync() => _servers = await ServersService.GetServers();
+    protected override async Task OnInitializedAsync()
+    {
+        IReadOnlyCollection<DofocusServer> servers = await ServersService.GetServers();
+        List<ServerAndIcon> result = new(servers.Count);
+        foreach (DofocusServer server in servers)
+        {
+            string icon = await ServersService.GetServerIconAsync(server);
+            result.Add(new ServerAndIcon(server, icon));
+        }
+
+        _servers = result;
+    }
 
     async Task SelectServer(DofocusServer server)
     {
         await ServersService.SetCurrentServerAsync(server);
         NavigationManager.NavigateTo(KnownRoutes.Server(server));
     }
+
+    readonly record struct ServerAndIcon(DofocusServer Server, string? Icon);
 
 }

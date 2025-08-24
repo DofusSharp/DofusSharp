@@ -1,13 +1,16 @@
-﻿using DofusSharp.Dofocus.ApiClients;
+﻿using System.Collections.Concurrent;
+using System.Net.Http.Headers;
+using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.Dofocus.ApiClients.Models.Servers;
 
 namespace BestCrush.Services;
 
-public class ServersService
+public class ServersService(ImageCache imageCache)
 {
     IReadOnlyCollection<DofocusServer>? _servers;
     readonly SemaphoreSlim _serversLock = new(1, 1);
     DofocusServer? _currentServer;
+    readonly ConcurrentDictionary<string, string> _cachedIcons = [];
 
     public async Task<IReadOnlyCollection<DofocusServer>> GetServers()
     {
@@ -31,6 +34,29 @@ public class ServersService
         {
             _serversLock.Release();
         }
+    }
+
+    public async Task<string> GetServerIconAsync(DofocusServer server)
+    {
+        byte[] content;
+
+        string cacheKey = $"server-icon-{server.Name}.webp";
+        if (await imageCache.HasImageAsync(cacheKey))
+        {
+            content = await imageCache.LoadImageAsync(cacheKey);
+        }
+        else
+        {
+            string url = $"https://dofocus.fr/servers/{server.Name.ToLower()}.webp";
+
+            using HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
+            content = await httpClient.GetByteArrayAsync(url);
+
+            await imageCache.StoreImageAsync(cacheKey, content);
+        }
+
+        return $"image/png;base64,{Convert.ToBase64String(content)}";
     }
 
     public Task<DofocusServer?> GetCurrentServer() => Task.FromResult(_currentServer);

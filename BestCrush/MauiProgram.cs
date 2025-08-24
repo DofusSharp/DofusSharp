@@ -40,6 +40,7 @@ public static class MauiProgram
 
             ConfigureDatabase(builder, logger);
 
+            builder.Services.AddSingleton<ImageCache>();
             builder.Services.AddSingleton<ServersService>();
             builder.Services.AddSingleton<RunesService>();
             builder.Services.AddSingleton<ItemsService>();
