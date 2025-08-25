@@ -7,54 +7,43 @@
 @using BestCrush.Components.Pure
 @using BestCrush.Domain.Models
 @using BestCrush.Domain.Services
+@using BestCrush.Models
 @using DofusSharp.Dofocus.ApiClients.Models.Items
 @using DofusSharp.Dofocus.ApiClients.Models.Runes
 @using Microsoft.Extensions.Logging
 
 <div class="container">
-    <form method="post" @onsubmit="Search" @formname="search-form">
-        <div class="input-group mb-3">
-            <span class="input-group-text">Level</span>
-            <InputNumber @bind-Value="Model!.LevelMin" class="form-control" placeholder="Min" aria-label="Min" disabled="@_searching"/>
-            <span class="input-group-text">to</span>
-            <InputNumber @bind-Value="Model!.LevelMax" class="form-control" placeholder="Max" aria-label="Max" disabled="@_searching"/>
-        </div>
 
+    <form method="post" @onsubmit="Count" @formname="search-form">
+        <SearchItemsForm Model="Model" Disabled="_searching"></SearchItemsForm>
         <div class="d-flex justify-content-center mb-4">
-            @if (_allItems is null)
-            {
-                <button class="btn btn-primary" type="submit" @onclick="Count" disabled="@_searching">Search items</button>
-            }
-            else
-            {
-                <button class="btn btn-outline-primary" type="button" @onclick="Count" disabled="@_searching">Search items</button>
-            }
+            <button class="btn btn-primary" type="submit" disabled="@_searching">Search items</button>
+        </div>
+    </form>
+
+    @if (_allItems is not null)
+    {
+        <div class="text-center">Found a total of @_allItems.Length items.</div>
+
+        <div class="d-flex justify-content-center my-4">
+            <button class="btn btn-primary" @onclick="Search" disabled="@_searching">Find the <span class="fw-semibold">Best Crush</span></button>
         </div>
 
-        @if (_allItems is not null)
+        @if (_searching)
         {
-            <div class="text-center">Found a total of @_allItems.Length items.</div>
+            int ranked = _rankedItems?.GroupBy(i => i.Equipment).Count() ?? 0;
+            int unranked = _unrankedItems?.Count ?? 0;
+            int done = ranked + unranked;
+            double ratio = (double)done / _allItems.Length;
+            int percent = (int)(ratio * 100);
 
-            <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-primary" type="submit" disabled="@_searching">Find the <span class="fw-semibold">Best Crush</span></button>
-            </div>
-
-            @if (_searching)
             {
-                int ranked = _rankedItems?.GroupBy(i => i.Equipment).Count() ?? 0;
-                int unranked = _unrankedItems?.Count ?? 0;
-                int done = ranked + unranked;
-                double ratio = (double)done / _allItems.Length;
-                int percent = (int)(ratio * 100);
-
-                {
-                    <div class="progress mb-4" role="progressbar" aria-label="Basic example" aria-valuenow="@done" aria-valuemin="0" aria-valuemax="@_allItems.Length">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated text-bg-warning" style="width: @percent%">@done / @_allItems.Length</div>
-                    </div>
-                }
+                <div class="progress mb-4" role="progressbar" aria-label="Basic example" aria-valuenow="@done" aria-valuemin="0" aria-valuemax="@_allItems.Length">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated text-bg-warning" style="width: @percent%">@done / @_allItems.Length</div>
+                </div>
             }
         }
-    </form>
+    }
 
 
     @if (_unrankedItems is not null && _rankedItems is not null)
@@ -92,19 +81,19 @@
 
 @code {
 
-    [Parameter]
-    public required string ServerName { get; set; }
-
-    [SupplyParameterFromForm]
-    private Request? Model { get; set; }
-
     private bool _searching;
     Equipment[]? _allItems;
     List<ItemCrushResult>? _rankedItems;
     List<Equipment>? _unrankedItems;
     IReadOnlyDictionary<Rune, DofocusRunePriceRecord> _runePrices = new Dictionary<Rune, DofocusRunePriceRecord>();
 
-    protected override void OnInitialized() => Model ??= new Request();
+    [Parameter]
+    public required string ServerName { get; set; }
+
+    [SupplyParameterFromForm]
+    private SearchItemsModel? Model { get; set; }
+
+    protected override void OnInitialized() => Model ??= new SearchItemsModel();
 
     async Task Count()
     {
@@ -247,11 +236,5 @@
     }
 
     readonly record struct ItemCrushResult(Equipment Equipment, DofocusCoefficientRecord Coefficient, DofocusItemPriceRecord Cost, double Benefits, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Rune, double> Runes);
-
-    public class Request
-    {
-        public int? LevelMin { get; set; }
-        public int? LevelMax { get; set; }
-    }
 
 }
