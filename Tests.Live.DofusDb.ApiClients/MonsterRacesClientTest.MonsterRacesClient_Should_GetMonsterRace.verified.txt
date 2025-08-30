@@ -1,0 +1,28 @@
+﻿{
+  SuperRaceId: 3,
+  Monsters: [
+    943,
+    944,
+    945,
+    946,
+    947,
+    3345,
+    3346,
+    3347,
+    3348,
+    3349,
+    3350,
+    3351,
+    3352
+  ],
+  Name: {
+    De: Sphincter Cells Bande,
+    En: Sphincter Cell's Gang,
+    Es: Banda de Sfinter Cell,
+    Fr: Gang de Sphincter Cell,
+    Pt: Gangue de Sphincter Cell
+  },
+  Id: 31,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
