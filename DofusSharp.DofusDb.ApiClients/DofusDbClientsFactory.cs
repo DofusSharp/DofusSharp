@@ -4,6 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
+using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 
@@ -39,6 +40,8 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
     public IDofusDbTableClient<DofusDbSpellState> SpellStates() => new DofusDbTableClient<DofusDbSpellState>(new Uri(baseAddress, "spell-states/"), referrer);
     public IDofusDbImageClient<string> SpellStateImages() => new DofusDbImageClient<string>(new Uri(baseAddress, "img/states/"), ImageFormat.Png, referrer);
     public IDofusDbTableClient<DofusDbSpellVariant> SpellVariants() => new DofusDbTableClient<DofusDbSpellVariant>(new Uri(baseAddress, "spell-variants/"), referrer);
+
+    public IDofusDbTableClient<DofusDbMonster> Monsters() => new DofusDbTableClient<DofusDbMonster>(new Uri(baseAddress, "monsters/"), referrer);
 
     public IDofusDbTableClient<DofusDbWorld> Worlds() => new DofusDbTableClient<DofusDbWorld>(new Uri(baseAddress, "worlds/"), referrer);
     public IDofusDbTableClient<DofusDbSuperArea> SuperAreas() => new DofusDbTableClient<DofusDbSuperArea>(new Uri(baseAddress, "super-areas/"), referrer);
