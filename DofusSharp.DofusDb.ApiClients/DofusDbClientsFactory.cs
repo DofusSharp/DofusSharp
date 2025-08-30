@@ -4,6 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
+using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 
 namespace DofusSharp.DofusDb.ApiClients;
@@ -17,8 +18,10 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
 {
     public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
 
+    public IDofusDbTableClient<DofusDbServer> Servers() => new DofusDbTableClient<DofusDbServer>(new Uri(baseAddress, "servers/"), referrer);
+
     public IDofusDbTableClient<DofusDbCharacteristic> Characteristics() => new DofusDbTableClient<DofusDbCharacteristic>(new Uri(baseAddress, "characteristics/"), referrer);
-    
+
     public IDofusDbTableClient<DofusDbItem> Items() => new DofusDbTableClient<DofusDbItem>(new Uri(baseAddress, "items/"), referrer);
     public IDofusDbImageClient<long> ItemImages() => new DofusDbImageClient<long>(new Uri(baseAddress, "img/items/"), ImageFormat.Png, referrer);
     public IDofusDbTableClient<DofusDbItemType> ItemTypes() => new DofusDbTableClient<DofusDbItemType>(new Uri(baseAddress, "item-types/"), referrer);
