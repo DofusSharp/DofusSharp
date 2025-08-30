@@ -31,7 +31,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     public Uri? Referrer { get; }
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
-    public async Task<TResource> GetAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default)
     {
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
