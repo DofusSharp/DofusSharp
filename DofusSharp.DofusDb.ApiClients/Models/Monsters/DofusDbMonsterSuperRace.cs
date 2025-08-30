@@ -7,5 +7,8 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Monsters;
 /// </summary>
 public class DofusDbMonsterSuperRace : DofusDbResource
 {
+    /// <summary>
+    ///     The localized name of the super race.
+    /// </summary>
     public DofusDbMultiLangString? Name { get; init; }
 }
