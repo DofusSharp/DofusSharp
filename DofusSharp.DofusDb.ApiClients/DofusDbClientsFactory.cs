@@ -42,6 +42,7 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
     public IDofusDbTableClient<DofusDbSpellVariant> SpellVariants() => new DofusDbTableClient<DofusDbSpellVariant>(new Uri(baseAddress, "spell-variants/"), referrer);
 
     public IDofusDbTableClient<DofusDbMonster> Monsters() => new DofusDbTableClient<DofusDbMonster>(new Uri(baseAddress, "monsters/"), referrer);
+    public IDofusDbImageClient<long> MonsterImages() => new DofusDbImageClient<long>(new Uri(baseAddress, "img/monsters/"), ImageFormat.Png, referrer);
 
     public IDofusDbTableClient<DofusDbWorld> Worlds() => new DofusDbTableClient<DofusDbWorld>(new Uri(baseAddress, "worlds/"), referrer);
     public IDofusDbTableClient<DofusDbSuperArea> SuperAreas() => new DofusDbTableClient<DofusDbSuperArea>(new Uri(baseAddress, "super-areas/"), referrer);
