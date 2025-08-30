@@ -13,7 +13,7 @@ public class DofocusCoefficientRecord
     /// <summary>
     ///     The coefficient recorded for the item.
     /// </summary>
-    public required int Coefficient { get; init; }
+    public required double Coefficient { get; init; }
 
     /// <summary>
     ///     The date and time of the last update for this coefficient.
