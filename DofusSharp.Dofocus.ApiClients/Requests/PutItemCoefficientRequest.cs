@@ -8,7 +8,7 @@ public class PutItemCoefficientRequest
     /// <summary>
     ///     The new coefficient to set for the item.
     /// </summary>
-    public required int Coefficient { get; init; }
+    public required double Coefficient { get; init; }
 
     /// <summary>
     ///     The name of the server where the coefficient is being updated.
