@@ -18,7 +18,7 @@ public class NewItemCoefficient
     /// <summary>
     ///     The updated coefficient of the item.
     /// </summary>
-    public required int Coefficient { get; init; }
+    public required double Coefficient { get; init; }
 
     /// <summary>
     ///     The date and time when the coefficient was updated.
