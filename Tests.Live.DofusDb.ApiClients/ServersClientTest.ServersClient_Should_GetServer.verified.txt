@@ -1,0 +1,28 @@
+﻿{
+  OpeningDate: Date_1,
+  Language: En,
+  PopulationId: 0,
+  GameTypeId: 4,
+  CommunityId: 12,
+  MonoAccount: false,
+  Illus: ombre,
+  Name: {
+    De: Schatten,
+    En: Shadow,
+    Es: Sombra,
+    Fr: Ombre,
+    Pt: Sombra
+  },
+  Comment: {
+    De:
+Schatten ist ein Mischwesen aus Ereziahs Schatten und dem Ebenholz-Dofus. Das erklärt auch seine Faszination für die Leere. Für ihn gibt es keine Zwischentöne, kein halb voll oder halb leer, nur die absolute Leere.
+Diese radikale Sicht der Dinge hat auf einige Helden abgefärbt, die darum auch jede Form der Reinkarnation ablehnen. Ihrer Meinung nach gibt es nur das endgültige und unausweichliche Ende. Das macht ihre Reise auch so episch!,
+    En: A creature born of Ereziah's shadow and the Ebony Dofus, Shadow is fascinated by the void. With him, there is no half-way, there is no all-or-nothing, and no life after death. Just the nothing. Some heroes were influenced by this radical vision of the Krosmoz and hence refuse any sort of reincarnation. According to them, there is only one destination, final and inexorable. And there is absolutely nothing more epic.,
+    Es: Sombra, nacido del dofus Ébano y la sombra de Ereziah, es una criatura a la que le fascina el vacío. Para él, las medias tintas y los claroscuros no existen: no hay vida tras la muerte, solo la nada. Esta visión radical ha influenciado a muchos héroes, por lo que rechazan toda forma de reencarnación. Según ellos, solo hay un destino, final e inexorable. Su viaje es de lo más épico.,
+    Fr: Créature née de l'ombre d'Ereziah et du Dofus Ébène, Ombre est fasciné par le vide. Pour lui, pas de demi-mesure ni de clair-obscur... Il n'y a pas de vie après la mort, seulement le néant. Certains héros ont été influencés par cette vision radicale du Krosmoz : ils refusent toute forme de réincarnation. Selon eux, il n'y a qu'une destination, finale et inexorable. Leur voyage n'en est que plus épique.,
+    Pt: Nascido da sombra de Ereziah e do Dofus Ébano, o Sombra é fascinado pelo nada e pelo vazio. Com ele não tem meia-medida nem claro-escuro... Não há vida após a morte, apenas o nada. Alguns heróis foram influenciados por esta visão radical do Krosmoz: eles recusam toda e qualquer forma de encarnação. Para eles, há apenas um destino, final e inexorável. Isto torna a viagem deles ainda mais épica.
+  },
+  Id: 50,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
