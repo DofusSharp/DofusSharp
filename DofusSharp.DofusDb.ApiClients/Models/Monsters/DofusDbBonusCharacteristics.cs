@@ -1,7 +1,7 @@
 ﻿namespace DofusSharp.DofusDb.ApiClients.Models.Monsters;
 
 /// <summary>
-///     Represents bonus characteristics for a monster grade.
+///     Bonus characteristics for a monster grade.
 /// </summary>
 public class DofusDbBonusCharacteristics
 {

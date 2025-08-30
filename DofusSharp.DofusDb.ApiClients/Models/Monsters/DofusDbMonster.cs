@@ -3,7 +3,7 @@
 namespace DofusSharp.DofusDb.ApiClients.Models.Monsters;
 
 /// <summary>
-///     Represents a monster in the game.
+///     A monster in the game.
 /// </summary>
 public class DofusDbMonster : DofusDbResource
 {

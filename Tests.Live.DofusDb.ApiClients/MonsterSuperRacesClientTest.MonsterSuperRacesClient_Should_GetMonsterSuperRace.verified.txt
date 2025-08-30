@@ -1,0 +1,12 @@
+﻿{
+  Name: {
+    De: Kreaturen von Astrub,
+    En: Astrub Creatures,
+    Es: Criaturas de Astrub,
+    Fr: Créatures d'Astrub,
+    Pt: Criaturas de Astrub
+  },
+  Id: 2,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

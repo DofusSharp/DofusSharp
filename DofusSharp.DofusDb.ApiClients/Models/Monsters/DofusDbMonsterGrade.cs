@@ -1,7 +1,7 @@
 ﻿namespace DofusSharp.DofusDb.ApiClients.Models.Monsters;
 
 /// <summary>
-///     Represents a grade of a monster, including its stats and characteristics.
+///     A grade of a monster, including its stats and characteristics.
 /// </summary>
 public class DofusDbMonsterGrade
 {

@@ -22,9 +22,9 @@ public class MonstersClientTest
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search
-        DofusDbSearchQuery query = new();
+        DofusDbSearchQuery query = new() { Predicates = [new DofusDbSearchPredicate.In("race", "9", "10", "11", "49", "69", "135", "174", "182", "256")] };
         DofusDbMonster[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
-        int count = await client.CountAsync();
+        int count = await client.CountAsync(query.Predicates);
 
         results.Length.Should().Be(count);
     }

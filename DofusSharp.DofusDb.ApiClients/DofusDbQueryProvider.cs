@@ -29,6 +29,8 @@ public class DofusDbQueryProvider(DofusDbClientsFactory factory)
     public DofusDbQuery<DofusDbSpellVariant> SpellVariants() => new(factory.SpellVariants());
 
     public DofusDbQuery<DofusDbMonster> Monsters() => new(factory.Monsters());
+    public DofusDbQuery<DofusDbMonsterRace> MonsterRaces() => new(factory.MonsterRaces());
+    public DofusDbQuery<DofusDbMonsterSuperRace> MonsterSuperRaces() => new(factory.MonsterSuperRaces());
 
     public DofusDbQuery<DofusDbWorld> Worlds() => new(factory.Worlds());
     public DofusDbQuery<DofusDbSuperArea> SuperAreas() => new(factory.SuperAreas());

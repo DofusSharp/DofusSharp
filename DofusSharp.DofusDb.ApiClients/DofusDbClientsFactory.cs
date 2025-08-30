@@ -43,6 +43,10 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
 
     public IDofusDbTableClient<DofusDbMonster> Monsters() => new DofusDbTableClient<DofusDbMonster>(new Uri(baseAddress, "monsters/"), referrer);
     public IDofusDbImageClient<long> MonsterImages() => new DofusDbImageClient<long>(new Uri(baseAddress, "img/monsters/"), ImageFormat.Png, referrer);
+    public IDofusDbTableClient<DofusDbMonsterRace> MonsterRaces() => new DofusDbTableClient<DofusDbMonsterRace>(new Uri(baseAddress, "monster-races/"), referrer);
+
+    public IDofusDbTableClient<DofusDbMonsterSuperRace> MonsterSuperRaces() =>
+        new DofusDbTableClient<DofusDbMonsterSuperRace>(new Uri(baseAddress, "monster-super-races/"), referrer);
 
     public IDofusDbTableClient<DofusDbWorld> Worlds() => new DofusDbTableClient<DofusDbWorld>(new Uri(baseAddress, "worlds/"), referrer);
     public IDofusDbTableClient<DofusDbSuperArea> SuperAreas() => new DofusDbTableClient<DofusDbSuperArea>(new Uri(baseAddress, "super-areas/"), referrer);

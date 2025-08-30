@@ -1,7 +1,7 @@
 ﻿namespace DofusSharp.DofusDb.ApiClients.Models.Monsters;
 
 /// <summary>
-///     Specific drop modifier when the given criteria are met.
+///     Drop modifier when the given criteria are met.
 /// </summary>
 public class DofusDbMonsterDropSpecificCoefficient
 {

@@ -1,7 +1,7 @@
 ﻿namespace DofusSharp.DofusDb.ApiClients.Models.Monsters;
 
 /// <summary>
-///     Represents an item that can be dropped by a monster.
+///     An item that can be dropped by a monster.
 /// </summary>
 public class DofusDbMonsterDrop
 {
