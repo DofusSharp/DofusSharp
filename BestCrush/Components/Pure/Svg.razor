@@ -1,0 +1,19 @@
+﻿<svg width="@(Width?.ToString() ?? "auto")" height="@(Height?.ToString() ?? "auto")" alt="@Alt">
+    <use href="@Href"></use>
+</svg>
+
+@code {
+
+    [Parameter]
+    public string? Href { get; set; }
+
+    [Parameter]
+    public int? Width { get; set; }
+
+    [Parameter]
+    public int? Height { get; set; }
+
+    [Parameter]
+    public string? Alt { get; set; }
+
+}

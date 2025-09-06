@@ -1,7 +1,6 @@
 ﻿@inject ItemsService ItemsService
 @inject RunesService RunesService
 @inject CrushService CrushService
-@inject CharacteristicsService CharacteristicsService
 @inject ILogger<Server> Logger
 @page "/servers/{ServerName}"
 @using BestCrush.Components.Pure
@@ -16,7 +15,7 @@
 
     <form method="post" @onsubmit="Count" @formname="search-form">
         <SearchItemsForm Model="Model" Disabled="_searching"></SearchItemsForm>
-        <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex justify-content-center mt-4">
             <button class="btn btn-primary" type="submit" disabled="@_searching">Search items</button>
         </div>
     </form>
@@ -275,10 +274,18 @@
             equipmentTypes.Add(EquipmentType.Cloak);
         }
 
-        if (Model?.EquipmentType.Animals is true)
+        if (Model?.EquipmentType.Pet is true)
         {
             equipmentTypes.Add(EquipmentType.Pet);
+        }
+
+        if (Model?.EquipmentType.Petsmount is true)
+        {
             equipmentTypes.Add(EquipmentType.Petsmount);
+        }
+
+        if (Model?.EquipmentType.Mount is true)
+        {
             equipmentTypes.Add(EquipmentType.Mount);
         }
 

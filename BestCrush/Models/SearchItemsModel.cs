@@ -15,7 +15,6 @@ public class EquipmentTypesFilter
     public bool Boots { get; set; }
     public bool Hat { get; set; }
     public bool Cloak { get; set; }
-    public bool Animals { get; set; }
     public bool Trophy { get; set; }
 
     public bool Bow { get; set; }
@@ -31,4 +30,8 @@ public class EquipmentTypesFilter
     public bool Sword { get; set; }
     public bool Hammer { get; set; }
     public bool Shovel { get; set; }
+
+    public bool Pet { get; set; }
+    public bool Petsmount { get; set; }
+    public bool Mount { get; set; }
 }
