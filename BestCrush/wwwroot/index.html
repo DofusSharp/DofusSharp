@@ -30,6 +30,20 @@
 <script autostart="false" src="js/popper.min.js"></script>
 <script autostart="false" src="js/bootstrap.bundle.min.js"></script>
 
-</body>
+<script>
+    function createTooltip(records) {
+        for (const record of records) {
+            for (const addedNode of record.addedNodes) {
+                if (addedNode.hasAttribute && addedNode.getAttribute && addedNode.hasAttribute("data-bs-toggle") && addedNode.getAttribute("data-bs-toggle") === "tooltip") {
+                    const _ = new bootstrap.Tooltip(addedNode);
+                }
+            }
+        }
+    }
 
+    const observer = new MutationObserver(createTooltip);
+    observer.observe(document.body, {childList: true, subtree: true});
+</script>
+
+</body>
 </html>

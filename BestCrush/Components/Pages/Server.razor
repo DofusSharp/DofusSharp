@@ -28,22 +28,22 @@
             <button class="btn btn-primary" @onclick="Search" disabled="@_searching">Trouver le <span class="fw-semibold">Best Crush</span></button>
         </div>
 
-        @if (_searching)
-        {
-            int ranked = _rankedItems?.GroupBy(i => i.Equipment).Count() ?? 0;
-            int unranked = _unrankedItems?.Count ?? 0;
-            int done = ranked + unranked;
-            double ratio = (double)done / _allItems.Length;
-            int percent = (int)(ratio * 100);
-
-            {
-                <div class="progress mb-4" role="progressbar" aria-label="Basic example" aria-valuenow="@done" aria-valuemin="0" aria-valuemax="@_allItems.Length">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated text-bg-warning" style="width: @percent%">@done / @_allItems.Length</div>
-                </div>
-            }
-        }
     }
 
+    @if (_allItems is not null && _searching)
+    {
+        int ranked = _rankedItems?.GroupBy(i => i.Equipment).Count() ?? 0;
+        int unranked = _unrankedItems?.Count ?? 0;
+        int done = ranked + unranked;
+        double ratio = (double)done / _allItems.Length;
+        int percent = (int)(ratio * 100);
+
+        {
+            <div class="progress mb-4" role="progressbar" aria-label="Basic example" aria-valuenow="@done" aria-valuemin="0" aria-valuemax="@_allItems.Length">
+                <div class="progress-bar progress-bar-striped progress-bar-animated text-bg-warning" style="width: @percent%">@done / @_allItems.Length</div>
+            </div>
+        }
+    }
 
     @if (_unrankedItems is not null && _rankedItems is not null)
     {
