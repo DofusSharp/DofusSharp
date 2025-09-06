@@ -16,16 +16,16 @@
     <form method="post" @onsubmit="Count" @formname="search-form">
         <SearchItemsForm Model="Model" Disabled="_searching"></SearchItemsForm>
         <div class="d-flex justify-content-center my-4">
-            <button class="btn btn-primary" type="submit" disabled="@_searching">Search items</button>
+            <button class="btn btn-primary" type="submit" disabled="@_searching">Rechercher les objets</button>
         </div>
     </form>
 
     @if (_allItems is not null)
     {
-        <div class="text-center">Found a total of @_allItems.Length items.</div>
+        <div class="text-center">@_allItems.Length objet(s) correspondent aux critères de recherche.</div>
 
         <div class="d-flex justify-content-center my-4">
-            <button class="btn btn-primary" @onclick="Search" disabled="@_searching">Find the <span class="fw-semibold">Best Crush</span></button>
+            <button class="btn btn-primary" @onclick="Search" disabled="@_searching">Trouver le <span class="fw-semibold">Best Crush</span></button>
         </div>
 
         @if (_searching)
@@ -56,11 +56,11 @@
             <div class="my-4">
                 <div class="d-flex align-items-center justify-content-end mb-2">
                     <div class="d-flex gap-2">
-                        <label for="sort-order" class="col-form-label col-form-label-sm text-nowrap">Sort by</label>
+                        <label for="sort-order" class="col-form-label col-form-label-sm text-nowrap">Tri par</label>
                         <InputSelect TValue="SortOrder" @bind-Value="_sortOrder" class="form-select form-select-sm" id="sort-order">
-                            <option value="">Select sort order...</option>
-                            <option value="@SortOrder.BestBenefit" checked="@(_sortOrder == SortOrder.BestBenefit)">Benefit (flat)</option>
-                            <option value="@SortOrder.BestYield" checked="@(_sortOrder == SortOrder.BestYield)">Yield (%)</option>
+                            <option value="">Sélectionner l'ordre de tri...</option>
+                            <option value="@SortOrder.BestBenefit" checked="@(_sortOrder == SortOrder.BestBenefit)">Bénéfice (flat)</option>
+                            <option value="@SortOrder.BestYield" checked="@(_sortOrder == SortOrder.BestYield)">Rendement (%)</option>
                         </InputSelect>
                     </div>
                 </div>
@@ -85,11 +85,11 @@
         @if (_unrankedItems.Count > 0)
         {
             <div class="my-4">
-                <p>Could not compute results for items:</p>
+                <p>Aucun résultat pour les objets suivants:</p>
                 <ul class="text-secondary">
                     @foreach (Equipment item in _unrankedItems.Take(10))
                     {
-                        <li>@item.Name Lv. @item.Level</li>
+                        <li>@item.Name Niv. @item.Level</li>
                     }
                 </ul>
             </div>

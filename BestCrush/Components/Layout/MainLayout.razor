@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@using BestCrush.Domain.Services
+﻿@using BestCrush.Domain.Services
 @using DofusSharp.Dofocus.ApiClients.Models.Servers
 @inherits LayoutComponentBase
 @inject ServersService ServersService
@@ -16,14 +15,14 @@
             @if (_currentServer is null || _servers is null)
             {
                 <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">Chargement...</span>
                 </div>
             }
             else
             {
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Server: @_currentServer.Name
+                        Serveur: @_currentServer.Name
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         @foreach (DofocusServer server in _servers)

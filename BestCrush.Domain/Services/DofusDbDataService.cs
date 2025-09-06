@@ -73,7 +73,7 @@ public class DofusDbDataService(BestCrushDbContext context, DofusDbQueryProvider
         {
             if (!dofusDbItem.Id.HasValue)
             {
-                logger.LogWarning("Could not map equipment {Name} ({Id}).", dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???", dofusDbItem.Id?.ToString() ?? "???");
+                logger.LogWarning("Could not map equipment {Name} ({Id}).", dofusDbItem.Name?.Fr ?? "???", dofusDbItem.Id?.ToString() ?? "???");
                 continue;
             }
 
@@ -83,7 +83,7 @@ public class DofusDbDataService(BestCrushDbContext context, DofusDbQueryProvider
                 equipment = CreateEquipment(dofusDbItem, characteristicsDict, recipesDict);
                 if (equipment is null)
                 {
-                    logger.LogWarning("Could not map equipment {Name} ({Id}).", dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???", dofusDbItem.Id?.ToString() ?? "???");
+                    logger.LogWarning("Could not map equipment {Name} ({Id}).", dofusDbItem.Name?.Fr ?? "???", dofusDbItem.Id?.ToString() ?? "???");
                     continue;
                 }
 
@@ -113,7 +113,7 @@ public class DofusDbDataService(BestCrushDbContext context, DofusDbQueryProvider
     {
         equipment.DofusDbIconId = dofusDbItem.IconId;
         equipment.Level = dofusDbItem.Level ?? 0;
-        equipment.Name = dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???";
+        equipment.Name = dofusDbItem.Name?.Fr ?? "???";
         equipment.Type = EquipmentTypeExtensions.EquipmentTypeFromDofusDbTypeId(dofusDbItem.TypeId ?? 0) ?? EquipmentType.MagicWeapon;
         UpdateCharacteristics(dofusDbItem, equipment, characteristics);
         UpdateRecipe(dofusDbItem, equipment, recipes);
@@ -238,7 +238,7 @@ public class DofusDbDataService(BestCrushDbContext context, DofusDbQueryProvider
     {
         resource.DofusDbIconId = dofusDbItem.IconId;
         resource.Level = dofusDbItem.Level ?? 0;
-        resource.Name = dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???";
+        resource.Name = dofusDbItem.Name?.Fr ?? "???";
     }
 
     async Task CreateOrUpdateRunesAsync()
@@ -314,6 +314,6 @@ public class DofusDbDataService(BestCrushDbContext context, DofusDbQueryProvider
     {
         rune.DofusDbIconId = dofusDbItem.IconId;
         rune.Level = dofusDbItem.Level ?? 0;
-        rune.Name = dofusDbItem.Name?.En ?? dofusDbItem.Name?.Fr ?? "???";
+        rune.Name = dofusDbItem.Name?.Fr ?? "???";
     }
 }
