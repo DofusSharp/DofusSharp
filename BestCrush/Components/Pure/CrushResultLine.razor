@@ -52,18 +52,24 @@
         </div>
 
         <div class="col-4 border-start">
-            <div class="fw-semibold">Runes</div>
-            <div>
-                <span class="small">Coefficient:</span>
-                @if (Coefficient is not null)
+            <div class="d-flex gap-2 justify-content-between">
+                <div>
+                    <div class="fw-semibold">Runes</div>
+                    @if (Coefficient is not null)
+                    {
+                        <div>Coeff.: <span class="fw-semibold">@Coefficient.Coefficient.ToString("N0")%</span></div>
+                    }
+                </div>
+                @if (Cost is not null)
                 {
-                    <span>@Coefficient.Coefficient.ToString("N0")%</span>
-                    <span class="small text-secondary">(@Coefficient.LastUpdate.ToString("G"))</span>
+                    <div class="d-flex flex-column align-items-center">
+                        <Kamas Amount="_estimatedPrice" Size="IconSize.Medium"/>
+                        @if (Coefficient is not null)
+                        {
+                            <span class="small text-secondary">@Coefficient.LastUpdate.ToString("G")</span>
+                        }
+                    </div>
                 }
-            </div>
-            <div class="d-flex gap-2">
-                <span class="small">Estimated price:</span>
-                <Kamas Amount="_estimatedPrice" Size="IconSize.Medium"/>
             </div>
             @if (!NoImage && Runes is not null)
             {

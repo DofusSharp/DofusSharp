@@ -211,6 +211,7 @@
 
                 try
                 {
+                    _runePrices = await RunesService.GetRunePricesAsync(ServerName);
                     IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(equipment, _runePrices, true);
                     _unrankedItems.Remove(equipment);
                     _rankedItems.RemoveAll(r => r.Equipment == equipment);
