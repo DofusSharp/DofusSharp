@@ -1,6 +1,6 @@
 ﻿namespace BestCrush.Models;
 
-public enum IconSize
+public enum Size
 {
     Tiny,
     Small,

@@ -11,6 +11,14 @@ body {
     background: #fff9e5;
 }
 
+.smaller {
+    font-size: 0.65em !important;
+}
+
+.smallest {
+    font-size: 0.50em !important;
+}
+
 a, .btn-link {
     color: #006bb7;
 }

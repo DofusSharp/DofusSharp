@@ -2,7 +2,7 @@
 @using BestCrush.Models
 <div class="position-relative">
     <ItemIcon Item="Item" Size="Size" Background="IconBackground.Slot"></ItemIcon>
-    <div class="position-absolute top-0 start-0 text-bg-dark bg-opacity-25 fs-6 fw-semibold px-1">
+    <div class="position-absolute top-0 start-0 text-bg-dark bg-opacity-25 fw-semibold px-1 @SizeClass">
         @Count.ToString("0.##")
     </div>
 </div>
@@ -16,6 +16,15 @@
     public required double Count { get; init; }
 
     [Parameter]
-    public IconSize Size { get; init; } = IconSize.Medium;
+    public Size Size { get; init; } = Size.Medium;
+
+    string SizeClass =>
+        Size switch
+        {
+            Size.Tiny => "smallest",
+            Size.Small => "smaller",
+            Size.Medium => "small",
+            Size.Large or _ => ""
+        };
 
 }

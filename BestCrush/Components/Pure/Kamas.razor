@@ -19,18 +19,20 @@
     int TextSizeInPx =>
         Size switch
         {
-            IconSize.Small => 12,
-            IconSize.Medium => 24,
-            IconSize.Large => 48,
+            Size.Tiny => 10,
+            Size.Small => 12,
+            Size.Medium => 24,
+            Size.Large => 48,
             _ => throw new ArgumentOutOfRangeException()
         };
 
     int IconSizeInPx =>
         Size switch
         {
-            IconSize.Small => 12,
-            IconSize.Medium => 24,
-            IconSize.Large => 48,
+            Size.Tiny => 10,
+            Size.Small => 12,
+            Size.Medium => 24,
+            Size.Large => 48,
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -47,7 +49,7 @@
     public double? Amount { get; init; }
 
     [Parameter]
-    public IconSize Size { get; init; }
+    public Size Size { get; init; }
 
     [Parameter]
     public TextColor Color { get; init; }
