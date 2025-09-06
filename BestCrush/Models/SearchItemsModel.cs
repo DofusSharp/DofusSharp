@@ -19,7 +19,6 @@ public class EquipmentTypesFilter
 
     public bool Bow { get; set; }
     public bool Lance { get; set; }
-    public bool MagicWeapon { get; set; }
     public bool Scythe { get; set; }
     public bool Axe { get; set; }
     public bool Tool { get; set; }

@@ -18,8 +18,8 @@
         <div class="d-flex flex-wrap justify-content-center gap-4 my-4">
             @foreach (ServerAndIcon server in _servers)
             {
-                <a class="btn text-center" @onclick="() => SelectServer(server.Server)">
-                    <div class="rounded">
+                <a class="btn btn-light border border-1 border-dark-subtle p-0 overflow-hidden text-center" @onclick="() => SelectServer(server.Server)">
+                    <div>
                         @if (server.Icon is not null)
                         {
                             <img src="data:@server.Icon" width="auto" height="200" alt="Server icon"/>

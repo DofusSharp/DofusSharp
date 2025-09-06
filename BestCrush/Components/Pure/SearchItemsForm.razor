@@ -1,13 +1,13 @@
 ﻿@using BestCrush.Models
 <div class="d-flex flex-column align-items-center mb-3">
     <div class="fw-semibold mb-1">Level</div>
-    <div class="input-group">
-        <InputNumber @bind-Value="Model.LevelMin" class="form-control" placeholder="Min" aria-label="Min" disabled="@Disabled"/>
+    <div class="input-group justify-content-center">
+        <InputNumber @bind-Value="Model.LevelMin" class="form-control flex-grow-0" style="width:100px" placeholder="Min" aria-label="Min" disabled="@Disabled"/>
         <span class="input-group-text">to</span>
-        <InputNumber @bind-Value="Model.LevelMax" class="form-control" placeholder="Max" aria-label="Max" disabled="@Disabled"/>
+        <InputNumber @bind-Value="Model.LevelMax" class="form-control flex-grow-0" style="width:100px" placeholder="Max" aria-label="Max" disabled="@Disabled"/>
     </div>
 </div>
-<div class="d-flex justify-content-between gap-4 mb-3">
+<div class="d-flex justify-content-center gap-4 flex-wrap mb-3">
     <div class="d-flex flex-column align-items-center">
         <div class="fw-semibold mb-1">Equipments</div>
         <div class="input-group flex-nowrap">
@@ -47,6 +47,27 @@
             </label>
         </div>
     </div>
+
+    <div class="d-flex flex-column align-items-center">
+        <div class="fw-semibold mb-1">Animals</div>
+        <div class="input-group flex-nowrap">
+            <InputCheckbox @bind-Value="Model.EquipmentType.Pet" class="btn-check" id="btn-pet" autocomplete="off" disabled="@Disabled"/>
+            <label class="btn btn-light border" for="btn-pet" data-bs-toggle="tooltip" data-bs-title="Pet">
+                <Svg Width="24" Height="24" Alt="Pet" Href="img/cat.svg"/>
+            </label>
+
+            <InputCheckbox @bind-Value="Model.EquipmentType.Petsmount" class="btn-check" id="btn-petsmount" autocomplete="off" disabled="@Disabled"/>
+            <label class="btn btn-light border" for="btn-petsmount" data-bs-toggle="tooltip" data-bs-title="Petsmount">
+                <Svg Width="24" Height="24" Alt="Petsmount" Href="img/petsmount.svg"/>
+            </label>
+
+            <InputCheckbox @bind-Value="Model.EquipmentType.Mount" class="btn-check" id="btn-mount" autocomplete="off" disabled="@Disabled"/>
+            <label class="btn btn-light border" for="btn-mount" data-bs-toggle="tooltip" data-bs-title="Mount">
+                <Svg Width="24" Height="24" Alt="Mount" Href="img/mount.svg"/>
+            </label>
+        </div>
+    </div>
+
     <div class="d-flex flex-column align-items-center">
         <div class="fw-semibold mb-1">Weapons</div>
         <div class="input-group flex-nowrap">
@@ -108,30 +129,6 @@
             <InputCheckbox @bind-Value="Model.EquipmentType.Tool" class="btn-check" id="btn-tool" autocomplete="off" disabled="@Disabled"/>
             <label class="btn btn-light border" for="btn-tool" data-bs-toggle="tooltip" data-bs-title="Tool">
                 <Svg Width="24" Height="24" Alt="Tool" Href="img/tool.svg"/>
-            </label>
-
-            <InputCheckbox @bind-Value="Model.EquipmentType.MagicWeapon" class="btn-check" id="btn-magic-weapon" autocomplete="off" disabled="@Disabled"/>
-            <label class="btn btn-light border" for="btn-magic-weapon" data-bs-toggle="tooltip" data-bs-title="Magic weapon">
-                <Svg Width="24" Height="24" Alt="Magic Weapon" Href="img/magic-weapon.svg"/>
-            </label>
-        </div>
-    </div>
-    <div class="d-flex flex-column align-items-center">
-        <div class="fw-semibold mb-1">Animals</div>
-        <div class="input-group flex-nowrap">
-            <InputCheckbox @bind-Value="Model.EquipmentType.Pet" class="btn-check" id="btn-pet" autocomplete="off" disabled="@Disabled"/>
-            <label class="btn btn-light border" for="btn-pet" data-bs-toggle="tooltip" data-bs-title="Pet">
-                <Svg Width="24" Height="24" Alt="Pet" Href="img/cat.svg"/>
-            </label>
-
-            <InputCheckbox @bind-Value="Model.EquipmentType.Petsmount" class="btn-check" id="btn-petsmount" autocomplete="off" disabled="@Disabled"/>
-            <label class="btn btn-light border" for="btn-petsmount" data-bs-toggle="tooltip" data-bs-title="Petsmount">
-                <Svg Width="24" Height="24" Alt="Petsmount" Href="img/petsmount.svg"/>
-            </label>
-
-            <InputCheckbox @bind-Value="Model.EquipmentType.Mount" class="btn-check" id="btn-mount" autocomplete="off" disabled="@Disabled"/>
-            <label class="btn btn-light border" for="btn-mount" data-bs-toggle="tooltip" data-bs-title="Mount">
-                <Svg Width="24" Height="24" Alt="Mount" Href="img/mount.svg"/>
             </label>
         </div>
     </div>
