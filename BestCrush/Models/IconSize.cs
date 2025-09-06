@@ -2,6 +2,7 @@
 
 public enum IconSize
 {
+    Tiny,
     Small,
     Medium,
     Large

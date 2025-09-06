@@ -47,7 +47,8 @@
     int BackgroundSizeInPx =>
         Size switch
         {
-            IconSize.Small => 32,
+            IconSize.Tiny => 32,
+            IconSize.Small => 48,
             IconSize.Medium => 64,
             IconSize.Large => 128,
             _ => throw new ArgumentOutOfRangeException()
@@ -58,7 +59,8 @@
             ? BackgroundSizeInPx
             : Size switch
             {
-                IconSize.Small => 24,
+                IconSize.Tiny => 24,
+                IconSize.Small => 32,
                 IconSize.Medium => 48,
                 IconSize.Large => 96,
                 _ => throw new ArgumentOutOfRangeException()

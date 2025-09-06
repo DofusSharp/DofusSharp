@@ -16,19 +16,19 @@
                     <ItemIcon Item="Equipment" Background="IconBackground.Slot" Size="IconSize.Medium"></ItemIcon>
                     @if (_focusedRune is not null)
                     {
-                        <ItemIcon Item="_focusedRune" Background="IconBackground.Slot" Size="IconSize.Small"></ItemIcon>
+                        <ItemIcon Item="_focusedRune" Background="IconBackground.Slot" Size="IconSize.Tiny"></ItemIcon>
                     }
                 </div>
             }
             <div>
                 <div class="d-flex gap-2 justify-content-between">
-                    <div>
+                    <div class="mb-2">
                         <div class="fw-bold">@Equipment.Name</div>
                         <div>@Equipment.Type.ToDisplayName() Lv.@Equipment.Level</div>
                     </div>
                     @if (Cost is not null)
                     {
-                        <div class="d-flex flex-column align-items-center">
+                        <div class="d-flex flex-column align-items-end">
                             <Kamas Amount="Cost.Price" Size="IconSize.Medium"/>
                             <span class="small text-secondary">@Cost.LastUpdate.ToString("G")</span>
                         </div>
@@ -42,7 +42,7 @@
                             @foreach (RecipeEntry entry in Equipment.Recipe)
                             {
                                 <div>
-                                    <ItemIconWithCount Item="entry.Resource" Count="entry.Count" Size="IconSize.Medium"></ItemIconWithCount>
+                                    <ItemIconWithCount Item="entry.Resource" Count="entry.Count" Size="IconSize.Small"></ItemIconWithCount>
                                 </div>
                             }
                         }
@@ -52,17 +52,17 @@
         </div>
 
         <div class="col-4 border-start">
-            <div class="d-flex gap-2 justify-content-between">
+            <div class="d-flex gap-2 justify-content-between mb-2">
                 <div>
                     <div class="fw-semibold">Runes</div>
                     @if (Coefficient is not null)
                     {
-                        <div>Coeff.: <span class="fw-semibold">@Coefficient.Coefficient.ToString("N0")%</span></div>
+                        <div>Coeff. <span class="fw-semibold">@Coefficient.Coefficient.ToString("N0")%</span></div>
                     }
                 </div>
                 @if (Cost is not null)
                 {
-                    <div class="d-flex flex-column align-items-center">
+                    <div class="d-flex flex-column align-items-end">
                         <Kamas Amount="_estimatedPrice" Size="IconSize.Medium"/>
                         @if (Coefficient is not null)
                         {
@@ -76,8 +76,13 @@
                 <div class="d-flex flex-wrap gap-2">
                     @foreach ((Rune rune, double yield) in Runes)
                     {
+                        double price = yield * RunePrices?.GetValueOrDefault(rune)?.Price ?? 0;
+
                         <div>
                             <ItemIconWithCount Item="rune" Count="yield" Size="IconSize.Medium"></ItemIconWithCount>
+                            <div class="d-flex justify-content-center">
+                                <Kamas Amount="price" Size="IconSize.Small"/>
+                            </div>
                         </div>
                     }
                 </div>
@@ -85,29 +90,31 @@
         </div>
 
         <div class="col flex-grow-1">
-            <div class="border border-1 border-secondary rounded p-4 d-flex flex-column align-items-center justify-content-evenly">
-                <p class="fw-bold">Benefit</p>
+            <div class="d-flex flex-column justify-content-center">
+                <div class="border border-1 border-secondary rounded p-4 d-flex flex-column align-items-center justify-content-center">
+                    <div class="fw-bold mb-2">Benefit</div>
 
-                @if (_benefit.HasValue)
-                {
-                    <Kamas Amount="_benefit" Size="IconSize.Medium" Color="_benefit > 0 ? TextColor.Success : TextColor.Danger"/>
-                }
+                    @if (_benefit.HasValue)
+                    {
+                        <Kamas Amount="_benefit" Size="IconSize.Medium" Color="_benefit > 0 ? TextColor.Success : TextColor.Danger"/>
+                    }
 
-                @if (_yield.HasValue)
-                {
-                    @if (_yield >= 0)
+                    @if (_yield.HasValue)
                     {
-                        <div class="fs-4 text-success">
-                            +@_yield.Value.ToString("P0")
-                        </div>
+                        @if (_yield >= 0)
+                        {
+                            <div class="fs-4 text-success">
+                                +@_yield.Value.ToString("P0")
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="fs-4 text-danger">
+                                @_yield.Value.ToString("P0")
+                            </div>
+                        }
                     }
-                    else
-                    {
-                        <div class="fs-4 text-danger">
-                            @_yield.Value.ToString("P0")
-                        </div>
-                    }
-                }
+                </div>
             </div>
         </div>
     }
