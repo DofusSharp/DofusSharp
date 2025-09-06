@@ -2,7 +2,7 @@
 
 namespace BestCrush.Domain.Services;
 
-public class CrushService(BestCrushDbContext context)
+public class CrushService(BestCrushDomainDbContext context)
 {
     public IReadOnlyDictionary<Rune, double> GetCrushResult(Dictionary<Characteristic, double> itemLines, int itemLevel, double coefficient)
     {

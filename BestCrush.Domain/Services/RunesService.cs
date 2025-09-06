@@ -5,7 +5,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 
 namespace BestCrush.Domain.Services;
 
-public class RunesService(CharacteristicsService characteristicsService, BestCrushDbContext context)
+public class RunesService(CharacteristicsService characteristicsService, BestCrushDomainDbContext context)
 {
     IReadOnlyCollection<DofocusRune>? _runes;
     readonly SemaphoreSlim _runesSemaphore = new(1, 1);

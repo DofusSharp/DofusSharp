@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BestCrush.Domain.Migrations
 {
-    [DbContext(typeof(BestCrushDbContext))]
+    [DbContext(typeof(BestCrushDomainDbContext))]
     partial class BestCrushDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

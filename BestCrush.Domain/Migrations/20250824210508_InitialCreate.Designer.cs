@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BestCrush.Domain.Migrations
 {
-    [DbContext(typeof(BestCrushDbContext))]
+    [DbContext(typeof(BestCrushDomainDbContext))]
     [Migration("20250824210508_InitialCreate")]
     partial class InitialCreate
     {

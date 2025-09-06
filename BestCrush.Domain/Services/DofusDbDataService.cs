@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BestCrush.Domain.Services;
 
-public class DofusDbDataService(BestCrushDbContext context, DofusDbQueryProvider dofusDbQueryProvider, ILogger<DofusDbDataService> logger)
+public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryProvider dofusDbQueryProvider, ILogger<DofusDbDataService> logger)
 {
     public async Task PrepareLocalDatabaseAsync()
     {

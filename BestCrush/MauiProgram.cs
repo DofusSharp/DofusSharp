@@ -30,7 +30,10 @@ public static class MauiProgram
             logger.LogInformation("Application starting...");
 
             MauiAppBuilder builder = MauiApp.CreateBuilder();
-            builder.UseMauiApp<App>().ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); });
+            builder
+                .UseMauiApp<App>()
+                .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); })
+                .ConfigureEssentials(essentials => essentials.UseVersionTracking());
 
             builder.Logging.AddSerilog();
             builder.Services.AddMauiBlazorWebView();
@@ -115,7 +118,7 @@ public static class MauiProgram
             Directory.CreateDirectory(FileSystem.AppDataDirectory);
         }
 
-        builder.Services.AddDbContext<BestCrushDbContext>(options => options.UseSqlite($"Data Source={DbPath}"));
+        builder.Services.AddDbContext<BestCrushDomainDbContext>(options => options.UseSqlite($"Data Source={DbPath}"));
 
         logger.LogInformation("Database configured at {DbPath}.", DbPath);
     }
@@ -125,7 +128,7 @@ public static class MauiProgram
         logger.LogInformation("Migrating database...");
 
         await using AsyncServiceScope scope = app.Services.CreateAsyncScope();
-        await using BestCrushDbContext context = scope.ServiceProvider.GetRequiredService<BestCrushDbContext>();
+        await using BestCrushDomainDbContext context = scope.ServiceProvider.GetRequiredService<BestCrushDomainDbContext>();
         await context.Database.MigrateAsync();
 
         logger.LogInformation("Done migrating database.");

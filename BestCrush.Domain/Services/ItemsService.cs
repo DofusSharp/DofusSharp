@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BestCrush.Domain.Services;
 
-public class ItemsService(BestCrushDbContext context, DofusDbClientsFactory dofusDbClientsFactory, ImageCache imageCache)
+public class ItemsService(BestCrushDomainDbContext context, DofusDbClientsFactory dofusDbClientsFactory, ImageCache imageCache)
 {
     readonly ConcurrentDictionary<long, DofocusItem> _cachedItems = [];
 

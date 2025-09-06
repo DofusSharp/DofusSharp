@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BestCrush.Domain;
 
-public class BestCrushDbContext : DbContext
+public class BestCrushDomainDbContext : DbContext
 {
-    public BestCrushDbContext(DbContextOptions<BestCrushDbContext> options) : base(options) { }
+    public BestCrushDomainDbContext(DbContextOptions<BestCrushDomainDbContext> options) : base(options) { }
 
     public DbSet<CurrentVersion> CurrentVersions { get; set; }
     public DbSet<Equipment> Equipments { get; set; }
