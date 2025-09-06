@@ -20,7 +20,7 @@
 
         <div class="col d-flex flex-column align-items-stretch">
             <div class="d-flex gap-4">
-                <div class="flex-grow-1 d-flex flex-wrap column-gap-4 row-gap-1">
+                <div class="flex-grow-1 d-flex flex-wrap column-gap-4 row-gap-2">
                     <div class="mb-2">
                         <div class="fw-bold text-nowrap">@Equipment.Name</div>
                         <div class="text-nowrap">@Equipment.Type.ToDisplayName() Lv.@Equipment.Level</div>
@@ -48,8 +48,9 @@
                     </div>
                 }
             </div>
+            <hr class="my-2 text-body-tertiary"/>
             <div class="d-flex gap-4">
-                <div class="flex-grow-1 d-flex flex-wrap column-gap-4 row-gap-1">
+                <div class="flex-grow-1 d-flex flex-wrap column-gap-4 row-gap-2">
                     <div>
                         <div class="fw-semibold">Runes</div>
                         @if (Coefficient is not null)
