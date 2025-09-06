@@ -29,8 +29,4 @@ public class EquipmentTypesFilter
     public bool Sword { get; set; }
     public bool Hammer { get; set; }
     public bool Shovel { get; set; }
-
-    public bool Pet { get; set; }
-    public bool Petsmount { get; set; }
-    public bool Mount { get; set; }
 }

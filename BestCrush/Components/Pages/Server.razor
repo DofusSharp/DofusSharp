@@ -69,7 +69,7 @@
                     {
                         <li class="list-group-item">
                             <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
-                                             Runes="item.Runes" RunePrices="_runePrices" NoImage="_searching" Refresh="() => Refresh(item.Equipment)"/>
+                                             Runes="item.Runes" RunePrices="_runePrices" SortOrder="_sortOrder" NoImage="_searching" Refresh="() => Refresh(item.Equipment)"/>
                         </li>
                     }
                 </ul>
@@ -331,21 +331,6 @@
         if (Model?.EquipmentType.Cloak is true)
         {
             equipmentTypes.Add(EquipmentType.Cloak);
-        }
-
-        if (Model?.EquipmentType.Pet is true)
-        {
-            equipmentTypes.Add(EquipmentType.Pet);
-        }
-
-        if (Model?.EquipmentType.Petsmount is true)
-        {
-            equipmentTypes.Add(EquipmentType.Petsmount);
-        }
-
-        if (Model?.EquipmentType.Mount is true)
-        {
-            equipmentTypes.Add(EquipmentType.Mount);
         }
 
         if (Model?.EquipmentType.Trophy is true)
