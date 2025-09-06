@@ -54,7 +54,7 @@
             IOrderedEnumerable<ItemCrushResult> bestLinesOrdered = bestLines.OrderByDescending(r => _sortOrder switch { SortOrder.BestYield => r.Yield, SortOrder.BestBenefit or _ => r.Benefits });
 
             <div class="my-4">
-                <div class="d-flex align-items-center justify-content-end gap-4 mb-2 px-3">
+                <div class="d-flex align-items-center justify-content-end gap-2 mb-2 px-3">
                     <div class="d-flex gap-2">
                         <label for="sort-order" class="col-form-label col-form-label-sm text-nowrap">Tri par</label>
                         <InputSelect TValue="SortOrder" @bind-Value="_sortOrder" class="form-select form-select-sm" id="sort-order">
