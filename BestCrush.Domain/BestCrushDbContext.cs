@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BestCrush.Domain;
 
-public class BestCrushDomainDbContext : DbContext
+public class BestCrushDbContext : DbContext
 {
-    public BestCrushDomainDbContext(DbContextOptions<BestCrushDomainDbContext> options) : base(options) { }
+    public BestCrushDbContext(DbContextOptions<BestCrushDbContext> options) : base(options) { }
 
-    public DbSet<CurrentVersion> CurrentVersions { get; set; }
+    public DbSet<Upgrade> Upgrades { get; set; }
+
     public DbSet<Equipment> Equipments { get; set; }
     public DbSet<Rune> Runes { get; set; }
     public DbSet<Resource> Resources { get; set; }

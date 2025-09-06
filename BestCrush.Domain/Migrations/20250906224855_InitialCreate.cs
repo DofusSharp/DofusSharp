@@ -12,18 +12,6 @@ namespace BestCrush.Domain.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CurrentVersions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DofusDbVersion = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CurrentVersions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Equipments",
                 columns: table => new
                 {
@@ -113,6 +101,21 @@ namespace BestCrush.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Runes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Upgrades",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Kind = table.Column<int>(type: "INTEGER", nullable: false),
+                    OldVersion = table.Column<string>(type: "TEXT", maxLength: 128, nullable: true),
+                    NewVersion = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    UpgradeDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Upgrades", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -210,9 +213,6 @@ namespace BestCrush.Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CurrentVersions");
-
-            migrationBuilder.DropTable(
                 name: "ItemCharacteristicLine");
 
             migrationBuilder.DropTable(
@@ -229,6 +229,9 @@ namespace BestCrush.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "Runes");
+
+            migrationBuilder.DropTable(
+                name: "Upgrades");
 
             migrationBuilder.DropTable(
                 name: "Equipments");

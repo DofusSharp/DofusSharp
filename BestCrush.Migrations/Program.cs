@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddDbContext<BestCrushDomainDbContext>(options => options.UseSqlite("Data Source=file.db"));
+builder.Services.AddDbContext<BestCrushDbContext>(options => options.UseSqlite("Data Source=file.db"));
 
 IHost host = builder.Build();
 host.Run();

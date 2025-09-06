@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BestCrush.Domain.Migrations
 {
-    [DbContext(typeof(BestCrushDomainDbContext))]
-    [Migration("20250824210508_InitialCreate")]
+    [DbContext(typeof(BestCrushDbContext))]
+    [Migration("20250906224855_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,22 +19,6 @@ namespace BestCrush.Domain.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
-
-            modelBuilder.Entity("BestCrush.Domain.Models.CurrentVersion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DofusDbVersion")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CurrentVersions");
-                });
 
             modelBuilder.Entity("BestCrush.Domain.Models.Equipment", b =>
                 {
@@ -248,6 +232,32 @@ namespace BestCrush.Domain.Migrations
                     b.HasIndex("ServerName");
 
                     b.ToTable("RunePriceRecords");
+                });
+
+            modelBuilder.Entity("BestCrush.Domain.Models.Upgrade", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NewVersion")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OldVersion")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpgradeDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Upgrades");
                 });
 
             modelBuilder.Entity("BestCrush.Domain.Models.ItemCharacteristicLine", b =>

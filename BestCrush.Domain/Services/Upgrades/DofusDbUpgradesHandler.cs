@@ -5,56 +5,35 @@ using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace BestCrush.Domain.Services;
+namespace BestCrush.Domain.Services.Upgrades;
 
-public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryProvider dofusDbQueryProvider, ILogger<DofusDbDataService> logger)
+public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryProvider dofusDbQueryProvider, ILogger<DofusDbUpgradesHandler> logger)
 {
-    public async Task PrepareLocalDatabaseAsync()
+    public async Task UpgradeAsync(Version newVersion, CancellationToken cancellationToken = default)
     {
-        CurrentVersion? currentVersionEntity = context.CurrentVersions.FirstOrDefault();
-        logger.LogInformation("Local version: DofusDB={Version}", currentVersionEntity?.DofusDbVersion ?? "NULL");
+        Upgrade? lastUpgrade = await dbContext.Upgrades.Where(u => u.Kind == UpgradeKind.DofusDb).OrderByDescending(u => u.UpgradeDate).FirstOrDefaultAsync(cancellationToken);
+        Version? oldVersion = Version.TryParse(lastUpgrade?.NewVersion, out Version? version) ? version : null;
 
-        Version version = await DofusDbClient.Production().Version().GetVersionAsync();
-        logger.LogInformation("Remote DofusDB version: {Version}", version);
-
-        if (currentVersionEntity is not null && Version.TryParse(currentVersionEntity.DofusDbVersion, out Version? currentVersion))
+        if (oldVersion == newVersion)
         {
-            if (currentVersion != version)
-            {
-                await UpgradeAsync(currentVersionEntity, currentVersion, version);
-            }
-        }
-        else
-        {
-            await InitializeAsync(version);
+            logger.LogInformation("DofusDB data is up to date. Version: {Version}.", newVersion);
+            return;
         }
 
-        await context.SaveChangesAsync();
-    }
-
-    async Task InitializeAsync(Version version)
-    {
-        logger.LogInformation("Fetching DofusDB data for version {NewVersion}...", version);
+        logger.LogInformation("Running upgrade from version {OldVersion} to {NewVersion}...", oldVersion, newVersion);
 
         await CreateOrUpdateEquipments();
         await CreateOrUpdateRunesAsync();
-        CurrentVersion currentVersion = new(version.ToString());
-        context.Add(currentVersion);
 
-        logger.LogInformation("DofusDB data fetched.");
-    }
+        Upgrade newUpgrade = new() { Kind = UpgradeKind.DofusDb, OldVersion = oldVersion?.ToString(), NewVersion = newVersion.ToString(), UpgradeDate = DateTime.Now };
+        dbContext.Upgrades.Add(newUpgrade);
 
-    async Task UpgradeAsync(CurrentVersion currentVersionEntity, Version currentVersion, Version newVersion)
-    {
-        logger.LogInformation("Upgrading DofusDB data from version {CurrentVersion} to {NewVersion}...", currentVersion, newVersion);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
-        await CreateOrUpdateEquipments();
-        await CreateOrUpdateRunesAsync();
-        currentVersionEntity.DofusDbVersion = newVersion.ToString();
-
-        logger.LogInformation("DofusDB data upgraded.");
+        logger.LogInformation("Successfully upgraded DofusDB data to version {NewVersion}.", newVersion);
     }
 
     async Task CreateOrUpdateEquipments()
@@ -68,7 +47,7 @@ public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryPr
         Dictionary<long, DofusDbRecipe> recipesDict = recipes.Where(r => r.ResultId.HasValue).ToDictionary(c => c.ResultId!.Value, c => c);
 
         long[] equipmentTypes = Enum.GetValues<EquipmentType>().Select(t => t.ToDofusDbItemTypeId()).ToArray();
-        DofusDbItem[] equipments = await dofusDbQueryProvider.Items().Where(i => equipmentTypes.Contains(i.TypeId.Value)).ExecuteAsync().ToArrayAsync();
+        DofusDbItem[] equipments = await dofusDbQueryProvider.Items().Where(i => equipmentTypes.Contains(i.TypeId!.Value)).ExecuteAsync().ToArrayAsync();
         foreach (DofusDbItem dofusDbItem in equipments)
         {
             if (!dofusDbItem.Id.HasValue)
@@ -77,7 +56,7 @@ public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryPr
                 continue;
             }
 
-            Equipment? equipment = context.Equipments.OfType<Equipment>().SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id.Value);
+            Equipment? equipment = dbContext.Equipments.OfType<Equipment>().SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id.Value);
             if (equipment is null)
             {
                 equipment = CreateEquipment(dofusDbItem, characteristicsDict, recipesDict);
@@ -87,7 +66,7 @@ public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryPr
                     continue;
                 }
 
-                context.Equipments.Add(equipment);
+                dbContext.Equipments.Add(equipment);
             }
             else
             {
@@ -177,7 +156,7 @@ public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryPr
                 List<RecipeEntry> itemsToRemoveFromRecipe = equipment.Recipe.Where(recipeItem => recipe.Ingredients.All(i => recipeItem.Resource.DofusDbId != i.Id)).ToList();
                 foreach (RecipeEntry itemToRemove in itemsToRemoveFromRecipe)
                 {
-                    context.Remove(itemToRemove);
+                    dbContext.Remove(itemToRemove);
                 }
 
                 for (int index = 0; index < recipe.Ingredients.Count; index++)
@@ -211,7 +190,7 @@ public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryPr
 
     Resource? UpdateOrCreateResource(DofusDbItem dofusDbItem)
     {
-        Resource? item = context.Resources.SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id);
+        Resource? item = dbContext.Resources.SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id);
         if (item is null)
         {
             return CreateResource(dofusDbItem);
@@ -277,7 +256,7 @@ public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryPr
                 continue;
             }
 
-            Rune? rune = context.Runes.SingleOrDefault(r => r.DofusDbId == dofocusRune.Id);
+            Rune? rune = dbContext.Runes.SingleOrDefault(r => r.DofusDbId == dofocusRune.Id);
             if (rune is null)
             {
                 rune = CreateRune(dofusDbRune);
@@ -286,7 +265,7 @@ public class DofusDbDataService(BestCrushDomainDbContext context, DofusDbQueryPr
                     continue;
                 }
 
-                context.Runes.Add(rune);
+                dbContext.Runes.Add(rune);
             }
             else
             {
