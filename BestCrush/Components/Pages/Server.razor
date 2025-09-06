@@ -20,7 +20,7 @@
         </div>
     </form>
 
-    @if (_allItems is not null)
+    @if (_allItems is not null && _rankedItems is null)
     {
         <div class="text-center">@_allItems.Length objet(s) correspondent aux critères de recherche.</div>
 
@@ -123,6 +123,8 @@
 
         _rankedItems = null;
         _unrankedItems = null;
+
+        StateHasChanged();
 
         IReadOnlyCollection<Equipment> allItems = await ItemsService.GetEquipmentsAsync();
         Equipment[] items = FilterItems(allItems).ToArray();
