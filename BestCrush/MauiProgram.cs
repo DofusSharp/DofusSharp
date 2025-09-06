@@ -66,32 +66,6 @@ public static class MauiProgram
 
             MauiApp app = builder.Build();
 
-            Task.Run(async () =>
-                {
-                    try
-                    {
-                        InitializationStateManager initializationStateManager = app.Services.GetRequiredService<InitializationStateManager>();
-
-                        initializationStateManager.UpdateState("Migration de la base de données...");
-                        await MigrateDatabaseAsync(app, logger);
-
-                        initializationStateManager.UpdateState("Mise à jour des données...");
-                        await UpgradeAsync(app);
-
-                        initializationStateManager.UpdateState("Chargement des serveurs...");
-                        ServersService serversService = app.Services.GetRequiredService<ServersService>();
-                        _ = await serversService.GetServers();
-
-                        initializationStateManager.UpdateState("Prêt.", true);
-                    }
-                    catch (Exception exn)
-                    {
-                        logger.LogError(exn, "An unexpected exception has occurred.");
-                        Application.Current?.Quit();
-                    }
-                }
-            );
-
             logger.LogInformation("Application started.");
 
             return app;
@@ -131,29 +105,5 @@ public static class MauiProgram
         builder.Services.AddDbContext<BestCrushDbContext>(options => options.UseSqlite($"Data Source={DbPath}"));
 
         logger.LogInformation("Databases configured at {DbPath}.", DbPath);
-    }
-
-    static async Task MigrateDatabaseAsync(MauiApp app, ILogger logger)
-    {
-        logger.LogInformation("Migrating databases...");
-
-        await using AsyncServiceScope scope = app.Services.CreateAsyncScope();
-        await using BestCrushDbContext dbContext = scope.ServiceProvider.GetRequiredService<BestCrushDbContext>();
-        await dbContext.Database.MigrateAsync();
-
-        logger.LogInformation("Done migrating databases.");
-    }
-
-    static async Task UpgradeAsync(MauiApp app)
-    {
-        await using AsyncServiceScope scope = app.Services.CreateAsyncScope();
-
-        ApplicationUpgradesHandler applicationUpgradesHandler = scope.ServiceProvider.GetRequiredService<ApplicationUpgradesHandler>();
-        await applicationUpgradesHandler.UpgradeAsync(AppInfo.Version);
-
-        DofusDbClientsFactory dofusDbClientFactory = scope.ServiceProvider.GetRequiredService<DofusDbClientsFactory>();
-        Version version = await dofusDbClientFactory.Version().GetVersionAsync();
-        DofusDbUpgradesHandler dofusDbUpgradesHandler = scope.ServiceProvider.GetRequiredService<DofusDbUpgradesHandler>();
-        await dofusDbUpgradesHandler.UpgradeAsync(version);
     }
 }

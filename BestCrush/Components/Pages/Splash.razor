@@ -1,51 +1,91 @@
 ﻿@inject ServersService ServersService
 @inject InitializationStateManager InitializationStateManager
+@inject BestCrushDbContext BestCrushDbContext
+@inject ApplicationUpgradesHandler ApplicationUpgradesHandler
+@inject DofusDbClientsFactory DofusDbClientsFactory
+@inject DofusDbUpgradesHandler DofusDbUpgradesHandler
 @inject NavigationManager NavigationManager
 @page "/"
 @using BestCrush.Components.Layout
+@using BestCrush.Domain
+@using BestCrush.Domain.Models
 @using BestCrush.Domain.Services
+@using BestCrush.Domain.Services.Upgrades
 @using BestCrush.Services
 @using DofusSharp.Dofocus.ApiClients.Models.Servers
+@using DofusSharp.DofusDb.ApiClients
+@using Microsoft.EntityFrameworkCore
 @layout EmptyLayout
 
-<div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-4 text-center py-5">
-    <img src="img/logo-684.png" width="684" height="684" alt="Logo"/>
-    @_message
+<div class="container h-100 d-flex flex-column align-items-stretch justify-content-center gap-4 text-center py-5">
+    <div class="d-flex justify-content-center">
+        <img src="img/logo-684.png" width="684" height="684" alt="Logo"/>
+    </div>
+    <div>
+        @if (_error is not null)
+        {
+            <div class="lead text-danger">@_error</div>
+        }
+        else
+        {
+            <div class="lead">@_progress.Message</div>
+            @if (!_progress.Done)
+            {
+                @if (_progress.Progress is null)
+                {
+                    <div class="progress" role="progressbar" aria-label="Warning striped example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-warning" style="width: 100%"></div>
+                    </div>
+                }
+                else
+                {
+                    int p = (int)(_progress.Progress * 100);
+
+                    <div class="progress" role="progressbar" aria-label="Warning striped example" aria-valuenow="@p" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-warning" style="width: @p%"></div>
+                    </div>
+                }
+            }
+        }
+    </div>
 </div>
 
 @code {
 
-    string? _message;
+    AsyncProgress _progress = new("Starting...", null);
+    string? _error;
 
     protected override async Task OnInitializedAsync()
     {
-        InitializationState state = InitializationStateManager.GetState();
-        await Update(state);
-
-        InitializationStateManager.RegisterCallback(OnInitializationState);
-    }
-
-    async Task Update(InitializationState state)
-    {
-        _message = state.Message;
-
-        if (state.Done)
+        try
         {
+            _progress = new AsyncProgress("Migration de la base de données...", null);
+            await BestCrushDbContext.Database.MigrateAsync();
+
+            _progress = new AsyncProgress("Mise à jour des données...", null);
+            await UpgradeAsync();
+
+            _progress = new AsyncProgress("Chargement des serveurs...", null);
+            _ = await ServersService.GetServers();
+
+            _progress = new AsyncProgress("Prêt.", null, true);
+
             DofocusServer? currentServer = await ServersService.GetCurrentServer();
-            if (currentServer is not null)
-            {
-                NavigationManager.NavigateTo(KnownRoutes.Server(currentServer));
-            }
-            else
-            {
-                NavigationManager.NavigateTo(KnownRoutes.Servers());
-            }
+            NavigationManager.NavigateTo(currentServer is not null ? KnownRoutes.Server(currentServer) : KnownRoutes.Servers());
         }
-        else
+        catch (Exception exn)
         {
-            StateHasChanged();
+            _error = "An unexpected exception has occurred.";
+            Application.Current?.Quit();
         }
     }
 
-    async void OnInitializationState(InitializationState state) => await InvokeAsync(() => Update(state));
+    async Task UpgradeAsync()
+    {
+        await ApplicationUpgradesHandler.UpgradeAsync(AppInfo.Version);
+
+        Version version = await DofusDbClientsFactory.Version().GetVersionAsync();
+        await DofusDbUpgradesHandler.UpgradeAsync(version);
+    }
+
 }
