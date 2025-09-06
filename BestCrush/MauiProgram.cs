@@ -65,17 +65,17 @@ public static class MauiProgram
                 {
                     InitializationStateManager initializationStateManager = app.Services.GetRequiredService<InitializationStateManager>();
 
-                    initializationStateManager.UpdateState("Migrating database...");
+                    initializationStateManager.UpdateState("Migration de la base de données...");
                     await MigrateDatabaseAsync(app, logger);
 
-                    initializationStateManager.UpdateState("Loading data...");
+                    initializationStateManager.UpdateState("Chargement des données...");
                     await PrepareDatabaseAsync(app);
 
-                    initializationStateManager.UpdateState("Loading servers...");
+                    initializationStateManager.UpdateState("Chargement des serveurs...");
                     ServersService serversService = app.Services.GetRequiredService<ServersService>();
                     _ = await serversService.GetServers();
 
-                    initializationStateManager.UpdateState("Done.", true);
+                    initializationStateManager.UpdateState("Prêt.", true);
                 }
             );
 
