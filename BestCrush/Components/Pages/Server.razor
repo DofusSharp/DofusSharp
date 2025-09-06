@@ -50,8 +50,18 @@
         @if (_rankedItems.Count > 0)
         {
             <div class="my-4">
+                <div class="d-flex align-items-center justify-content-end mb-2">
+                    <div class="d-flex gap-2">
+                        <label for="sort-order" class="col-form-label col-form-label-sm text-nowrap">Sort by</label>
+                        <InputSelect TValue="SortOrder" @bind-Value="_sortOrder" class="form-select form-select-sm" id="sort-order">
+                            <option value="">Select sort order...</option>
+                            <option value="@SortOrder.BestBenefit" checked="@(_sortOrder == SortOrder.BestBenefit)">Benefit (flat)</option>
+                            <option value="@SortOrder.BestYield" checked="@(_sortOrder == SortOrder.BestYield)">Yield (%)</option>
+                        </InputSelect>
+                    </div>
+                </div>
                 <ul class="list-group list-group-flush rounded">
-                    @foreach (ItemCrushResult item in _rankedItems.GroupBy(i => i.Equipment).Select(g => g.MaxBy(i => i.Benefits)).OrderByDescending(r => r.Benefits))
+                    @foreach (ItemCrushResult item in _rankedItems.GroupBy(i => i.Equipment).Select(g => g.MaxBy(i => i.FlatBenefits)).OrderByDescending(r => r.FlatBenefits))
                     {
                         <li class="list-group-item">
                             <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
@@ -85,6 +95,7 @@
     List<ItemCrushResult>? _rankedItems;
     List<Equipment>? _unrankedItems;
     IReadOnlyDictionary<Rune, DofocusRunePriceRecord> _runePrices = new Dictionary<Rune, DofocusRunePriceRecord>();
+    SortOrder _sortOrder;
 
     [Parameter]
     public required string ServerName { get; set; }
@@ -195,12 +206,13 @@
         }
         double cost = itemCost.Price;
 
-        string? icon = await ItemsService.GetItemIconAsync(equipment);
         List<ItemCrushResult> result = [];
         Dictionary<Characteristic, double> averageLines = equipment.Characteristics.ToDictionary(c => c.Characteristic, c => (double)(c.From + c.To) / 2);
         IReadOnlyDictionary<Rune, double> runesWithoutFocus = CrushService.GetCrushResult(averageLines, equipment.Level, coefficient);
         double priceWithoutFocus = runesWithoutFocus.Sum(kv => (runePrices.GetValueOrDefault(kv.Key)?.Price ?? 0) * kv.Value);
-        result.Add(new ItemCrushResult(equipment, itemCoefficient, itemCost, priceWithoutFocus - cost, null, runesWithoutFocus));
+        double benefitWithoutFocus = priceWithoutFocus - cost;
+        double yieldWithoutFocus = itemCost.Price == 0 ? 0 : benefitWithoutFocus / itemCost.Price;
+        result.Add(new ItemCrushResult(equipment, itemCoefficient, itemCost, benefitWithoutFocus, yieldWithoutFocus, null, runesWithoutFocus));
 
         foreach ((Characteristic characteristic, double value) in averageLines)
         {
@@ -211,7 +223,9 @@
 
             IReadOnlyDictionary<Rune, double> runesWithFocus = CrushService.GetFocusedCrushResult(averageLines, characteristic, equipment.Level, coefficient);
             double priceWithFocus = runesWithFocus.Sum(kv => (runePrices.GetValueOrDefault(kv.Key)?.Price ?? 0) * kv.Value);
-            result.Add(new ItemCrushResult(equipment, itemCoefficient, itemCost, priceWithFocus - cost, characteristic, runesWithFocus));
+            double benefitWithFocus = priceWithFocus - cost;
+            double yieldWithFocus = itemCost.Price == 0 ? 0 : benefitWithFocus / itemCost.Price;
+            result.Add(new ItemCrushResult(equipment, itemCoefficient, itemCost, benefitWithFocus, yieldWithFocus, characteristic, runesWithFocus));
         }
 
         return result;
@@ -362,6 +376,6 @@
         return equipmentTypes;
     }
 
-    readonly record struct ItemCrushResult(Equipment Equipment, DofocusCoefficientRecord Coefficient, DofocusItemPriceRecord Cost, double Benefits, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Rune, double> Runes);
+    readonly record struct ItemCrushResult(Equipment Equipment, DofocusCoefficientRecord Coefficient, DofocusItemPriceRecord Cost, double FlatBenefits, double RelativeBenefits, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Rune, double> Runes);
 
 }
