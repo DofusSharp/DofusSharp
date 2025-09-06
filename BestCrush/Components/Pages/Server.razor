@@ -49,6 +49,10 @@
     {
         @if (_rankedItems.Count > 0)
         {
+            IEnumerable<IGrouping<Equipment, ItemCrushResult>> equipments = _rankedItems.GroupBy(i => i.Equipment);
+            IEnumerable<ItemCrushResult> bestLines = equipments.Select(g => g.MaxBy(r => r.Benefits));
+            IOrderedEnumerable<ItemCrushResult> bestLinesOrdered = bestLines.OrderByDescending(r => _sortOrder switch { SortOrder.BestYield => r.Yield, SortOrder.BestBenefit or _ => r.Benefits });
+
             <div class="my-4">
                 <div class="d-flex align-items-center justify-content-end mb-2">
                     <div class="d-flex gap-2">
@@ -61,21 +65,17 @@
                     </div>
                 </div>
                 <ul class="list-group list-group-flush rounded">
-                    @foreach (ItemCrushResult item in _rankedItems
-                                      .GroupBy(i => i.Equipment)
-                                      .Select(g => g.MaxBy(i => _sortOrder switch
-                                                  {
-                                                      SortOrder.BestYield => i.Yield,
-                                                      SortOrder.BestBenefit or _ => i.Benefits
-                                                  }
-                                              )
-                                      )
-                                      .OrderByDescending(r => r.Benefits))
+                    @foreach (ItemCrushResult item in bestLinesOrdered)
                     {
-                        <li class="list-group-item">
-                            <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
-                                             Runes="item.Runes"
-                                             RunePrices="_runePrices"/>
+                        <li class="list-group-item d-flex gap-3">
+                            <div class="flex-grow-1">
+                                <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
+                                                 Runes="item.Runes" RunePrices="_runePrices" NoImage="_searching"/>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-secondary" disabled="@_searching" @onclick="() => Refresh(item.Equipment)"><i class="bi bi-arrow-clockwise"></i>
+                                </button>
+                            </div>
                         </li>
                     }
                 </ul>
@@ -182,6 +182,45 @@
                             _unrankedItems.Add(item);
                             Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name, item.DofusDbId);
                         }
+                    }
+                }
+                catch (Exception exn)
+                {
+                    Logger.LogError(exn, "An error occured while searching for best crush.");
+                }
+                finally
+                {
+                    _searching = false;
+                    await InvokeAsync(StateHasChanged);
+                }
+            }
+        );
+    }
+
+    void Refresh(Equipment equipment)
+    {
+        if (_searching || _unrankedItems is null || _rankedItems is null)
+        {
+            return;
+        }
+
+        _ = Task.Run(async () =>
+            {
+                _searching = true;
+                await InvokeAsync(StateHasChanged);
+
+                try
+                {
+                    IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(equipment, _runePrices, true);
+                    _unrankedItems.Remove(equipment);
+                    _rankedItems.RemoveAll(r => r.Equipment == equipment);
+                    if (result.Count == 0)
+                    {
+                        _unrankedItems.Add(equipment);
+                    }
+                    else
+                    {
+                        _rankedItems.AddRange(result);
                     }
                 }
                 catch (Exception exn)
