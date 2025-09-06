@@ -67,15 +67,9 @@
                 <ul class="list-group list-group-flush rounded">
                     @foreach (ItemCrushResult item in bestLinesOrdered)
                     {
-                        <li class="list-group-item d-flex gap-3">
-                            <div class="flex-grow-1">
-                                <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
-                                                 Runes="item.Runes" RunePrices="_runePrices" NoImage="_searching"/>
-                            </div>
-                            <div>
-                                <button class="btn btn-outline-secondary" disabled="@_searching" @onclick="() => Refresh(item.Equipment)"><i class="bi bi-arrow-clockwise"></i>
-                                </button>
-                            </div>
+                        <li class="list-group-item">
+                            <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
+                                             Runes="item.Runes" RunePrices="_runePrices" NoImage="_searching" Refresh="() => Refresh(item.Equipment)"/>
                         </li>
                     }
                 </ul>

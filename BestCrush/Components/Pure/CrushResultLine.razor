@@ -18,8 +18,8 @@
             </div>
         }
 
-        <div class="col d-flex flex-column align-items-stretch gap-2">
-            <div class="d-flex gap-4">
+        <div class="col d-flex flex-column align-items-stretch">
+            <div class="d-flex align-items-center" style="height: 64px">
                 <div class="flex-grow-1 d-flex gap-2">
                     <div>
                         <div class="fw-bold text-nowrap">@Equipment.Name</div>
@@ -89,8 +89,8 @@
 
         <div class="col-3">
             <div class="h-100 d-flex flex-column justify-content-center">
-                <div class="border border-1 border-secondary rounded px-4 py-2 d-flex flex-column align-items-center justify-content-center">
-                    <div class="fw-bold mb-2">Bénéfice</div>
+                <div class="border border-1 border-secondary rounded overflow-hidden d-flex flex-column align-items-center justify-content-center">
+                    <div class="fw-bold px-4 py-2">Bénéfice</div>
 
                     @if (_benefit.HasValue)
                     {
@@ -112,6 +112,12 @@
                             </div>
                         }
                     }
+
+                    <hr class="w-100 mb-0"/>
+
+                    <button class="w-100 btn btn-light rounded-top-0" @onclick="async () => await Refresh.InvokeAsync()">
+                        Rafraîchir
+                    </button>
                 </div>
             </div>
         </div>
@@ -145,6 +151,9 @@
 
     [Parameter]
     public bool NoImage { get; init; }
+
+    [Parameter]
+    public EventCallback Refresh { get; init; }
 
     protected override void OnParametersSet()
     {
