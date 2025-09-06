@@ -10,72 +10,119 @@
         <span class="input-group-text">Equipments</span>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Amulet" class="btn-check" id="btn-amulet" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-amulet"><img src="img/necklace.png" width="24" height="24" alt="Amulet"/></label>
+        <label class="btn btn-light border" for="btn-amulet" data-bs-toggle="tooltip" data-bs-title="Amulet">
+            <img src="img/necklace.svg" width="24" height="24" alt="Amulet"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Ring" class="btn-check" id="btn-ring" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-ring"><img src="img/ring.png" width="24" height="24" alt="Ring"/></label>
+        <label class="btn btn-light border" for="btn-ring" data-bs-toggle="tooltip" data-bs-title="Ring">
+            <img src="img/ring.svg" width="24" height="24" alt="Ring"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Belt" class="btn-check" id="btn-belt" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-belt"><img src="img/belt.png" width="24" height="24" alt="Belt"/></label>
+        <label class="btn btn-light border" for="btn-belt" data-bs-toggle="tooltip" data-bs-title="Belt">
+            <img src="img/belt.svg" width="24" height="24" alt="Belt"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Boots" class="btn-check" id="btn-boots" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-boots"><img src="img/boots.png" width="24" height="24" alt="Boots"/></label>
+        <label class="btn btn-light border" for="btn-boots" data-bs-toggle="tooltip" data-bs-title="Boots">
+            <img src="img/boots.svg" width="24" height="24" alt="Boots"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Hat" class="btn-check" id="btn-hat" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-hat"><img src="img/hat.png" width="24" height="24" alt="Hat"/></label>
+        <label class="btn btn-light border" for="btn-hat" data-bs-toggle="tooltip" data-bs-title="Hat">
+            <img src="img/hat.svg" width="24" height="24" alt="Hat"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Cloak" class="btn-check" id="btn-cloak" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-cloak"><img src="img/cape.png" width="24" height="24" alt="Cloak"/></label>
+        <label class="btn btn-light border" for="btn-cloak" data-bs-toggle="tooltip" data-bs-title="Cloak">
+            <img src="img/cape.svg" width="24" height="24" alt="Cloak"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Animals" class="btn-check" id="btn-animals" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-animals"><img src="img/companions.png" width="24" height="24" alt="Animals"/></label>
+        <label class="btn btn-light border" for="btn-animals" data-bs-toggle="tooltip" data-bs-title="Animals">
+            <img src="img/paw.svg" width="24" height="24" alt="Animals"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Trophy" class="btn-check" id="btn-trophy" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-trophy"><img src="img/trophee.png" width="24" height="24" alt="Trophy"/></label>
+        <label class="btn btn-light border" for="btn-trophy" data-bs-toggle="tooltip" data-bs-title="Trophy">
+            <img src="img/trophy.svg" width="24" height="24" alt="Trophy"/>
+        </label>
     </div>
     <div class="input-group flex-nowrap">
         <span class="input-group-text">Weapons</span>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Bow" class="btn-check" id="btn-bow" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-bow"><img src="img/bow.svg" width="24" height="24" alt="Bow"/></label>
-
-        <InputCheckbox @bind-Value="Model.EquipmentType.Lance" class="btn-check" id="btn-lance" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-lance"><img src="img/lance.svg" width="24" height="24" alt="Lance"/></label>
-
-        <InputCheckbox @bind-Value="Model.EquipmentType.Scythe" class="btn-check" id="btn-scythe" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-scythe"><img src="img/scythe.svg" width="24" height="24" alt="Scythe"/></label>
-
-        <InputCheckbox @bind-Value="Model.EquipmentType.Axe" class="btn-check" id="btn-axe" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-axe"><img src="img/axe.svg" width="24" height="24" alt="Axe"/></label>
-
-        <InputCheckbox @bind-Value="Model.EquipmentType.Tool" class="btn-check" id="btn-tool" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-tool"><img src="img/tool.svg" width="24" height="24" alt="Tool"/></label>
-
-        <InputCheckbox @bind-Value="Model.EquipmentType.Pickaxe" class="btn-check" id="btn-pickaxe" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-pickaxe"><img src="img/pickaxe.svg" width="24" height="24" alt="Pickaxe"/></label>
+        <label class="btn btn-light border" for="btn-bow" data-bs-toggle="tooltip" data-bs-title="Bow">
+            <img src="img/bow.svg" width="24" height="24" alt="Bow"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Wand" class="btn-check" id="btn-wand" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-wand"><img src="img/wand.svg" width="24" height="24" alt="Wand"/></label>
+        <label class="btn btn-light border" for="btn-wand" data-bs-toggle="tooltip" data-bs-title="Wand">
+            <img src="img/wand.svg" width="24" height="24" alt="Wand"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Staff" class="btn-check" id="btn-staff" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-staff"><img src="img/staff.svg" width="24" height="24" alt="Staff"/></label>
+        <label class="btn btn-light border" for="btn-staff" data-bs-toggle="tooltip" data-bs-title="Staff">
+            <img src="img/staff.svg" width="24" height="24" alt="Staff"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Dagger" class="btn-check" id="btn-dagger" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-dagger"><img src="img/dagger.svg" width="24" height="24" alt="Dagger"/></label>
+        <label class="btn btn-light border" for="btn-dagger" data-bs-toggle="tooltip" data-bs-title="Dagger">
+            <img src="img/dagger.svg" width="24" height="24" alt="Dagger"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Sword" class="btn-check" id="btn-sword" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-sword"><img src="img/sword.svg" width="24" height="24" alt="Sword"/></label>
+        <label class="btn btn-light border" for="btn-sword" data-bs-toggle="tooltip" data-bs-title="Sword">
+            <img src="img/sword.svg" width="24" height="24" alt="Sword"/>
+        </label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Scythe" class="btn-check" id="btn-scythe" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-scythe" data-bs-toggle="tooltip" data-bs-title="Scythe">
+            <img src="img/scythe.svg" width="24" height="24" alt="Scythe"/>
+        </label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Axe" class="btn-check" id="btn-axe" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-axe" data-bs-toggle="tooltip" data-bs-title="Axe">
+            <img src="img/axe.svg" width="24" height="24" alt="Axe"/>
+        </label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Lance" class="btn-check" id="btn-lance" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-lance" data-bs-toggle="tooltip" data-bs-title="Lance">
+            <img src="img/lance.svg" width="24" height="24" alt="Lance"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Hammer" class="btn-check" id="btn-hammer" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-hammer"><img src="img/hammer.svg" width="24" height="24" alt="Hammer"/></label>
+        <label class="btn btn-light border" for="btn-hammer" data-bs-toggle="tooltip" data-bs-title="Hammer">
+            <img src="img/hammer.svg" width="24" height="24" alt="Hammer"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.Shovel" class="btn-check" id="btn-shovel" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-shovel"><img src="img/shovel.svg" width="24" height="24" alt="Shovel"/></label>
+        <label class="btn btn-light border" for="btn-shovel" data-bs-toggle="tooltip" data-bs-title="Shovel">
+            <img src="img/shovel.svg" width="24" height="24" alt="Shovel"/>
+        </label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Pickaxe" class="btn-check" id="btn-pickaxe" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-pickaxe" data-bs-toggle="tooltip" data-bs-title="Pickaxe">
+            <img src="img/pickaxe.svg" width="24" height="24" alt="Pickaxe"/>
+        </label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Tool" class="btn-check" id="btn-tool" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-tool" data-bs-toggle="tooltip" data-bs-title="Tool">
+            <img src="img/tool.svg" width="24" height="24" alt="Tool"/>
+        </label>
 
         <InputCheckbox @bind-Value="Model.EquipmentType.MagicWeapon" class="btn-check" id="btn-magicweapon" autocomplete="off" disabled="@Disabled"/>
-        <label class="btn btn-light border" for="btn-magicweapon"><img src="img/magic-weapon.svg" width="24" height="24" alt="Magic Weapon"/></label>
+        <label class="btn btn-light border" for="btn-magicweapon" data-bs-toggle="tooltip" data-bs-title="MagicWeapon">
+            <img src="img/magic-weapon.svg" width="24" height="24" alt="Magic Weapon"/>
+        </label>
     </div>
 </div>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
 
 @code {
 
