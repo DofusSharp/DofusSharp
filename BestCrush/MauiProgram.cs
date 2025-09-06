@@ -2,11 +2,9 @@
 using BestCrush.Domain;
 using BestCrush.Domain.Services;
 using BestCrush.Domain.Services.Upgrades;
-using BestCrush.Services;
 using DofusSharp.DofusDb.ApiClients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Logging;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
@@ -36,12 +34,9 @@ public static class MauiProgram
                 .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); })
                 .ConfigureEssentials(essentials => essentials.UseVersionTracking());
 
-            builder.Logging.AddSerilog();
             builder.Services.AddMauiBlazorWebView();
-
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
-            builder.Logging.AddDebug();
 #endif
 
             ConfigureDatabase(builder, logger);
@@ -51,7 +46,6 @@ public static class MauiProgram
             builder.Services.AddSingleton<RunesService>();
             builder.Services.AddSingleton<CharacteristicsService>();
             builder.Services.AddSingleton<CrushService>();
-            builder.Services.AddSingleton<InitializationStateManager>();
             builder.Services.AddScoped<ApplicationUpgradesHandler>();
             builder.Services.AddScoped<DofusDbUpgradesHandler>();
             builder.Services.AddScoped<ItemsService>();
@@ -63,6 +57,9 @@ public static class MauiProgram
             builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("http://localhost/BestCrush")));
             builder.Services.AddSingleton(DofusDbClient.Production(new Uri("http://localhost/BestCrush")));
 #endif
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddSerilog(Log.Logger, true);
 
             MauiApp app = builder.Build();
 
@@ -89,7 +86,13 @@ public static class MauiProgram
             .MinimumLevel.Verbose()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
+            .WriteTo.Console()
             .WriteTo.File(LogPath, flushToDiskInterval: flushInterval, encoding: Encoding.UTF8, rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 100_000_000);
+
+#if DEBUG
+        configuration.WriteTo.Debug();
+#endif
+
         Log.Logger = configuration.CreateLogger();
 
         return configuration;

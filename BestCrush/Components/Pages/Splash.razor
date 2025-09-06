@@ -1,20 +1,19 @@
 ﻿@inject ServersService ServersService
-@inject InitializationStateManager InitializationStateManager
 @inject BestCrushDbContext BestCrushDbContext
 @inject ApplicationUpgradesHandler ApplicationUpgradesHandler
 @inject DofusDbClientsFactory DofusDbClientsFactory
 @inject DofusDbUpgradesHandler DofusDbUpgradesHandler
 @inject NavigationManager NavigationManager
+@inject ILogger<Splash> Logger;
 @page "/"
-@using BestCrush.Components.Layout
 @using BestCrush.Domain
 @using BestCrush.Domain.Models
 @using BestCrush.Domain.Services
 @using BestCrush.Domain.Services.Upgrades
-@using BestCrush.Services
 @using DofusSharp.Dofocus.ApiClients.Models.Servers
 @using DofusSharp.DofusDb.ApiClients
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Logging
 @layout EmptyLayout
 
 <div class="container h-100 d-flex flex-column align-items-stretch justify-content-center gap-4 text-center py-5">
@@ -76,6 +75,7 @@
         catch (Exception exn)
         {
             _error = "An unexpected exception has occurred.";
+            Logger.LogError(exn, "An unexpected exception has occurred.");
             Application.Current?.Quit();
         }
     }
