@@ -13,7 +13,7 @@ public class ItemsService(BestCrushDbContext context, DofusDbClientsFactory dofu
     readonly ConcurrentDictionary<long, DofocusItem> _cachedItems = [];
 
     public async Task<IReadOnlyCollection<Equipment>> GetEquipmentsAsync() =>
-        await context.Equipments.Include(i => i.Characteristics).Include(i => i.Recipe).ThenInclude(i => i.Resource).AsNoTracking().ToArrayAsync();
+        await context.Equipments.Include(i => i.Characteristics).Include(i => i.Recipe).ThenInclude(i => i.Resource).Where(i => i.Recipe.Count > 0).AsNoTracking().ToArrayAsync();
 
     public async Task<DofocusItem> GetItemAsync(long id, bool forceRefresh = false)
     {

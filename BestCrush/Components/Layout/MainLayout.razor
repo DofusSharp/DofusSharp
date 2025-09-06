@@ -13,31 +13,6 @@
             <img src="img/logo-48.png" width="48" height="48" alt="Logo"/>
         </ul>
         <div class="col-md-3 d-flex justify-content-end gap-4">
-            <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="@CurrentLanguageFlag" width="20" height="15" alt="Language flag"/>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                        <a class="dropdown-item @(CultureInfo.CurrentUICulture.Name is "en-US" or "en" ? "active" : null)" @onclick="() => SelectLanguage(Language.English)"
-                           href="#">
-                            <img src="img/gb.png" width="20" height="15" alt="English flag"/> EN
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item @(CultureInfo.CurrentUICulture.Name is "fr-FR" or "fr" ? "active" : null)" @onclick="() => SelectLanguage(Language.French)"
-                           href="#">
-                            <img src="img/fr.png" width="20" height="15" alt="French flag"/> FR
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item @(CultureInfo.CurrentUICulture.Name is "es-ES" or "es" ? "active" : null)" @onclick="() => SelectLanguage(Language.Spanish)"
-                           href="#">
-                            <img src="img/es.png" width="20" height="15" alt="Spanish flag"/> ES
-                        </a>
-                    </li>
-                </ul>
-            </div>
             @if (_currentServer is null || _servers is null)
             {
                 <div class="spinner-border text-primary" role="status">
@@ -74,15 +49,6 @@
     IReadOnlyCollection<DofocusServer>? _servers;
     DofocusServer? _currentServer;
 
-    static string CurrentLanguageFlag =>
-        CultureInfo.CurrentUICulture.Name switch
-        {
-            "en-US" or "en" => "img/gb.png",
-            "fr-FR" or "fr" => "img/fr.png",
-            "es-ES" or "es" => "img/es.png",
-            _ => "img/gb.png"
-        };
-
     protected override async Task OnInitializedAsync()
     {
         Task<IReadOnlyCollection<DofocusServer>> serversTask = ServersService.GetServers();
@@ -100,27 +66,11 @@
         _currentServer = currentServerTask.Result;
     }
 
-    void SelectLanguage(Language language) =>
-        CultureInfo.CurrentUICulture = language switch
-        {
-            Language.English => new CultureInfo("en-US", false),
-            Language.French => new CultureInfo("fr-FR", false),
-            Language.Spanish => new CultureInfo("es-ES", false),
-            _ => throw new ArgumentOutOfRangeException(nameof(language), language, null)
-        };
-
     async Task SelectServer(DofocusServer server)
     {
         await ServersService.SetCurrentServerAsync(server);
         _currentServer = server;
         NavigationManager.NavigateTo(KnownRoutes.Server(server), true);
-    }
-
-    enum Language
-    {
-        English,
-        French,
-        Spanish
     }
 
 }
