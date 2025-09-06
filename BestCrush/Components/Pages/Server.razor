@@ -232,7 +232,127 @@
             result = result.Where(i => i.Level <= Model.LevelMax);
         }
 
+        HashSet<EquipmentType> equipmentTypes = ComputeEquipmentTypes();
+        if (equipmentTypes.Count > 0)
+        {
+            result = result.Where(i => equipmentTypes.Contains(i.Type));
+        }
+
         return result;
+    }
+
+    HashSet<EquipmentType> ComputeEquipmentTypes()
+    {
+        HashSet<EquipmentType> equipmentTypes = new();
+
+        if (Model?.EquipmentType.Amulet is true)
+        {
+            equipmentTypes.Add(EquipmentType.Amulet);
+        }
+
+        if (Model?.EquipmentType.Ring is true)
+        {
+            equipmentTypes.Add(EquipmentType.Ring);
+        }
+
+        if (Model?.EquipmentType.Belt is true)
+        {
+            equipmentTypes.Add(EquipmentType.Belt);
+        }
+
+        if (Model?.EquipmentType.Boots is true)
+        {
+            equipmentTypes.Add(EquipmentType.Boots);
+        }
+
+        if (Model?.EquipmentType.Hat is true)
+        {
+            equipmentTypes.Add(EquipmentType.Hat);
+        }
+
+        if (Model?.EquipmentType.Cloak is true)
+        {
+            equipmentTypes.Add(EquipmentType.Cloak);
+        }
+
+        if (Model?.EquipmentType.Animals is true)
+        {
+            equipmentTypes.Add(EquipmentType.Pet);
+            equipmentTypes.Add(EquipmentType.Petsmount);
+            equipmentTypes.Add(EquipmentType.Mount);
+        }
+
+        if (Model?.EquipmentType.Trophy is true)
+        {
+            equipmentTypes.Add(EquipmentType.Trophy);
+        }
+
+        if (Model?.EquipmentType.Bow is true)
+        {
+            equipmentTypes.Add(EquipmentType.Bow);
+        }
+
+        if (Model?.EquipmentType.Lance is true)
+        {
+            equipmentTypes.Add(EquipmentType.Lance);
+        }
+
+        if (Model?.EquipmentType.MagicWeapon is true)
+        {
+            equipmentTypes.Add(EquipmentType.MagicWeapon);
+        }
+
+        if (Model?.EquipmentType.Scythe is true)
+        {
+            equipmentTypes.Add(EquipmentType.Scythe);
+        }
+
+        if (Model?.EquipmentType.Axe is true)
+        {
+            equipmentTypes.Add(EquipmentType.Axe);
+        }
+
+        if (Model?.EquipmentType.Tool is true)
+        {
+            equipmentTypes.Add(EquipmentType.Tool);
+        }
+
+        if (Model?.EquipmentType.Pickaxe is true)
+        {
+            equipmentTypes.Add(EquipmentType.Pickaxe);
+        }
+
+        if (Model?.EquipmentType.Wand is true)
+        {
+            equipmentTypes.Add(EquipmentType.Wand);
+        }
+
+        if (Model?.EquipmentType.Staff is true)
+        {
+            equipmentTypes.Add(EquipmentType.Staff);
+        }
+
+        if (Model?.EquipmentType.Dagger is true)
+        {
+            equipmentTypes.Add(EquipmentType.Dagger);
+        }
+
+        if (Model?.EquipmentType.Sword is true)
+        {
+            equipmentTypes.Add(EquipmentType.Sword);
+        }
+
+        if (Model?.EquipmentType.Hammer is true)
+        {
+            equipmentTypes.Add(EquipmentType.Hammer);
+        }
+
+        if (Model?.EquipmentType.Shovel is true)
+        {
+            equipmentTypes.Add(EquipmentType.Shovel);
+        }
+
+        return equipmentTypes;
     }
 
     readonly record struct ItemCrushResult(Equipment Equipment, DofocusCoefficientRecord Coefficient, DofocusItemPriceRecord Cost, double Benefits, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Rune, double> Runes);

@@ -1,9 +1,80 @@
 ﻿@using BestCrush.Models
 <div class="input-group mb-3">
     <span class="input-group-text">Level</span>
-    <InputNumber @bind-Value="Model!.LevelMin" class="form-control" placeholder="Min" aria-label="Min" disabled="@Disabled"/>
+    <InputNumber @bind-Value="Model.LevelMin" class="form-control" placeholder="Min" aria-label="Min" disabled="@Disabled"/>
     <span class="input-group-text">to</span>
-    <InputNumber @bind-Value="Model!.LevelMax" class="form-control" placeholder="Max" aria-label="Max" disabled="@Disabled"/>
+    <InputNumber @bind-Value="Model.LevelMax" class="form-control" placeholder="Max" aria-label="Max" disabled="@Disabled"/>
+</div>
+<div class="d-flex gap-4 mb-3">
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text">Equipments</span>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Amulet" class="btn-check" id="btn-amulet" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-amulet"><img src="img/necklace.png" width="24" height="24" alt="Amulet"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Ring" class="btn-check" id="btn-ring" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-ring"><img src="img/ring.png" width="24" height="24" alt="Ring"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Belt" class="btn-check" id="btn-belt" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-belt"><img src="img/belt.png" width="24" height="24" alt="Belt"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Boots" class="btn-check" id="btn-boots" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-boots"><img src="img/boots.png" width="24" height="24" alt="Boots"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Hat" class="btn-check" id="btn-hat" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-hat"><img src="img/hat.png" width="24" height="24" alt="Hat"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Cloak" class="btn-check" id="btn-cloak" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-cloak"><img src="img/cape.png" width="24" height="24" alt="Cloak"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Animals" class="btn-check" id="btn-animals" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-animals"><img src="img/companions.png" width="24" height="24" alt="Animals"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Trophy" class="btn-check" id="btn-trophy" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-trophy"><img src="img/trophee.png" width="24" height="24" alt="Trophy"/></label>
+    </div>
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text">Weapons</span>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Bow" class="btn-check" id="btn-bow" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-bow"><img src="img/bow.svg" width="24" height="24" alt="Bow"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Lance" class="btn-check" id="btn-lance" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-lance"><img src="img/lance.svg" width="24" height="24" alt="Lance"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Scythe" class="btn-check" id="btn-scythe" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-scythe"><img src="img/scythe.svg" width="24" height="24" alt="Scythe"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Axe" class="btn-check" id="btn-axe" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-axe"><img src="img/axe.svg" width="24" height="24" alt="Axe"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Tool" class="btn-check" id="btn-tool" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-tool"><img src="img/tool.svg" width="24" height="24" alt="Tool"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Pickaxe" class="btn-check" id="btn-pickaxe" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-pickaxe"><img src="img/pickaxe.svg" width="24" height="24" alt="Pickaxe"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Wand" class="btn-check" id="btn-wand" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-wand"><img src="img/wand.svg" width="24" height="24" alt="Wand"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Staff" class="btn-check" id="btn-staff" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-staff"><img src="img/staff.svg" width="24" height="24" alt="Staff"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Dagger" class="btn-check" id="btn-dagger" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-dagger"><img src="img/dagger.svg" width="24" height="24" alt="Dagger"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Sword" class="btn-check" id="btn-sword" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-sword"><img src="img/sword.svg" width="24" height="24" alt="Sword"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Hammer" class="btn-check" id="btn-hammer" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-hammer"><img src="img/hammer.svg" width="24" height="24" alt="Hammer"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.Shovel" class="btn-check" id="btn-shovel" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-shovel"><img src="img/shovel.svg" width="24" height="24" alt="Shovel"/></label>
+
+        <InputCheckbox @bind-Value="Model.EquipmentType.MagicWeapon" class="btn-check" id="btn-magicweapon" autocomplete="off" disabled="@Disabled"/>
+        <label class="btn btn-light border" for="btn-magicweapon"><img src="img/magic-weapon.svg" width="24" height="24" alt="Magic Weapon"/></label>
+    </div>
 </div>
 
 @code {
