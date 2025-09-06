@@ -43,6 +43,11 @@
                     <Svg Width="24" Height="24" Alt="Cloak" Href="img/cape.svg"/>
                 </label>
 
+                <InputCheckbox @bind-Value="Model.EquipmentType.Shield" class="btn-check" id="btn-shield" autocomplete="off" disabled="@Disabled"/>
+                <label class="btn btn-light border" for="btn-shield" data-bs-toggle="tooltip" data-bs-title="@EquipmentType.Shield.ToDisplayName()">
+                    <Svg Width="24" Height="24" Alt="Shield" Href="img/shield.svg"/>
+                </label>
+
                 <InputCheckbox @bind-Value="Model.EquipmentType.Trophy" class="btn-check" id="btn-trophy" autocomplete="off" disabled="@Disabled"/>
                 <label class="btn btn-light border" for="btn-trophy" data-bs-toggle="tooltip" data-bs-title="@EquipmentType.Trophy.ToDisplayName()">
                     <Svg Width="24" Height="24" Alt="Trophy" Href="img/trophy.svg"/>

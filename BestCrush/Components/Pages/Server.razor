@@ -335,6 +335,11 @@
             equipmentTypes.Add(EquipmentType.Cloak);
         }
 
+        if (Model?.EquipmentType.Shield is true)
+        {
+            equipmentTypes.Add(EquipmentType.Shield);
+        }
+
         if (Model?.EquipmentType.Trophy is true)
         {
             equipmentTypes.Add(EquipmentType.Trophy);

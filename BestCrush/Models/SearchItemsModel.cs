@@ -15,6 +15,7 @@ public class EquipmentTypesFilter
     public bool Boots { get; set; }
     public bool Hat { get; set; }
     public bool Cloak { get; set; }
+    public bool Shield { get; set; }
     public bool Trophy { get; set; }
 
     public bool Bow { get; set; }
