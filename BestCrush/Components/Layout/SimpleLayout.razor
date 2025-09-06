@@ -1,11 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="container" data-bs-theme="@_theme">
+<div class="min-vh-100 container d-flex flex-column" data-bs-theme="@_theme">
     <header class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-4 border-bottom">
         <img src="img/logo-48.png" width="48" height="48" alt="Logo"/>
     </header>
 
-    @Body
+    <div class="flex-grow-1">
+        @Body
+    </div>
 
     <Footer></Footer>
 </div>

@@ -4,7 +4,7 @@
 @inject ServersService ServersService
 @inject NavigationManager NavigationManager
 
-<div class="container" data-bs-theme="@_theme">
+<div class="min-vh-100 container d-flex flex-column" data-bs-theme="@_theme">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-4">
         </div>
@@ -39,7 +39,9 @@
         </div>
     </header>
 
-    @Body
+    <div class="flex-grow-1">
+        @Body
+    </div>
 
     <Footer></Footer>
 </div>
