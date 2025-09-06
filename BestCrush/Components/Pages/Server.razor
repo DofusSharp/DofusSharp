@@ -61,7 +61,16 @@
                     </div>
                 </div>
                 <ul class="list-group list-group-flush rounded">
-                    @foreach (ItemCrushResult item in _rankedItems.GroupBy(i => i.Equipment).Select(g => g.MaxBy(i => i.FlatBenefits)).OrderByDescending(r => r.FlatBenefits))
+                    @foreach (ItemCrushResult item in _rankedItems
+                                      .GroupBy(i => i.Equipment)
+                                      .Select(g => g.MaxBy(i => _sortOrder switch
+                                                  {
+                                                      SortOrder.BestYield => i.Yield,
+                                                      SortOrder.BestBenefit or _ => i.Benefits
+                                                  }
+                                              )
+                                      )
+                                      .OrderByDescending(r => r.Benefits))
                     {
                         <li class="list-group-item">
                             <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
@@ -376,6 +385,6 @@
         return equipmentTypes;
     }
 
-    readonly record struct ItemCrushResult(Equipment Equipment, DofocusCoefficientRecord Coefficient, DofocusItemPriceRecord Cost, double FlatBenefits, double RelativeBenefits, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Rune, double> Runes);
+    readonly record struct ItemCrushResult(Equipment Equipment, DofocusCoefficientRecord Coefficient, DofocusItemPriceRecord Cost, double Benefits, double Yield, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Rune, double> Runes);
 
 }
