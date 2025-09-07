@@ -4,7 +4,7 @@ This repository contains C# libraries and applications around the game Dofus.
 
 ## Applications
 
-- [Best Crush](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.BestCrush): Find the best items to crush using data from Dofocus.
+- [Best Crush](https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush): Find the best items to crush using data from Dofocus.
 
 ## Libraries
 
