@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BestCrush.Domain.Migrations
 {
     [DbContext(typeof(BestCrushDbContext))]
-    [Migration("20250907211006_InitialCreate")]
+    [Migration("20250907213618_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -45,8 +45,7 @@ namespace BestCrush.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DofusDbId")
-                        .IsUnique();
+                    b.HasAlternateKey("DofusDbId");
 
                     b.ToTable("Equipments");
                 });

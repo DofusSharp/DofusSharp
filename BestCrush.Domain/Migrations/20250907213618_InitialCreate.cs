@@ -25,6 +25,7 @@ namespace BestCrush.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Equipments", x => x.Id);
+                    table.UniqueConstraint("AK_Equipments_DofusDbId", x => x.DofusDbId);
                 });
 
             migrationBuilder.CreateTable(
@@ -121,12 +122,6 @@ namespace BestCrush.Domain.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Equipments_DofusDbId",
-                table: "Equipments",
-                column: "DofusDbId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ItemCharacteristicLine_EquipmentId",

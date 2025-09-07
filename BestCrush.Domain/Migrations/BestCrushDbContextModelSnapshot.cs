@@ -42,8 +42,7 @@ namespace BestCrush.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DofusDbId")
-                        .IsUnique();
+                    b.HasAlternateKey("DofusDbId");
 
                     b.ToTable("Equipments");
                 });
