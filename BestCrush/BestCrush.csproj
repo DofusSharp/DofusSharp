@@ -56,10 +56,6 @@
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0-preview.1.25080.5"/>
-        <PackageReference Include="MinVer" Version="6.0.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
         <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
@@ -72,23 +68,4 @@
       <ProjectReference Include="..\DofusSharp.DofusDb.ApiClients\DofusSharp.DofusDb.ApiClients.csproj" />
     </ItemGroup>
 
-    <!-- Workaround to make MinVer run earlier -->
-    <!-- This allows to update Versions before platform manifest files are generated -->
-    <!-- It also sets ApplicationDisplayVersion and AssemblyVersion -->
-    <Target Name="MinVerPrerun" BeforeTargets="MauiGeneratePackageAppxManifest">
-        <Message Text="MinVer Prerun" Importance="high"/>
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="MinVer" />
-    </Target>
-    <Target Name="UpdateVersions" AfterTargets="MinVerPrerun">
-        <PropertyGroup>
-            <AssemblyVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch).0</AssemblyVersion>
-            <ApplicationDisplayVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</ApplicationDisplayVersion>
-        </PropertyGroup>
-        <Message Text="Update Versions" Importance="high"/>
-        <Message Text="AssemblyVersion = $(AssemblyVersion)" Importance="high" />
-        <Message Text="Version = $(Version)" Importance="high" />
-        <Message Text="PackageVersion = $(PackageVersion)" Importance="high" />
-        <Message Text="ApplicationDisplayVersion = $(ApplicationDisplayVersion)" Importance="high" />
-    </Target>
-    
 </Project>
