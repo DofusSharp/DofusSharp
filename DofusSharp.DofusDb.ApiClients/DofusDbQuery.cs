@@ -5,7 +5,7 @@ namespace DofusSharp.DofusDb.ApiClients;
 public static class DofusDbQuery
 {
     /// <summary>
-    ///     Create a query provider for the DofusDb API that connects to the production API.
+    ///     Create a query provider for the DofusDb API that uses the provided clients.
     /// </summary>
     /// <param name="clientsFactory">The clients factory used by the query.</param>
     public static IDofusDbQueryProvider Create(IDofusDbClientsFactory clientsFactory) => new DofusDbQueryProvider(clientsFactory);
