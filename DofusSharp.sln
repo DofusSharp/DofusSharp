@@ -21,6 +21,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Live.Dofocus.ApiClients", "Tests.Live.Dofocus.ApiClients\Tests.Live.Dofocus.ApiClients.csproj", "{6584E059-6B3D-4743-BA83-18F8E2E400D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BestCrush", "BestCrush", "{4C55A816-EA26-473B-B7E0-7059CA09D651}"
+	ProjectSection(SolutionItems) = preProject
+		BestCrush\README.md = BestCrush\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestCrush", "BestCrush\BestCrush.csproj", "{0B71BD10-E10E-4430-86A6-AD1431F4F893}"
 EndProject

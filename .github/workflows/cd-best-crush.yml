@@ -1,0 +1,68 @@
+name: Continuous Deployment - Publish Best Crush
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    dry-run:
+      description: Whether to skip the publication of packages to the repositories
+      type: boolean
+
+jobs:
+  compute-version:
+    name: Compute version
+    uses: ./.github/workflows/reusable-compute-version.yml
+    with:
+      build-name: pr
+
+  build-publish:
+    runs-on: windows-latest
+    needs: compute-version
+    
+    permissions:
+      actions: write
+      contents: write
+      packages: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install .NET 10.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build
+        run: dotnet build DofusSharp.BestCrush.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+
+      - name: Test
+        run: dotnet test DofusSharp.BestCrush.Filter.slnf --configuration Release --no-build
+        
+      - name: Publish
+        run: dotnet publish DofusSharp.BestCrush/DofusSharp.BestCrush.csproj --output best-crush/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
+
+      - name: Create release archive
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          cd best-crush
+          7z a best-crush.zip *
+
+      - name: Upload compiled libraries to release
+        if: ${{ github.event_name == 'release' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: best-crush/release.zip
+          asset_name: best-crush.zip
+          tag: ${{ github.ref }}
+
+      - name: Upload compiled library to artifacts
+        if: ${{ github.event_name != 'release' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: best-crush
+          path: best-crush
+          if-no-files-found: 'error'

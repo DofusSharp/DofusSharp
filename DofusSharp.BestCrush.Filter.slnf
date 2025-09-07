@@ -1,0 +1,17 @@
+﻿{
+  "solution": {
+    "path": "DofusSharp.sln",
+    "projects": [
+      "BestCrush.Domain\\BestCrush.Domain.csproj",
+      "BestCrush.Migrations\\BestCrush.Migrations.csproj",
+      "BestCrush\\BestCrush.csproj",
+      "DofusSharp.Common\\DofusSharp.Common.csproj",
+      "DofusSharp.Dofocus.ApiClients\\DofusSharp.Dofocus.ApiClients.csproj",
+      "DofusSharp.DofusDb.ApiClients\\DofusSharp.DofusDb.ApiClients.csproj",
+      "Tests.Live.Dofocus.ApiClients\\Tests.Live.Dofocus.ApiClients.csproj",
+      "Tests.Live.DofusDb.ApiClients\\Tests.Live.DofusDb.ApiClients.csproj",
+      "Tests.UnitTests.Dofocus.ApiClients\\Tests.UnitTests.Dofocus.ApiClients.csproj",
+      "Tests.UnitTests.DofusDb.ApiClients\\Tests.UnitTests.DofusDb.ApiClients.csproj"
+    ]
+  }
+}
