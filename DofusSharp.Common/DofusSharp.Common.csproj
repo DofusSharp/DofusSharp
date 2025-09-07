@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+    
+    <PropertyGroup>
         <Title>DofusSharp - Common</Title>
         <Authors>Ismail Bennani</Authors>
         <Description>Common code for the DofusSharp nugets.</Description>
