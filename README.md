@@ -4,9 +4,9 @@ This repository contains C# libraries and applications around the game Dofus.
 
 ## Applications
 
-WIP
+- [Best Crush](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.BestCrush): Find the best items to crush using data from Dofocus.
 
 ## Libraries
 
-- [DofusDb.ApiClients](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.DofusDb.ApiClients): API clients for the DofusDB APIs.
-- [Dofocus.ApiClients](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.Dofocus.ApiClients): API clients for the Dofocus APIs.
+- [DofusSharp.DofusDb.ApiClients](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.DofusDb.ApiClients): API clients for the DofusDB APIs.
+- [DofusSharp.Dofocus.ApiClients](https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.Dofocus.ApiClients): API clients for the Dofocus APIs.
