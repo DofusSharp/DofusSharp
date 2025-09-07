@@ -9,7 +9,7 @@ on:
       type: boolean
 
 jobs:
-  compute_version:
+  compute-version:
     name: Compute version
     uses: ./.github/workflows/reusable-compute-version.yml
     with:

@@ -9,7 +9,7 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 jobs:
-  compute_version:
+  compute-version:
     name: Compute version
     uses: ./.github/workflows/reusable-compute-version.yml
     with:
