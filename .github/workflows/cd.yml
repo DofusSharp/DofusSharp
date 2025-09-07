@@ -22,6 +22,7 @@ jobs:
     permissions:
       actions: write
       contents: write
+      packages: write
     
     steps:
       - name: Checkout
@@ -54,7 +55,7 @@ jobs:
         if: ${{ !inputs.dry-run }}
         run: dotnet nuget add source --username ismailbennani --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DofusSharp/index.json"
         
-      - name: Publish nugets
+      - name: Publish nugets - Github
         if: ${{ !inputs.dry-run }}
         run: |
           for filename in nuget/*.nupkg; do
