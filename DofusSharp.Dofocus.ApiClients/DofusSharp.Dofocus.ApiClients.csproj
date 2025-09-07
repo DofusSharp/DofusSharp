@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+    
+    <PropertyGroup>
         <Title>Dofocus API Clients</Title>
         <Authors>Ismail Bennani</Authors>
         <Description>API clients for the Dofocus API.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
-    
+
     <ItemGroup>
-      <PackageReference Include="MinVer" Version="6.0.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+        <InternalsVisibleTo Include="Tests.UnitTests.Dofocus.ApiClients"/>
     </ItemGroup>
     
     <ItemGroup>

@@ -20,7 +20,8 @@ public class DofocusRunesClientTest
     public async Task GetRunes_Should_ReturnRunes()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com")
+        httpHandlerMock
+            .SetupRequest(HttpMethod.Get, "http://base.com")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new[]
@@ -54,7 +55,8 @@ public class DofocusRunesClientTest
 
         IReadOnlyCollection<DofocusRune> result = await client.GetRunesAsync();
 
-        result.Should()
+        result
+            .Should()
             .BeEquivalentTo(
                 [
                     new DofocusRune
@@ -85,7 +87,8 @@ public class DofocusRunesClientTest
     public async Task PutRunePrice_Should_ReturnResponse()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456/prices")
+        httpHandlerMock
+            .SetupRequest(HttpMethod.Put, "http://base.com/123456/prices")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new PutRunePriceResponse
@@ -112,7 +115,8 @@ public class DofocusRunesClientTest
             }
         );
 
-        result.Should()
+        result
+            .Should()
             .BeEquivalentTo(
                 new PutRunePriceResponse
                 {

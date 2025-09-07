@@ -1,0 +1,79 @@
+﻿@using BestCrush.Domain.Services
+@using DofusSharp.Dofocus.ApiClients.Models.Servers
+@inherits LayoutComponentBase
+@inject ServersService ServersService
+@inject NavigationManager NavigationManager
+
+<div class="min-vh-100 container d-flex flex-column" data-bs-theme="@_theme">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-4">
+        </div>
+        <div class="flex-grow-1 d-flex align-items-end justify-content-center">
+            <img src="img/logo-48.png" width="48" height="48" alt="Logo"/>
+        </div>
+        <div class="col-4 d-flex justify-content-end">
+            @if (_currentServer is null || _servers is null)
+            {
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+            }
+            else
+            {
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Serveur: @_currentServer.Name
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        @foreach (DofocusServer server in _servers)
+                        {
+                            <li>
+                                <a class="dropdown-item @(server.Name == _currentServer?.Name ? "active" : null)" @onclick="() => SelectServer(server)" href="#">
+                                    @server.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </header>
+
+    <div class="flex-grow-1">
+        @Body
+    </div>
+
+    <Footer></Footer>
+</div>
+
+@code {
+
+    readonly string _theme = Application.Current?.RequestedTheme is AppTheme.Dark ? "dark" : "light";
+    IReadOnlyCollection<DofocusServer>? _servers;
+    DofocusServer? _currentServer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Task<IReadOnlyCollection<DofocusServer>> serversTask = ServersService.GetServers();
+        Task<DofocusServer?> currentServerTask = ServersService.GetCurrentServer();
+
+        await Task.WhenAll(serversTask, currentServerTask);
+
+        if (currentServerTask.Result is null)
+        {
+            NavigationManager.NavigateTo(KnownRoutes.Servers());
+            return;
+        }
+
+        _servers = serversTask.Result;
+        _currentServer = currentServerTask.Result;
+    }
+
+    async Task SelectServer(DofocusServer server)
+    {
+        await ServersService.SetCurrentServerAsync(server);
+        _currentServer = server;
+        NavigationManager.NavigateTo(KnownRoutes.Server(server), true);
+    }
+
+}

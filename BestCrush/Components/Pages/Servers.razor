@@ -1,0 +1,63 @@
+﻿@inject ServersService ServersService
+@inject NavigationManager NavigationManager
+@page "/servers"
+@using BestCrush.Components.Layout
+@using BestCrush.Domain.Services
+@using DofusSharp.Dofocus.ApiClients.Models.Servers
+@layout SimpleLayout
+
+<div class="container">
+    @if (_servers is null)
+    {
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-wrap justify-content-center gap-4 my-4">
+            @foreach (ServerAndIcon server in _servers)
+            {
+                <a class="btn btn-light border border-1 border-dark-subtle p-0 overflow-hidden text-center" @onclick="() => SelectServer(server.Server)">
+                    <div>
+                        @if (server.Icon is not null)
+                        {
+                            <img src="data:@server.Icon" width="auto" height="200" alt="Server icon"/>
+                        }
+                        else
+                        {
+                            <img src="img/server.webp" width="auto" height="200" alt="Server icon"/>
+                        }
+                    </div>
+                    <span class="fw-semibold">@server.Server.Name</span>
+                </a>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    List<ServerAndIcon>? _servers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IReadOnlyCollection<DofocusServer> servers = await ServersService.GetServers();
+        List<ServerAndIcon> result = new(servers.Count);
+        foreach (DofocusServer server in servers)
+        {
+            string icon = await ServersService.GetServerIconAsync(server);
+            result.Add(new ServerAndIcon(server, icon));
+        }
+
+        _servers = result;
+    }
+
+    async Task SelectServer(DofocusServer server)
+    {
+        await ServersService.SetCurrentServerAsync(server);
+        NavigationManager.NavigateTo(KnownRoutes.Server(server));
+    }
+
+    readonly record struct ServerAndIcon(DofocusServer Server, string? Icon);
+
+}

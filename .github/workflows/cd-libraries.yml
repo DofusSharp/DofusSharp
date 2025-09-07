@@ -2,7 +2,7 @@ name: Continuous Deployment - Publish Libraries
 
 on:
   release:
-    types: [published]
+    types: published
   workflow_dispatch:
     dry-run:
       description: Whether to skip the publication of packages to the repositories
@@ -36,13 +36,13 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Build
-        run: dotnet build --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.Libraries.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Test
-        run: dotnet test --configuration Release --no-build
+        run: dotnet test DofusSharp.Libraries.Filter.slnf --configuration Release --no-build
         
       - name: Pack
-        run: dotnet pack --output nuget/ --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet pack DofusSharp.Libraries.Filter.slnf --output nuget/ --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
       
       - name: Upload binaries as artifact
         uses: actions/upload-artifact@v4

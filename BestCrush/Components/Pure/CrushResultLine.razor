@@ -1,0 +1,200 @@
+﻿@using BestCrush.Domain.Models
+@using BestCrush.Models
+@using DofusSharp.Dofocus.ApiClients.Models.Items
+@using DofusSharp.Dofocus.ApiClients.Models.Runes
+@using Rune = BestCrush.Domain.Models.Rune
+
+@if (Equipment is not null)
+{
+    <div class="row align-items-stretch">
+        @if (!NoImage)
+        {
+            <div class="col-auto d-flex flex-column">
+                <ItemIcon Item="Equipment" Background="IconBackground.Slot" Size="Size.Medium"></ItemIcon>
+                @if (_focusedRune is not null)
+                {
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center" data-bs-toggle="tooltip" data-bs-title="Focus">
+                            <i class="bi bi-bullseye text-secondary"></i>
+                        </div>
+                        <div>
+                            <ItemIcon Item="_focusedRune" Background="IconBackground.Slot" Size="Size.Tiny"></ItemIcon>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="col d-flex flex-column align-items-stretch">
+            <div class="d-flex align-items-center gap-2" style="height: 64px">
+                <div>
+                    <div class="fw-bold text-nowrap">@Equipment.Name</div>
+                    <div class="text-nowrap">@Equipment.Type.ToDisplayName() Niv.@Equipment.Level</div>
+                </div>
+                <div class="flex-grow-1 d-flex flex-wrap align-items-center gap-1">
+                    @if (Equipment.Recipe.Any())
+                    {
+                        @if (!NoImage)
+                        {
+                            @foreach (RecipeEntry entry in Equipment.Recipe)
+                            {
+                                <div>
+                                    <ItemIconWithCount Item="entry.Resource" Count="entry.Count" Size="Size.Tiny"></ItemIconWithCount>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                @if (Cost is not null)
+                {
+                    <div class="d-flex flex-column align-items-end">
+                        <Kamas Amount="Cost.Price" Size="Size.Medium"/>
+                        <span class="small text-secondary text-nowrap">@Cost.LastUpdate.ToString("G")</span>
+                    </div>
+                }
+            </div>
+            <div class="d-flex gap-4">
+                <div class="flex-grow-1 d-flex flex-wrap column-gap-4 row-gap-2">
+                    <div>
+                        <div class="fw-semibold">Runes</div>
+                        @if (Coefficient is not null)
+                        {
+                            <div class="text-nowrap">Coeff. <span class="fw-semibold">@Coefficient.Coefficient.ToString("N0")%</span></div>
+                        }
+                    </div>
+                    @if (!NoImage && Runes is not null)
+                    {
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach ((Rune rune, double yield) in Runes)
+                            {
+                                double price = yield * RunePrices?.GetValueOrDefault(rune)?.Price ?? 0;
+
+                                <div>
+                                    <ItemIconWithCount Item="rune" Count="yield" Size="Size.Small"></ItemIconWithCount>
+                                    <div class="d-flex justify-content-center">
+                                        <Kamas Amount="price" Size="Size.Tiny"/>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                @if (Cost is not null)
+                {
+                    <div class="d-flex flex-column align-items-end">
+                        <Kamas Amount="_estimatedPrice" Size="Size.Medium"/>
+                        @if (Coefficient is not null)
+                        {
+                            <span class="small text-secondary text-nowrap">@Coefficient.LastUpdate.ToString("G")</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="h-100 d-flex flex-column justify-content-center">
+                <div class="border border-1 border-secondary rounded overflow-hidden d-flex flex-column align-items-center justify-content-start">
+                    <div class="fw-bold px-4 py-2">Bénéfice</div>
+
+                    @switch (SortOrder)
+                    {
+                        case SortOrder.BestBenefit:
+                            @if (_benefit.HasValue)
+                            {
+                                <Kamas Amount="_benefit" Size="Size.Medium" Color="BenefitTextColor"/>
+                            }
+
+                            @if (_yield.HasValue)
+                            {
+                                <div class="fs-6 @BenefitTextColor.ToClass()">
+                                    @(_yield >= 0 ? "+" : "")@_yield.Value.ToString("P0")
+                                </div>
+                            }
+                            break;
+
+                        case SortOrder.BestYield:
+                            @if (_yield.HasValue)
+                            {
+                                <div class="fs-4 @BenefitTextColor.ToClass()">
+                                    @(_yield >= 0 ? "+" : "")@_yield.Value.ToString("P0")
+                                </div>
+                            }
+
+                            @if (_benefit.HasValue)
+                            {
+                                <Kamas Amount="_benefit" Size="Size.Small" Color="BenefitTextColor"/>
+                            }
+                            break;
+
+                    }
+
+                    <hr class="w-100 mb-0"/>
+
+                    <button class="w-100 btn btn-light rounded-top-0" @onclick="async () => await Refresh.InvokeAsync()">
+                        Rafraîchir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    double? _estimatedPrice;
+    double? _benefit;
+    double? _yield;
+    Rune? _focusedRune;
+
+    [Parameter]
+    public Equipment? Equipment { get; init; }
+
+    [Parameter]
+    public DofocusItemPriceRecord? Cost { get; init; }
+
+    [Parameter]
+    public DofocusCoefficientRecord? Coefficient { get; init; }
+
+    [Parameter]
+    public Characteristic? FocusedCharacteristic { get; init; }
+
+    [Parameter]
+    public IReadOnlyDictionary<Rune, double>? Runes { get; init; }
+
+    [Parameter]
+    public IReadOnlyDictionary<Rune, DofocusRunePriceRecord>? RunePrices { get; init; }
+
+    [Parameter]
+    public SortOrder SortOrder { get; init; }
+
+    [Parameter]
+    public bool NoImage { get; init; }
+
+    [Parameter]
+    public EventCallback Refresh { get; init; }
+
+    TextColor BenefitTextColor => _yield >= 0 ? TextColor.Success : TextColor.Danger;
+
+    protected override void OnParametersSet()
+    {
+        if (Runes is null || RunePrices is null)
+        {
+            _estimatedPrice = 0;
+            _benefit = 0;
+            _yield = 0;
+            _focusedRune = null;
+            return;
+        }
+
+        _estimatedPrice = Runes.Sum(kv => RunePrices.GetValueOrDefault(kv.Key)?.Price * kv.Value);
+        _benefit = _estimatedPrice - Cost?.Price;
+        _yield = Cost is null
+            ? null
+            : Cost.Price == 0
+                ? 0
+                : _benefit / Cost.Price;
+        _focusedRune = Runes.Keys.SingleOrDefault(r => r.Characteristic == FocusedCharacteristic);
+    }
+
+}

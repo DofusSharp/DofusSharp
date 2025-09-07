@@ -1,0 +1,19 @@
+﻿@inherits LayoutComponentBase
+
+<div class="min-vh-100 container d-flex flex-column" data-bs-theme="@_theme">
+    <header class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-4 border-bottom">
+        <img src="img/logo-48.png" width="48" height="48" alt="Logo"/>
+    </header>
+
+    <div class="flex-grow-1">
+        @Body
+    </div>
+
+    <Footer></Footer>
+</div>
+
+@code {
+
+    readonly string _theme = Application.Current?.RequestedTheme is AppTheme.Dark ? "dark" : "light";
+
+}

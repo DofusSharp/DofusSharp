@@ -21,7 +21,7 @@ dotnet add package DofusSharp.Dofocus.ApiClients
 ```csharp
 using DofusSharp.Dofocus.ApiClients;
 
-DofocusItemsClient client = DofocusClient.Items();
+IDofocusItemsClient client = DofocusClient.Production.Items();
 
 // Fetch all items
 IReadOnlyCollection<DofocusItemMinimal> items = await client.GetItemsAsync(); 

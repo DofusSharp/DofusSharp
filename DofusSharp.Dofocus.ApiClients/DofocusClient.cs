@@ -2,7 +2,6 @@
 
 public static class DofocusClient
 {
-    public static DofocusServersClient Servers() => new(new Uri("https://dofocus.fr/api/servers/"));
-    public static DofocusRunesClient Runes() => new(new Uri("https://dofocus.fr/api/runes/"));
-    public static DofocusItemsClient Items() => new(new Uri("https://dofocus.fr/api/items/"));
+    public static IDofocusClientFactory Create(Uri baseUri) => new DofocusClientFactory(baseUri);
+    public static IDofocusClientFactory Production() => new DofocusClientFactory(new Uri("https://dofocus.fr/api/"));
 }

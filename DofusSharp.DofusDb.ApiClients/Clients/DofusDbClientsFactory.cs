@@ -1,5 +1,4 @@
-﻿using DofusSharp.DofusDb.ApiClients.Clients;
-using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -8,14 +7,14 @@ using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 
-namespace DofusSharp.DofusDb.ApiClients;
+namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 /// <summary>
 ///     Factory for creating DofusDb API clients.
 /// </summary>
 /// <param name="baseAddress">The base URL of the API to query.</param>
 /// <param name="referrer">The referer header to include in requests to the API.</param>
-public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
+class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbClientsFactory
 {
     public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
 

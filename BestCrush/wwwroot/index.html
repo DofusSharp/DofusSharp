@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+    <title>Best Crush</title>
+    <base href="/"/>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/bootstrap-icons.min.css" rel="stylesheet">
+
+    <link href="css/app.css" rel="stylesheet"/>
+    <link href="data:," rel="icon">
+</head>
+
+<body>
+
+<div class="status-bar-safe-area"></div>
+
+<div id="app">
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a class="reload" href="">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+<script autostart="false" src="_framework/blazor.webview.js"></script>
+<script autostart="false" src="js/popper.min.js"></script>
+<script autostart="false" src="js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function createTooltip(records) {
+        for (const record of records) {
+            for (const addedNode of record.addedNodes) {
+                if (addedNode.hasAttribute && addedNode.getAttribute && addedNode.hasAttribute("data-bs-toggle") && addedNode.getAttribute("data-bs-toggle") === "tooltip") {
+                    const _ = new bootstrap.Tooltip(addedNode);
+                }
+            }
+        }
+    }
+
+    const observer = new MutationObserver(createTooltip);
+    observer.observe(document.body, {childList: true, subtree: true});
+</script>
+
+</body>
+</html>

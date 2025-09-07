@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+    
+    <PropertyGroup>
         <Title>DofusDB API Clients</Title>
         <Authors>Ismail Bennani</Authors>
         <Description>API clients for the DofusDB API.</Description>
@@ -13,16 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="MinVer" Version="6.0.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\DofusSharp.Common\DofusSharp.Common.csproj" />
     </ItemGroup>
-
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\"/>

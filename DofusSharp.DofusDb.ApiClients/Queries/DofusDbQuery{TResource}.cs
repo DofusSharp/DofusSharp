@@ -4,9 +4,9 @@ using System.Reflection;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 
-namespace DofusSharp.DofusDb.ApiClients;
+namespace DofusSharp.DofusDb.ApiClients.Queries;
 
-public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) where TResource: DofusDbResource
+class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQuery<TResource> where TResource: DofusDbResource
 {
     int? _limit;
     int? _skip;
@@ -19,7 +19,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     /// </summary>
     /// <param name="count">The maximum number of items to return.</param>
     /// <returns>The current builder, for chaining.</returns>
-    public DofusDbQuery<TResource> Take(int count)
+    public IDofusDbQuery<TResource> Take(int count)
     {
         _limit = count;
         return this;
@@ -30,7 +30,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     /// </summary>
     /// <param name="count">The number of items to skip.</param>
     /// <returns>The current builder, for chaining.</returns>
-    public DofusDbQuery<TResource> Skip(int count)
+    public IDofusDbQuery<TResource> Skip(int count)
     {
         _skip = count;
         return this;
@@ -41,7 +41,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     /// </summary>
     /// <param name="expression">The expression representing the property to sort by.</param>
     /// <returns>The current builder, for chaining.</returns>
-    public DofusDbQuery<TResource> SortByAscending(Expression<Func<TResource, object?>> expression)
+    public IDofusDbQuery<TResource> SortByAscending(Expression<Func<TResource, object?>> expression)
     {
         string propertyName = ExtractPropertyName(expression);
         _sort[propertyName] = DofusDbSearchQuerySortOrder.Ascending;
@@ -53,7 +53,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     /// </summary>
     /// <param name="expression">The expression representing the property to sort by.</param>
     /// <returns>The current builder, for chaining.</returns>
-    public DofusDbQuery<TResource> SortByDescending(Expression<Func<TResource, object?>> expression)
+    public IDofusDbQuery<TResource> SortByDescending(Expression<Func<TResource, object?>> expression)
     {
         string propertyName = ExtractPropertyName(expression);
         _sort[propertyName] = DofusDbSearchQuerySortOrder.Descending;
@@ -64,7 +64,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     /// </summary>
     /// <param name="expression"></param>
     /// <returns></returns>
-    public DofusDbQuery<TResource> Select(Expression<Func<TResource, object?>> expression)
+    public IDofusDbQuery<TResource> Select(Expression<Func<TResource, object?>> expression)
     {
         string propertyName = ExtractPropertyName(expression);
         _select.Add(propertyName);
@@ -76,7 +76,7 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     /// </summary>
     /// <param name="expression">The expression representing the predicate to apply.</param>
     /// <returns>The current builder, for chaining.</returns>
-    public DofusDbQuery<TResource> Where(Expression<Func<TResource, bool>> expression)
+    public IDofusDbQuery<TResource> Where(Expression<Func<TResource, bool>> expression)
     {
         DofusDbSearchPredicate predicate = ExtractPredicate(expression);
         _predicates.Add(predicate);
@@ -88,10 +88,17 @@ public class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) wher
     ///     This method will perform as many requests as necessary to retrieve the requested number of results.
     /// </summary>
     /// <returns>The search result containing all resources matching the query.</returns>
-    public IAsyncEnumerable<TResource> ExecuteAsync(CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<TResource> ExecuteAsync(CancellationToken cancellationToken = default) => ExecuteAsync(null, cancellationToken);
+
+    /// <summary>
+    ///     Executes the search query and returns an asynchronous enumerable of resources matching the query.
+    ///     This method will perform as many requests as necessary to retrieve the requested number of results.
+    /// </summary>
+    /// <returns>The search result containing all resources matching the query.</returns>
+    public IAsyncEnumerable<TResource> ExecuteAsync(IProgress<(int Loaded, int Total)>? progress, CancellationToken cancellationToken = default)
     {
         DofusDbSearchQuery query = BuildQuery();
-        return client.MultiQuerySearchAsync(query, cancellationToken);
+        return client.MultiQuerySearchAsync(query, progress, cancellationToken);
     }
 
     /// <summary>

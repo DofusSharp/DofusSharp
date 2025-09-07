@@ -3,6 +3,9 @@ changelog:
     labels:
       - ignore-for-release
   categories:
+    - title: Best Crush
+      labels:
+        - best-crush
     - title: DofusDB API Clients
       labels:
         - dofusdb-api

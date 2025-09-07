@@ -89,17 +89,39 @@ public static class DofusDbTableClientExtensions
     /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
     /// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
     /// <returns>The search result containing all resources matching the query.</returns>
+    public static IAsyncEnumerable<TResource> MultiQuerySearchAsync<TResource>(
+        this IDofusDbTableClient<TResource> client,
+        DofusDbSearchQuery query,
+        CancellationToken cancellationToken = default
+    ) where TResource: DofusDbResource =>
+        MultiQuerySearchAsync(client, query, null, cancellationToken);
+
+    /// <summary>
+    ///     Fetch ressources matching the search query from the API.
+    ///     Performs multiple queries if necessary to fetch the requested number of results.
+    /// </summary>
+    /// <param name="client">The client instance to use for the requests.</param>
+    /// <param name="query">The search query containing pagination parameters.</param>
+    /// <param name="progress">The progress reporter.</param>
+    /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
+    /// <returns>The search result containing all resources matching the query.</returns>
     public static async IAsyncEnumerable<TResource> MultiQuerySearchAsync<TResource>(
         this IDofusDbTableClient<TResource> client,
         DofusDbSearchQuery query,
+        IProgress<(int Loaded, int Total)>? progress,
         [EnumeratorCancellation] CancellationToken cancellationToken = default
     ) where TResource: DofusDbResource
     {
-        int requested = query.Limit ?? int.MaxValue;
+        int toFetch = query.Limit ?? int.MaxValue;
         int offset = query.Skip ?? 0;
 
-        DofusDbSearchQuery firstQuery = new() { Limit = requested, Skip = offset, Sort = query.Sort, Select = query.Select, Predicates = query.Predicates };
+        DofusDbSearchQuery firstQuery = new() { Limit = toFetch, Skip = offset, Sort = query.Sort, Select = query.Select, Predicates = query.Predicates };
         DofusDbSearchResult<TResource> firstResults = await SearchImplAsync(client, firstQuery, cancellationToken);
+
+        int loaded = firstResults.Data.Count;
+        int requested = Math.Min(query.Limit ?? int.MaxValue, firstResults.Total - (query.Skip ?? 0));
+        progress?.Report((loaded, requested));
 
         foreach (TResource result in firstResults.Data)
         {
@@ -107,7 +129,7 @@ public static class DofusDbTableClientExtensions
         }
 
         offset += firstResults.Data.Count;
-        requested -= firstResults.Data.Count;
+        toFetch -= firstResults.Data.Count;
         int total = firstResults.Total;
 
         if (offset >= total)
@@ -115,11 +137,15 @@ public static class DofusDbTableClientExtensions
             yield break;
         }
 
-        while (requested > 0 && offset < total)
+        progress?.Report((0, requested));
+        while (toFetch > 0 && offset < total)
         {
-            DofusDbSearchQuery currentQuery = new() { Limit = requested, Skip = offset, Sort = query.Sort, Select = query.Select, Predicates = query.Predicates };
+            DofusDbSearchQuery currentQuery = new() { Limit = toFetch, Skip = offset, Sort = query.Sort, Select = query.Select, Predicates = query.Predicates };
 
             DofusDbSearchResult<TResource> results = await SearchImplAsync(client, currentQuery, cancellationToken);
+
+            loaded += results.Data.Count;
+            progress?.Report((loaded, requested));
 
             foreach (TResource result in results.Data)
             {
@@ -127,7 +153,7 @@ public static class DofusDbTableClientExtensions
             }
 
             offset += results.Data.Count;
-            requested -= results.Data.Count;
+            toFetch -= results.Data.Count;
         }
     }
 

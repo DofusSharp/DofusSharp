@@ -24,7 +24,7 @@ In both the examples below we will fetch the items from level 50 to 100, that ar
 The query interface returns an `IAsyncEnumerable<TResource>` that will fetch all the available pages automatically while iterating over the results.
 
 ```csharp
-DofusDbQuery<DofusDbItem> query = DofusDbQuery.Production().Items()
+IDofusDbQuery<DofusDbItem> query = DofusDbQuery.Production().Items()
     .Select(i => i.Name)
     .OrderByDescending(i => i.RealWeight)
     .Where(i => i.Level >= 50 && i.Level <= 100 && i.Usable == false);

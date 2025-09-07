@@ -20,7 +20,8 @@ public class DofocusItemsClientTest
     public async Task GetItems_Should_ReturnItems()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com")
+        httpHandlerMock
+            .SetupRequest(HttpMethod.Get, "http://base.com")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new[]
@@ -52,7 +53,8 @@ public class DofocusItemsClientTest
 
         IReadOnlyCollection<DofocusItemMinimal> result = await client.GetItemsAsync();
 
-        result.Should()
+        result
+            .Should()
             .BeEquivalentTo(
                 [
                     new DofocusItemMinimal
@@ -81,7 +83,8 @@ public class DofocusItemsClientTest
     public async Task GetItem_Should_ReturnItem()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123456")
+        httpHandlerMock
+            .SetupRequest(HttpMethod.Get, "http://base.com/123456")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new DofocusItem
@@ -128,7 +131,8 @@ public class DofocusItemsClientTest
 
         DofocusItem result = await client.GetItemAsync(123456);
 
-        result.Should()
+        result
+            .Should()
             .BeEquivalentTo(
                 new DofocusItem
                 {
@@ -173,7 +177,8 @@ public class DofocusItemsClientTest
     public async Task PutItemPrice_Should_ReturnResponse()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456/prices")
+        httpHandlerMock
+            .SetupRequest(HttpMethod.Put, "http://base.com/123456/prices")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new PutItemPriceResponse
@@ -200,7 +205,8 @@ public class DofocusItemsClientTest
             }
         );
 
-        result.Should()
+        result
+            .Should()
             .BeEquivalentTo(
                 new PutItemPriceResponse
                 {
@@ -214,7 +220,8 @@ public class DofocusItemsClientTest
     public async Task PutItemCoefficient_Should_ReturnResponse()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Put, "http://base.com/123456/coefficients")
+        httpHandlerMock
+            .SetupRequest(HttpMethod.Put, "http://base.com/123456/coefficients")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new PutItemCoefficientResponse
@@ -242,7 +249,8 @@ public class DofocusItemsClientTest
             }
         );
 
-        result.Should()
+        result
+            .Should()
             .BeEquivalentTo(
                 new PutItemCoefficientResponse
                 {

@@ -1,0 +1,38 @@
+﻿[
+  {
+    Id: Guid_1,
+    DofusDbId: 1,
+    DofusDbIconId: 147,
+    Level: 159,
+    Name: ITEM_NAME,
+    Type: Bow,
+    Characteristics: [
+      {
+        Id: Guid_2,
+        Characteristic: Ap,
+        From: 4,
+        To: 6
+      }
+    ],
+    Recipe: [
+      {
+        Id: Guid_3,
+        Resource: {
+          Id: Guid_4,
+          DofusDbId: 987,
+          DofusDbIconId: 258,
+          Level: 357,
+          Name: INGREDIENT_NAME
+        },
+        Count: 5
+      }
+    ]
+  },
+  {
+    Id: Guid_4,
+    DofusDbId: 987,
+    DofusDbIconId: 258,
+    Level: 357,
+    Name: INGREDIENT_NAME
+  }
+]

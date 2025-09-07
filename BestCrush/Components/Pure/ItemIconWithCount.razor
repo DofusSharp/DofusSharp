@@ -1,0 +1,30 @@
+﻿@using BestCrush.Domain.Models
+@using BestCrush.Models
+<div class="position-relative">
+    <ItemIcon Item="Item" Size="Size" Background="IconBackground.Slot"></ItemIcon>
+    <div class="position-absolute text-bg-dark bg-opacity-25 fw-semibold px-1 @SizeClass" style="left: 2px; top: 2px;">
+        @Count.ToString("0.##")
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public required IItem Item { get; init; }
+
+    [Parameter]
+    public required double Count { get; init; }
+
+    [Parameter]
+    public Size Size { get; init; } = Size.Medium;
+
+    string SizeClass =>
+        Size switch
+        {
+            Size.Tiny => "smallest",
+            Size.Small => "smaller",
+            Size.Medium => "small",
+            Size.Large or _ => ""
+        };
+
+}

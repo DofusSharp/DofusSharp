@@ -1,0 +1,32 @@
+name: Reusable - Publish test report
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: The name of the artifact containing the test reports
+        type: string
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  publish-test-reports:
+    name: Publish test reports
+    runs-on: ubuntu-latest
+    
+    permissions:
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Download test reports from artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: test-reports/
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: test-reports/*

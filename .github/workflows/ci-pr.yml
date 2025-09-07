@@ -2,7 +2,7 @@ name: Continuous Integration - PR Build & Test
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: main
   workflow_dispatch:
 
 env:
@@ -14,14 +14,10 @@ jobs:
     uses: ./.github/workflows/reusable-compute-version.yml
     with:
       build-name: pr
-      
+  
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: compute-version
-    
-    permissions:
-      checks: write
-      pull-requests: write
     
     steps:
       - name: Checkout
@@ -34,64 +30,52 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Install MAUI
+        run: dotnet workload install maui
+
       - name: Restore dependencies
         run: dotnet restore
-        
+
       - name: Build
         run: dotnet build --no-restore --property Version=${{ needs.compute-version.outputs.version }}
-        
+
       - name: Tests
         run: dotnet test --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
 
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+      - name: Upload test reports as artifact
         if: ${{ always() }}
+        uses: actions/upload-artifact@v4
         with:
-          files: |
+          name: test-reports
+          path: |
             TestResults/**/*.xml
             !TestResults/**/*.cobertura*.xml
             TestResults/**/*.trx
             TestResults/**/*.json
 
-      - name: Install dotnet-coverage
-        run: dotnet tool install -g dotnet-coverage
-
-      - name: Merge coverage files
-        run: dotnet-coverage merge TestResults/**/*.cobertura.xml --output TestResults/coverage.cobertura.xml --output-format cobertura
-
-      - name: Create coverage report
-        uses: irongut/CodeCoverageSummary@v1.3.0
+      - name: Upload coverage reports as artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
         with:
-          filename: TestResults/coverage.cobertura.xml
-          badge: true
-          fail_below_min: false
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 80'
+          name: coverage-reports
+          path: TestResults/**/*.cobertura.xml
 
-      - name: Prepend title to coverage markdown
-        run: sed -i '1s;^;## Coverage ;' code-coverage-results.md
+  publish-tests-reports:
+    name: Publish test reports
+    needs: build-and-test
+    uses: ./.github/workflows/reusable-publish-test-reports.yml
+    permissions:
+      checks: write
+      pull-requests: write
+    with:
+      artifact-name: test-reports
 
-      - name: Add Coverage as Job Summary
-        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
-
-      - name: Add Coverage as Check Run
-        uses: LouisBrunner/checks-action@v2.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: Coverage
-          conclusion: success
-          output: |
-            { "summary": "Code coverage report" }
-          output_text_description_file: code-coverage-results.md
-
-      - name: Add Coverage as PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          recreate: true
-          path: code-coverage-results.md
-
+  publish-coverage-reports:
+    name: Publish coverage reports
+    needs: build-and-test
+    uses: ./.github/workflows/reusable-publish-coverage-reports.yml
+    permissions:
+      checks: write
+      pull-requests: write
+    with:
+      artifact-name: coverage-reports

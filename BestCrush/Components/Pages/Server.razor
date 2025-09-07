@@ -1,0 +1,413 @@
+﻿@inject ItemsService ItemsService
+@inject RunesService RunesService
+@inject CrushService CrushService
+@inject ILogger<Server> Logger
+@page "/servers/{ServerName}"
+@using BestCrush.Components.Pure
+@using BestCrush.Domain.Models
+@using BestCrush.Domain.Services
+@using BestCrush.Models
+@using DofusSharp.Dofocus.ApiClients.Models.Items
+@using DofusSharp.Dofocus.ApiClients.Models.Runes
+@using Microsoft.Extensions.Logging
+
+<div class="container">
+
+    <form method="post" @onsubmit="Count" @formname="search-form">
+        <SearchItemsForm Model="Model" Disabled="_searching"></SearchItemsForm>
+        <div class="d-flex justify-content-center my-4">
+            <button class="btn btn-primary" type="submit" disabled="@_searching">Rechercher les objets</button>
+        </div>
+    </form>
+
+    @if (_allItems is not null && _rankedItems is null)
+    {
+        <div class="text-center">@_allItems.Length objet(s) correspondent aux critères de recherche.</div>
+
+        <div class="d-flex justify-content-center my-4">
+            <button class="btn btn-primary" @onclick="() => Search(false)" disabled="@_searching">Trouver le <span class="fw-semibold">Best Crush</span></button>
+        </div>
+
+    }
+
+    @if (_allItems is not null && _searching)
+    {
+        int ranked = _rankedItems?.GroupBy(i => i.Equipment).Count() ?? 0;
+        int unranked = _unrankedItems?.Count ?? 0;
+        int done = ranked + unranked;
+        double ratio = (double)done / _allItems.Length;
+        int percent = (int)(ratio * 100);
+
+        {
+            <div class="progress mb-4" role="progressbar" aria-label="Basic example" aria-valuenow="@done" aria-valuemin="0" aria-valuemax="@_allItems.Length">
+                <div class="progress-bar progress-bar-striped progress-bar-animated text-bg-warning" style="width: @percent%">@done / @_allItems.Length</div>
+            </div>
+        }
+    }
+
+    @if (_unrankedItems is not null && _rankedItems is not null)
+    {
+        @if (_rankedItems.Count > 0)
+        {
+            IEnumerable<IGrouping<Equipment, ItemCrushResult>> equipments = _rankedItems.GroupBy(i => i.Equipment);
+            IEnumerable<ItemCrushResult> bestLines = equipments.Select(g => g.MaxBy(r => r.Benefits));
+            IOrderedEnumerable<ItemCrushResult> bestLinesOrdered = bestLines.OrderByDescending(r => _sortOrder switch { SortOrder.BestYield => r.Yield, SortOrder.BestBenefit or _ => r.Benefits });
+
+            <div class="my-4">
+                <div class="d-flex align-items-center justify-content-end gap-2 mb-2 px-3">
+                    <div class="d-flex gap-2">
+                        <label for="sort-order" class="col-form-label col-form-label-sm text-nowrap">Tri par</label>
+                        <InputSelect TValue="SortOrder" @bind-Value="_sortOrder" class="form-select form-select-sm" id="sort-order">
+                            <option value="">Sélectionner l'ordre de tri...</option>
+                            <option value="@SortOrder.BestBenefit" checked="@(_sortOrder == SortOrder.BestBenefit)">Bénéfice (flat)</option>
+                            <option value="@SortOrder.BestYield" checked="@(_sortOrder == SortOrder.BestYield)">Rendement (%)</option>
+                        </InputSelect>
+                    </div>
+                    <div>
+                        <button class="btn btn-light border" @onclick="() => Search(true)">Tout rafraîchir</button>
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush rounded">
+                    @foreach (ItemCrushResult item in bestLinesOrdered)
+                    {
+                        <li class="list-group-item">
+                            <CrushResultLine Equipment="item.Equipment" Cost="item.Cost" Coefficient="item.Coefficient" FocusedCharacteristic="item.FocusedCharacteristic"
+                                             Runes="item.Runes" RunePrices="_runePrices" SortOrder="_sortOrder" NoImage="_searching" Refresh="() => Refresh(item.Equipment)"/>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (_unrankedItems.Count > 0)
+        {
+            <div class="my-4">
+                <p>Aucun résultat pour les objets suivants:</p>
+                <ul class="text-secondary">
+                    @foreach (Equipment item in _unrankedItems.Take(10))
+                    {
+                        <li>@item.Name Niv. @item.Level</li>
+                    }
+                </ul>
+            </div>
+        }
+    }
+</div>
+
+@code {
+
+    private bool _searching;
+    Equipment[]? _allItems;
+    List<ItemCrushResult>? _rankedItems;
+    List<Equipment>? _unrankedItems;
+    IReadOnlyDictionary<Rune, DofocusRunePriceRecord> _runePrices = new Dictionary<Rune, DofocusRunePriceRecord>();
+    SortOrder _sortOrder;
+
+    [Parameter]
+    public required string ServerName { get; set; }
+
+    [SupplyParameterFromForm]
+    private SearchItemsModel? Model { get; set; }
+
+    protected override void OnInitialized() => Model ??= new SearchItemsModel();
+
+    async Task Count()
+    {
+        if (_searching)
+        {
+            return;
+        }
+
+        _rankedItems = null;
+        _unrankedItems = null;
+
+        StateHasChanged();
+
+        IReadOnlyCollection<Equipment> allItems = await ItemsService.GetEquipmentsAsync();
+        Equipment[] items = FilterItems(allItems).ToArray();
+        _allItems = items;
+    }
+
+    void Search(bool forceRefresh)
+    {
+        if (_searching)
+        {
+            return;
+        }
+
+        _ = Task.Run(async () =>
+            {
+                _rankedItems = null;
+                _unrankedItems = null;
+                _searching = true;
+                await InvokeAsync(StateHasChanged);
+
+                try
+                {
+                    Task<IReadOnlyCollection<Equipment>> itemsTask = ItemsService.GetEquipmentsAsync();
+                    Task<IReadOnlyDictionary<Characteristic, DofocusRune>> runesByCharacteristicAsync = RunesService.GetRunesByCharacteristicAsync();
+                    Task<IReadOnlyDictionary<Rune, DofocusRunePriceRecord>> runePricesTask = RunesService.GetRunePricesAsync(ServerName);
+
+                    await Task.WhenAll(itemsTask, runesByCharacteristicAsync, runePricesTask);
+
+                    Equipment[] items = FilterItems(itemsTask.Result).ToArray();
+                    _allItems = items;
+
+                    await InvokeAsync(StateHasChanged);
+
+                    _runePrices = runePricesTask.Result;
+                    _rankedItems = [];
+                    _unrankedItems = [];
+
+                    foreach (Equipment item in items)
+                    {
+                        try
+                        {
+                            IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(item, _runePrices, forceRefresh);
+                            if (result.Count == 0)
+                            {
+                                _unrankedItems.Add(item);
+                            }
+                            else
+                            {
+                                _rankedItems.AddRange(result);
+                            }
+
+                            await InvokeAsync(StateHasChanged);
+                        }
+                        catch (Exception exn)
+                        {
+                            _unrankedItems.Add(item);
+                            Logger.LogError(exn, "Error while processing item {ItemName} ({ItemId})", item.Name, item.DofusDbId);
+                        }
+                    }
+                }
+                catch (Exception exn)
+                {
+                    Logger.LogError(exn, "An error occured while searching for best crush.");
+                }
+                finally
+                {
+                    _searching = false;
+                    await InvokeAsync(StateHasChanged);
+                }
+            }
+        );
+    }
+
+    void Refresh(Equipment equipment)
+    {
+        if (_searching || _unrankedItems is null || _rankedItems is null)
+        {
+            return;
+        }
+
+        _ = Task.Run(async () =>
+            {
+                _searching = true;
+                await InvokeAsync(StateHasChanged);
+
+                try
+                {
+                    _runePrices = await RunesService.GetRunePricesAsync(ServerName);
+                    IReadOnlyCollection<ItemCrushResult> result = await ComputeBenefit(equipment, _runePrices, true);
+                    _unrankedItems.Remove(equipment);
+                    _rankedItems.RemoveAll(r => r.Equipment == equipment);
+                    if (result.Count == 0)
+                    {
+                        _unrankedItems.Add(equipment);
+                    }
+                    else
+                    {
+                        _rankedItems.AddRange(result);
+                    }
+                }
+                catch (Exception exn)
+                {
+                    Logger.LogError(exn, "An error occured while searching for best crush.");
+                }
+                finally
+                {
+                    _searching = false;
+                    await InvokeAsync(StateHasChanged);
+                }
+            }
+        );
+    }
+
+    async Task<IReadOnlyCollection<ItemCrushResult>> ComputeBenefit(Equipment equipment, IReadOnlyDictionary<Rune, DofocusRunePriceRecord> runePrices, bool forceRefresh)
+    {
+        DofocusItem detailedItem = await ItemsService.GetItemAsync(equipment.DofusDbId, forceRefresh);
+
+        DofocusCoefficientRecord? itemCoefficient = detailedItem.Coefficients.Where(c => c.ServerName == ServerName).OrderByDescending(c => c.LastUpdate).FirstOrDefault();
+        if (itemCoefficient == null)
+        {
+            return [];
+        }
+        double coefficient = itemCoefficient.Coefficient / 100;
+
+        DofocusItemPriceRecord? itemCost = detailedItem.Prices.Where(r => r.ServerName == ServerName).OrderByDescending(r => r.LastUpdate).FirstOrDefault();
+        if (itemCost is null)
+        {
+            return [];
+        }
+        double cost = itemCost.Price;
+
+        List<ItemCrushResult> result = [];
+        Dictionary<Characteristic, double> averageLines = equipment.Characteristics.ToDictionary(c => c.Characteristic, c => (double)(c.From + c.To) / 2);
+        IReadOnlyDictionary<Rune, double> runesWithoutFocus = CrushService.GetCrushResult(averageLines, equipment.Level, coefficient);
+        double priceWithoutFocus = runesWithoutFocus.Sum(kv => (runePrices.GetValueOrDefault(kv.Key)?.Price ?? 0) * kv.Value);
+        double benefitWithoutFocus = priceWithoutFocus - cost;
+        double yieldWithoutFocus = itemCost.Price == 0 ? 0 : benefitWithoutFocus / itemCost.Price;
+        result.Add(new ItemCrushResult(equipment, itemCoefficient, itemCost, benefitWithoutFocus, yieldWithoutFocus, null, runesWithoutFocus));
+
+        foreach ((Characteristic characteristic, double value) in averageLines)
+        {
+            if (value <= 0)
+            {
+                continue;
+            }
+
+            IReadOnlyDictionary<Rune, double> runesWithFocus = CrushService.GetFocusedCrushResult(averageLines, characteristic, equipment.Level, coefficient);
+            double priceWithFocus = runesWithFocus.Sum(kv => (runePrices.GetValueOrDefault(kv.Key)?.Price ?? 0) * kv.Value);
+            double benefitWithFocus = priceWithFocus - cost;
+            double yieldWithFocus = itemCost.Price == 0 ? 0 : benefitWithFocus / itemCost.Price;
+            result.Add(new ItemCrushResult(equipment, itemCoefficient, itemCost, benefitWithFocus, yieldWithFocus, characteristic, runesWithFocus));
+        }
+
+        return result;
+    }
+
+    IEnumerable<Equipment> FilterItems(IReadOnlyCollection<Equipment> items)
+    {
+        IEnumerable<Equipment> result = items;
+
+        if (Model?.LevelMin is not null)
+        {
+            result = result.Where(i => i.Level >= Model.LevelMin);
+        }
+
+        if (Model?.LevelMax is not null)
+        {
+            result = result.Where(i => i.Level <= Model.LevelMax);
+        }
+
+        HashSet<EquipmentType> equipmentTypes = ComputeEquipmentTypes();
+        if (equipmentTypes.Count > 0)
+        {
+            result = result.Where(i => equipmentTypes.Contains(i.Type));
+        }
+
+        return result;
+    }
+
+    HashSet<EquipmentType> ComputeEquipmentTypes()
+    {
+        HashSet<EquipmentType> equipmentTypes = new();
+
+        if (Model?.EquipmentType.Amulet is true)
+        {
+            equipmentTypes.Add(EquipmentType.Amulet);
+        }
+
+        if (Model?.EquipmentType.Ring is true)
+        {
+            equipmentTypes.Add(EquipmentType.Ring);
+        }
+
+        if (Model?.EquipmentType.Belt is true)
+        {
+            equipmentTypes.Add(EquipmentType.Belt);
+        }
+
+        if (Model?.EquipmentType.Boots is true)
+        {
+            equipmentTypes.Add(EquipmentType.Boots);
+        }
+
+        if (Model?.EquipmentType.Hat is true)
+        {
+            equipmentTypes.Add(EquipmentType.Hat);
+        }
+
+        if (Model?.EquipmentType.Cloak is true)
+        {
+            equipmentTypes.Add(EquipmentType.Cloak);
+        }
+
+        if (Model?.EquipmentType.Shield is true)
+        {
+            equipmentTypes.Add(EquipmentType.Shield);
+        }
+
+        if (Model?.EquipmentType.Trophy is true)
+        {
+            equipmentTypes.Add(EquipmentType.Trophy);
+        }
+
+        if (Model?.EquipmentType.Bow is true)
+        {
+            equipmentTypes.Add(EquipmentType.Bow);
+        }
+
+        if (Model?.EquipmentType.Lance is true)
+        {
+            equipmentTypes.Add(EquipmentType.Lance);
+        }
+
+        if (Model?.EquipmentType.Scythe is true)
+        {
+            equipmentTypes.Add(EquipmentType.Scythe);
+        }
+
+        if (Model?.EquipmentType.Axe is true)
+        {
+            equipmentTypes.Add(EquipmentType.Axe);
+        }
+
+        if (Model?.EquipmentType.Tool is true)
+        {
+            equipmentTypes.Add(EquipmentType.Tool);
+        }
+
+        if (Model?.EquipmentType.Pickaxe is true)
+        {
+            equipmentTypes.Add(EquipmentType.Pickaxe);
+        }
+
+        if (Model?.EquipmentType.Wand is true)
+        {
+            equipmentTypes.Add(EquipmentType.Wand);
+        }
+
+        if (Model?.EquipmentType.Staff is true)
+        {
+            equipmentTypes.Add(EquipmentType.Staff);
+        }
+
+        if (Model?.EquipmentType.Dagger is true)
+        {
+            equipmentTypes.Add(EquipmentType.Dagger);
+        }
+
+        if (Model?.EquipmentType.Sword is true)
+        {
+            equipmentTypes.Add(EquipmentType.Sword);
+        }
+
+        if (Model?.EquipmentType.Hammer is true)
+        {
+            equipmentTypes.Add(EquipmentType.Hammer);
+        }
+
+        if (Model?.EquipmentType.Shovel is true)
+        {
+            equipmentTypes.Add(EquipmentType.Shovel);
+        }
+
+        return equipmentTypes;
+    }
+
+    readonly record struct ItemCrushResult(Equipment Equipment, DofocusCoefficientRecord Coefficient, DofocusItemPriceRecord Cost, double Benefits, double Yield, Characteristic? FocusedCharacteristic, IReadOnlyDictionary<Rune, double> Runes);
+
+}

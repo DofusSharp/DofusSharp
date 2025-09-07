@@ -1,0 +1,102 @@
+﻿@using BestCrush.Domain.Models
+@using BestCrush.Domain.Services
+@using BestCrush.Models
+@inject ItemsService ItemsService
+
+<button id="item-icon-@GetHashCode()" class="btn p-0" data-bs-toggle="tooltip" data-bs-title="@Item?.Name">
+    <div class="d-flex align-items-center justify-content-center position-relative"
+         style="width:@(BackgroundSizeInPx)px; height:@(BackgroundSizeInPx)px">
+        @if (_loadingIcon)
+        {
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        }
+        else if (_icon is not null)
+        {
+            @switch (Background)
+            {
+                case IconBackground.Slot:
+                    <img class="position-absolute top-0 bottom-0 start-0 end-0" src="img/slot_bg.png" width="@BackgroundSizeInPx" height="@BackgroundSizeInPx" alt="Item icon"/>
+                    break;
+            }
+
+            <div class="position-absolute top-0 bottom-0 start-0 end-0 d-flex align-items-center justify-content-center">
+                <img src="data:@_icon" width="@IconSizeInPx" height="@IconSizeInPx" alt="Item icon"/>
+            </div>
+        }
+        else
+        {
+            @switch (Size)
+            {
+                case Size.Small:
+                    <span class="fw-bold small">?</span>
+                    break;
+                case Size.Medium:
+                    <span class="fw-bold fs-3">?</span>
+                    break;
+                case Size.Large:
+                    <span class="fw-bold fs-1">?</span>
+                    break;
+            }
+        }
+    </div>
+</button>
+
+@code {
+    string? _icon;
+    bool _loadingIcon;
+
+    int BackgroundSizeInPx =>
+        Size switch
+        {
+            Size.Tiny => 32,
+            Size.Small => 48,
+            Size.Medium => 64,
+            Size.Large => 128,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+    int IconSizeInPx =>
+        Background == IconBackground.None
+            ? BackgroundSizeInPx
+            : Size switch
+            {
+                Size.Tiny => 24,
+                Size.Small => 32,
+                Size.Medium => 48,
+                Size.Large => 96,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+    [Parameter]
+    public IItem? Item { get; init; }
+
+    [Parameter]
+    public Size Size { get; init; } = Size.Medium;
+
+    [Parameter]
+    public IconBackground Background { get; init; } = IconBackground.None;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Item is null)
+        {
+            _icon = null;
+            _loadingIcon = false;
+            return;
+        }
+
+        _loadingIcon = true;
+        try
+        {
+            _icon = await ItemsService.GetItemIconAsync(Item);
+        }
+        finally
+        {
+            _loadingIcon = false;
+        }
+    }
+
+
+}
