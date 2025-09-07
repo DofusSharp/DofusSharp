@@ -113,7 +113,6 @@ public static class DofusDbTableClientExtensions
         [EnumeratorCancellation] CancellationToken cancellationToken = default
     ) where TResource: DofusDbResource
     {
-        int requested = query.Limit ?? int.MaxValue;
         int toFetch = query.Limit ?? int.MaxValue;
         int offset = query.Skip ?? 0;
 
@@ -121,7 +120,7 @@ public static class DofusDbTableClientExtensions
         DofusDbSearchResult<TResource> firstResults = await SearchImplAsync(client, firstQuery, cancellationToken);
 
         int loaded = firstResults.Data.Count;
-        requested = Math.Min(query.Limit ?? int.MaxValue, firstResults.Total - (query.Skip ?? 0));
+        int requested = Math.Min(query.Limit ?? int.MaxValue, firstResults.Total - (query.Skip ?? 0));
         progress?.Report((loaded, requested));
 
         foreach (TResource result in firstResults.Data)
@@ -155,6 +154,8 @@ public static class DofusDbTableClientExtensions
             offset += results.Data.Count;
             toFetch -= results.Data.Count;
         }
+
+        progress?.Report((requested, requested));
     }
 
     static async Task<DofusDbSearchResult<TResource>> SearchImplAsync<TResource>(
