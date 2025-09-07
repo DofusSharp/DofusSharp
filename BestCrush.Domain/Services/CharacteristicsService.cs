@@ -25,7 +25,7 @@ public class CharacteristicsService
                 return _dofusDbCharacteristics;
             }
 
-            DofusDbQuery<DofusDbCharacteristic> query = DofusDbQuery.Production().Characteristics();
+            IDofusDbQuery<DofusDbCharacteristic> query = DofusDbQuery.Production().Characteristics();
             DofusDbCharacteristic[] characteristics = await query.ExecuteAsync().ToArrayAsync();
             _dofusDbCharacteristics = characteristics.Where(c => c.Id.HasValue).ToDictionary(c => c.Id!.Value, c => c);
             return _dofusDbCharacteristics;

@@ -1,5 +1,6 @@
 ﻿using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Queries;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -7,11 +8,11 @@ using Moq;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
-[TestSubject(typeof(DofusDbQuery<>))]
+[TestSubject(typeof(IDofusDbQuery<>))]
 public class DofusDbQueryTest
 {
     readonly Mock<IDofusDbTableClient<DofusDbItem>> _clientMock;
-    readonly DofusDbQuery<DofusDbItem> _builder;
+    readonly IDofusDbQuery<DofusDbItem> _builder;
 
     public DofusDbQueryTest()
     {

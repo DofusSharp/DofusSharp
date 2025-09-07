@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BestCrush.Domain.Services.Upgrades;
 
-public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryProvider dofusDbQueryProvider, ILogger<DofusDbUpgradesHandler> logger)
+public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, IDofusDbQueryProvider dofusDbQueryProvider, ILogger<DofusDbUpgradesHandler> logger)
 {
     public async Task UpgradeAsync(Version newVersion, ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
     {
@@ -25,7 +25,7 @@ public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryPr
 
         logger.LogInformation("Running upgrade from version {OldVersion} to {NewVersion}...", oldVersion, newVersion);
 
-        DofusDbQuery<DofusDbCharacteristic> characteristicsQuery = dofusDbQueryProvider.Characteristics();
+        IDofusDbQuery<DofusDbCharacteristic> characteristicsQuery = dofusDbQueryProvider.Characteristics();
         DofusDbCharacteristic[] characteristics = await characteristicsQuery
             .ExecuteAsync(progress?.DeriveSubtask(0, 10).ToStepProgress("Récupération des caractéristiques"), cancellationToken)
             .ToArrayAsync(cancellationToken);
@@ -48,7 +48,7 @@ public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryPr
         CancellationToken cancellationToken = default
     )
     {
-        DofusDbQuery<DofusDbRecipe> recipesQuery = dofusDbQueryProvider.Recipes();
+        IDofusDbQuery<DofusDbRecipe> recipesQuery = dofusDbQueryProvider.Recipes();
         DofusDbRecipe[] recipes = await recipesQuery
             .ExecuteAsync(progress?.DeriveSubtask(10, 30).ToStepProgress("Récupération des recettes"), cancellationToken)
             .ToArrayAsync(cancellationToken);
