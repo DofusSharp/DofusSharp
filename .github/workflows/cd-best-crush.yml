@@ -36,13 +36,13 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Build
-        run: dotnet build DofusSharp.BestCrush.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.BestCrush.Filter.slnf --configuration Release --framework net10.0-windows10.0.19041.0 --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Test
-        run: dotnet test DofusSharp.BestCrush.Filter.slnf --configuration Release --no-build
+        run: dotnet test DofusSharp.BestCrush.Filter.slnf --configuration Release --framework net10.0-windows10.0.19041.0 --no-build
         
       - name: Publish
-        run: dotnet publish DofusSharp.BestCrush/DofusSharp.BestCrush.csproj --output best-crush/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet publish DofusSharp.BestCrush/DofusSharp.BestCrush.csproj --output best-crush/ --configuration Release --framework net10.0-windows10.0.19041.0 --no-build --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Create release archive
         if: ${{ github.event_name == 'release' }}
