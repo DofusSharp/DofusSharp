@@ -137,6 +137,7 @@ public static class DofusDbTableClientExtensions
             yield break;
         }
 
+        progress?.Report((0, requested));
         while (toFetch > 0 && offset < total)
         {
             DofusDbSearchQuery currentQuery = new() { Limit = toFetch, Skip = offset, Sort = query.Sort, Select = query.Select, Predicates = query.Predicates };
@@ -154,8 +155,6 @@ public static class DofusDbTableClientExtensions
             offset += results.Data.Count;
             toFetch -= results.Data.Count;
         }
-
-        progress?.Report((requested, requested));
     }
 
     static async Task<DofusDbSearchResult<TResource>> SearchImplAsync<TResource>(

@@ -28,36 +28,6 @@ namespace BestCrush.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemCoefficientRecords",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ItemId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ServerName = table.Column<string>(type: "TEXT", nullable: false),
-                    Coefficient = table.Column<int>(type: "INTEGER", nullable: false),
-                    Date = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemCoefficientRecords", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ItemPriceRecords",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ItemId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ServerName = table.Column<string>(type: "TEXT", nullable: false),
-                    Price = table.Column<double>(type: "REAL", nullable: false),
-                    Date = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemPriceRecords", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Resources",
                 columns: table => new
                 {
@@ -70,21 +40,7 @@ namespace BestCrush.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Resources", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RunePriceRecords",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    RuneId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ServerName = table.Column<string>(type: "TEXT", nullable: false),
-                    Price = table.Column<double>(type: "REAL", nullable: false),
-                    Date = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RunePriceRecords", x => x.Id);
+                    table.UniqueConstraint("AK_Resources_DofusDbId", x => x.DofusDbId);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,6 +57,7 @@ namespace BestCrush.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Runes", x => x.Id);
+                    table.UniqueConstraint("AK_Runes_DofusDbId", x => x.DofusDbId);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,10 +80,10 @@ namespace BestCrush.Domain.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EquipmentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Characteristic = table.Column<int>(type: "INTEGER", nullable: false),
                     From = table.Column<int>(type: "INTEGER", nullable: false),
-                    To = table.Column<int>(type: "INTEGER", nullable: false),
-                    EquipmentId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    To = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,7 +92,8 @@ namespace BestCrush.Domain.Migrations
                         name: "FK_ItemCharacteristicLine_Equipments_EquipmentId",
                         column: x => x.EquipmentId,
                         principalTable: "Equipments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,9 +101,9 @@ namespace BestCrush.Domain.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EquipmentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     ResourceId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Count = table.Column<int>(type: "INTEGER", nullable: false),
-                    EquipmentId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Count = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -154,7 +112,8 @@ namespace BestCrush.Domain.Migrations
                         name: "FK_RecipeEntry_Equipments_EquipmentId",
                         column: x => x.EquipmentId,
                         principalTable: "Equipments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RecipeEntry_Resources_ResourceId",
                         column: x => x.ResourceId,
@@ -164,29 +123,15 @@ namespace BestCrush.Domain.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Equipments_DofusDbId",
+                table: "Equipments",
+                column: "DofusDbId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ItemCharacteristicLine_EquipmentId",
                 table: "ItemCharacteristicLine",
                 column: "EquipmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemCoefficientRecords_ItemId",
-                table: "ItemCoefficientRecords",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemCoefficientRecords_ServerName",
-                table: "ItemCoefficientRecords",
-                column: "ServerName");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemPriceRecords_ItemId",
-                table: "ItemPriceRecords",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemPriceRecords_ServerName",
-                table: "ItemPriceRecords",
-                column: "ServerName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeEntry_EquipmentId",
@@ -197,16 +142,6 @@ namespace BestCrush.Domain.Migrations
                 name: "IX_RecipeEntry_ResourceId",
                 table: "RecipeEntry",
                 column: "ResourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RunePriceRecords_RuneId",
-                table: "RunePriceRecords",
-                column: "RuneId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RunePriceRecords_ServerName",
-                table: "RunePriceRecords",
-                column: "ServerName");
         }
 
         /// <inheritdoc />
@@ -216,16 +151,7 @@ namespace BestCrush.Domain.Migrations
                 name: "ItemCharacteristicLine");
 
             migrationBuilder.DropTable(
-                name: "ItemCoefficientRecords");
-
-            migrationBuilder.DropTable(
-                name: "ItemPriceRecords");
-
-            migrationBuilder.DropTable(
                 name: "RecipeEntry");
-
-            migrationBuilder.DropTable(
-                name: "RunePriceRecords");
 
             migrationBuilder.DropTable(
                 name: "Runes");

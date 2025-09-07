@@ -42,6 +42,9 @@ namespace BestCrush.Domain.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DofusDbId")
+                        .IsUnique();
+
                     b.ToTable("Equipments");
                 });
 
@@ -54,7 +57,7 @@ namespace BestCrush.Domain.Migrations
                     b.Property<int>("Characteristic")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("EquipmentId")
+                    b.Property<Guid>("EquipmentId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("From")
@@ -70,62 +73,6 @@ namespace BestCrush.Domain.Migrations
                     b.ToTable("ItemCharacteristicLine");
                 });
 
-            modelBuilder.Entity("BestCrush.Domain.Models.ItemCoefficientRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Coefficient")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("ItemId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ServerName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("ServerName");
-
-                    b.ToTable("ItemCoefficientRecords");
-                });
-
-            modelBuilder.Entity("BestCrush.Domain.Models.ItemPriceRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("ItemId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("ServerName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("ServerName");
-
-                    b.ToTable("ItemPriceRecords");
-                });
-
             modelBuilder.Entity("BestCrush.Domain.Models.RecipeEntry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -135,7 +82,7 @@ namespace BestCrush.Domain.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("EquipmentId")
+                    b.Property<Guid>("EquipmentId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ResourceId")
@@ -172,6 +119,8 @@ namespace BestCrush.Domain.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("DofusDbId");
+
                     b.ToTable("Resources");
                 });
 
@@ -200,35 +149,9 @@ namespace BestCrush.Domain.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("DofusDbId");
+
                     b.ToTable("Runes");
-                });
-
-            modelBuilder.Entity("BestCrush.Domain.Models.RunePriceRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("REAL");
-
-                    b.Property<long>("RuneId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ServerName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RuneId");
-
-                    b.HasIndex("ServerName");
-
-                    b.ToTable("RunePriceRecords");
                 });
 
             modelBuilder.Entity("BestCrush.Domain.Models.Upgrade", b =>
@@ -259,22 +182,30 @@ namespace BestCrush.Domain.Migrations
 
             modelBuilder.Entity("BestCrush.Domain.Models.ItemCharacteristicLine", b =>
                 {
-                    b.HasOne("BestCrush.Domain.Models.Equipment", null)
+                    b.HasOne("BestCrush.Domain.Models.Equipment", "Equipment")
                         .WithMany("Characteristics")
-                        .HasForeignKey("EquipmentId");
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
                 });
 
             modelBuilder.Entity("BestCrush.Domain.Models.RecipeEntry", b =>
                 {
-                    b.HasOne("BestCrush.Domain.Models.Equipment", null)
+                    b.HasOne("BestCrush.Domain.Models.Equipment", "Equipment")
                         .WithMany("Recipe")
-                        .HasForeignKey("EquipmentId");
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BestCrush.Domain.Models.Resource", "Resource")
                         .WithMany()
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Equipment");
 
                     b.Navigation("Resource");
                 });

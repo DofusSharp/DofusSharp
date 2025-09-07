@@ -17,5 +17,9 @@ public class BestCrushDbContext : DbContext
     {
         modelBuilder.Entity<Equipment>().HasMany(e => e.Characteristics).WithOne(e => e.Equipment).OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<Equipment>().HasMany(e => e.Recipe).WithOne(e => e.Equipment).OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Equipment>().HasAlternateKey(u => u.DofusDbId);
+        modelBuilder.Entity<Rune>().HasAlternateKey(u => u.DofusDbId);
+        modelBuilder.Entity<Resource>().HasAlternateKey(u => u.DofusDbId);
     }
 }
