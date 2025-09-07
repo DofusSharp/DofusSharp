@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using DofusSharp.Common;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
@@ -21,8 +22,10 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
             AllowOutOfOrderMetadataProperties = true,
             Converters =
             {
+                new JsonStringEnumConverter(),
                 new DofusDbValueOrFalseJsonConverterFactory(),
-                new DofusDbValueTupleJsonConverterFactory()
+                new DofusDbValueTupleJsonConverterFactory(),
+                new DofusDbDateOnlyJsonConverter()
             }
         };
     }

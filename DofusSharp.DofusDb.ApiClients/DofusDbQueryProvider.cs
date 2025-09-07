@@ -2,14 +2,18 @@
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
+using DofusSharp.DofusDb.ApiClients.Models.Monsters;
+using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
 public class DofusDbQueryProvider(DofusDbClientsFactory factory)
 {
+    public DofusDbQuery<DofusDbServer> Servers() => new(factory.Servers());
+
     public DofusDbQuery<DofusDbCharacteristic> Characteristics() => new(factory.Characteristics());
-    
+
     public DofusDbQuery<DofusDbItem> Items() => new(factory.Items());
     public DofusDbQuery<DofusDbItemType> ItemTypes() => new(factory.ItemTypes());
     public DofusDbQuery<DofusDbItemSuperType> ItemSuperTypes() => new(factory.ItemSuperTypes());
@@ -23,6 +27,10 @@ public class DofusDbQueryProvider(DofusDbClientsFactory factory)
     public DofusDbQuery<DofusDbSpellLevel> SpellLevels() => new(factory.SpellLevels());
     public DofusDbQuery<DofusDbSpellState> SpellStates() => new(factory.SpellStates());
     public DofusDbQuery<DofusDbSpellVariant> SpellVariants() => new(factory.SpellVariants());
+
+    public DofusDbQuery<DofusDbMonster> Monsters() => new(factory.Monsters());
+    public DofusDbQuery<DofusDbMonsterRace> MonsterRaces() => new(factory.MonsterRaces());
+    public DofusDbQuery<DofusDbMonsterSuperRace> MonsterSuperRaces() => new(factory.MonsterSuperRaces());
 
     public DofusDbQuery<DofusDbWorld> Worlds() => new(factory.Worlds());
     public DofusDbQuery<DofusDbSuperArea> SuperAreas() => new(factory.SuperAreas());

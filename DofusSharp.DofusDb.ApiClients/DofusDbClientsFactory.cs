@@ -4,6 +4,8 @@ using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
+using DofusSharp.DofusDb.ApiClients.Models.Monsters;
+using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 
 namespace DofusSharp.DofusDb.ApiClients;
@@ -17,8 +19,10 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
 {
     public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
 
+    public IDofusDbTableClient<DofusDbServer> Servers() => new DofusDbTableClient<DofusDbServer>(new Uri(baseAddress, "servers/"), referrer);
+
     public IDofusDbTableClient<DofusDbCharacteristic> Characteristics() => new DofusDbTableClient<DofusDbCharacteristic>(new Uri(baseAddress, "characteristics/"), referrer);
-    
+
     public IDofusDbTableClient<DofusDbItem> Items() => new DofusDbTableClient<DofusDbItem>(new Uri(baseAddress, "items/"), referrer);
     public IDofusDbImageClient<long> ItemImages() => new DofusDbImageClient<long>(new Uri(baseAddress, "img/items/"), ImageFormat.Png, referrer);
     public IDofusDbTableClient<DofusDbItemType> ItemTypes() => new DofusDbTableClient<DofusDbItemType>(new Uri(baseAddress, "item-types/"), referrer);
@@ -36,6 +40,13 @@ public class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null)
     public IDofusDbTableClient<DofusDbSpellState> SpellStates() => new DofusDbTableClient<DofusDbSpellState>(new Uri(baseAddress, "spell-states/"), referrer);
     public IDofusDbImageClient<string> SpellStateImages() => new DofusDbImageClient<string>(new Uri(baseAddress, "img/states/"), ImageFormat.Png, referrer);
     public IDofusDbTableClient<DofusDbSpellVariant> SpellVariants() => new DofusDbTableClient<DofusDbSpellVariant>(new Uri(baseAddress, "spell-variants/"), referrer);
+
+    public IDofusDbTableClient<DofusDbMonster> Monsters() => new DofusDbTableClient<DofusDbMonster>(new Uri(baseAddress, "monsters/"), referrer);
+    public IDofusDbImageClient<long> MonsterImages() => new DofusDbImageClient<long>(new Uri(baseAddress, "img/monsters/"), ImageFormat.Png, referrer);
+    public IDofusDbTableClient<DofusDbMonsterRace> MonsterRaces() => new DofusDbTableClient<DofusDbMonsterRace>(new Uri(baseAddress, "monster-races/"), referrer);
+
+    public IDofusDbTableClient<DofusDbMonsterSuperRace> MonsterSuperRaces() =>
+        new DofusDbTableClient<DofusDbMonsterSuperRace>(new Uri(baseAddress, "monster-super-races/"), referrer);
 
     public IDofusDbTableClient<DofusDbWorld> Worlds() => new DofusDbTableClient<DofusDbWorld>(new Uri(baseAddress, "worlds/"), referrer);
     public IDofusDbTableClient<DofusDbSuperArea> SuperAreas() => new DofusDbTableClient<DofusDbSuperArea>(new Uri(baseAddress, "super-areas/"), referrer);
