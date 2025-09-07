@@ -16,7 +16,8 @@ public class DofocusServersClientTest
     public async Task GetServers_Should_ReturnServers()
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
-        httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com")
+        httpHandlerMock
+            .SetupRequest(HttpMethod.Get, "http://base.com")
             .ReturnsJsonResponse(
                 HttpStatusCode.OK,
                 new[]
@@ -32,7 +33,8 @@ public class DofocusServersClientTest
 
         IReadOnlyCollection<DofocusServer> result = await client.GetServersAsync();
 
-        result.Should()
+        result
+            .Should()
             .BeEquivalentTo(
                 [
                     new DofocusServer { Name = "SERVER 1" },

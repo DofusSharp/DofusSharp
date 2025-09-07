@@ -8,7 +8,7 @@ using DofusSharp.Dofocus.ApiClients.Responses;
 
 namespace DofusSharp.Dofocus.ApiClients;
 
-public class DofocusItemsClient(Uri baseAddress)
+class DofocusItemsClient(Uri baseAddress) : IDofocusItemsClient
 {
     readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web);
 

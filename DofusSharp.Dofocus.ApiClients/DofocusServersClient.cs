@@ -6,7 +6,7 @@ using DofusSharp.Dofocus.ApiClients.Models.Servers;
 
 namespace DofusSharp.Dofocus.ApiClients;
 
-public class DofocusServersClient(Uri baseAddress)
+class DofocusServersClient(Uri baseAddress) : IDofocusServersClient
 {
     readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web);
 
@@ -17,7 +17,7 @@ public class DofocusServersClient(Uri baseAddress)
     {
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
-        
+
         using HttpResponseMessage response = await httpClient.GetAsync("", cancellationToken);
         response.EnsureSuccessStatusCode();
 

@@ -11,6 +11,10 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Tests.UnitTests.Dofocus.ApiClients"/>
+    </ItemGroup>
     
     <ItemGroup>
       <ProjectReference Include="..\DofusSharp.Common\DofusSharp.Common.csproj" />
