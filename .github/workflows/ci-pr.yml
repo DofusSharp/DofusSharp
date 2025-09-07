@@ -2,7 +2,7 @@ name: Continuous Integration - PR Build & Test
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: main
   workflow_dispatch:
 
 env:
@@ -18,10 +18,6 @@ jobs:
   build-and-test:
     runs-on: windows-latest
     needs: compute-version
-    
-    permissions:
-      checks: write
-      pull-requests: write
     
     steps:
       - name: Checkout
@@ -46,11 +42,12 @@ jobs:
       - name: Tests
         run: dotnet test --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
 
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action/windows@v2
+      - name: Upload test reports as artifact
         if: ${{ always() }}
+        uses: actions/upload-artifact@v4
         with:
-          files: |
+          name: test-reports
+          path: |
             TestResults/**/*.xml
             !TestResults/**/*.cobertura*.xml
             TestResults/**/*.trx
@@ -63,9 +60,16 @@ jobs:
           name: coverage-reports
           path: TestResults/**/*.cobertura.xml
 
-  publish-coverage:
+  publish-tests-reports:
+    name: Publish test reports
+    needs: build-and-test
+    uses: ./.github/workflows/reusable-publish-test-reports.yml
+    with:
+      artifact-name: test-reports
+
+  publish-coverage-reports:
     name: Publish coverage reports
     needs: build-and-test
-    uses: ./.github/workflows/reusable-publish-coverage.yml
+    uses: ./.github/workflows/reusable-publish-coverage-reports.yml
     with:
       artifact-name: coverage-reports

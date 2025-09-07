@@ -2,7 +2,7 @@ name: Continuous Deployment - Publish Best Crush
 
 on:
   release:
-    types: [published]
+    types: published
   workflow_dispatch:
     dry-run:
       description: Whether to skip the publication of packages to the repositories

@@ -6,15 +6,18 @@ on:
       artifact-name:
         description: The name of the artifact containing the coverage reports
         type: string
-        default: build
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 jobs:
-  publish-coverage:
+  publish-coverage-reports:
     name: Publish coverage reports
     runs-on: ubuntu-latest
+    
+    permissions:
+      checks: write
+      pull-requests: write
 
     steps:
       - name: Download coverage reports from artifacts
