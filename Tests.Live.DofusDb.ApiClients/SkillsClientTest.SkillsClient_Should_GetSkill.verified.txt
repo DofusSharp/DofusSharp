@@ -1,7 +1,6 @@
 ﻿{
   ParentJobId: 1,
   IsForgemagus: false,
-  InteractiveId: 16,
   Range: 1,
   UseRangeInClient: false,
   UseAnimation: AnimStatique,

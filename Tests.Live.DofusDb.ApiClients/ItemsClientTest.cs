@@ -18,9 +18,12 @@ public class ItemsClientTest
     [Fact]
     public async Task ItemsClient_Should_GetItem_Weapon()
     {
+        Type[] expectedType = [typeof(DofusDbWeapon), typeof(DofusDbWeaponBeta)];
+
         IDofusDbTableClient<DofusDbItem> client = DofusDbClient.Beta(Constants.Referrer).Items();
         DofusDbItem value = await client.GetAsync(44);
-        value.Should().BeOfType<DofusDbWeapon>();
+        Type valueType = value.GetType();
+        expectedType.Should().Contain(valueType);
         await Verify(value);
     }
 
