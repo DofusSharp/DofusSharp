@@ -64,6 +64,9 @@ jobs:
     name: Publish test reports
     needs: build-and-test
     uses: ./.github/workflows/reusable-publish-test-reports.yml
+    permissions:
+      checks: write
+      pull-requests: write
     with:
       artifact-name: test-reports
 
@@ -71,5 +74,8 @@ jobs:
     name: Publish coverage reports
     needs: build-and-test
     uses: ./.github/workflows/reusable-publish-coverage-reports.yml
+    permissions:
+      checks: write
+      pull-requests: write
     with:
       artifact-name: coverage-reports
