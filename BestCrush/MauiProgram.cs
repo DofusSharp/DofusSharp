@@ -27,12 +27,10 @@ public static class MauiProgram
             ILogger logger = loggerFactory.CreateLogger("Bootstrap");
 
             logger.LogInformation("Application starting...");
+            logger.LogInformation("Version of binaries: {Version}.", CurrentVersion.Version);
 
             MauiAppBuilder builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); })
-                .ConfigureEssentials(essentials => essentials.UseVersionTracking());
+            builder.UseMauiApp<App>().ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); });
 
             builder.Services.AddMauiBlazorWebView();
 #if DEBUG

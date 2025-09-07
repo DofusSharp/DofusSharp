@@ -1,7 +1,9 @@
-﻿namespace BestCrush.Domain.Services.Upgrades;
+﻿using Semver;
+
+namespace BestCrush.Domain.Services.Upgrades;
 
 public interface IApplicationUpgrader
 {
-    Version TargetVersion { get; }
-    Task UpgradeAsync(Version? oldVersion, Version newVersion, CancellationToken cancellationToken = default);
+    SemVersion TargetVersion { get; }
+    Task UpgradeAsync(SemVersion? oldVersion, SemVersion newVersion, CancellationToken cancellationToken = default);
 }

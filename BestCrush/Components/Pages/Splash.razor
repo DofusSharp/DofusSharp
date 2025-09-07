@@ -14,6 +14,7 @@
 @using DofusSharp.DofusDb.ApiClients
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Logging
+@using CurrentVersion = CurrentVersion
 @layout EmptyLayout
 
 <div class="container h-100 d-flex flex-column align-items-stretch justify-content-center gap-4 text-center py-5">
@@ -93,7 +94,7 @@
 
     async Task UpgradeAsync(ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
     {
-        await ApplicationUpgradesHandler.UpgradeAsync(AppInfo.Version, progress?.DeriveSubtask(0, 50), cancellationToken);
+        await ApplicationUpgradesHandler.UpgradeAsync(CurrentVersion.Version, progress?.DeriveSubtask(0, 50), cancellationToken);
 
         Version version = await DofusDbClientsFactory.Version().GetVersionAsync(cancellationToken);
         await DofusDbUpgradesHandler.UpgradeAsync(version, progress?.DeriveSubtask(50, 100), cancellationToken);

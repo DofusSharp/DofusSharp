@@ -1,17 +1,18 @@
 ﻿using BestCrush.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Semver;
 
 namespace BestCrush.Domain.Services.Upgrades;
 
 public class ApplicationUpgradesHandler(BestCrushDbContext dbContext, IEnumerable<IApplicationUpgrader> upgraders, ILogger<ApplicationUpgradesHandler> logger)
 {
-    public async Task UpgradeAsync(Version newVersion, ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
+    public async Task UpgradeAsync(SemVersion newVersion, ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
     {
         Upgrade? lastUpgrade = await dbContext.Upgrades.Where(u => u.Kind == UpgradeKind.Application).OrderByDescending(u => u.UpgradeDate).FirstOrDefaultAsync(cancellationToken);
-        Version? oldVersion = Version.TryParse(lastUpgrade?.NewVersion, out Version? version) ? version : null;
+        SemVersion? oldVersion = lastUpgrade?.NewVersion is null ? null : SemVersion.Parse(lastUpgrade.NewVersion);
 
-        if (oldVersion == newVersion)
+        if (oldVersion?.ComparePrecedenceTo(newVersion) == 0)
         {
             logger.LogInformation("Application is up to date. Version: {Version}.", newVersion);
             return;
@@ -20,7 +21,7 @@ public class ApplicationUpgradesHandler(BestCrushDbContext dbContext, IEnumerabl
         logger.LogInformation("Running upgrade from version {OldVersion} to {NewVersion}...", oldVersion, newVersion);
 
         IApplicationUpgrader[] toRun = upgraders
-            .Where(upgrader => upgrader.TargetVersion > oldVersion && upgrader.TargetVersion <= newVersion)
+            .Where(upgrader => upgrader.TargetVersion.ComparePrecedenceTo(oldVersion) > 0 && upgrader.TargetVersion.ComparePrecedenceTo(newVersion) <= 0)
             .OrderBy(upgrader => upgrader.TargetVersion)
             .ToArray();
         if (toRun.Length > 0)

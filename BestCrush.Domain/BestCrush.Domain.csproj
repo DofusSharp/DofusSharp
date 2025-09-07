@@ -15,6 +15,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.8" />
+      <PackageReference Include="Semver" Version="3.0.0" />
     </ItemGroup>
 
     <ItemGroup>
