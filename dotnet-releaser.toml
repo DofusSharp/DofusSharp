@@ -1,7 +1,0 @@
-# configuration file for dotnet-releaser
-[msbuild]
-project = "DofusSharp.sln"
-[github]
-user = "ismailbennani"
-repo = "DofusSharp"
-version_prefix = "v"

@@ -1,10 +1,12 @@
 name: Continuous Deployment - Publish Libraries
 
 on:
-  push:
-    tags:
-      - v*
+  release:
+    types: [published]
   workflow_dispatch:
+    dry-run:
+      description: Whether to skip the publication of packages to the repositories
+      type: boolean
 
 jobs:
   build-publish:
@@ -20,28 +22,42 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install .NET 8.0 (for dotnet-releaser)
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
       - name: Install .NET 10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: 10.0.x
 
-      - name: Install dotnet-releaser
-        shell: bash
-        run: dotnet tool install --global dotnet-releaser --version 0.11.0
+      - name: Compute version
+        id: compute_version
+        uses: ./.github/workflows/reusable-compute-version.yml
+        with:
+          build-name: main
 
-      - name: Build, Tests, Cover, Pack and Publish
-        shell: bash
-        run: dotnet-releaser run --nuget-token "${{ secrets.NUGET_TOKEN }}" --github-token "${{ secrets.GITHUB_TOKEN }}" dotnet-releaser.toml
+      - name: Build
+        run: dotnet build --configuration Release --property Version=${{ steps.compute_version.outputs.version }}
 
+      - name: Test
+        run: dotnet test --configuration Release --no-build
+        
+      - name: Pack
+        run: dotnet pack --output nuget/ --property Version=${{ steps.compute_version.outputs.version }}
+      
       - name: Upload binaries as artifact
-        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/upload-artifact@v4
         with:
-          name: binaries
-          path: src/artifacts-dotnet-releaser
-          if-no-files-found: 'error'
+          name: libraries
+          path: nuget/*.nupkg
+          if-no-files-found: error
+          
+      - name: Publish nugets - Github
+        if: ${{ !inputs.dry-run }}
+        run: |
+          foreach($File in (Get-ChildItem "nuget/" -Recurse -Include *.nupkg)) {
+              dotnet nuget push $File --source github --api-key ${{ secrets.GITHUB_TOKEN }}
+          }
+
+      - name: Publish nugets - Nuget
+        if: ${{ !inputs.dry-run }}
+        run: |
+          foreach($File in (Get-ChildItem "nuget/" -Recurse -Include *.nupkg)) {
+              dotnet nuget push $File --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}

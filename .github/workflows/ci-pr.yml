@@ -7,7 +7,6 @@ on:
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  MINVERBUILDMETADATA: build.${{ github.run_id }}.${{ github.run_attempt}}
 
 jobs:
   build-and-test:
@@ -28,11 +27,17 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Compute version
+        id: compute_version
+        uses: ./.github/workflows/reusable-compute-version.yml
+        with:
+          build-name: pr
+
       - name: Restore dependencies
         run: dotnet restore
         
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore --property Version=${{ steps.compute_version.outputs.version }}
         
       - name: Tests
         run: dotnet test --no-build --filter "FullyQualifiedName!~Tests.Live" --verbosity normal --logger trx
