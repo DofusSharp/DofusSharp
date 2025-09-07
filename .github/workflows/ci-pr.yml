@@ -9,8 +9,15 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 jobs:
+  compute_version:
+    name: Compute version
+    uses: ./.github/workflows/reusable-compute-version.yml
+    with:
+      build-name: pr
+      
   build-and-test:
     runs-on: ubuntu-latest
+    needs: compute-version
     
     permissions:
       checks: write
@@ -27,17 +34,11 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Compute version
-        id: compute_version
-        uses: ./.github/workflows/reusable-compute-version.yml
-        with:
-          build-name: pr
-
       - name: Restore dependencies
         run: dotnet restore
         
       - name: Build
-        run: dotnet build --no-restore --property Version=${{ steps.compute_version.outputs.version }}
+        run: dotnet build --no-restore --property Version=${{ needs.compute-version.outputs.version }}
         
       - name: Tests
         run: dotnet test --no-build --filter "FullyQualifiedName!~Tests.Live" --verbosity normal --logger trx
