@@ -6,5 +6,5 @@
   ],
   Id: 16,
   CreatedAt: DateTimeOffset_1,
-  UpdatedAt: DateTimeOffset_1
+  UpdatedAt: DateTimeOffset_2
 }
