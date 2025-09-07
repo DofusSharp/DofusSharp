@@ -9,11 +9,18 @@
     <div class="row align-items-stretch">
         @if (!NoImage)
         {
-            <div class="col-auto d-flex flex-column align-items-end">
+            <div class="col-auto d-flex flex-column">
                 <ItemIcon Item="Equipment" Background="IconBackground.Slot" Size="Size.Medium"></ItemIcon>
                 @if (_focusedRune is not null)
                 {
-                    <ItemIcon Item="_focusedRune" Background="IconBackground.Slot" Size="Size.Tiny"></ItemIcon>
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center" data-bs-toggle="tooltip" data-bs-title="Focus">
+                            <i class="bi bi-bullseye text-secondary"></i>
+                        </div>
+                        <div>
+                            <ItemIcon Item="_focusedRune" Background="IconBackground.Slot" Size="Size.Tiny"></ItemIcon>
+                        </div>
+                    </div>
                 }
             </div>
         }
