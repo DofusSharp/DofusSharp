@@ -49,7 +49,11 @@ jobs:
           name: libraries
           path: nuget/*.nupkg
           if-no-files-found: error
-          
+
+      - name: Configure Github Nuget repository
+        if: !inputs.dry-run
+        run: dotnet nuget add source --username ismailbennani --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DofusSharp/index.json"
+        
       - name: Publish nugets
         if: !inputs.dry-run
         run: |
