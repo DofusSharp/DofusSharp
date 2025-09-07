@@ -78,31 +78,33 @@
     string? _error;
     string? _errorDetails;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized() => _ = Task.Run(ExecuteAsync);
+
+    async Task ExecuteAsync()
     {
         try
         {
             ProgressSync<ProgressMessage> progress = new(m =>
                 {
                     _progress = m;
-                    StateHasChanged();
+                    InvokeAsync(StateHasChanged).GetAwaiter().GetResult();
                 }
             );
 
             _progress = new ProgressMessage("Migration de la base de données...", null);
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
             await BestCrushDbContext.Database.MigrateAsync();
 
             _progress = new ProgressMessage("Mise à jour des données...", 0);
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
             await UpgradeAsync(progress);
 
             _progress = new ProgressMessage("Chargement des serveurs...", null);
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
             _ = await ServersService.GetServers();
 
             _progress = new ProgressMessage("Prêt.", null, true);
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
 
             DofocusServer? currentServer = await ServersService.GetCurrentServer();
             NavigationManager.NavigateTo(currentServer is not null ? KnownRoutes.Server(currentServer) : KnownRoutes.Servers());
@@ -112,6 +114,7 @@
             _error = "Une erreur inattendue s'est produite.";
             _errorDetails = exn.ToString();
             Logger.LogError(exn, "An unexpected exception has occurred.");
+            await InvokeAsync(StateHasChanged);
         }
     }
 

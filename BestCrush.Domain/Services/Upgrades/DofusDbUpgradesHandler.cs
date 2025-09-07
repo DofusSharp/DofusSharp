@@ -30,19 +30,29 @@ public class DofusDbUpgradesHandler(
 
         logger.LogInformation("Running upgrade from version {OldVersion} to {NewVersion}...", oldVersion, newVersion);
 
+        ProgressSync<ProgressMessage>? removeProgress = progress?.DeriveSubtask(0, 25);
+        removeProgress?.ReportStep("Suppression des anciennes données", 1, 6);
+        await ClearTableAsync<ItemCharacteristicLine>(cancellationToken);
+        removeProgress?.ReportStep("Suppression des anciennes données", 2, 6);
+        await ClearTableAsync<RecipeEntry>(cancellationToken);
+        removeProgress?.ReportStep("Suppression des anciennes données", 3, 6);
+        await ClearTableAsync<Resource>(cancellationToken);
+        removeProgress?.ReportStep("Suppression des anciennes données", 4, 6);
+        await ClearTableAsync<Equipment>(cancellationToken);
+        removeProgress?.ReportStep("Suppression des anciennes données", 5, 6);
+        await ClearTableAsync<Rune>(cancellationToken);
+        removeProgress?.ReportStep("Suppression des anciennes données", 6, 6);
+
         IDofusDbQuery<DofusDbCharacteristic> characteristicsQuery = dofusDbQueryProvider.Characteristics();
         DofusDbCharacteristic[] characteristics = await characteristicsQuery
-            .ExecuteAsync(progress?.DeriveSubtask(0, 10).ToStepProgress("Récupération des caractéristiques"), cancellationToken)
+            .ExecuteAsync(progress?.DeriveSubtask(25, 35).ToStepProgress("Récupération des caractéristiques"), cancellationToken)
             .ToArrayAsync(cancellationToken);
         Dictionary<long, DofusDbCharacteristic> characteristicsDict = characteristics.Where(c => c.Id.HasValue).ToDictionary(c => c.Id!.Value, c => c);
 
-        await CreateOrUpdateEquipmentsAsync(characteristicsDict, progress?.DeriveSubtask(10, 50), cancellationToken);
+        await CreateEquipmentsAsync(characteristicsDict, progress?.DeriveSubtask(35, 70), cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        await CreateOrUpdateRunesAsync(characteristicsDict, progress?.DeriveSubtask(50, 90), cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        await RemoveUnusedResourcesAsync(progress?.DeriveSubtask(90, 100), cancellationToken);
+        await CreateRunesAsync(characteristicsDict, progress?.DeriveSubtask(70, 100), cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         Upgrade newUpgrade = new() { Kind = UpgradeKind.DofusDb, OldVersion = oldVersion?.ToString(), NewVersion = newVersion.ToString(), UpgradeDate = DateTime.Now };
@@ -53,7 +63,21 @@ public class DofusDbUpgradesHandler(
         logger.LogInformation("Successfully upgraded DofusDB data to version {NewVersion}.", newVersion);
     }
 
-    async Task CreateOrUpdateEquipmentsAsync(
+    async Task ClearTableAsync<T>(CancellationToken cancellationToken = default)
+    {
+        string? tableName = dbContext.Model.FindEntityType(typeof(T))?.GetTableName();
+        if (tableName is null)
+        {
+            throw new InvalidOperationException($"Could not find table name for entity type {typeof(T).FullName}");
+        }
+
+#pragma warning disable EF1002
+        await dbContext.Database.ExecuteSqlRawAsync($"DELETE FROM {tableName};", cancellationToken);
+#pragma warning restore EF1002
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    async Task CreateEquipmentsAsync(
         Dictionary<long, DofusDbCharacteristic> characteristicsDict,
         ProgressSync<ProgressMessage>? progress = null,
         CancellationToken cancellationToken = default
@@ -72,18 +96,35 @@ public class DofusDbUpgradesHandler(
             .ExecuteAsync(progress?.DeriveSubtask(30, 50).ToStepProgress("Récupération des équipements"), cancellationToken)
             .ToArrayAsync(cancellationToken);
 
-        ProgressSync<ProgressMessage>? removeProgress = progress?.DeriveSubtask(50, 60);
-        HashSet<long> existingEquipmentIds = dbContext.Equipments.Select(e => e.DofusDbId).ToHashSet();
-        List<long> newEquipmentsIds = equipments.Select(i => i.Id!.Value).ToList();
-        long[] missingEquipmentIds = existingEquipmentIds.Select(i => i).Except(newEquipmentsIds).ToArray();
-        removeProgress?.Report("Suppression des équipements obsolètes", 0);
-        await dbContext.Equipments.Where(i => missingEquipmentIds.Contains(i.DofusDbId)).ExecuteDeleteAsync(cancellationToken);
-        removeProgress?.Report("Suppression des équipements obsolètes", 1);
+        DofusDbItem[] ingredients = equipments
+            .Select(e => recipesDict.GetValueOrDefault(e.Id!.Value))
+            .OfType<DofusDbRecipe>()
+            .SelectMany(r => r.Ingredients ?? [])
+            .DistinctBy(i => i.Id!.Value)
+            .ToArray();
 
-        ProgressSync<ProgressMessage>? updateProgress = progress?.DeriveSubtask(60, 100);
+        ProgressSync<ProgressMessage>? ingredientsProgress = progress?.DeriveSubtask(50, 70);
+        for (int index = 0; index < ingredients.Length; index++)
+        {
+            ingredientsProgress?.ReportStep($"Création des ingrédients {index}/{ingredients.Length}", index, ingredients.Length);
+            DofusDbItem ingredient = ingredients[index];
+            Resource? resource = CreateResource(ingredient);
+            if (resource is null)
+            {
+                logger.LogWarning("Could not map ingredient {Name} ({Id}).", ingredient.Name?.Fr ?? "???", ingredient.Id?.ToString() ?? "???");
+                continue;
+            }
+
+            dbContext.Resources.Add(resource);
+        }
+
+        ingredientsProgress?.ReportStep($"Création des ingrédients {ingredients.Length}/{ingredients.Length}", ingredients.Length, ingredients.Length);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        ProgressSync<ProgressMessage>? equipmentsProgress = progress?.DeriveSubtask(70, 100);
         for (int index = 0; index < equipments.Length; index++)
         {
-            updateProgress?.ReportStep("Mise à jour des équipements", index, equipments.Length);
+            equipmentsProgress?.ReportStep($"Création des équipements {index}/{equipments.Length}", index, equipments.Length);
 
             DofusDbItem dofusDbItem = equipments[index];
             if (!dofusDbItem.Id.HasValue)
@@ -92,24 +133,17 @@ public class DofusDbUpgradesHandler(
                 continue;
             }
 
-            Equipment? equipment = dbContext.Equipments.Include(e => e.Characteristics).Include(e => e.Recipe).SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id.Value);
+            Equipment? equipment = await CreateEquipmentAsync(dofusDbItem, characteristicsDict, recipesDict, cancellationToken);
             if (equipment is null)
             {
-                equipment = await CreateEquipmentAsync(dofusDbItem, characteristicsDict, recipesDict, cancellationToken);
-                if (equipment is null)
-                {
-                    logger.LogWarning("Could not map equipment {Name} ({Id}).", dofusDbItem.Name?.Fr ?? "???", dofusDbItem.Id?.ToString() ?? "???");
-                    continue;
-                }
-
-                dbContext.Equipments.Add(equipment);
+                logger.LogWarning("Could not map equipment {Name} ({Id}).", dofusDbItem.Name?.Fr ?? "???", dofusDbItem.Id?.ToString() ?? "???");
+                continue;
             }
-            else
-            {
-                await UpdateEquipmentAsync(dofusDbItem, equipment, characteristicsDict, recipesDict, cancellationToken);
-            }
+            dbContext.Equipments.Add(equipment);
         }
-        updateProgress?.ReportStep("Mise à jour des équipements", equipments.Length, equipments.Length);
+
+        equipmentsProgress?.ReportStep($"Création des équipements {equipments.Length}/{equipments.Length}", equipments.Length, equipments.Length);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 
     async Task<Equipment?> CreateEquipmentAsync(
@@ -124,33 +158,24 @@ public class DofusDbUpgradesHandler(
             return null;
         }
 
-        Equipment equipment = new(dofusDbItem.Id.Value);
-        await UpdateEquipmentAsync(dofusDbItem, equipment, characteristics, recipes, cancellationToken);
+        Equipment equipment = new(dofusDbItem.Id.Value)
+        {
+            DofusDbIconId = dofusDbItem.IconId,
+            Level = dofusDbItem.Level ?? 0,
+            Name = dofusDbItem.Name?.Fr ?? "???",
+            Type = EquipmentTypeExtensions.EquipmentTypeFromDofusDbTypeId(dofusDbItem.TypeId ?? 0) ?? EquipmentType.MagicWeapon
+        };
+
+        CreateCharacteristicLines(dofusDbItem, equipment, characteristics);
+        await CreateRecipeAsync(dofusDbItem, equipment, recipes, cancellationToken);
 
         return equipment;
     }
 
-    async Task UpdateEquipmentAsync(
-        DofusDbItem dofusDbItem,
-        Equipment equipment,
-        Dictionary<long, DofusDbCharacteristic> characteristics,
-        Dictionary<long, DofusDbRecipe> recipes,
-        CancellationToken cancellationToken = default
-    )
-    {
-        equipment.DofusDbIconId = dofusDbItem.IconId;
-        equipment.Level = dofusDbItem.Level ?? 0;
-        equipment.Name = dofusDbItem.Name?.Fr ?? "???";
-        equipment.Type = EquipmentTypeExtensions.EquipmentTypeFromDofusDbTypeId(dofusDbItem.TypeId ?? 0) ?? EquipmentType.MagicWeapon;
-        UpdateCharacteristics(dofusDbItem, equipment, characteristics);
-        await UpdateRecipeAsync(dofusDbItem, equipment, recipes, cancellationToken);
-    }
-
-    void UpdateCharacteristics(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbCharacteristic> characteristics)
+    static void CreateCharacteristicLines(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbCharacteristic> characteristics)
     {
         if (dofusDbItem.Effects is null)
         {
-            dbContext.RemoveRange(equipment.Characteristics);
             return;
         }
 
@@ -160,77 +185,33 @@ public class DofusDbUpgradesHandler(
             .Select(x => (Characteristic: CharacteristicExtensions.CharacteristicFromDofusDbKeyword(x.Characteristic!.Keyword!), x.Effect))
             .Where(x => x.Characteristic is not null)
             .ToDictionary(x => x.Characteristic!.Value, x => x.Effect);
-        List<ItemCharacteristicLine> characteristicLinesToRemove = equipment.Characteristics.Where(cLine => !itemCharacteristics.Keys.Contains(cLine.Characteristic)).ToList();
-        dbContext.RemoveRange(characteristicLinesToRemove);
 
         foreach ((Characteristic characteristic, DofusDbItemEffect effect) in itemCharacteristics)
         {
-            ItemCharacteristicLine? line = equipment.Characteristics.SingleOrDefault(c => c.Characteristic == characteristic);
-            if (line is null)
-            {
-                equipment.Characteristics.Add(new ItemCharacteristicLine(equipment, characteristic, effect.From ?? 0, effect.To is null or 0 ? effect.From ?? 0 : effect.To.Value));
-            }
-            else
-            {
-                line.From = effect.From ?? 0;
-                line.To = effect.To is null or 0 ? effect.From ?? 0 : effect.To.Value;
-            }
+            equipment.Characteristics.Add(new ItemCharacteristicLine(equipment, characteristic, effect.From ?? 0, effect.To is null or 0 ? effect.From ?? 0 : effect.To.Value));
         }
     }
 
-    async Task UpdateRecipeAsync(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbRecipe> recipes, CancellationToken cancellationToken = default)
+    async Task CreateRecipeAsync(DofusDbItem dofusDbItem, Equipment equipment, Dictionary<long, DofusDbRecipe> recipes, CancellationToken cancellationToken = default)
     {
         if (dofusDbItem.HasRecipe != true || !recipes.TryGetValue(equipment.DofusDbId, out DofusDbRecipe? recipe) || recipe.Ingredients is null || recipe.Quantities is null)
         {
-            dbContext.RemoveRange(equipment.Recipe);
             return;
         }
-
-        List<RecipeEntry> itemsToRemoveFromRecipe = equipment.Recipe.Where(recipeItem => recipe.Ingredients.All(i => recipeItem.Resource.DofusDbId != i.Id)).ToList();
-        dbContext.RemoveRange(itemsToRemoveFromRecipe);
-        await dbContext.SaveChangesAsync(cancellationToken);
 
         for (int index = 0; index < recipe.Ingredients.Count; index++)
         {
             DofusDbItem ingredient = recipe.Ingredients[index];
             int quantity = recipe.Quantities[index];
 
-            Resource? item = await UpdateOrCreateResourceAsync(ingredient, cancellationToken);
-            if (item is null)
+            Resource? resource = await dbContext.Resources.SingleOrDefaultAsync(r => r.DofusDbId == ingredient.Id!.Value, cancellationToken);
+            if (resource is null)
             {
                 continue;
             }
 
-            RecipeEntry? recipeEntry = equipment.Recipe.SingleOrDefault(r => r.Resource == item);
-            if (recipeEntry is null)
-            {
-                equipment.Recipe.Add(new RecipeEntry(equipment, item, quantity));
-            }
-            else
-            {
-                recipeEntry.Count = quantity;
-            }
+            equipment.Recipe.Add(new RecipeEntry(equipment, resource, quantity));
         }
-    }
-
-    async Task<Resource?> UpdateOrCreateResourceAsync(DofusDbItem dofusDbItem, CancellationToken cancellationToken = default)
-    {
-        Resource? item = dbContext.Resources.SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id);
-        if (item is null)
-        {
-            Resource? resource = CreateResource(dofusDbItem);
-            if (resource is null)
-            {
-                return null;
-            }
-
-            dbContext.Resources.Add(resource);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            return resource;
-        }
-
-        UpdateResource(dofusDbItem, item);
-        return item;
     }
 
     static Resource? CreateResource(DofusDbItem dofusDbItem)
@@ -240,20 +221,17 @@ public class DofusDbUpgradesHandler(
             return null;
         }
 
-        Resource resource = new(dofusDbItem.Id.Value);
-        UpdateResource(dofusDbItem, resource);
+        Resource resource = new(dofusDbItem.Id.Value)
+        {
+            DofusDbIconId = dofusDbItem.IconId,
+            Level = dofusDbItem.Level ?? 0,
+            Name = dofusDbItem.Name?.Fr ?? "???"
+        };
 
         return resource;
     }
 
-    static void UpdateResource(DofusDbItem dofusDbItem, Resource resource)
-    {
-        resource.DofusDbIconId = dofusDbItem.IconId;
-        resource.Level = dofusDbItem.Level ?? 0;
-        resource.Name = dofusDbItem.Name?.Fr ?? "???";
-    }
-
-    async Task CreateOrUpdateRunesAsync(
+    async Task CreateRunesAsync(
         Dictionary<long, DofusDbCharacteristic> characteristicsDict,
         ProgressSync<ProgressMessage>? progress = null,
         CancellationToken cancellationToken = default
@@ -269,19 +247,11 @@ public class DofusDbUpgradesHandler(
             .Where(i => i.Id.HasValue)
             .ToDictionaryAsync(i => i.Id!.Value, i => i, cancellationToken: cancellationToken);
 
-        ProgressSync<ProgressMessage>? removeProgress = progress?.DeriveSubtask(50, 60);
-        HashSet<long> existingRuneIds = dbContext.Runes.Select(e => e.DofusDbId).ToHashSet();
-        List<long> newRunesIds = dofusDbRunes.Values.Select(i => i.Id!.Value).ToList();
-        long[] missingRuneIds = existingRuneIds.Select(i => i).Except(newRunesIds).ToArray();
-        removeProgress?.Report("Suppression des runes obsolètes", 0);
-        await dbContext.Runes.Where(i => missingRuneIds.Contains(i.DofusDbId)).ExecuteDeleteAsync(cancellationToken);
-        removeProgress?.Report("Suppression des runes obsolètes", 1);
-
-        ProgressSync<ProgressMessage>? updateProgress = progress?.DeriveSubtask(60, 100);
+        ProgressSync<ProgressMessage>? updateProgress = progress?.DeriveSubtask(50, 100);
         int index = 0;
         foreach (DofocusRune dofocusRune in dofocusRunes)
         {
-            updateProgress?.ReportStep("Mise à jour des runes", index, dofocusRunes.Count);
+            updateProgress?.ReportStep($"Mise à jour des runes {index}/{dofocusRunes.Count}", index, dofocusRunes.Count);
 
             if (dofocusRune.CharacteristicId is null)
             {
@@ -306,26 +276,17 @@ public class DofusDbUpgradesHandler(
                 continue;
             }
 
-            Rune? rune = dbContext.Runes.SingleOrDefault(r => r.DofusDbId == dofocusRune.Id);
+            Rune? rune = CreateRune(dofusDbRune);
             if (rune is null)
             {
-                rune = CreateRune(dofusDbRune);
-                if (rune is null)
-                {
-                    continue;
-                }
-                dbContext.Runes.Add(rune);
-                await dbContext.SaveChangesAsync(cancellationToken);
+                continue;
             }
-            else
-            {
-                UpdateRune(dofusDbRune, rune);
-            }
+            dbContext.Runes.Add(rune);
 
             rune.Characteristic = characteristic.Value;
             index++;
         }
-        updateProgress?.ReportStep("Mise à jour des runes", dofocusRunes.Count, dofocusRunes.Count);
+        updateProgress?.ReportStep($"Mise à jour des runes {dofocusRunes.Count}/{dofocusRunes.Count}", dofocusRunes.Count, dofocusRunes.Count);
     }
 
 
@@ -336,27 +297,13 @@ public class DofusDbUpgradesHandler(
             return null;
         }
 
-        Rune rune = new(dofusDbItem.Id.Value);
-        UpdateRune(dofusDbItem, rune);
+        Rune rune = new(dofusDbItem.Id.Value)
+        {
+            DofusDbIconId = dofusDbItem.IconId,
+            Level = dofusDbItem.Level ?? 0,
+            Name = dofusDbItem.Name?.Fr ?? "???"
+        };
 
         return rune;
-    }
-
-    static void UpdateRune(DofusDbItem dofusDbItem, Rune rune)
-    {
-        rune.DofusDbIconId = dofusDbItem.IconId;
-        rune.Level = dofusDbItem.Level ?? 0;
-        rune.Name = dofusDbItem.Name?.Fr ?? "???";
-    }
-
-    async Task RemoveUnusedResourcesAsync(ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
-    {
-        progress?.Report("Suppression des ressources obsolètes", 0);
-        IQueryable<Resource> toRemove = from resource in dbContext.Resources
-            join recipeEntry in dbContext.Equipments.SelectMany(e => e.Recipe) on resource.Id equals recipeEntry.Resource.Id into recipeEntries
-            where !recipeEntries.Any()
-            select resource;
-        await toRemove.ExecuteDeleteAsync(cancellationToken);
-        progress?.Report("Suppression des ressources obsolètes", 1);
     }
 }

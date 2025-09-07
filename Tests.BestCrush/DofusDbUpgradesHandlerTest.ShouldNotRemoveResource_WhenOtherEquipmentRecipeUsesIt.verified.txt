@@ -1,0 +1,7 @@
+﻿{
+  Id: Guid_1,
+  DofusDbId: 987,
+  DofusDbIconId: 258,
+  Level: 357,
+  Name: INGREDIENT_NAME
+}

@@ -20,7 +20,7 @@ public class TestDatabase : IDisposable
         _databaseFile = Path.Join(directory, dbFileName);
         _connection = new SqliteConnection($"Data Source={_databaseFile};");
         _connection.Open();
-        _contextOptions = new DbContextOptionsBuilder<BestCrushDbContext>().UseSqlite(_connection).Options;
+        _contextOptions = new DbContextOptionsBuilder<BestCrushDbContext>().UseSqlite(_connection).EnableSensitiveDataLogging().Options;
 
         using BestCrushDbContext context = CreateContext();
         context.Database.EnsureCreated();

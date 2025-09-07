@@ -62,6 +62,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
     {
         _context.Upgrades.Add(new Upgrade { Kind = UpgradeKind.DofusDb, NewVersion = "1.2.3", UpgradeDate = DateTime.Now });
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
@@ -87,6 +88,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
     {
         _context.Upgrades.Add(new Upgrade { Kind = UpgradeKind.DofusDb, NewVersion = currentVersion, UpgradeDate = DateTime.Now });
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
@@ -196,7 +198,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         Resource[] resources = await _context.Resources.ToArrayAsync();
         Resource? resource = resources.Should().ContainSingle().Which;
 
-        await Verify(new object[] { equipment, resource });
+        await Verify(((IItem[])[equipment, resource]).OrderBy(i => i.DofusDbId));
     }
 
     [Fact]
@@ -233,6 +235,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         _context.Equipments.Add(dbEquipment);
 
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
@@ -287,6 +290,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         _context.Equipments.Add(dbEquipment);
 
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
@@ -369,6 +373,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         _context.Equipments.Add(dbEquipment);
 
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
@@ -378,7 +383,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         Resource[] resources = await _context.Resources.ToArrayAsync();
         resources.Should().HaveCount(2);
 
-        await Verify((object[])[equipment, ..resources]);
+        await Verify(((IItem[])[equipment, ..resources]).OrderBy(i => i.DofusDbId).ToArray());
     }
 
     [Fact]
@@ -399,6 +404,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         _context.Equipments.Add(dbEquipment);
 
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
@@ -437,6 +443,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         _context.Equipments.Add(dbEquipment);
 
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
@@ -507,11 +514,14 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         _context.Equipments.Add(dbEquipment2);
 
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
         Resource[] resources = await _context.Resources.ToArrayAsync();
-        resources.Should().ContainSingle().Which.Should().BeEquivalentTo(dbResource);
+        Resource? resource = resources.Should().ContainSingle().Which;
+
+        await Verify(resource);
     }
 
     [Fact]
@@ -616,6 +626,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
 
         _context.Runes.Add(new Rune(123) { Characteristic = Characteristic.ApReduction, DofusDbIconId = 111111, Level = 2222222, Name = "OLD_NAME" });
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 
@@ -630,6 +641,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
     {
         _context.Runes.Add(new Rune(123) { Characteristic = Characteristic.ApReduction, DofusDbIconId = 111111, Level = 2222222, Name = "OLD_NAME" });
         await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         await _handler.UpgradeAsync(new Version(1, 2, 3));
 

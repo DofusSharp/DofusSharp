@@ -32,17 +32,17 @@
     ]
   },
   {
-    Id: Guid_3,
-    DofusDbId: 987,
-    DofusDbIconId: 258,
-    Level: 357,
-    Name: INGREDIENT_NAME1
-  },
-  {
     Id: Guid_5,
     DofusDbId: 321,
     DofusDbIconId: 369,
     Level: 495,
     Name: INGREDIENT_NAME2
+  },
+  {
+    Id: Guid_3,
+    DofusDbId: 987,
+    DofusDbIconId: 258,
+    Level: 357,
+    Name: INGREDIENT_NAME1
   }
 ]
