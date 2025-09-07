@@ -232,94 +232,13 @@
   Drops: [
     {
       MonsterId: 31,
-      ObjectId: 21171,
-      PercentDropForGrade1: 100.0,
-      PercentDropForGrade2: 100.0,
-      PercentDropForGrade3: 100.0,
-      PercentDropForGrade4: 100.0,
-      PercentDropForGrade5: 100.0,
-      Count: 63,
-      Criteria: PL>9&PL<31&DD<30,21172&Sc=944,
-      HasCriteria: true,
-      HiddenIfInvalidCriteria: false
-    },
-    {
-      MonsterId: 31,
-      ObjectId: 2270,
-      PercentDropForGrade1: 100.0,
-      PercentDropForGrade2: 100.0,
-      PercentDropForGrade3: 100.0,
-      PercentDropForGrade4: 100.0,
-      PercentDropForGrade5: 100.0,
-      Count: 63,
-      Criteria: PO!2270&PO>2269,0,
-      HasCriteria: true,
-      HiddenIfInvalidCriteria: false
-    },
-    {
-      MonsterId: 31,
-      ObjectId: 21618,
-      PercentDropForGrade1: 100.0,
-      PercentDropForGrade2: 100.0,
-      PercentDropForGrade3: 100.0,
-      PercentDropForGrade4: 100.0,
-      PercentDropForGrade5: 100.0,
-      Count: 63,
-      Criteria: PL>9&PL<31&PO=21619&Sc=940&PO=30071&DD<91,30071,
-      HasCriteria: true,
-      HiddenIfInvalidCriteria: false
-    },
-    {
-      MonsterId: 31,
-      ObjectId: 2269,
-      PercentDropForGrade1: 100.0,
-      PercentDropForGrade2: 100.0,
-      PercentDropForGrade3: 100.0,
-      PercentDropForGrade4: 100.0,
-      PercentDropForGrade5: 100.0,
-      Count: 63,
-      Criteria: Qa=385&PO<2269,10,
-      HasCriteria: true,
-      HiddenIfInvalidCriteria: false
-    },
-    {
-      MonsterId: 31,
-      ObjectId: 19756,
-      PercentDropForGrade1: 100.0,
-      PercentDropForGrade2: 100.0,
-      PercentDropForGrade3: 100.0,
-      PercentDropForGrade4: 100.0,
-      PercentDropForGrade5: 100.0,
-      Count: 63,
-      Criteria: (Pm=190578688|Pm=190579200|Pm=190578689|Pm=190579201|Pm=190579712|Pm=190579713|Pm=190579714|Pm=190579202|Pm=190578690)&Qo=14179&PO<19756,10,
-      HasCriteria: true,
-      HiddenIfInvalidCriteria: false
-    },
-    {
-      MonsterId: 31,
       ObjectId: 362,
       PercentDropForGrade1: 55.0,
       PercentDropForGrade2: 55.0,
       PercentDropForGrade3: 55.0,
       PercentDropForGrade4: 55.0,
       PercentDropForGrade5: 55.0,
-      Count: 63,
-      Criteria: ,
-      HasCriteria: false,
-      HiddenIfInvalidCriteria: false
-    },
-    {
-      MonsterId: 31,
-      ObjectId: 17123,
-      PercentDropForGrade1: 55.0,
-      PercentDropForGrade2: 55.0,
-      PercentDropForGrade3: 55.0,
-      PercentDropForGrade4: 55.0,
-      PercentDropForGrade5: 55.0,
-      Count: 63,
-      Criteria: Pj>41,9&CU>0,
-      HasCriteria: true,
-      HiddenIfInvalidCriteria: false
+      Count: 63
     },
     {
       MonsterId: 31,
@@ -329,10 +248,27 @@
       PercentDropForGrade3: 9.239999771118164,
       PercentDropForGrade4: 9.239999771118164,
       PercentDropForGrade5: 9.239999771118164,
-      Count: 63,
-      Criteria: ,
-      HasCriteria: false,
-      HiddenIfInvalidCriteria: false
+      Count: 63
+    },
+    {
+      MonsterId: 31,
+      ObjectId: 2269,
+      PercentDropForGrade1: 100.0,
+      PercentDropForGrade2: 100.0,
+      PercentDropForGrade3: 100.0,
+      PercentDropForGrade4: 100.0,
+      PercentDropForGrade5: 100.0,
+      Count: 63
+    },
+    {
+      MonsterId: 31,
+      ObjectId: 2270,
+      PercentDropForGrade1: 100.0,
+      PercentDropForGrade2: 100.0,
+      PercentDropForGrade3: 100.0,
+      PercentDropForGrade4: 100.0,
+      PercentDropForGrade5: 100.0,
+      Count: 63
     },
     {
       MonsterId: 31,
@@ -342,10 +278,7 @@
       PercentDropForGrade3: 9.239999771118164,
       PercentDropForGrade4: 9.239999771118164,
       PercentDropForGrade5: 9.239999771118164,
-      Count: 63,
-      Criteria: ,
-      HasCriteria: false,
-      HiddenIfInvalidCriteria: false
+      Count: 63
     },
     {
       MonsterId: 31,
@@ -355,10 +288,7 @@
       PercentDropForGrade3: 6.0,
       PercentDropForGrade4: 6.0,
       PercentDropForGrade5: 6.0,
-      Count: 63,
-      Criteria: ,
-      HasCriteria: false,
-      HiddenIfInvalidCriteria: false
+      Count: 63
     },
     {
       MonsterId: 31,
@@ -368,10 +298,47 @@
       PercentDropForGrade3: 1.0,
       PercentDropForGrade4: 1.0,
       PercentDropForGrade5: 1.0,
-      Count: 63,
-      Criteria: ,
-      HasCriteria: false,
-      HiddenIfInvalidCriteria: false
+      Count: 63
+    },
+    {
+      MonsterId: 31,
+      ObjectId: 17123,
+      PercentDropForGrade1: 55.0,
+      PercentDropForGrade2: 55.0,
+      PercentDropForGrade3: 55.0,
+      PercentDropForGrade4: 55.0,
+      PercentDropForGrade5: 55.0,
+      Count: 63
+    },
+    {
+      MonsterId: 31,
+      ObjectId: 19756,
+      PercentDropForGrade1: 100.0,
+      PercentDropForGrade2: 100.0,
+      PercentDropForGrade3: 100.0,
+      PercentDropForGrade4: 100.0,
+      PercentDropForGrade5: 100.0,
+      Count: 63
+    },
+    {
+      MonsterId: 31,
+      ObjectId: 21171,
+      PercentDropForGrade1: 100.0,
+      PercentDropForGrade2: 100.0,
+      PercentDropForGrade3: 100.0,
+      PercentDropForGrade4: 100.0,
+      PercentDropForGrade5: 100.0,
+      Count: 63
+    },
+    {
+      MonsterId: 31,
+      ObjectId: 21618,
+      PercentDropForGrade1: 100.0,
+      PercentDropForGrade2: 100.0,
+      PercentDropForGrade3: 100.0,
+      PercentDropForGrade4: 100.0,
+      PercentDropForGrade5: 100.0,
+      Count: 63
     }
   ],
   Subareas: [
@@ -387,7 +354,7 @@
     1,16;1,17;1,18;1,19;1,20,
     1,16;1,17;1,18;1,19;1,20
   ],
-  FavoriteSubareaId: 1,
+  FavoriteSubareaId: 0,
   CorrespondingMiniBossId: 2574,
   SpeedAdjust: -1,
   CreatureBoneId: 0,
@@ -402,8 +369,23 @@
       Item2: 1.5816199779510498
     },
     {
+      Item1: 11
+    },
+    {
       Item1: 12,
       Item2: 1.1862150430679321
+    },
+    {
+      Item1: 13,
+      Item2: 1.5816199779510498
+    },
+    {
+      Item1: 14,
+      Item2: 1.5816199779510498
+    },
+    {
+      Item1: 15,
+      Item2: 1.5816199779510498
     },
     {
       Item1: 19,
@@ -414,23 +396,8 @@
       Item2: 1.0
     },
     {
-      Item1: 13,
-      Item2: 1.5816199779510498
-    },
-    {
       Item1: 25,
       Item2: 0.019770000129938126
-    },
-    {
-      Item1: 11
-    },
-    {
-      Item1: 14,
-      Item2: 1.5816199779510498
-    },
-    {
-      Item1: 15,
-      Item2: 1.5816199779510498
     }
   ],
   Name: {
@@ -748,55 +715,13 @@
     Drops: [
       {
         MonsterId: 2574,
-        ObjectId: 17123,
-        PercentDropForGrade1: 100.0,
-        PercentDropForGrade2: 100.0,
-        PercentDropForGrade3: 100.0,
-        PercentDropForGrade4: 100.0,
-        PercentDropForGrade5: 100.0,
-        Count: 63,
-        Criteria: Pj>41,9&CU>0,
-        HasCriteria: true,
-        HiddenIfInvalidCriteria: false
-      },
-      {
-        MonsterId: 2574,
         ObjectId: 362,
         PercentDropForGrade1: 100.0,
         PercentDropForGrade2: 100.0,
         PercentDropForGrade3: 100.0,
         PercentDropForGrade4: 100.0,
         PercentDropForGrade5: 100.0,
-        Count: 63,
-        Criteria: ,
-        HasCriteria: false,
-        HiddenIfInvalidCriteria: false
-      },
-      {
-        MonsterId: 2574,
-        ObjectId: 2270,
-        PercentDropForGrade1: 100.0,
-        PercentDropForGrade2: 100.0,
-        PercentDropForGrade3: 100.0,
-        PercentDropForGrade4: 100.0,
-        PercentDropForGrade5: 100.0,
-        Count: 63,
-        Criteria: PO!2270&PO>2269,1,
-        HasCriteria: true,
-        HiddenIfInvalidCriteria: false
-      },
-      {
-        MonsterId: 2574,
-        ObjectId: 2269,
-        PercentDropForGrade1: 100.0,
-        PercentDropForGrade2: 100.0,
-        PercentDropForGrade3: 100.0,
-        PercentDropForGrade4: 100.0,
-        PercentDropForGrade5: 100.0,
-        Count: 63,
-        Criteria: Qa=385&PO<2269,10,
-        HasCriteria: true,
-        HiddenIfInvalidCriteria: false
+        Count: 63
       },
       {
         MonsterId: 2574,
@@ -806,10 +731,27 @@
         PercentDropForGrade3: 9.239999771118164,
         PercentDropForGrade4: 9.239999771118164,
         PercentDropForGrade5: 9.239999771118164,
-        Count: 63,
-        Criteria: ,
-        HasCriteria: false,
-        HiddenIfInvalidCriteria: false
+        Count: 63
+      },
+      {
+        MonsterId: 2574,
+        ObjectId: 2269,
+        PercentDropForGrade1: 100.0,
+        PercentDropForGrade2: 100.0,
+        PercentDropForGrade3: 100.0,
+        PercentDropForGrade4: 100.0,
+        PercentDropForGrade5: 100.0,
+        Count: 63
+      },
+      {
+        MonsterId: 2574,
+        ObjectId: 2270,
+        PercentDropForGrade1: 100.0,
+        PercentDropForGrade2: 100.0,
+        PercentDropForGrade3: 100.0,
+        PercentDropForGrade4: 100.0,
+        PercentDropForGrade5: 100.0,
+        Count: 63
       },
       {
         MonsterId: 2574,
@@ -819,10 +761,7 @@
         PercentDropForGrade3: 9.239999771118164,
         PercentDropForGrade4: 9.239999771118164,
         PercentDropForGrade5: 9.239999771118164,
-        Count: 63,
-        Criteria: ,
-        HasCriteria: false,
-        HiddenIfInvalidCriteria: false
+        Count: 63
       },
       {
         MonsterId: 2574,
@@ -832,10 +771,17 @@
         PercentDropForGrade3: 2.0,
         PercentDropForGrade4: 2.0,
         PercentDropForGrade5: 2.0,
-        Count: 63,
-        Criteria: ,
-        HasCriteria: false,
-        HiddenIfInvalidCriteria: false
+        Count: 63
+      },
+      {
+        MonsterId: 2574,
+        ObjectId: 17123,
+        PercentDropForGrade1: 100.0,
+        PercentDropForGrade2: 100.0,
+        PercentDropForGrade3: 100.0,
+        PercentDropForGrade4: 100.0,
+        PercentDropForGrade5: 100.0,
+        Count: 63
       }
     ],
     Subareas: [
@@ -851,7 +797,7 @@
       1,16;1,17;1,18;1,19;1,20;1,20,
       1,16;1,17;1,18;1,19;1,20;1,20
     ],
-    FavoriteSubareaId: 173,
+    FavoriteSubareaId: 0,
     CorrespondingMiniBossId: 0,
     SpeedAdjust: -1,
     CreatureBoneId: 0,

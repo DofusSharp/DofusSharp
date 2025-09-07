@@ -1,5 +1,4 @@
 ﻿{
-  OpeningDate: Date_1,
   Language: En,
   PopulationId: 0,
   GameTypeId: 4,

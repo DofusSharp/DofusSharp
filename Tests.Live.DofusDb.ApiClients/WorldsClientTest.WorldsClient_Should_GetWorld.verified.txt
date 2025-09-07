@@ -3,7 +3,6 @@
   OrigineY: 4944,
   MapWidth: 69.5,
   MapHeight: 49.70000076293945,
-  ViewableEverywhere: true,
   MinScale: 0.20000000298023224,
   MaxScale: 1.0,
   StartScale: 0.6000000238418579,
