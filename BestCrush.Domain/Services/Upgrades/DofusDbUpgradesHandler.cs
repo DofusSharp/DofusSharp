@@ -12,7 +12,7 @@ namespace BestCrush.Domain.Services.Upgrades;
 
 public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryProvider dofusDbQueryProvider, ILogger<DofusDbUpgradesHandler> logger)
 {
-    public async Task UpgradeAsync(Version newVersion, CancellationToken cancellationToken = default)
+    public async Task UpgradeAsync(Version newVersion, ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
     {
         Upgrade? lastUpgrade = await dbContext.Upgrades.Where(u => u.Kind == UpgradeKind.DofusDb).OrderByDescending(u => u.UpgradeDate).FirstOrDefaultAsync(cancellationToken);
         Version? oldVersion = Version.TryParse(lastUpgrade?.NewVersion, out Version? version) ? version : null;
@@ -25,8 +25,14 @@ public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryPr
 
         logger.LogInformation("Running upgrade from version {OldVersion} to {NewVersion}...", oldVersion, newVersion);
 
-        await CreateOrUpdateEquipments();
-        await CreateOrUpdateRunesAsync();
+        DofusDbQuery<DofusDbCharacteristic> characteristicsQuery = dofusDbQueryProvider.Characteristics();
+        DofusDbCharacteristic[] characteristics = await characteristicsQuery
+            .ExecuteAsync(progress?.DeriveSubtask(0, 10).ToStepProgress("Récupération des caractéristiques"), cancellationToken)
+            .ToArrayAsync(cancellationToken);
+        Dictionary<long, DofusDbCharacteristic> characteristicsDict = characteristics.Where(c => c.Id.HasValue).ToDictionary(c => c.Id!.Value, c => c);
+
+        await CreateOrUpdateEquipments(characteristicsDict, progress?.DeriveSubtask(10, 55), cancellationToken);
+        await CreateOrUpdateRunesAsync(characteristicsDict, progress?.DeriveSubtask(55, 100), cancellationToken);
 
         Upgrade newUpgrade = new() { Kind = UpgradeKind.DofusDb, OldVersion = oldVersion?.ToString(), NewVersion = newVersion.ToString(), UpgradeDate = DateTime.Now };
         dbContext.Upgrades.Add(newUpgrade);
@@ -36,20 +42,29 @@ public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryPr
         logger.LogInformation("Successfully upgraded DofusDB data to version {NewVersion}.", newVersion);
     }
 
-    async Task CreateOrUpdateEquipments()
+    async Task CreateOrUpdateEquipments(
+        Dictionary<long, DofusDbCharacteristic> characteristicsDict,
+        ProgressSync<ProgressMessage>? progress = null,
+        CancellationToken cancellationToken = default
+    )
     {
-        DofusDbQuery<DofusDbCharacteristic> characteristicsQuery = dofusDbQueryProvider.Characteristics();
-        DofusDbCharacteristic[] characteristics = await characteristicsQuery.ExecuteAsync().ToArrayAsync();
-        Dictionary<long, DofusDbCharacteristic> characteristicsDict = characteristics.Where(c => c.Id.HasValue).ToDictionary(c => c.Id!.Value, c => c);
-
         DofusDbQuery<DofusDbRecipe> recipesQuery = dofusDbQueryProvider.Recipes();
-        DofusDbRecipe[] recipes = await recipesQuery.ExecuteAsync().ToArrayAsync();
+        DofusDbRecipe[] recipes = await recipesQuery
+            .ExecuteAsync(progress?.DeriveSubtask(10, 30).ToStepProgress("Récupération des recettes"), cancellationToken)
+            .ToArrayAsync(cancellationToken);
         Dictionary<long, DofusDbRecipe> recipesDict = recipes.Where(r => r.ResultId.HasValue).ToDictionary(c => c.ResultId!.Value, c => c);
 
         long[] equipmentTypes = Enum.GetValues<EquipmentType>().Select(t => t.ToDofusDbItemTypeId()).ToArray();
-        DofusDbItem[] equipments = await dofusDbQueryProvider.Items().Where(i => equipmentTypes.Contains(i.TypeId!.Value)).ExecuteAsync().ToArrayAsync();
-        foreach (DofusDbItem dofusDbItem in equipments)
+        DofusDbItem[] equipments = await dofusDbQueryProvider
+            .Items()
+            .Where(i => equipmentTypes.Contains(i.TypeId!.Value))
+            .ExecuteAsync(progress?.DeriveSubtask(30, 50).ToStepProgress("Récupération des équipements"), cancellationToken)
+            .ToArrayAsync(cancellationToken);
+
+        ProgressSync<ProgressMessage>? updateProgress = progress?.DeriveSubtask(50, 100);
+        for (int index = 0; index < equipments.Length; index++)
         {
+            DofusDbItem dofusDbItem = equipments[index];
             if (!dofusDbItem.Id.HasValue)
             {
                 logger.LogWarning("Could not map equipment {Name} ({Id}).", dofusDbItem.Name?.Fr ?? "???", dofusDbItem.Id?.ToString() ?? "???");
@@ -72,7 +87,10 @@ public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryPr
             {
                 UpdateEquipment(dofusDbItem, equipment, characteristicsDict, recipesDict);
             }
+
+            updateProgress?.ReportStep("Mise à jour des équipements", index, equipments.Length);
         }
+        updateProgress?.ReportStep("Mise à jour des équipements", equipments.Length, equipments.Length);
     }
 
     Equipment? CreateEquipment(DofusDbItem dofusDbItem, Dictionary<long, DofusDbCharacteristic> characteristics, Dictionary<long, DofusDbRecipe> recipes)
@@ -220,17 +238,24 @@ public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryPr
         resource.Name = dofusDbItem.Name?.Fr ?? "???";
     }
 
-    async Task CreateOrUpdateRunesAsync()
+    async Task CreateOrUpdateRunesAsync(
+        Dictionary<long, DofusDbCharacteristic> characteristicsDict,
+        ProgressSync<ProgressMessage>? progress = null,
+        CancellationToken cancellationToken = default
+    )
     {
         DofocusRunesClient dofocusClient = DofocusClient.Runes();
-        IReadOnlyCollection<DofocusRune> dofocusRunes = await dofocusClient.GetRunesAsync();
+        IReadOnlyCollection<DofocusRune> dofocusRunes = await dofocusClient.GetRunesAsync(cancellationToken);
 
-        Dictionary<long, DofusDbItem> dofusDbRunes =
-            await dofusDbQueryProvider.Items().Where(i => i.TypeId == 78).ExecuteAsync().Where(i => i.Id.HasValue).ToDictionaryAsync(i => i.Id!.Value, i => i);
+        Dictionary<long, DofusDbItem> dofusDbRunes = await dofusDbQueryProvider
+            .Items()
+            .Where(i => i.TypeId == 78)
+            .ExecuteAsync(progress?.DeriveSubtask(0, 50).ToStepProgress("Récupération des runes"), cancellationToken)
+            .Where(i => i.Id.HasValue)
+            .ToDictionaryAsync(i => i.Id!.Value, i => i, cancellationToken: cancellationToken);
 
-        Dictionary<long, DofusDbCharacteristic> dofusDbCharacteristics =
-            await dofusDbQueryProvider.Characteristics().ExecuteAsync().Where(i => i.Id.HasValue).ToDictionaryAsync(i => i.Id!.Value, i => i);
-
+        ProgressSync<ProgressMessage>? updateProgress = progress?.DeriveSubtask(50, 100);
+        int index = 0;
         foreach (DofocusRune dofocusRune in dofocusRunes)
         {
             if (dofocusRune.CharacteristicId is null)
@@ -244,7 +269,7 @@ public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryPr
                 continue;
             }
 
-            DofusDbCharacteristic? dofusDbCharacteristic = dofusDbCharacteristics.GetValueOrDefault(dofocusRune.CharacteristicId.Value);
+            DofusDbCharacteristic? dofusDbCharacteristic = characteristicsDict.GetValueOrDefault(dofocusRune.CharacteristicId.Value);
             if (dofusDbCharacteristic is null)
             {
                 continue;
@@ -273,7 +298,11 @@ public class DofusDbUpgradesHandler(BestCrushDbContext dbContext, DofusDbQueryPr
             }
 
             rune.Characteristic = characteristic.Value;
+
+            updateProgress?.ReportStep("Mise à jour des runes", index, dofocusRunes.Count);
+            index++;
         }
+        updateProgress?.ReportStep("Mise à jour des runes", dofocusRunes.Count, dofocusRunes.Count);
     }
 
     static Rune? CreateRune(DofusDbItem dofusDbItem)

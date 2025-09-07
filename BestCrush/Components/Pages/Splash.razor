@@ -30,18 +30,18 @@
             <div class="lead">@_progress.Message</div>
             @if (!_progress.Done)
             {
-                @if (_progress.Progress is null)
+                @if (_progress.Percent is null)
                 {
-                    <div class="progress" role="progressbar" aria-label="Warning striped example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="height: 4px">
                         <div class="progress-bar progress-bar-striped bg-warning" style="width: 100%"></div>
                     </div>
                 }
                 else
                 {
-                    int p = (int)(_progress.Progress * 100);
+                    int p = (int)_progress.Percent;
 
-                    <div class="progress" role="progressbar" aria-label="Warning striped example" aria-valuenow="@p" aria-valuemin="0" aria-valuemax="100">
-                        <div class="progress-bar progress-bar-striped bg-warning" style="width: @p%"></div>
+                    <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="@p" aria-valuemin="0" aria-valuemax="100" style="height: 4px">
+                        <div class="progress-bar bg-warning" style="width: @(p)%"></div>
                     </div>
                 }
             }
@@ -51,23 +51,34 @@
 
 @code {
 
-    AsyncProgress _progress = new("Starting...", null);
+    ProgressMessage _progress = new("Starting...", null);
     string? _error;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _progress = new AsyncProgress("Migration de la base de données...", null);
+            ProgressSync<ProgressMessage> progress = new(m =>
+                {
+                    _progress = m;
+                    StateHasChanged();
+                }
+            );
+
+            _progress = new ProgressMessage("Migration de la base de données...", null);
+            StateHasChanged();
             await BestCrushDbContext.Database.MigrateAsync();
 
-            _progress = new AsyncProgress("Mise à jour des données...", null);
-            await UpgradeAsync();
+            _progress = new ProgressMessage("Mise à jour des données...", 0);
+            StateHasChanged();
+            await UpgradeAsync(progress);
 
-            _progress = new AsyncProgress("Chargement des serveurs...", null);
+            _progress = new ProgressMessage("Chargement des serveurs...", null);
+            StateHasChanged();
             _ = await ServersService.GetServers();
 
-            _progress = new AsyncProgress("Prêt.", null, true);
+            _progress = new ProgressMessage("Prêt.", null, true);
+            StateHasChanged();
 
             DofocusServer? currentServer = await ServersService.GetCurrentServer();
             NavigationManager.NavigateTo(currentServer is not null ? KnownRoutes.Server(currentServer) : KnownRoutes.Servers());
@@ -80,12 +91,12 @@
         }
     }
 
-    async Task UpgradeAsync()
+    async Task UpgradeAsync(ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
     {
-        await ApplicationUpgradesHandler.UpgradeAsync(AppInfo.Version);
+        await ApplicationUpgradesHandler.UpgradeAsync(AppInfo.Version, progress?.DeriveSubtask(0, 50), cancellationToken);
 
-        Version version = await DofusDbClientsFactory.Version().GetVersionAsync();
-        await DofusDbUpgradesHandler.UpgradeAsync(version);
+        Version version = await DofusDbClientsFactory.Version().GetVersionAsync(cancellationToken);
+        await DofusDbUpgradesHandler.UpgradeAsync(version, progress?.DeriveSubtask(50, 100), cancellationToken);
     }
 
 }
