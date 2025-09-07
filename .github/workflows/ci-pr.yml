@@ -7,11 +7,17 @@ on:
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  MINVERBUILDMETADATA: build.${{ github.run_id }}.${{ github.run_attempt}}
 
 jobs:
+  compute-version:
+    name: Compute version
+    uses: ./.github/workflows/reusable-compute-version.yml
+    with:
+      build-name: pr
+      
   build-and-test:
     runs-on: ubuntu-latest
+    needs: compute-version
     
     permissions:
       checks: write
@@ -32,19 +38,60 @@ jobs:
         run: dotnet restore
         
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore --property Version=${{ needs.compute-version.outputs.version }}
         
       - name: Tests
-        run: dotnet test --no-build --filter "FullyQualifiedName!~Tests.Live" --verbosity normal --logger trx
-        
-      - name: Live Tests 
-        run: dotnet test --no-build --filter "FullyQualifiedName~Tests.Live" --verbosity normal --logger trx
-        continue-on-error: true # Live tests might fail because of external factors like a service being down
+        run: dotnet test --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
 
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.16.1
-        if: (!cancelled())
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: ${{ always() }}
         with:
-          # Test results are written to each test project's directory under the TestResults directory
-          trx_files: "**/TestResults/*.trx"
+          files: |
+            TestResults/**/*.xml
+            !TestResults/**/*.cobertura*.xml
+            TestResults/**/*.trx
+            TestResults/**/*.json
+
+      - name: Install dotnet-coverage
+        run: dotnet tool install -g dotnet-coverage
+
+      - name: Merge coverage files
+        run: dotnet-coverage merge TestResults/**/*.cobertura.xml --output TestResults/coverage.cobertura.xml --output-format cobertura
+
+      - name: Create coverage report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: TestResults/coverage.cobertura.xml
+          badge: true
+          fail_below_min: false
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 80'
+
+      - name: Prepend title to coverage markdown
+        run: sed -i '1s;^;## Coverage ;' code-coverage-results.md
+
+      - name: Add Coverage as Job Summary
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Add Coverage as Check Run
+        uses: LouisBrunner/checks-action@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Coverage
+          conclusion: success
+          output: |
+            { "summary": "Code coverage report" }
+          output_text_description_file: code-coverage-results.md
+
+      - name: Add Coverage as PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          recreate: true
+          path: code-coverage-results.md
 

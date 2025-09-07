@@ -5,6 +5,7 @@
         <Authors>Ismail Bennani</Authors>
         <Description>API clients for the Dofocus API.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
     
     <ItemGroup>
@@ -16,6 +17,10 @@
     
     <ItemGroup>
       <ProjectReference Include="..\DofusSharp.Common\DofusSharp.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>

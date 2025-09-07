@@ -1,18 +1,28 @@
 name: Continuous Deployment - Publish Libraries
 
 on:
-  push:
-    tags:
-      - v*
+  release:
+    types: [published]
   workflow_dispatch:
+    dry-run:
+      description: Whether to skip the publication of packages to the repositories
+      type: boolean
 
 jobs:
+  compute-version:
+    name: Compute version
+    uses: ./.github/workflows/reusable-compute-version.yml
+    with:
+      build-name: pr
+
   build-publish:
     runs-on: ubuntu-latest
+    needs: compute-version
     
     permissions:
       actions: write
       contents: write
+      packages: write
     
     steps:
       - name: Checkout
@@ -20,28 +30,41 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install .NET 8.0 (for dotnet-releaser)
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
       - name: Install .NET 10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: 10.0.x
 
-      - name: Install dotnet-releaser
-        shell: bash
-        run: dotnet tool install --global dotnet-releaser --version 0.11.0
+      - name: Build
+        run: dotnet build --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
 
-      - name: Build, Tests, Cover, Pack and Publish
-        shell: bash
-        run: dotnet-releaser run --nuget-token "${{ secrets.NUGET_TOKEN }}" --github-token "${{ secrets.GITHUB_TOKEN }}" dotnet-releaser.toml
-
+      - name: Test
+        run: dotnet test --configuration Release --no-build
+        
+      - name: Pack
+        run: dotnet pack --output nuget/ --property Version=${{ needs.compute-version.outputs.version }}
+      
       - name: Upload binaries as artifact
-        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/upload-artifact@v4
         with:
-          name: binaries
-          path: src/artifacts-dotnet-releaser
-          if-no-files-found: 'error'
+          name: libraries
+          path: nuget/*.nupkg
+          if-no-files-found: error
+
+      - name: Configure Github Nuget repository
+        if: ${{ !inputs.dry-run }}
+        run: dotnet nuget add source --username ismailbennani --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/ismailbennani/index.json"
+        
+      - name: Publish nugets - Github
+        if: ${{ !inputs.dry-run }}
+        run: |
+          for filename in nuget/*.nupkg; do
+              dotnet nuget push "$filename" --source github --api-key ${{ secrets.GITHUB_TOKEN }}
+          done
+
+      - name: Publish nugets - Nuget
+        if: ${{ !inputs.dry-run }}
+        run: |
+          for filename in nuget/*.nupkg; do
+              dotnet nuget push "$filename" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}
+          done
