@@ -1,0 +1,14 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+  categories:
+    - title: DofusDB API Clients
+      labels:
+        - dofusdb-api
+    - title: Dofocus API Clients
+      labels:
+        - dofocus-api
+    - title: Other Changes
+      labels:
+        - "*"

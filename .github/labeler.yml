@@ -1,0 +1,28 @@
+dofusdb-api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'DofusSharp.DofusDb.ApiClients/*'
+          - 'Tests.Live.DofusDb.ApiClients/*'
+          - 'Tests.UnitTests.DofusDb.ApiClients/*'
+
+dofocus-api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'DofusSharp.Dofocus.ApiClients/*'
+          - 'Tests.Live.Dofocus.ApiClients/*'
+          - 'Tests.UnitTests.Dofocus.ApiClients/*'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/*'
+  - head-branch: ['^ci:']
+
+refactor:
+  - head-branch: ['^refactor:']
+
+documentation:
+  - head-branch: ['^docs:']
+
+feature:
+  - head-branch: ['^feat:']
