@@ -16,7 +16,7 @@ jobs:
       build-name: pr
 
   build-publish:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: compute-version
     
     permissions:
@@ -61,13 +61,13 @@ jobs:
       - name: Publish nugets - Github
         if: ${{ !inputs.dry-run }}
         run: |
-          for filename in nuget/*.nupkg; do
-              dotnet nuget push "$filename" --source github --api-key ${{ secrets.GITHUB_TOKEN }}
-          done
+          foreach($File in (Get-ChildItem "nuget/" -Recurse -Include *.nupkg)) {
+              dotnet nuget push $File --source github --api-key ${{ secrets.GITHUB_TOKEN }}
+          }
 
       - name: Publish nugets - Nuget
         if: ${{ !inputs.dry-run }}
         run: |
-          for filename in nuget/*.nupkg; do
-              dotnet nuget push "$filename" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}
-          done
+          foreach($File in (Get-ChildItem "nuget/" -Recurse -Include *.nupkg)) {
+              dotnet nuget push $File --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}
+          }

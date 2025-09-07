@@ -16,7 +16,7 @@ jobs:
       build-name: pr
       
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: compute-version
     
     permissions:
