@@ -75,7 +75,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task Execute_ShouldSetSortParameter_NestedProperty()
     {
-        await _builder.SortByDescending(i => i.Name.Fr).ExecuteAsync().ToArrayAsync();
+        await _builder.SortByDescending(i => i.Name!.Fr).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
@@ -112,7 +112,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task Execute_ShouldSetSelectParameter_ForNestedFields()
     {
-        await _builder.Select(i => i.Name.Fr).ExecuteAsync().ToArrayAsync();
+        await _builder.Select(i => i.Name!.Fr).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
@@ -206,7 +206,7 @@ public class DofusDbQueryTest
     public async Task Execute_ShouldSetPredicateParameter_In_CollectionIsNotNullable()
     {
         IEnumerable<long> collection = [1, 2];
-        await _builder.Where(i => collection.Contains(i.AppearanceId.Value)).ExecuteAsync().ToArrayAsync();
+        await _builder.Where(i => collection.Contains(i.AppearanceId!.Value)).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
@@ -430,7 +430,7 @@ public class DofusDbQueryTest
     public async Task ShouldSetPredicateParameter_DynamicValueInExpression()
     {
         int id = 2;
-        await _builder.Where(i => i.Type.SuperType.Id == id).ExecuteAsync().ToArrayAsync();
+        await _builder.Where(i => i.Type!.SuperType!.Id == id).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
@@ -442,7 +442,7 @@ public class DofusDbQueryTest
     public async Task ShouldSetPredicateParameter_NestedDynamicValueInExpression()
     {
         var value = new { Content = new { Id = 2 } };
-        await _builder.Where(i => i.Type.SuperType.Id == value.Content.Id).ExecuteAsync().ToArrayAsync();
+        await _builder.Where(i => i.Type!.SuperType!.Id == value.Content.Id).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
@@ -453,7 +453,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task ShouldSetPredicateParameter_MemberChain()
     {
-        await _builder.Where(i => i.Type.SuperType.Id == 2).ExecuteAsync().ToArrayAsync();
+        await _builder.Where(i => i.Type!.SuperType!.Id == 2).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
@@ -464,7 +464,7 @@ public class DofusDbQueryTest
     [Fact]
     public async Task ShouldSetPredicateParameter_MemberChain_ShouldIgnoreValuePropertyOfNullableField()
     {
-        await _builder.Where(i => i.Type.SuperType.Id.Value == 2).ExecuteAsync().ToArrayAsync();
+        await _builder.Where(i => i.Type!.SuperType!.Id!.Value == 2).ExecuteAsync().ToArrayAsync();
 
         _clientMock.Verify(c => c.SearchAsync(It.IsAny<DofusDbSearchQuery>(), It.IsAny<CancellationToken>()));
 
@@ -480,7 +480,7 @@ public class DofusDbQueryTest
         List<string?> thirdContainer = ["value3", "value4"];
 
         await _builder
-            .Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name.Fr))
+            .Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name!.Fr))
             .Where(i => thirdContainer.Contains(i.Criteria))
             .ExecuteAsync()
             .ToArrayAsync();
@@ -562,7 +562,7 @@ public class DofusDbQueryTest
         List<string?> thirdContainer = ["value3", "value4"];
 
         await _builder
-            .Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name.Fr))
+            .Where(i => firstContainer.Contains(i.AppearanceId) || i.BonusIsSecret == true && i.Level > 50 && !secondContainer.Contains(i.Name!.Fr))
             .Where(i => thirdContainer.Contains(i.Criteria))
             .CountAsync();
 
