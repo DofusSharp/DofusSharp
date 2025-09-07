@@ -2,7 +2,7 @@
 
 # BestCrush
 
-BestCrush is an application designed to help players of the game **Dofus** find the most profitable items to crush for runes. It leverages both static game data from DofusDB and dynamic community-driven data from Dofocus to provide accurate, up-to-date recommendations.
+BestCrush is an application designed to help players of the game Dofus find the most profitable items to crush for runes. It leverages both static game data from DofusDB and dynamic community-driven data from Dofocus to provide accurate, up-to-date recommendations.
 
 ![](Docs/Screenshots/search_shovels.png)
 
