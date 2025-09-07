@@ -16,8 +16,6 @@ ci:
   - changed-files:
       - any-glob-to-any-file:
           - '.github/*'
-
-ci:
   - head-branch: ['^ci:']
 
 refactor:
