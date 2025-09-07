@@ -63,9 +63,9 @@ jobs:
           name: coverage-reports
           path: TestResults/**/*.cobertura.xml
 
-    publish-coverage:
-        name: Publish coverage reports
-        needs: build-and-test
-        uses: ./.github/workflows/reusable-publish-coverage.yml
-        with:
-            artifact-name: coverage-reports
+  publish-coverage:
+    name: Publish coverage reports
+    needs: build-and-test
+    uses: ./.github/workflows/reusable-publish-coverage.yml
+    with:
+      artifact-name: coverage-reports
