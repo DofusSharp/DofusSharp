@@ -12,6 +12,13 @@ dofocus-api:
           - 'Tests.Live.Dofocus.ApiClients/*'
           - 'Tests.UnitTests.Dofocus.ApiClients/*'
 
+best-crush:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'BestCrush/*'
+          - 'BestCrush.Domain/*'
+          - 'BestCrush.Migrations/*'
+
 ci:
   - changed-files:
       - any-glob-to-any-file:
