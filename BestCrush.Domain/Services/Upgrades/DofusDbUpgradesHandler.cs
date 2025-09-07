@@ -92,7 +92,7 @@ public class DofusDbUpgradesHandler(
                 continue;
             }
 
-            Equipment? equipment = dbContext.Equipments.SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id.Value);
+            Equipment? equipment = dbContext.Equipments.Include(e => e.Characteristics).Include(e => e.Recipe).SingleOrDefault(i => i.DofusDbId == dofusDbItem.Id.Value);
             if (equipment is null)
             {
                 equipment = await CreateEquipmentAsync(dofusDbItem, characteristicsDict, recipesDict, cancellationToken);
