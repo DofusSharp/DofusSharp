@@ -1,14 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <IsPackable>false</IsPackable>
+        <Title>DofusSharp - Common</Title>
+        <Authors>Ismail Bennani</Authors>
+        <Description>Common code for the DofusSharp nugets.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
-    
+
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.8" />
     </ItemGroup>
