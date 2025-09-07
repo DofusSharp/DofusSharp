@@ -51,14 +51,14 @@ jobs:
           if-no-files-found: error
           
       - name: Publish nugets
-        if: ${{ !inputs.dry-run }}
+        if: !inputs.dry-run
         run: |
           for filename in nuget/*.nupkg; do
               dotnet nuget push "$filename" --source github --api-key ${{ secrets.GITHUB_TOKEN }}
           done
 
       - name: Publish nugets - Nuget
-        if: ${{ !inputs.dry-run }}
+        if: !inputs.dry-run
         run: |
           for filename in nuget/*.nupkg; do
               dotnet nuget push "$filename" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}
