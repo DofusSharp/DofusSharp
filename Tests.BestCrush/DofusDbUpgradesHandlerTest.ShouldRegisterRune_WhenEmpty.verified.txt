@@ -1,0 +1,8 @@
+﻿{
+  Id: Guid_1,
+  DofusDbId: 123,
+  DofusDbIconId: 269,
+  Level: 159,
+  Name: RUNE_NAME,
+  Characteristic: Ap
+}

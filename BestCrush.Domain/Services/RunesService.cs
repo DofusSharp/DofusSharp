@@ -5,7 +5,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 
 namespace BestCrush.Domain.Services;
 
-public class RunesService(CharacteristicsService characteristicsService, BestCrushDbContext context)
+public class RunesService(CharacteristicsService characteristicsService, BestCrushDbContext context, IDofocusClientFactory dofocusClientFactory)
 {
     IReadOnlyCollection<DofocusRune>? _runes;
     readonly SemaphoreSlim _runesSemaphore = new(1, 1);
@@ -74,7 +74,7 @@ public class RunesService(CharacteristicsService characteristicsService, BestCru
                 return _runes;
             }
 
-            DofocusRunesClient client = DofocusClient.Runes();
+            IDofocusRunesClient client = dofocusClientFactory.Runes();
             _runes = await client.GetRunesAsync();
             return _runes;
         }

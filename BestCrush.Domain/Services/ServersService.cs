@@ -4,7 +4,7 @@ using DofusSharp.Dofocus.ApiClients.Models.Servers;
 
 namespace BestCrush.Domain.Services;
 
-public class ServersService(ImageCache imageCache)
+public class ServersService(ImageCache imageCache, IDofocusClientFactory dofocusClientFactory)
 {
     IReadOnlyCollection<DofocusServer>? _servers;
     readonly SemaphoreSlim _serversLock = new(1, 1);
@@ -22,7 +22,7 @@ public class ServersService(ImageCache imageCache)
         {
             if (_servers is null)
             {
-                DofocusServersClient serversClient = DofocusClient.Servers();
+                IDofocusServersClient serversClient = dofocusClientFactory.Servers();
                 _servers = await serversClient.GetServersAsync();
             }
 

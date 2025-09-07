@@ -2,6 +2,7 @@
 using BestCrush.Domain;
 using BestCrush.Domain.Services;
 using BestCrush.Domain.Services.Upgrades;
+using DofusSharp.Dofocus.ApiClients;
 using DofusSharp.DofusDb.ApiClients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -55,6 +56,8 @@ public static class MauiProgram
             builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("http://localhost/BestCrush")));
             builder.Services.AddSingleton(DofusDbClient.Production(new Uri("http://localhost/BestCrush")));
 #endif
+
+            builder.Services.AddSingleton(DofocusClient.Production());
 
             builder.Logging.ClearProviders();
             builder.Logging.AddSerilog(Log.Logger, true);

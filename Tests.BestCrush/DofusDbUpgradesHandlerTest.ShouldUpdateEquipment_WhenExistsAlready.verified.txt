@@ -1,0 +1,8 @@
+﻿{
+  Id: Guid_1,
+  DofusDbId: 1,
+  DofusDbIconId: 147,
+  Level: 159,
+  Name: ITEM_NAME,
+  Type: Boots
+}

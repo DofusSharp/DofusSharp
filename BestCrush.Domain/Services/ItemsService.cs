@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BestCrush.Domain.Services;
 
-public class ItemsService(BestCrushDbContext context, IDofusDbClientsFactory dofusDbClientsFactory, ImageCache imageCache)
+public class ItemsService(BestCrushDbContext context, IDofusDbClientsFactory dofusDbClientsFactory, IDofocusClientFactory dofocusClientFactory, ImageCache imageCache)
 {
     readonly ConcurrentDictionary<long, DofocusItem> _cachedItems = [];
 
@@ -22,7 +22,7 @@ public class ItemsService(BestCrushDbContext context, IDofusDbClientsFactory dof
             return cachedItem;
         }
 
-        DofocusItemsClient client = DofocusClient.Items();
+        IDofocusItemsClient client = dofocusClientFactory.Items();
         DofocusItem item = await client.GetItemAsync(id);
         _cachedItems.AddOrUpdate(id, item, (_, _) => item);
 
