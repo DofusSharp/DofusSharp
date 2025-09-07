@@ -7,14 +7,15 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProgressMessage = BestCrush.Domain.Models.ProgressMessage;
 
 namespace BestCrush.Domain.Services.Upgrades;
 
-public class DofusDbUpgradesHandler(
+public class GameDataUpgradeHandler(
     BestCrushDbContext dbContext,
     IDofusDbQueryProvider dofusDbQueryProvider,
     IDofocusClientFactory dofocusClientFactory,
-    ILogger<DofusDbUpgradesHandler> logger
+    ILogger<GameDataUpgradeHandler> logger
 )
 {
     public async Task UpgradeAsync(Version newVersion, ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
@@ -30,37 +31,44 @@ public class DofusDbUpgradesHandler(
 
         logger.LogInformation("Running upgrade from version {OldVersion} to {NewVersion}...", oldVersion, newVersion);
 
-        ProgressSync<ProgressMessage>? removeProgress = progress?.DeriveSubtask(0, 25);
-        removeProgress?.ReportStep("Suppression des anciennes données", 1, 6);
-        await ClearTableAsync<ItemCharacteristicLine>(cancellationToken);
-        removeProgress?.ReportStep("Suppression des anciennes données", 2, 6);
-        await ClearTableAsync<RecipeEntry>(cancellationToken);
-        removeProgress?.ReportStep("Suppression des anciennes données", 3, 6);
-        await ClearTableAsync<Resource>(cancellationToken);
-        removeProgress?.ReportStep("Suppression des anciennes données", 4, 6);
-        await ClearTableAsync<Equipment>(cancellationToken);
-        removeProgress?.ReportStep("Suppression des anciennes données", 5, 6);
-        await ClearTableAsync<Rune>(cancellationToken);
-        removeProgress?.ReportStep("Suppression des anciennes données", 6, 6);
+        progress?.Report("Mise à jour des données du jeu.");
 
-        IDofusDbQuery<DofusDbCharacteristic> characteristicsQuery = dofusDbQueryProvider.Characteristics();
-        DofusDbCharacteristic[] characteristics = await characteristicsQuery
-            .ExecuteAsync(progress?.DeriveSubtask(25, 35).ToStepProgress("Récupération des caractéristiques"), cancellationToken)
-            .ToArrayAsync(cancellationToken);
-        Dictionary<long, DofusDbCharacteristic> characteristicsDict = characteristics.Where(c => c.Id.HasValue).ToDictionary(c => c.Id!.Value, c => c);
+        await ClearTables(progress?.DeriveSubtask(0, 25), cancellationToken);
 
-        await CreateEquipmentsAsync(characteristicsDict, progress?.DeriveSubtask(35, 70), cancellationToken);
+        (Dictionary<long, DofusDbCharacteristic> characteristicsDict, Dictionary<long, DofusDbRecipe> recipesDict, DofusDbItem[] equipments, DofusDbItem[] ingredients) =
+            await FetchDataAsync(progress?.DeriveSubtask(25, 50), cancellationToken);
+
+        CreateIngredients(ingredients, progress?.DeriveSubtask(50, 60));
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        await CreateRunesAsync(characteristicsDict, progress?.DeriveSubtask(70, 100), cancellationToken);
+        await CreateEquipmentsAsync(characteristicsDict, recipesDict, equipments, progress?.DeriveSubtask(60, 80), cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        await CreateRunesAsync(characteristicsDict, progress?.DeriveSubtask(80, 100), cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         Upgrade newUpgrade = new() { Kind = UpgradeKind.DofusDb, OldVersion = oldVersion?.ToString(), NewVersion = newVersion.ToString(), UpgradeDate = DateTime.Now };
         dbContext.Upgrades.Add(newUpgrade);
-
         await dbContext.SaveChangesAsync(cancellationToken);
 
+        progress?.Report("Les données du jeu ont été mises à jour.", 100, true);
+
         logger.LogInformation("Successfully upgraded DofusDB data to version {NewVersion}.", newVersion);
+    }
+
+    async Task ClearTables(ProgressSync<ProgressMessage>? progress, CancellationToken cancellationToken)
+    {
+        progress?.ReportStep("Suppression des anciennes données", 1, 6);
+        await ClearTableAsync<ItemCharacteristicLine>(cancellationToken);
+        progress?.ReportStep("Suppression des anciennes données", 2, 6);
+        await ClearTableAsync<RecipeEntry>(cancellationToken);
+        progress?.ReportStep("Suppression des anciennes données", 3, 6);
+        await ClearTableAsync<Resource>(cancellationToken);
+        progress?.ReportStep("Suppression des anciennes données", 4, 6);
+        await ClearTableAsync<Equipment>(cancellationToken);
+        progress?.ReportStep("Suppression des anciennes données", 5, 6);
+        await ClearTableAsync<Rune>(cancellationToken);
+        progress?.ReportStep("Suppression des anciennes données", 6, 6);
     }
 
     async Task ClearTableAsync<T>(CancellationToken cancellationToken = default)
@@ -77,15 +85,18 @@ public class DofusDbUpgradesHandler(
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    async Task CreateEquipmentsAsync(
-        Dictionary<long, DofusDbCharacteristic> characteristicsDict,
-        ProgressSync<ProgressMessage>? progress = null,
-        CancellationToken cancellationToken = default
-    )
+    async Task<(Dictionary<long, DofusDbCharacteristic> characteristicsDict, Dictionary<long, DofusDbRecipe> recipesDict, DofusDbItem[] equipments, DofusDbItem[] ingredients)>
+        FetchDataAsync(ProgressSync<ProgressMessage>? progress = null, CancellationToken cancellationToken = default)
     {
+        IDofusDbQuery<DofusDbCharacteristic> characteristicsQuery = dofusDbQueryProvider.Characteristics();
+        DofusDbCharacteristic[] characteristics = await characteristicsQuery
+            .ExecuteAsync(progress?.DeriveSubtask(0, 20).ToStepProgress("Récupération des caractéristiques"), cancellationToken)
+            .ToArrayAsync(cancellationToken);
+        Dictionary<long, DofusDbCharacteristic> characteristicsDict = characteristics.Where(c => c.Id.HasValue).ToDictionary(c => c.Id!.Value, c => c);
+
         IDofusDbQuery<DofusDbRecipe> recipesQuery = dofusDbQueryProvider.Recipes();
         DofusDbRecipe[] recipes = await recipesQuery
-            .ExecuteAsync(progress?.DeriveSubtask(10, 30).ToStepProgress("Récupération des recettes"), cancellationToken)
+            .ExecuteAsync(progress?.DeriveSubtask(20, 60).ToStepProgress("Récupération des recettes"), cancellationToken)
             .ToArrayAsync(cancellationToken);
         Dictionary<long, DofusDbRecipe> recipesDict = recipes.Where(r => r.ResultId.HasValue).ToDictionary(c => c.ResultId!.Value, c => c);
 
@@ -93,7 +104,7 @@ public class DofusDbUpgradesHandler(
         DofusDbItem[] equipments = await dofusDbQueryProvider
             .Items()
             .Where(i => equipmentTypes.Contains(i.TypeId!.Value))
-            .ExecuteAsync(progress?.DeriveSubtask(30, 50).ToStepProgress("Récupération des équipements"), cancellationToken)
+            .ExecuteAsync(progress?.DeriveSubtask(60, 100).ToStepProgress("Récupération des équipements"), cancellationToken)
             .ToArrayAsync(cancellationToken);
 
         DofusDbItem[] ingredients = equipments
@@ -103,6 +114,11 @@ public class DofusDbUpgradesHandler(
             .DistinctBy(i => i.Id!.Value)
             .ToArray();
 
+        return (characteristicsDict, recipesDict, equipments, ingredients);
+    }
+
+    void CreateIngredients(DofusDbItem[] ingredients, ProgressSync<ProgressMessage>? progress)
+    {
         ProgressSync<ProgressMessage>? ingredientsProgress = progress?.DeriveSubtask(50, 70);
         for (int index = 0; index < ingredients.Length; index++)
         {
@@ -119,8 +135,16 @@ public class DofusDbUpgradesHandler(
         }
 
         ingredientsProgress?.ReportStep($"Création des ingrédients {ingredients.Length}/{ingredients.Length}", ingredients.Length, ingredients.Length);
-        await dbContext.SaveChangesAsync(cancellationToken);
+    }
 
+    async Task CreateEquipmentsAsync(
+        Dictionary<long, DofusDbCharacteristic> characteristicsDict,
+        Dictionary<long, DofusDbRecipe> recipesDict,
+        DofusDbItem[] equipments,
+        ProgressSync<ProgressMessage>? progress = null,
+        CancellationToken cancellationToken = default
+    )
+    {
         ProgressSync<ProgressMessage>? equipmentsProgress = progress?.DeriveSubtask(70, 100);
         for (int index = 0; index < equipments.Length; index++)
         {
@@ -143,7 +167,6 @@ public class DofusDbUpgradesHandler(
         }
 
         equipmentsProgress?.ReportStep($"Création des équipements {equipments.Length}/{equipments.Length}", equipments.Length, equipments.Length);
-        await dbContext.SaveChangesAsync(cancellationToken);
     }
 
     async Task<Equipment?> CreateEquipmentAsync(

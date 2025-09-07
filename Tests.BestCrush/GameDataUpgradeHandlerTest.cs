@@ -18,7 +18,7 @@ using Tests.BestCrush.Utils;
 
 namespace Tests.BestCrush;
 
-public class DofusDbUpgradesHandlerTest : IDisposable
+public class GameDataUpgradeHandlerTest : IDisposable
 {
     static readonly string[] EquipmentTypeIds =
         ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "16", "17", "18", "121", "311", "19", "20", "21", "22", "82", "114", "151", "271"];
@@ -31,9 +31,9 @@ public class DofusDbUpgradesHandlerTest : IDisposable
     readonly Mock<IDofusDbTableClient<DofusDbItem>> _dofusDbItemsClientMock;
     readonly Mock<IDofusDbTableClient<DofusDbRecipe>> _dofusDbRecipesClientMock;
     readonly Mock<IDofocusRunesClient> _dofocusRunesClientMock;
-    readonly DofusDbUpgradesHandler _handler;
+    readonly GameDataUpgradeHandler _handler;
 
-    public DofusDbUpgradesHandlerTest()
+    public GameDataUpgradeHandlerTest()
     {
         _testDatabase = new TestDatabase();
         _context = _testDatabase.CreateContext();
@@ -52,7 +52,7 @@ public class DofusDbUpgradesHandlerTest : IDisposable
         dofocusClientFactory.Setup(f => f.Runes()).Returns(_dofocusRunesClientMock.Object);
 
         IDofusDbQueryProvider queryProvider = DofusDbQuery.Create(clientsFactory.Object);
-        _handler = new DofusDbUpgradesHandler(_context, queryProvider, dofocusClientFactory.Object, Mock.Of<ILogger<DofusDbUpgradesHandler>>());
+        _handler = new GameDataUpgradeHandler(_context, queryProvider, dofocusClientFactory.Object, Mock.Of<ILogger<GameDataUpgradeHandler>>());
     }
 
     public void Dispose() => _testDatabase.Dispose();

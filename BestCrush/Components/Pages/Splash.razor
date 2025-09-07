@@ -2,7 +2,7 @@
 @inject BestCrushDbContext BestCrushDbContext
 @inject ApplicationUpgradesHandler ApplicationUpgradesHandler
 @inject IDofusDbClientsFactory DofusDbClientsFactory
-@inject DofusDbUpgradesHandler DofusDbUpgradesHandler
+@inject GameDataUpgradeHandler GameDataUpgradeHandler
 @inject NavigationManager NavigationManager
 @inject ILogger<Splash> Logger;
 @page "/"
@@ -123,7 +123,7 @@
         await ApplicationUpgradesHandler.UpgradeAsync(CurrentVersion.Version, progress?.DeriveSubtask(0, 50), cancellationToken);
 
         Version version = await DofusDbClientsFactory.Version().GetVersionAsync(cancellationToken);
-        await DofusDbUpgradesHandler.UpgradeAsync(version, progress?.DeriveSubtask(50, 100), cancellationToken);
+        await GameDataUpgradeHandler.UpgradeAsync(version, progress?.DeriveSubtask(50, 100), cancellationToken);
     }
 
 }

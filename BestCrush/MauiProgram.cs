@@ -46,7 +46,7 @@ public static class MauiProgram
             builder.Services.AddSingleton<CharacteristicsService>();
             builder.Services.AddSingleton<CrushService>();
             builder.Services.AddScoped<ApplicationUpgradesHandler>();
-            builder.Services.AddScoped<DofusDbUpgradesHandler>();
+            builder.Services.AddScoped<GameDataUpgradeHandler>();
             builder.Services.AddScoped<ItemsService>();
 
 #if DEBUG
