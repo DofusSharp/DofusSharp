@@ -47,7 +47,7 @@ jobs:
         run: dotnet test DofusSharp.BestCrush.Filter.slnf --configuration Release --no-build
         
       - name: Publish
-        run: dotnet publish DofusSharp.BestCrush/DofusSharp.BestCrush.csproj --output best-crush/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet publish BestCrush/BestCrush.csproj --output best-crush/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Create release archive
         if: ${{ github.event_name == 'release' }}
