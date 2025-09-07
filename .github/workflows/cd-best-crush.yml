@@ -5,8 +5,10 @@ on:
     types: published
   workflow_dispatch:
     dry-run:
-      description: Whether to skip the publication of packages to the repositories
+      description: Skip the publication of packages to repos
+      required: true
       type: boolean
+      default: false
 
 jobs:
   compute-version:
