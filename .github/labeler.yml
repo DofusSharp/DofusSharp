@@ -26,6 +26,3 @@ documentation:
 
 feature:
   - head-branch: ['^feat:']
-
-release:
-  - base-branch: 'main'
