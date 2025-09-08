@@ -15,12 +15,14 @@ namespace BestCrush;
 public static class MauiProgram
 {
     const string DatabaseFileName = "bestcrush.db";
-    static readonly string DbPath = Path.Combine(FileSystem.AppDataDirectory, DatabaseFileName);
-    static readonly string LogPath = Path.Combine(FileSystem.AppDataDirectory, "bestcrush.log");
 
     public static MauiApp CreateMauiApp()
     {
-        SetupSerilog();
+        string dataDirectory = GetDataDirectory();
+        string dbPath = Path.Combine(dataDirectory, DatabaseFileName);
+        string logPath = Path.Combine(dataDirectory, "bestcrush.log");
+
+        SetupSerilog(logPath);
 
         try
         {
@@ -38,7 +40,7 @@ public static class MauiProgram
             builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
 
-            ConfigureDatabase(builder, logger);
+            ConfigureDatabase(builder, dbPath, logger);
 
             builder.Services.AddSingleton(new ImageCache(Path.Combine(FileSystem.CacheDirectory, "images")));
             builder.Services.AddSingleton<ServersService>();
@@ -50,11 +52,11 @@ public static class MauiProgram
             builder.Services.AddScoped<ItemsService>();
 
 #if DEBUG
-            builder.Services.AddSingleton(DofusDbQuery.Beta(new Uri("http://localhost/BestCrush")));
-            builder.Services.AddSingleton(DofusDbClient.Beta(new Uri("http://localhost/BestCrush")));
+            builder.Services.AddSingleton(DofusDbQuery.Beta(new Uri("https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush")));
+            builder.Services.AddSingleton(DofusDbClient.Beta(new Uri("https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush")));
 #else
-            builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("http://localhost/BestCrush")));
-            builder.Services.AddSingleton(DofusDbClient.Production(new Uri("http://localhost/BestCrush")));
+            builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush")));
+            builder.Services.AddSingleton(DofusDbClient.Production(new Uri("https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush")));
 #endif
 
             builder.Services.AddSingleton(DofocusClient.Production());
@@ -79,7 +81,7 @@ public static class MauiProgram
         }
     }
 
-    static LoggerConfiguration SetupSerilog()
+    static LoggerConfiguration SetupSerilog(string logPath)
     {
         TimeSpan flushInterval = new(0, 0, 1);
 
@@ -88,7 +90,7 @@ public static class MauiProgram
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.File(LogPath, flushToDiskInterval: flushInterval, encoding: Encoding.UTF8, rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 100_000_000);
+            .WriteTo.File(logPath, flushToDiskInterval: flushInterval, encoding: Encoding.UTF8, rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 100_000_000);
 
 #if DEBUG
         configuration.WriteTo.Debug();
@@ -99,15 +101,26 @@ public static class MauiProgram
         return configuration;
     }
 
-    static void ConfigureDatabase(MauiAppBuilder builder, ILogger logger)
+    static void ConfigureDatabase(MauiAppBuilder builder, string dbPath, ILogger logger)
     {
-        if (!Directory.Exists(FileSystem.AppDataDirectory))
+        string? directory = Path.GetDirectoryName(dbPath);
+        if (directory is not null && !Directory.Exists(directory))
         {
-            Directory.CreateDirectory(FileSystem.AppDataDirectory);
+            Directory.CreateDirectory(directory);
         }
 
-        builder.Services.AddDbContext<BestCrushDbContext>(options => options.UseSqlite($"Data Source={DbPath}"));
+        builder.Services.AddDbContext<BestCrushDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 
-        logger.LogInformation("Databases configured at {DbPath}.", DbPath);
+        logger.LogInformation("Databases configured at {DbPath}.", dbPath);
+    }
+
+    static string GetDataDirectory()
+    {
+#if WINDOWS
+        // use %LOCALAPPDATA% on Windows because it is the path that is cleaned by the installer on uninstall
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BestCrush");
+#else
+        return FileSystem.AppDataDirectory;
+#endif
     }
 }
