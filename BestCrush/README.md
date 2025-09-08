@@ -27,7 +27,12 @@ BestCrush is an application designed to help players of the game Dofus find the 
 ## Installation
 
 - Download [the latest release](https://github.com/ismailbennani/DofusSharp/releases/latest) for your platform.
-- Extract the contents and run `BestCrush.exe` (Windows) or `BestCrush` (macOS).
+- Extract the contents and run `BestCrush.exe` (Windows).
+
+> [!INFO]
+> A MacOS release will be added soon. 
+> However I do not own any Apple hardware so I cannot test it myself.
+
 
 > [!INFO]
 > The application is built using .NET Core and MAUI, ensuring cross-platform compatibility on Windows, macOS, Android and iOS.
