@@ -47,7 +47,7 @@ jobs:
         run: dotnet test DofusSharp.BestCrush.Filter.slnf --configuration Release --no-build
         
       - name: Publish
-        run: dotnet publish BestCrush/BestCrush.csproj --output best-crush/ --configuration Release --framework net10.0-windows10.0.19041.0 --no-build --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet publish BestCrush/BestCrush.csproj --output best-crush/ --configuration Release --framework net10.0-windows10.0.19041.0 --self-contained true --no-build --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Create release archive
         if: ${{ github.event_name == 'release' }}
@@ -55,7 +55,7 @@ jobs:
           cd best-crush
           7z a best-crush.zip *
 
-      - name: Upload compiled libraries to release
+      - name: Upload compiled application to release
         if: ${{ github.event_name == 'release' }}
         uses: svenstaro/upload-release-action@v2
         with:
@@ -64,7 +64,7 @@ jobs:
           asset_name: best-crush-${{ needs.compute-version.outputs.version }}.zip
           tag: ${{ github.ref }}
 
-      - name: Upload compiled library to artifacts
+      - name: Upload compiled application to artifacts
         if: ${{ github.event_name != 'release' }}
         uses: actions/upload-artifact@v4
         with:
