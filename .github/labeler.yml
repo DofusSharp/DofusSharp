@@ -23,13 +23,13 @@ ci:
   - changed-files:
       - any-glob-to-any-file:
           - '.github/*'
-  - head-branch: ['^ci:']
+  - head-branch: ['^ci/']
 
 refactor:
-  - head-branch: ['^refactor:']
+  - head-branch: ['^refactor/']
 
 documentation:
-  - head-branch: ['^docs:']
+  - head-branch: ['^docs/']
 
 feature:
-  - head-branch: ['^feat:']
+  - head-branch: ['^feat/']
