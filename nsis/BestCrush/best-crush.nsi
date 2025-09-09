@@ -131,7 +131,7 @@ Section "Best Crush" BestCrush
     WriteUninstaller "$INSTDIR\${UninstFile}"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${Name}" "DisplayName" "${DisplayName}"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${Name}" "DisplayIcon" "${Icon}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${Name}" "InstallDir" "$INSTDIR\${UninstFile}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${Name}" "InstallDir" "$INSTDIR"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${Name}" "UninstallString" "$INSTDIR\${UninstFile}"
 SectionEnd
 
