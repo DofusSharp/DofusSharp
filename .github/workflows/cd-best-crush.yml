@@ -89,9 +89,16 @@ jobs:
           makensis best-crush.nsi
 
       - name: Upload installer to release
+        if: ${{ github.event_name == 'release' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: nsis/BestCrush/*.exe
           tag: ${{ github.ref }}
-        
+
+      - name: Upload installer to artifacts
+        if: ${{ github.event_name != 'release' }}
+        uses: actions/upload-artifact@v4
+        with:
+          path: nsis/BestCrush/*.exe
+          if-no-files-found: 'error'
