@@ -292,7 +292,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
             ConstantExpression constantExpression => constantExpression.Value,
             MemberExpression { Expression: not null } memberExpression => GetMemberValue(ExtractValue(memberExpression.Expression), memberExpression.Member.Name),
             UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression => ExtractValue(unaryExpression.Operand),
-            _ => throw new ArgumentException($"Could not evaluate expression {expression}.", nameof(expression))
+            _ => throw new ArgumentException($"Could not evaluate expression {expression} of type {expression.GetType()}.", nameof(expression))
         };
 
     static string[] ExtractCollectionValuesAsString(Expression expression)
