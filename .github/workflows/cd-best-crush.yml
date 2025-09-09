@@ -54,7 +54,6 @@ jobs:
           if-no-files-found: 'error'
 
   create-installer:
-    if: ${{ github.event_name == 'release' }}
     name: Create installer
     
     runs-on: windows-latest
