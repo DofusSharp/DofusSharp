@@ -52,9 +52,9 @@ jobs:
           name: best-crush-${{ needs.compute-version.outputs.version-short }}-windows
           path: nsis/BestCrush/app/
           if-no-files-found: 'error'
-  
+
   create-installer:
-    if: github.event_name == 'release'
+    if: ${{ github.event_name == 'release' }}
     name: Create installer
     
     runs-on: windows-latest
