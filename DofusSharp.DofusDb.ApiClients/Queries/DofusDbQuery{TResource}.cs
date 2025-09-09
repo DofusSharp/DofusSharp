@@ -298,12 +298,12 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
 
         if (values is IEnumerable<bool> boolEnumerable)
         {
-            return boolEnumerable.Select(v => v ? "true" : "false").ToArray();
+            return FormatBools(boolEnumerable);
         }
 
         if (values is IEnumerable enumerable)
         {
-            return enumerable.Cast<object?>().Select(o => o?.ToString() ?? "null").ToArray();
+            return FormatObjects(enumerable.Cast<object?>());
         }
 
         Type valuesType = values.GetType();
@@ -312,16 +312,26 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
         {
             MethodInfo toArrayMethod = valuesType.GetMethod(nameof(ReadOnlySpan<object>.ToArray)) ?? throw new InvalidOperationException("Internal error.");
             bool[] array = (bool[])(toArrayMethod.Invoke(values, null) ?? throw new InvalidOperationException("Internal error."));
-            return array.Select(v => v ? "true" : "false").ToArray();
+            return FormatBools(array);
         }
 
         if (valuesType.IsGenericType && valuesType.GetGenericTypeDefinition() == typeof(ReadOnlySpan<>))
         {
             MethodInfo toArrayMethod = valuesType.GetMethod(nameof(ReadOnlySpan<object>.ToArray)) ?? throw new InvalidOperationException("Internal error.");
             object?[] array = (object?[])(toArrayMethod.Invoke(values, null) ?? throw new InvalidOperationException("Internal error."));
-            return array.Select(o => o?.ToString() ?? "null").ToArray();
+            return FormatObjects(array);
         }
 
-        throw new ArgumentOutOfRangeException(nameof(values));
+        throw new InvalidOperationException($"Could not extract collection values from value of type {values.GetType()}.");
+
+        string[] FormatBools(IEnumerable<bool> bools)
+        {
+            return bools.Select(b => b ? "true" : "false").ToArray();
+        }
+
+        string[] FormatObjects(IEnumerable<object?> objects)
+        {
+            return objects.Select(o => o?.ToString() ?? "null").ToArray();
+        }
     }
 }
