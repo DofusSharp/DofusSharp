@@ -79,10 +79,10 @@ jobs:
           buckets: extras
           apps: nsis
 
-      - name: Download Windows App SDK
+      - name: Download .NET 10 Runtime installer
         run: |
           mkdir nsis/BestCrush/redist
-          iwr "https://aka.ms/windowsappsdk/1.7/1.7.250606001/windowsappruntimeinstall-x64.exe" -OutFile "nsis/BestCrush/redist/WindowsAppRuntimeInstall-x64.exe"
+          iwr "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/10.0.0-rc.1.25451.107/windowsdesktop-runtime-10.0.0-rc.1.25451.107-win-x64.exe" -OutFile "nsis/BestCrush/redist/windowsdesktop-runtime-10.0.0-win-x64.exe"
 
       - name: Create installer
         run: |
