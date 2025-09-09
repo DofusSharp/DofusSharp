@@ -11,14 +11,30 @@
 !include MUI2.nsh
 !include LogicLib.nsh
 
-; ---------------------
-; Uninstall previous version
-; ---------------------
-
 Var PrevInstDir
 Var PrevInstFile
 
 Function .onInit
+
+; ---------------------
+; Splash screen
+; ---------------------
+InitPluginsDir
+File "/oname=$PluginsDir\splash.bmp" "assets\splash.bmp"
+
+advsplash::show 1400 600 0 -1 $PluginsDir\splash
+
+Pop $0 ; $0 has '1' if the user closed the splash screen early,
+     ; '0' if everything closed normally, and '-1' if some error occurred.
+
+${If} $0 < 0
+    MessageBox MB_OK|MB_ICONSTOP "An unexpected error has occurred. ($0)"
+    Abort
+${EndIf}
+
+; ---------------------
+; Uninstall previous version
+; ---------------------
 ReadRegStr $PrevInstDir HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${Name}" "InstallDir"
 ReadRegStr $PrevInstFile HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${Name}" "UninstallString"
 ${If} $PrevInstDir != "" 
@@ -39,6 +55,7 @@ ${AndIf} $PrevInstFile != ""
         Abort
     ${EndIf}
 ${EndIf}
+
 FunctionEnd
 
 ; ---------------------
