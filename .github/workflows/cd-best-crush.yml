@@ -57,7 +57,9 @@ jobs:
     name: Create installer
     
     runs-on: windows-latest
-    needs: build-publish
+    needs: 
+      - compute-version
+      - build-publish
     
     steps:
       - name: Checkout
