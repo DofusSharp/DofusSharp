@@ -19,6 +19,9 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         string dataDirectory = GetDataDirectory();
+        // By default the web view data folder is next to the executable, which might be in a protected location like Program Files.
+        Environment.SetEnvironmentVariable("WEBVIEW2_USER_DATA_FOLDER", dataDirectory);
+
         string dbPath = Path.Combine(dataDirectory, "Data", DatabaseFileName);
         string logPath = Path.Combine(dataDirectory, "Logs", "bestcrush.log");
 
