@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
-using System.Reflection;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 
@@ -286,29 +285,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
         };
     }
 
-    static object? ExtractValue(Expression expression) =>
-        expression switch
-        {
-            ConstantExpression constantExpression => constantExpression.Value,
-            MemberExpression { Expression: not null } memberExpression => GetMemberValue(ExtractValue(memberExpression.Expression), memberExpression.Member.Name),
-            UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression => ExtractValue(unaryExpression.Operand),
-            MethodCallExpression { Method.Name: "op_Implicit" } methodCallExpression => CastValue(
-                ExtractValue(methodCallExpression.Arguments[0]),
-                methodCallExpression.Method.ReturnType
-            ),
-            MethodCallExpression methodCallExpression => throw new InvalidOperationException(
-                $"""
-                 Could not evaluate method call expression.
-                 Expression: {expression}
-                 NodeType: {methodCallExpression.NodeType}
-                 Object: {methodCallExpression.Object}
-                 Method: {methodCallExpression.Method}
-                 Method Name: {methodCallExpression.Method.Name}
-                 Arguments: {string.Join(", ", methodCallExpression.Arguments.Select(a => a.ToString()))}
-                 """
-            ),
-            _ => throw new ArgumentException($"Could not evaluate expression {expression} of type {expression.GetType()}.", nameof(expression))
-        };
+    static object? ExtractValue(Expression expression) => Expression.Lambda(expression).Compile().DynamicInvoke();
 
     static string[] ExtractCollectionValuesAsString(Expression expression)
     {
@@ -320,40 +297,5 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
         };
     }
 
-    static IEnumerable ExtractCollectionValues(Expression expression)
-    {
-        object? value = ExtractValue(expression);
-        if (value is IEnumerable enumerableValue)
-        {
-            return enumerableValue;
-        }
-
-        throw new ArgumentException($"Could not evaluate collection {expression}.", nameof(expression));
-    }
-
-    static object? GetMemberValue(object? value, string member)
-    {
-        if (value is null)
-        {
-            return null;
-        }
-
-        Type type = value.GetType();
-
-        FieldInfo? field = type.GetField(member);
-        if (field is not null)
-        {
-            return field.GetValue(value);
-        }
-
-        PropertyInfo? property = type.GetProperty(member);
-        if (property is not null)
-        {
-            return property.GetValue(value);
-        }
-
-        return null;
-    }
-
-    static object? CastValue(object? value, Type type) => Convert.ChangeType(value, type);
+    static IEnumerable ExtractCollectionValues(Expression expression) => Expression.Lambda<Func<IEnumerable>>(expression).Compile()();
 }
