@@ -167,5 +167,5 @@ Function CreateDesktopShortCut
 FunctionEnd
 
 Function un.onUninstSuccess
-  MessageBox MB_OK|MB_ICONINFORMATION "${Slug} uninstall complete.cd" /SD IDOK
+  MessageBox MB_OK|MB_ICONINFORMATION "Désinstallation de ${Slug} terminée." /SD IDOK
 FunctionEnd
