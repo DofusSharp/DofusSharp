@@ -82,7 +82,9 @@ jobs:
           scoop install nsis
 
       - name: Download Windows App SDK
-        run: iwr "https://aka.ms/windowsappsdk/1.6/1.6.250602001/windowsappruntimeinstall-x64.exe" -OutFile "nsis/BestCrush/app/redist/WindowsAppRuntimeInstall-x64.exe"
+        run: |
+          mkdir nsis/BestCrush/app/redist
+          iwr "https://aka.ms/windowsappsdk/1.6/1.6.250602001/windowsappruntimeinstall-x64.exe" -OutFile "nsis/BestCrush/app/redist/WindowsAppRuntimeInstall-x64.exe"
 
       - name: Create installer
         run: |
