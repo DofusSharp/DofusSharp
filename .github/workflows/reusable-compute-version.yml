@@ -12,6 +12,9 @@ on:
       version:
         description: The version of the application
         value: ${{ jobs.compute_version.outputs.version }}
+      version-short:
+        description: The short version of the application
+        value: ${{ jobs.compute_version.outputs.version-short }}
 
 
 env:
@@ -23,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.compute_version.outputs.version }}
+      version-short: ${{ steps.compute_version.outputs.version }}
 
     steps:
       - uses: actions/checkout@v4
@@ -45,3 +49,4 @@ jobs:
           VERSION=$(minver -t v -v d)
           echo "Version is $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version-short=${VERSION%%+*}" >> $GITHUB_OUTPUT
