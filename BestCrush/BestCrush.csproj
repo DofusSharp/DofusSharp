@@ -26,6 +26,8 @@
 
         <!-- Versions -->
         <Version>0.0.0.0</Version>
+        <ApplicationDisplayVersion>0.0.0</ApplicationDisplayVersion>
+        <ApplicationVersion>0</ApplicationVersion>
 
         <!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
         <WindowsPackageType>None</WindowsPackageType>
