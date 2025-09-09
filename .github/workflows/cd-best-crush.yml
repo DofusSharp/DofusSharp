@@ -81,7 +81,7 @@ jobs:
 
       - name: Download Windows App SDK
         run: |
-          mkdir nsis/BestCrush/app/redist
+          mkdir nsis/BestCrush/redist
           iwr "https://aka.ms/windowsappsdk/1.6/1.6.250602001/windowsappruntimeinstall-x64.exe" -OutFile "nsis/BestCrush/app/redist/WindowsAppRuntimeInstall-x64.exe"
 
       - name: Create installer
