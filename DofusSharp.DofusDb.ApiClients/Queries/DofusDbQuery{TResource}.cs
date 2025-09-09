@@ -203,7 +203,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
                         return new DofusDbSearchPredicate.In(left, right);
                     }
                     default:
-                        throw new ArgumentException("Invalid call to method 'Contains'.", nameof(expression));
+                        throw new ArgumentException($"Invalid call to method 'Contains': {expression}.", nameof(expression));
                 }
             }
             case UnaryExpression { NodeType: ExpressionType.Not } e:
@@ -293,7 +293,15 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
             MemberExpression { Expression: not null } memberExpression => GetMemberValue(ExtractValue(memberExpression.Expression), memberExpression.Member.Name),
             UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression => ExtractValue(unaryExpression.Operand),
             MethodCallExpression methodCallExpression => throw new ArgumentException(
-                $"Could not evaluate method call expression {methodCallExpression.Method}({string.Join(", ", methodCallExpression.Arguments.Select(a => a.ToString()))}).",
+                $"""
+                 Could not evaluate method call expression.
+                 Expression: {expression}
+                 NodeType: {methodCallExpression.NodeType}
+                 Object: {methodCallExpression.Object}
+                 Method: {methodCallExpression.Method}
+                 Method Name: {methodCallExpression.Method.Name}
+                 Arguments: {string.Join(", ", methodCallExpression.Arguments.Select(a => a.ToString()))}.
+                 """,
                 nameof(expression)
             ),
             _ => throw new ArgumentException($"Could not evaluate expression {expression} of type {expression.GetType()}.", nameof(expression))
