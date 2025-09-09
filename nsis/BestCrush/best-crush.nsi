@@ -30,9 +30,11 @@ ${AndIf} $PrevInstFile != ""
         ${If} $0 <> 0
             MessageBox MB_YESNO|MB_ICONSTOP "La désinstallation a échoué. Continuer quand même ?" /SD IDYES IDYES +2
                 Abort
-        ${Else}
-            MessageBox MB_OK|MB_ICONINFORMATION "La désinstallation s'est terminée avec succès."
         ${EndIf}
+        
+        Delete "$PrevInstFile"
+        RMDir "$PrevInstDir"
+        MessageBox MB_OK|MB_ICONINFORMATION "La désinstallation s'est terminée avec succès."
     ${Else}
         Abort
     ${EndIf}
