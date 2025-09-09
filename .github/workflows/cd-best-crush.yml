@@ -23,6 +23,9 @@ jobs:
     runs-on: windows-latest
     needs: compute-version
     
+    permissions:
+      contents: write
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,13 +41,13 @@ jobs:
         run: dotnet workload install maui
 
       - name: Build
-        run: dotnet build DofusSharp.BestCrush.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.BestCrush.Filter.slnf --arch win-x64 --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Test
-        run: dotnet test DofusSharp.BestCrush.Filter.slnf --configuration Release --no-build
+        run: dotnet test DofusSharp.BestCrush.Filter.slnf --arch win-x64 --configuration Release --no-build
 
       - name: Publish
-        run: dotnet publish BestCrush/BestCrush.csproj --output nsis/BestCrush/app/ --configuration Release --framework net10.0-windows10.0.19041.0 --no-build --property Version=${{ needs.compute-version.outputs.version }} --property DebugSymbols=false --property DebugType=None
+        run: dotnet publish BestCrush/BestCrush.csproj --output nsis/BestCrush/app/ --arch win-x64 --configuration Release --framework net10.0-windows10.0.19041.0 --no-build --property Version=${{ needs.compute-version.outputs.version }} --property DebugSymbols=false --property DebugType=None
 
       - name: Upload compiled application to artifacts
         uses: actions/upload-artifact@v4
@@ -53,6 +56,21 @@ jobs:
           path: nsis/BestCrush/app/
           if-no-files-found: 'error'
 
+      - name: Create release archive
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          cd nsis/BestCrush/app
+          7z a app.zip .
+
+      - name: Upload archive to release
+        if: ${{ github.event_name == 'release' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: nsis/BestCrush/app/app.zip
+          asset_name: best-crush-v${{ needs.compute-version.outputs.version-short }}-win64.zip
+          tag: ${{ github.ref }}
+
   create-installer:
     name: Create installer
     
@@ -60,6 +78,9 @@ jobs:
     needs:
       - compute-version
       - build-publish
+    
+    permissions: 
+      contents: write
     
     steps:
       - name: Checkout
