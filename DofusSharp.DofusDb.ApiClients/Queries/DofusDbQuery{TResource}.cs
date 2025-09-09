@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
+using System.Reflection;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 
@@ -190,7 +191,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
                         }
 
                         string left = ExtractPropertyChain(root, e.Arguments[0]);
-                        string[] right = ExtractCollectionValuesAsString(e.Object);
+                        string[] right = ExtractCollectionValuesAsString(e.Object) ?? throw new ArgumentException("Collection is null.", nameof(expression));
                         return new DofusDbSearchPredicate.In(left, right);
                     }
                     case 2:
@@ -198,7 +199,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
                         // when the Contains method is an extension method, e.g. when called on an IEnumerable
 
                         string left = ExtractPropertyChain(root, e.Arguments[1]);
-                        string[] right = ExtractCollectionValuesAsString(e.Arguments[0]);
+                        string[] right = ExtractCollectionValuesAsString(e.Arguments[0]) ?? throw new ArgumentException("Collection is null.", nameof(expression));
                         return new DofusDbSearchPredicate.In(left, right);
                     }
                     default:
@@ -287,15 +288,40 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
 
     static object? ExtractValue(Expression expression) => Expression.Lambda(expression).Compile().DynamicInvoke();
 
-    static string[] ExtractCollectionValuesAsString(Expression expression)
+    static string[]? ExtractCollectionValuesAsString(Expression expression)
     {
-        IEnumerable values = ExtractCollectionValues(expression);
-        return values switch
+        object? values = Expression.Lambda(expression).Compile().DynamicInvoke();
+        if (values is null)
         {
-            IEnumerable<bool> => values.Cast<bool>().Select(v => v ? "true" : "false").ToArray(),
-            _ => values.Cast<object?>().Select(o => o?.ToString() ?? "null").ToArray()
-        };
-    }
+            return null;
+        }
 
-    static IEnumerable ExtractCollectionValues(Expression expression) => Expression.Lambda<Func<IEnumerable>>(expression).Compile()();
+        if (values is IEnumerable<bool> boolEnumerable)
+        {
+            return boolEnumerable.Select(v => v ? "true" : "false").ToArray();
+        }
+
+        if (values is IEnumerable enumerable)
+        {
+            return enumerable.Cast<object?>().Select(o => o?.ToString() ?? "null").ToArray();
+        }
+
+        Type valuesType = values.GetType();
+
+        if (valuesType == typeof(ReadOnlySpan<bool>))
+        {
+            MethodInfo toArrayMethod = valuesType.GetMethod(nameof(ReadOnlySpan<object>.ToArray)) ?? throw new InvalidOperationException("Internal error.");
+            bool[] array = (bool[])(toArrayMethod.Invoke(values, null) ?? throw new InvalidOperationException("Internal error."));
+            return array.Select(v => v ? "true" : "false").ToArray();
+        }
+
+        if (valuesType.IsGenericType && valuesType.GetGenericTypeDefinition() == typeof(ReadOnlySpan<>))
+        {
+            MethodInfo toArrayMethod = valuesType.GetMethod(nameof(ReadOnlySpan<object>.ToArray)) ?? throw new InvalidOperationException("Internal error.");
+            object?[] array = (object?[])(toArrayMethod.Invoke(values, null) ?? throw new InvalidOperationException("Internal error."));
+            return array.Select(o => o?.ToString() ?? "null").ToArray();
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(values));
+    }
 }
