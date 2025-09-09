@@ -205,7 +205,9 @@ public class GameDataUpgradeHandler(
         Dictionary<Characteristic, DofusDbItemEffect> itemCharacteristics = dofusDbItem
             .Effects.Select(e => e.Characteristic.HasValue ? (Characteristic: characteristics.GetValueOrDefault(e.Characteristic.Value), Effect: e) : (null, e))
             .Where(x => x.Characteristic?.Keyword is not null)
-            .Select(x => (Characteristic: CharacteristicExtensions.CharacteristicFromDofusDbKeyword(x.Characteristic!.Keyword!), x.Effect))
+            .Select((Characteristic? Characteristic, DofusDbItemEffect Effect) (x) =>
+                        (Characteristic: CharacteristicExtensions.CharacteristicFromDofusDbKeyword(x.Characteristic!.Keyword!), x.Effect)
+            )
             .Where(x => x.Characteristic is not null)
             .ToDictionary(x => x.Characteristic!.Value, x => x.Effect);
 
