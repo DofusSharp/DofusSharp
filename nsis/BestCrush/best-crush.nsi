@@ -113,13 +113,18 @@ Var SMDir ;Start menu folder
 ; Language
 !insertmacro MUI_LANGUAGE "French"
 
-Section "Windows App SDK" WindowsAppSDK
+Section ".NET 10 Runtime" DotNet10Runtime
     SectionIn RO
     SetOutPath "$INSTDIR\Redist"
-    File "redist\WindowsAppRuntimeInstall-x64.exe"
-    DetailPrint "Running Windows App SDK Setup..."
-    ExecWait "$INSTDIR\Redist\WindowsAppRuntimeInstall.exe --quiet"
-    DetailPrint "Finished Windows App SDK Setup"
+    File redist\windowsdesktop-runtime-10.0.0-win-x64.exe
+    DetailPrint "Running .NET 10 Runtime Setup..."
+    ExecWait "$INSTDIR\Redist\windowsdesktop-runtime-10.0.0-win-x64.exe /install /quiet /norestart"
+    ${If} $0 <> 0
+        MessageBox MB_OK|MB_ICONSTOP ".NET 10 Runtime installation failed. Error code: $0"
+        Abort
+    ${Else}
+        DetailPrint "Finished .NET 10 Runtime Setup"
+    ${EndIf}
 SectionEnd
 
 Section "Best Crush" BestCrush
@@ -154,11 +159,11 @@ Section "Uninstall"
     RMDir /r "$INSTDIR"
 SectionEnd
 
-LangString DESC_WindowsAppSDK ${LANG_FRENCH} "Installer le runtime du Kit de développement logiciel (SDK) d’application Windows."
+LangString DESC_DotNet10Runtime ${LANG_FRENCH} "Installer le runtime .NET Core 10.0 s'il n'est pas déjà présent."
 LangString DESC_BestCrush ${LANG_FRENCH} "Installer Best Crush."
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${WindowsAppSDK} $(DESC_WindowsAppSDK)
+  !insertmacro MUI_DESCRIPTION_TEXT ${DotNet10Runtime} $(DESC_DotNet10Runtime)
   !insertmacro MUI_DESCRIPTION_TEXT ${BestCrush} $(DESC_BestCrush)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
