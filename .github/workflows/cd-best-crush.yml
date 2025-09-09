@@ -44,7 +44,7 @@ jobs:
         run: dotnet test DofusSharp.BestCrush.Filter.slnf --configuration Release --no-build
 
       - name: Publish
-        run: dotnet publish BestCrush/BestCrush.csproj --output nsis/BestCrush/app/ --configuration Release --framework net10.0-windows10.0.19041.0 --self-contained true --property WindowsAppSDKSelfContained --no-build --property Version=${{ needs.compute-version.outputs.version }} --property DebugSymbols=false --property DebugType=None
+        run: dotnet publish BestCrush/BestCrush.csproj --output nsis/BestCrush/app/ --configuration Release --framework net10.0-windows10.0.19041.0 --no-build --property Version=${{ needs.compute-version.outputs.version }} --property DebugSymbols=false --property DebugType=None
 
       - name: Upload compiled application to artifacts
         uses: actions/upload-artifact@v4
