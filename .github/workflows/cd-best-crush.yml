@@ -60,7 +60,7 @@ jobs:
     runs-on: windows-latest
     needs: build-publish
     
-    - steps:
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
