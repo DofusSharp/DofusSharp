@@ -16,7 +16,7 @@
         <UseMaui>true</UseMaui>
         <SingleProject>true</SingleProject>
         <EnableDefaultCssItems>false</EnableDefaultCssItems>
-        <NeutralLanguage>en-US</NeutralLanguage>
+        <NeutralLanguage>fr-FR</NeutralLanguage>
 
         <!-- Display name -->
         <ApplicationTitle>Best Crush</ApplicationTitle>
