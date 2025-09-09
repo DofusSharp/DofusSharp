@@ -57,7 +57,7 @@ jobs:
     name: Create installer
     
     runs-on: windows-latest
-    needs: 
+    needs:
       - compute-version
       - build-publish
     
@@ -74,12 +74,10 @@ jobs:
           path: nsis/BestCrush/app/
 
       - name: Install NSIS
-        run: |
-          iwr -useb get.scoop.sh -outfile 'install.ps1'
-          .\install.ps1 -RunAsAdmin
-          scoop update
-          scoop bucket add extras
-          scoop install nsis
+        uses: MinoruSekine/setup-scoop@v4.0.2
+        with:
+          buckets: extras
+          apps: nsis
 
       - name: Download Windows App SDK
         run: |
