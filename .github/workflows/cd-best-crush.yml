@@ -41,13 +41,13 @@ jobs:
         run: dotnet workload install maui
 
       - name: Build
-        run: dotnet build DofusSharp.BestCrush.Filter.slnf --arch win-x64 --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.BestCrush.Filter.slnf --arch x64 --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Test
-        run: dotnet test DofusSharp.BestCrush.Filter.slnf --arch win-x64 --configuration Release --no-build
+        run: dotnet test DofusSharp.BestCrush.Filter.slnf --arch x64 --configuration Release --no-build
 
       - name: Publish
-        run: dotnet publish BestCrush/BestCrush.csproj --output nsis/BestCrush/app/ --arch win-x64 --configuration Release --framework net10.0-windows10.0.19041.0 --no-build --property Version=${{ needs.compute-version.outputs.version }} --property DebugSymbols=false --property DebugType=None
+        run: dotnet publish BestCrush/BestCrush.csproj --output nsis/BestCrush/app/ --arch x64 --configuration Release --framework net10.0-windows10.0.19041.0 --no-build --property Version=${{ needs.compute-version.outputs.version }} --property DebugSymbols=false --property DebugType=None
 
       - name: Upload compiled application to artifacts
         uses: actions/upload-artifact@v4
