@@ -19,8 +19,8 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         string dataDirectory = GetDataDirectory();
-        string dbPath = Path.Combine(dataDirectory, DatabaseFileName);
-        string logPath = Path.Combine(dataDirectory, "bestcrush.log");
+        string dbPath = Path.Combine(dataDirectory, "Data", DatabaseFileName);
+        string logPath = Path.Combine(dataDirectory, "Logs", "bestcrush.log");
 
         SetupSerilog(logPath);
 
@@ -42,7 +42,7 @@ public static class MauiProgram
 
             ConfigureDatabase(builder, dbPath, logger);
 
-            builder.Services.AddSingleton(new ImageCache(Path.Combine(FileSystem.CacheDirectory, "images")));
+            builder.Services.AddSingleton(new ImageCache(Path.Combine(dataDirectory, "Cache", "images")));
             builder.Services.AddSingleton<ServersService>();
             builder.Services.AddSingleton<RunesService>();
             builder.Services.AddSingleton<CharacteristicsService>();
