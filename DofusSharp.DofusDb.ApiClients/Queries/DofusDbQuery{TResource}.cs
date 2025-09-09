@@ -292,7 +292,11 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
             ConstantExpression constantExpression => constantExpression.Value,
             MemberExpression { Expression: not null } memberExpression => GetMemberValue(ExtractValue(memberExpression.Expression), memberExpression.Member.Name),
             UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression => ExtractValue(unaryExpression.Operand),
-            MethodCallExpression methodCallExpression => throw new ArgumentException(
+            MethodCallExpression { Method.Name: "op_Implicit" } methodCallExpression => CastValue(
+                ExtractValue(methodCallExpression.Arguments[0]),
+                methodCallExpression.Method.ReturnType
+            ),
+            MethodCallExpression methodCallExpression => throw new InvalidOperationException(
                 $"""
                  Could not evaluate method call expression.
                  Expression: {expression}
@@ -300,9 +304,8 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
                  Object: {methodCallExpression.Object}
                  Method: {methodCallExpression.Method}
                  Method Name: {methodCallExpression.Method.Name}
-                 Arguments: {string.Join(", ", methodCallExpression.Arguments.Select(a => a.ToString()))}.
-                 """,
-                nameof(expression)
+                 Arguments: {string.Join(", ", methodCallExpression.Arguments.Select(a => a.ToString()))}
+                 """
             ),
             _ => throw new ArgumentException($"Could not evaluate expression {expression} of type {expression.GetType()}.", nameof(expression))
         };
@@ -351,4 +354,6 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
 
         return null;
     }
+
+    static object? CastValue(object? value, Type type) => Convert.ChangeType(value, type);
 }
