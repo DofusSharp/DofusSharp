@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
-using System.Reflection;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 
@@ -181,29 +180,26 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
             {
                 switch (e.Arguments.Count)
                 {
-                    case 1:
+                    case 1: // the Contains method with one parameter is a class method on collections, e.g. when called on a List<>
                     {
-                        // when the Contains method is a class method, e.g. when called on a List<>
-
                         if (e.Object is null)
                         {
                             throw new ArgumentException("The 'Contains' method must be called on a collection.", nameof(expression));
                         }
 
                         string left = ExtractPropertyChain(root, e.Arguments[0]);
-                        string[] right = ExtractCollectionValuesAsString(e.Object);
+                        string[] right = ExtractCollectionValuesAsString(e.Object) ?? throw new ArgumentException("Collection is null.", nameof(expression));
                         return new DofusDbSearchPredicate.In(left, right);
                     }
-                    case 2:
+                    case 2: // the Contains method with two parameters is an extension method on collections, e.g. when called on an IEnumerable
+                    case 3: // the Contains method with tree parameters is an extension method on ReadOnlySpan<>
                     {
-                        // when the Contains method is an extension method, e.g. when called on an IEnumerable
-
                         string left = ExtractPropertyChain(root, e.Arguments[1]);
-                        string[] right = ExtractCollectionValuesAsString(e.Arguments[0]);
+                        string[] right = ExtractCollectionValuesAsString(e.Arguments[0]) ?? throw new ArgumentException("Collection is null.", nameof(expression));
                         return new DofusDbSearchPredicate.In(left, right);
                     }
                     default:
-                        throw new ArgumentException("Invalid call to method 'Contains'.", nameof(expression));
+                        throw new ArgumentException($"Invalid call to method 'Contains': {expression}.", nameof(expression));
                 }
             }
             case UnaryExpression { NodeType: ExpressionType.Not } e:
@@ -278,7 +274,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
 
     static string ExtractValueAsString(Expression expression)
     {
-        object? value = ExtractValue(expression);
+        object? value = Expression.Lambda(expression).Compile().DynamicInvoke();
         return value switch
         {
             bool b => b ? "true" : "false",
@@ -286,57 +282,43 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
         };
     }
 
-    static object? ExtractValue(Expression expression) =>
-        expression switch
-        {
-            ConstantExpression constantExpression => constantExpression.Value,
-            MemberExpression { Expression: not null } memberExpression => GetMemberValue(ExtractValue(memberExpression.Expression), memberExpression.Member.Name),
-            UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression => ExtractValue(unaryExpression.Operand),
-            _ => throw new ArgumentException($"Could not evaluate expression {expression}.", nameof(expression))
-        };
-
-    static string[] ExtractCollectionValuesAsString(Expression expression)
+    static string[]? ExtractCollectionValuesAsString(Expression expression)
     {
-        IEnumerable values = ExtractCollectionValues(expression);
-        return values switch
+        // some collections are implicitly converted to ReadOnlySpan<T>, which cannot be directly compiled and invoked
+        // in that case we want to skip the conversion and extract the original collection instead
+        if (expression is MethodCallExpression { Method.Name: "op_Implicit", Type.IsGenericType: true } methodExpression
+            && (methodExpression.Type.GetGenericTypeDefinition() == typeof(ReadOnlySpan<>) || methodExpression.Type.GetGenericTypeDefinition() == typeof(Span<>))
+            && methodExpression.Arguments.Count >= 1)
         {
-            IEnumerable<bool> => values.Cast<bool>().Select(v => v ? "true" : "false").ToArray(),
-            _ => values.Cast<object?>().Select(o => o?.ToString() ?? "null").ToArray()
-        };
-    }
-
-    static IEnumerable ExtractCollectionValues(Expression expression)
-    {
-        object? value = ExtractValue(expression);
-        if (value is IEnumerable enumerableValue)
-        {
-            return enumerableValue;
+            return ExtractCollectionValuesAsString(methodExpression.Arguments[0]);
         }
 
-        throw new ArgumentException($"Could not evaluate collection {expression}.", nameof(expression));
-    }
-
-    static object? GetMemberValue(object? value, string member)
-    {
-        if (value is null)
+        object? values = Expression.Lambda(expression).Compile().DynamicInvoke();
+        if (values is null)
         {
             return null;
         }
 
-        Type type = value.GetType();
-
-        FieldInfo? field = type.GetField(member);
-        if (field is not null)
+        if (values is IEnumerable<bool> boolEnumerable)
         {
-            return field.GetValue(value);
+            return FormatBools(boolEnumerable);
         }
 
-        PropertyInfo? property = type.GetProperty(member);
-        if (property is not null)
+        if (values is IEnumerable enumerable)
         {
-            return property.GetValue(value);
+            return FormatObjects(enumerable.Cast<object?>());
         }
 
-        return null;
+        throw new InvalidOperationException($"Could not extract collection values from value of type {values.GetType()}.");
+
+        string[] FormatBools(IEnumerable<bool> bools)
+        {
+            return bools.Select(b => b ? "true" : "false").ToArray();
+        }
+
+        string[] FormatObjects(IEnumerable<object?> objects)
+        {
+            return objects.Select(o => o?.ToString() ?? "null").ToArray();
+        }
     }
 }
