@@ -100,7 +100,16 @@ public class GameDataUpgradeHandler(
             .ToArrayAsync(cancellationToken);
         Dictionary<long, DofusDbRecipe> recipesDict = recipes.Where(r => r.ResultId.HasValue).ToDictionary(c => c.ResultId!.Value, c => c);
 
-        long[] equipmentTypes = Enum.GetValues<EquipmentType>().Select(t => t.ToDofusDbItemTypeId()).ToArray();
+        long[] equipmentTypes = new[]
+            {
+                EquipmentType.Amulet, EquipmentType.Bow, EquipmentType.Wand, EquipmentType.Staff, EquipmentType.Dagger, EquipmentType.Sword, EquipmentType.Hammer,
+                EquipmentType.Shovel, EquipmentType.Ring, EquipmentType.Belt, EquipmentType.Boots, EquipmentType.Hat, EquipmentType.Cloak, EquipmentType.Pet, EquipmentType.Petsmount,
+                EquipmentType.Mount, EquipmentType.Axe, EquipmentType.Tool, EquipmentType.Pickaxe, EquipmentType.Scythe, EquipmentType.Shield, EquipmentType.MagicWeapon,
+                EquipmentType.Trophy, EquipmentType.Lance
+            }
+            .Select(t => t.ToDofusDbItemTypeId())
+            .ToArray();
+
         DofusDbItem[] equipments = await dofusDbQueryProvider
             .Items()
             .Where(i => equipmentTypes.Contains(i.TypeId!.Value))
@@ -113,7 +122,6 @@ public class GameDataUpgradeHandler(
             .SelectMany(r => r.Ingredients ?? [])
             .DistinctBy(i => i.Id!.Value)
             .ToArray();
-
         return (characteristicsDict, recipesDict, equipments, ingredients);
     }
 
