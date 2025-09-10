@@ -16,12 +16,12 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
         Arity = ArgumentArity.ExactlyOne
     };
 
-    readonly Option<int> _limitOption = new("--limit")
+    readonly Option<int?> _limitOption = new("--limit")
     {
         Description = "Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size."
     };
 
-    readonly Option<int> _skipOption = new("--skip")
+    readonly Option<int?> _skipOption = new("--skip")
     {
         Description = "Number of results to skip."
     };
@@ -73,8 +73,8 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
 
         result.SetAction(async (r, cancellationToken) =>
             {
-                int limit = r.GetValue(_limitOption);
-                int skip = r.GetValue(_skipOption);
+                int? limit = r.GetValue(_limitOption);
+                int? skip = r.GetValue(_skipOption);
                 string[]? select = r.GetValue(_selectOption);
                 string[]? sort = r.GetValue(_sortOption);
                 string? outputFile = r.GetValue(_outputFileOption);
@@ -102,16 +102,23 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
 
         result.SetAction(r =>
             {
-                int limit = r.GetValue(_limitOption);
-                int skip = r.GetValue(_skipOption);
+                int? limit = r.GetValue(_limitOption);
+                int? skip = r.GetValue(_skipOption);
                 string[]? select = r.GetValue(_selectOption);
                 string[]? sort = r.GetValue(_sortOption);
-                string baseUrl = r.GetRequiredValue(_baseUrlOption);
+                string? baseUrl = r.GetValue(_baseUrlOption);
 
                 DofusDbSearchQuery query = new() { Limit = limit, Skip = skip, Select = select ?? [], Sort = BuildSortQuery(sort) };
-                query.ToQueryString();
+                string queryString = query.ToQueryString();
 
-                Console.WriteLine("{0}?{1}", baseUrl, query.ToQueryString());
+                if (string.IsNullOrWhiteSpace(queryString))
+                {
+                    Console.WriteLine(baseUrl);
+                }
+                else
+                {
+                    Console.WriteLine("{0}?{1}", baseUrl, queryString);
+                }
             }
         );
 
