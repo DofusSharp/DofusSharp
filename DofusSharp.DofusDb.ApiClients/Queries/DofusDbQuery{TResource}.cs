@@ -295,7 +295,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
             PropertyInfo indexer = type.GetProperty("Item") ?? throw new InvalidOperationException("Internal error.");
             object?[] spanContent = Enumerable
                 .Range(0, length)
-                .Select(index => Expression.Lambda<Func<object?>>(Expression.MakeIndex(expression, indexer, [Expression.Constant(index)])).Compile()())
+                .Select(index => Expression.Lambda<Func<object?>>(Expression.Property(expression, indexer, Expression.Constant(index))).Compile()())
                 .ToArray();
 
             return FormatObjects(spanContent);
