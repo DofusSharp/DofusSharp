@@ -1,7 +1,7 @@
 ﻿!define Name "BestCrush"
 !define DisplayName "Best Crush"
 !define AppFile "BestCrush.exe"
-!define InstFile "${DisplayName} setup v${Version}.exe"
+!define InstFile "Setup ${DisplayName} v${Version}.exe"
 !define Slug "${DisplayName} v${Version}"
 !define Icon "assets\best-crush.ico"
 !define UninstName "Uninstall"
