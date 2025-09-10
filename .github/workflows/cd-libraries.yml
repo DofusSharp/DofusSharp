@@ -15,7 +15,7 @@ jobs:
     name: Compute version
     uses: ./.github/workflows/reusable-compute-version.yml
     with:
-      build-name: pr
+      build-name: release
 
   build-publish:
     runs-on: ubuntu-latest
