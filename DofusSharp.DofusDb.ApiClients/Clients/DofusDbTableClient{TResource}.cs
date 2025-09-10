@@ -41,7 +41,9 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
+#pragma warning disable IL2026
         TResource? result = await response.Content.ReadFromJsonAsync<TResource>(_options, cancellationToken);
+#pragma warning restore IL2026
         if (result == null)
         {
             throw new InvalidOperationException("Could not deserialize the response content.");
@@ -59,7 +61,9 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync($"?{queryParams}", cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        DofusDbSearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<DofusDbSearchResult<TResource>>(cancellationToken);
+#pragma warning disable IL2026
+        DofusDbSearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<DofusDbSearchResult<TResource>>(_options, cancellationToken);
+#pragma warning restore IL2026
         if (result == null)
         {
             throw new InvalidOperationException("Could not deserialize the search result.");
@@ -77,7 +81,9 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(requestUri, cancellationToken);
         response.EnsureSuccessStatusCode();
 
+#pragma warning disable IL2026
         DofusDbSearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<DofusDbSearchResult<TResource>>(_options, cancellationToken);
+#pragma warning restore IL2026
         if (result == null)
         {
             throw new InvalidOperationException("Could not deserialize the search result.");

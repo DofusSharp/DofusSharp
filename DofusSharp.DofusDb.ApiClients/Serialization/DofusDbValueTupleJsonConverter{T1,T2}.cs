@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿#pragma warning disable IL2026
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients.Serialization;

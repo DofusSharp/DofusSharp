@@ -169,7 +169,7 @@ public static class DofusDbTableClientExtensions
         }
         catch (Exception e)
         {
-            throw new Exception($"Error while executing query {JsonSerializer.Serialize(currentQuery)}", e);
+            throw new Exception($"Error while executing query {JsonSerializer.Serialize(currentQuery, SourceGenerationContext.Default.DofusDbSearchQuery)}", e);
         }
     }
 }

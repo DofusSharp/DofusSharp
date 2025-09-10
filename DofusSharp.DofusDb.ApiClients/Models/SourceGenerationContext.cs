@@ -7,6 +7,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
+using DofusSharp.DofusDb.ApiClients.Search;
 
 namespace DofusSharp.DofusDb.ApiClients.Models;
 
@@ -36,6 +37,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSpellState))]
 [JsonSerializable(typeof(DofusDbSpellType))]
 [JsonSerializable(typeof(DofusDbSpellVariant))]
+[JsonSerializable(typeof(DofusDbSearchQuery))]
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
 partial class SourceGenerationContext : JsonSerializerContext
 {
