@@ -116,6 +116,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "nsis/BestCrush/Setup Best Crush v${{ needs.compute-version.outputs.version-short }}.exe"
+          asset_name: "Setup Best Crush v${{ needs.compute-version.outputs.version-short }}.exe"
           tag: ${{ github.ref }}
 
       - name: Upload installer to artifacts
@@ -123,4 +124,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: "nsis/BestCrush/Setup Best Crush v${{ needs.compute-version.outputs.version-short }}.exe"
+          name: "Setup Best Crush v${{ needs.compute-version.outputs.version-short }}.exe"
           if-no-files-found: 'error'
