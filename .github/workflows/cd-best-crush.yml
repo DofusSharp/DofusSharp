@@ -108,8 +108,7 @@ jobs:
       - name: Create installer
         run: |
           cd nsis/BestCrush
-          (Get-Content best-crush.nsi) -replace '__VERSION__', '${{ needs.compute-version.outputs.version-short }}' | Out-File -encoding UTF8 best-crush.nsi
-          makensis best-crush.nsi
+          makensis /DVersion=${{ needs.compute-version.outputs.version-short }} /INPUTCHARSET UTF8 best-crush.nsi
 
       - name: Upload installer to release
         if: ${{ github.event_name == 'release' }}

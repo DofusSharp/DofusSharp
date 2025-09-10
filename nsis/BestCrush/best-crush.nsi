@@ -1,12 +1,15 @@
 ﻿!define Name "BestCrush"
 !define DisplayName "Best Crush"
-!define Version "__VERSION__"
 !define AppFile "BestCrush.exe"
 !define InstFile "${DisplayName} setup v${Version}.exe"
 !define Slug "${DisplayName} v${Version}"
 !define Icon "assets\best-crush.ico"
 !define UninstName "Uninstall"
 !define UninstFile "${UninstName}.exe"
+
+!ifndef Version
+    !define Version "0.0.0"
+!endif
 
 !include MUI2.nsh
 !include LogicLib.nsh
