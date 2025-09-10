@@ -7,5 +7,5 @@ public partial class App : Application
         InitializeComponent();
     }
 
-    protected override Window CreateWindow(IActivationState? activationState) => new(new MainPage()) { Title = "BestCrush" };
+    protected override Window CreateWindow(IActivationState? activationState) => new(new MainPage()) { Title = $"Best Crush v{CurrentVersion.Version.WithoutMetadata()}" };
 }

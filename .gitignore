@@ -1,6 +1,9 @@
 artifacts-dotnet-releaser
 *.received.*
 ignore
+nsis/BestCrush/app
+nsis/BestCrush/*.exe
+nsis/BestCrush/redist/
 
 # Created by https://www.toptal.com/developers/gitignore/api/csharp,rider
 # Edit at https://www.toptal.com/developers/gitignore?templates=csharp,rider
