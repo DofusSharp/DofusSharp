@@ -2,11 +2,20 @@
 
 using System.CommandLine;
 using System.CommandLine.Parsing;
+using DofusSharp.DofusDb.ApiClients;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.Cli.Commands;
+
+Uri referrer = new("https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.DofusDb.Cli");
+#if DEBUG
+IDofusDbClientsFactory factory = DofusDbClient.Beta(referrer);
+#else
+IDofusDbClientsFactory factory = DofusDbClient.Production(referrer);
+#endif
 
 RootCommand rootCommand = new("A command line interface for DofusDB.")
 {
-    new ItemsCommand().CreateCommand()
+    new TableClientCommand<DofusDbItem>("items", "Items", factory.Items()).CreateCommand()
 };
 
 ParseResult parseResult = rootCommand.Parse(args);

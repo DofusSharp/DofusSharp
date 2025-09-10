@@ -7,7 +7,9 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>dofusdb</ToolCommandName>
         <PublishAot>true</PublishAot>
+        <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
         <PublishTrimmed>true</PublishTrimmed>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
         <SelfContained>true</SelfContained>
     </PropertyGroup>
 
