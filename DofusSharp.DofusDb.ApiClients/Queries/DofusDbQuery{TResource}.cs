@@ -181,10 +181,8 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
             {
                 switch (e.Arguments.Count)
                 {
-                    case 1:
+                    case 1: // the Contains method with one parameter is a class method on collections, e.g. when called on a List<>
                     {
-                        // when the Contains method is a class method, e.g. when called on a List<>
-
                         if (e.Object is null)
                         {
                             throw new ArgumentException("The 'Contains' method must be called on a collection.", nameof(expression));
@@ -194,10 +192,9 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
                         string[] right = ExtractCollectionValuesAsString(e.Object) ?? throw new ArgumentException("Collection is null.", nameof(expression));
                         return new DofusDbSearchPredicate.In(left, right);
                     }
-                    case 2:
+                    case 2: // the Contains method with two parameters is an extension method on collections, e.g. when called on an IEnumerable
+                    case 3: // the Contains method with tree parameters is an extension method on ReadOnlySpan<>
                     {
-                        // when the Contains method is an extension method, e.g. when called on an IEnumerable
-
                         string left = ExtractPropertyChain(root, e.Arguments[1]);
                         string[] right = ExtractCollectionValuesAsString(e.Arguments[0]) ?? throw new ArgumentException("Collection is null.", nameof(expression));
                         return new DofusDbSearchPredicate.In(left, right);
@@ -278,7 +275,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
 
     static string ExtractValueAsString(Expression expression)
     {
-        object? value = ExtractValue(expression);
+        object? value = Expression.Lambda(expression).Compile().DynamicInvoke();
         return value switch
         {
             bool b => b ? "true" : "false",
@@ -286,10 +283,24 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
         };
     }
 
-    static object? ExtractValue(Expression expression) => Expression.Lambda(expression).Compile().DynamicInvoke();
-
     static string[]? ExtractCollectionValuesAsString(Expression expression)
     {
+        Type type = expression.Type;
+
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ReadOnlySpan<>))
+        {
+            // by-ref structs like ReadOnlySpan<T> cannot be boxed so we need to extract the values manually by building the expression trees that access each element
+            MemberInfo lengthMember = type.GetMember(nameof(ReadOnlySpan<object>.Length)).First();
+            int length = Expression.Lambda<int>(Expression.MakeMemberAccess(expression, lengthMember)).Compile();
+            PropertyInfo indexer = type.GetProperty("Item") ?? throw new InvalidOperationException("Internal error.");
+            object?[] spanContent = Enumerable
+                .Range(0, length)
+                .Select(index => Expression.Lambda<object?>(Expression.MakeIndex(expression, indexer, [Expression.Constant(index)])).Compile())
+                .ToArray();
+
+            return FormatObjects(spanContent);
+        }
+
         object? values = Expression.Lambda(expression).Compile().DynamicInvoke();
         if (values is null)
         {
@@ -304,22 +315,6 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
         if (values is IEnumerable enumerable)
         {
             return FormatObjects(enumerable.Cast<object?>());
-        }
-
-        Type valuesType = values.GetType();
-
-        if (valuesType == typeof(ReadOnlySpan<bool>))
-        {
-            MethodInfo toArrayMethod = valuesType.GetMethod(nameof(ReadOnlySpan<object>.ToArray)) ?? throw new InvalidOperationException("Internal error.");
-            bool[] array = (bool[])(toArrayMethod.Invoke(values, null) ?? throw new InvalidOperationException("Internal error."));
-            return FormatBools(array);
-        }
-
-        if (valuesType.IsGenericType && valuesType.GetGenericTypeDefinition() == typeof(ReadOnlySpan<>))
-        {
-            MethodInfo toArrayMethod = valuesType.GetMethod(nameof(ReadOnlySpan<object>.ToArray)) ?? throw new InvalidOperationException("Internal error.");
-            object?[] array = (object?[])(toArrayMethod.Invoke(values, null) ?? throw new InvalidOperationException("Internal error."));
-            return FormatObjects(array);
         }
 
         throw new InvalidOperationException($"Could not extract collection values from value of type {values.GetType()}.");
