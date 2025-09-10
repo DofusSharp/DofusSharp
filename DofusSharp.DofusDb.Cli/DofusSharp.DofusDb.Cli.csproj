@@ -29,4 +29,8 @@
       <ProjectReference Include="..\DofusSharp.DofusDb.ApiClients\DofusSharp.DofusDb.ApiClients.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
 </Project>

@@ -68,6 +68,6 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 // Others
 [JsonSerializable(typeof(DofusDbSearchQuery))]
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
-partial class SourceGenerationContext : JsonSerializerContext
+public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContext
 {
 }

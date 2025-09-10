@@ -157,7 +157,7 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
 
     static JsonSerializerOptions BuildJsonSerializerOptions(bool prettyPrint) =>
         new(JsonSerializerDefaults.Web)
-            { TypeInfoResolver = SourceGenerationContext.Default, WriteIndented = prettyPrint, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault };
+            { TypeInfoResolver = DofusDbModelsSourceGenerationContext.Default, WriteIndented = prettyPrint, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault };
 
     static Dictionary<string, DofusDbSearchQuerySortOrder> BuildSortQuery(string[]? sort) =>
         sort?.ToDictionary(s => s, s => s.StartsWith('-') ? DofusDbSearchQuerySortOrder.Descending : DofusDbSearchQuerySortOrder.Ascending) ?? [];

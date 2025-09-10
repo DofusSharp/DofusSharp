@@ -23,7 +23,7 @@ class DofusDbVersionClient : IDofusDbVersionClient
         using HttpResponseMessage response = await httpClient.GetAsync(string.Empty, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        string? result = await response.Content.ReadFromJsonAsync<string>(SourceGenerationContext.Default.String, cancellationToken);
+        string? result = await response.Content.ReadFromJsonAsync<string>(DofusDbModelsSourceGenerationContext.Default.String, cancellationToken);
         if (result == null)
         {
             throw new InvalidOperationException("Could not deserialize the version.");
