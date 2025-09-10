@@ -291,11 +291,11 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
         {
             // by-ref structs like ReadOnlySpan<T> cannot be boxed so we need to extract the values manually by building the expression trees that access each element
             MemberInfo lengthMember = type.GetMember(nameof(ReadOnlySpan<object>.Length)).First();
-            int length = Expression.Lambda<int>(Expression.MakeMemberAccess(expression, lengthMember)).Compile();
+            int length = Expression.Lambda<Func<int>>(Expression.MakeMemberAccess(expression, lengthMember)).Compile()();
             PropertyInfo indexer = type.GetProperty("Item") ?? throw new InvalidOperationException("Internal error.");
             object?[] spanContent = Enumerable
                 .Range(0, length)
-                .Select(index => Expression.Lambda<object?>(Expression.MakeIndex(expression, indexer, [Expression.Constant(index)])).Compile())
+                .Select(index => Expression.Lambda<Func<object?>>(Expression.MakeIndex(expression, indexer, [Expression.Constant(index)])).Compile()())
                 .ToArray();
 
             return FormatObjects(spanContent);
