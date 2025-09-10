@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
-using System.Reflection;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 
@@ -285,6 +284,15 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
 
     static string[]? ExtractCollectionValuesAsString(Expression expression)
     {
+        // some collections are implicitly converted to ReadOnlySpan<T>, which cannot be directly compiled and invoked
+        // in that case we want to skip the conversion and extract the original collection instead
+        if (expression is MethodCallExpression { Method.Name: "op_Implicit", Type.IsGenericType: true } methodExpression
+            && (methodExpression.Type.GetGenericTypeDefinition() == typeof(ReadOnlySpan<>) || methodExpression.Type.GetGenericTypeDefinition() == typeof(Span<>))
+            && methodExpression.Arguments.Count >= 1)
+        {
+            return ExtractCollectionValuesAsString(methodExpression.Arguments[0]);
+        }
+
         object? values = Expression.Lambda(expression).Compile().DynamicInvoke();
         if (values is null)
         {
