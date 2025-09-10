@@ -100,8 +100,7 @@ public class GameDataUpgradeHandler(
             .ToArrayAsync(cancellationToken);
         Dictionary<long, DofusDbRecipe> recipesDict = recipes.Where(r => r.ResultId.HasValue).ToDictionary(c => c.ResultId!.Value, c => c);
 
-        // see EquipmentType.ToDofusDbItemTypeId
-        long[] equipmentTypes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 121, 311, 19, 20, 21, 22, 82, 114, 151, 271];
+        long[] equipmentTypes = Enum.GetValues<EquipmentType>().Select(t => t.ToDofusDbItemTypeId()).ToArray();
         DofusDbItem[] equipments = await dofusDbQueryProvider
             .Items()
             .Where(i => equipmentTypes.Contains(i.TypeId!.Value))
