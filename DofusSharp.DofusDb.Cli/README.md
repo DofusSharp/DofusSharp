@@ -25,6 +25,19 @@ Download the latest release from the [GitHub releases page](https://github.com/i
 
 There are different types of commands for different types of resources.
 
+### Game version
+
+```
+Description:
+  Get the version of the game corresponding to the data.
+
+Utilisation :
+  DofusSharp.DofusDb.Cli game-version [options]
+
+Options :
+  -?, -h, --help  Show help and usage information
+```
+
 ### Table data
 
 Resources endpoints that query tables of data (such as items, recipes, runes, etc.) have the following commands.
