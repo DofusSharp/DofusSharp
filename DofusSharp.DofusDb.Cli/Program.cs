@@ -12,7 +12,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.Cli.Commands;
 
-Uri referrer = new("https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.DofusDb.Cli");
+Uri referrer = new("https://github.com/DofusSharp/DofusSharp/tree/main/DofusSharp.DofusDb.Cli");
 #if DEBUG
 Uri defaultUrl = DofusDbClient.BetaUri;
 #else
