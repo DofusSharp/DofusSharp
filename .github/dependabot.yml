@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+  - package-ecosystem: nuget
+    directory: /
+    ignore:
+      - dependency-name: FluentAssertions
+        versions: [ ">=8.0.0" ] # ignore paid versions
+    groups:
+      microsoft:
+        patterns:
+          - Microsoft.Extensions.*
+      entity-framework:
+        patterns:
+          - Microsoft.EntityFrameworkCore*
+      serilog:
+        patterns:
+          - Serilog*
+      xunit:
+        patterns:
+          - xunit*
+      moq:
+        patterns:
+          - Moq*
+    schedule:
+      interval: daily
