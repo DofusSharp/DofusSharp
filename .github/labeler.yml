@@ -24,11 +24,11 @@ best-crush:
           - 'BestCrush.Domain/*'
           - 'BestCrush.Migrations/*'
 
-ci:
+build:
   - changed-files:
       - any-glob-to-any-file:
           - '.github/*'
-  - head-branch: ['^ci/']
+  - head-branch: ['^build/']
 
 refactor:
   - head-branch: ['^refactor/']
