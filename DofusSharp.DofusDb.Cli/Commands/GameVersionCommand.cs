@@ -13,7 +13,7 @@ public class GameVersionCommand(Func<Uri, IDofusDbVersionClient> clientFactory, 
 
     public Command CreateCommand()
     {
-        Command result = new("game-version", "Get the version of the game corresponding to the data.");
+        Command result = new("game-version", "Get the version of the game corresponding to the data.") { Options = { _baseUrlOption } };
         result.SetAction(async (r, cancellationToken) =>
             {
                 string? baseUrl = r.GetValue(_baseUrlOption);
