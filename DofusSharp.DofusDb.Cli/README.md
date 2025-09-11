@@ -1,4 +1,4 @@
-﻿# [DofusDB](https://dofusdb.fr) CLI tool
+﻿# [DofusDB](https://dofusdb.fr) CLI Tool
 
 ## Overview
 
@@ -13,7 +13,7 @@ Command line interface (CLI) tool that exposes the API clients from the [DofusSh
 ## Installation
 
 ### Using dotnet tool (recommended)
-```
+```shell
 dotnet tool install --global dofusdb
 ```
 
@@ -55,7 +55,7 @@ Options :
 Results can be paginated using the `--limit` and `--skip` options.
 
 Example:
-```
+```shell
     dofusdb items list --limit 50 --skip 100
 ```
 
@@ -64,7 +64,7 @@ Example:
 Results can be limited to specific fields using the `--select` option.
 
 Example:
-```
+```shell
     dofusdb items list --select id,name,level
 ```
 
@@ -73,7 +73,7 @@ Example:
 Results can be sorted by one or more fields using the `--sort` option. Prefix a field with `-` for descending order.
 
 Example:
-```
+```shell
     dofusdb items list --sort level,-name
 ```
 
@@ -82,7 +82,7 @@ Example:
 Results can be filtered using the `--filter` option. Each predicate is made of the name of the field, an operator (`=`, `!=`, `<`, `<=`, `>`, `>=`) and the value.
 
 Example:
-```
+```shell
     dofusdb items list --filter "level>=10,name=Excalibur"
 ```
 
@@ -108,6 +108,11 @@ Options :
   -?, -h, --help         Show help and usage information
 ```
 
+Example:
+```shell
+    dofusdb items get 123
+```
+
 #### `count`
 
 Get the total count of resources that would be returned by the `list` command with the same filters applied.
@@ -123,6 +128,11 @@ Options :
   --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. Example: 
                      --filter "level>=10,name=Excalibur"
   -?, -h, --help     Show help and usage information
+```
+
+Example:
+```shell
+    dofusdb items count --filter "level>=10"
 ```
 
 #### `build-query`
@@ -145,6 +155,11 @@ Options :
                      --filter "level>=10,name=Excalibur"
   --base <base>      Base URL to use when building the query URL. [default: https://api.beta.dofusdb.fr/items/]
   -?, -h, --help     Show help and usage information
+```
+
+Example:
+```shell
+    dofusdb items build-query --filter "level>=10" --sort level
 ```
 
 ## Contributing
