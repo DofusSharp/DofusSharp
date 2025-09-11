@@ -44,6 +44,9 @@ jobs:
       - name: Publish
         run: dotnet publish BestCrush/BestCrush.csproj --output nsis/BestCrush/app/ --configuration Release --framework net10.0-windows10.0.19041.0 --no-build --property Version=${{ needs.compute-version.outputs.version }} --property DebugSymbols=false --property DebugType=None
 
+      - name: Remove PDBs
+        run: rm nsis/BestCrush/app/*.pdb
+
       - name: Upload compiled application to artifacts
         uses: actions/upload-artifact@v4
         with:
