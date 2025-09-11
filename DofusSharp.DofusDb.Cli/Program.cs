@@ -1,0 +1,72 @@
+﻿// See https://aka.ms/new-console-template for more information
+
+using System.CommandLine;
+using System.CommandLine.Parsing;
+using DofusSharp.DofusDb.ApiClients;
+using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Models.Jobs;
+using DofusSharp.DofusDb.ApiClients.Models.Maps;
+using DofusSharp.DofusDb.ApiClients.Models.Monsters;
+using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Spells;
+using DofusSharp.DofusDb.Cli.Commands;
+
+Uri referrer = new("https://github.com/ismailbennani/DofusSharp/tree/main/DofusSharp.DofusDb.Cli");
+#if DEBUG
+Uri defaultUrl = DofusDbClient.BetaUri;
+#else
+Uri defaultUrl = DofusDbClient.ProductionUri;
+#endif
+
+RootCommand rootCommand = new("A command line interface for DofusDB.")
+{
+    new GameVersionCommand(uri => GetFactory(uri).Version(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbServer>("servers", "Servers", uri => GetFactory(uri).Servers(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbItem>("items", "Items", uri => GetFactory(uri).Items(), defaultUrl).CreateCommand(),
+    new ImageClientCommand<long>("item-images", "Item images", uri => GetFactory(uri).ItemImages(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbItemType>("item-types", "Item Types", uri => GetFactory(uri).ItemTypes(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbItemSuperType>("item-super-types", "Item Super Types", uri => GetFactory(uri).ItemSuperTypes(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbItemSet>("item-sets", "Item Sets", uri => GetFactory(uri).ItemSets(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbJob>("jobs", "Jobs", uri => GetFactory(uri).Jobs(), defaultUrl).CreateCommand(),
+    new ImageClientCommand<long>("job-images", "Job images", uri => GetFactory(uri).JobImages(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbRecipe>("recipes", "Recipes", uri => GetFactory(uri).Recipes(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbSkill>("skills", "Skills", uri => GetFactory(uri).Skills(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbSpell>("spells", "Spells", uri => GetFactory(uri).Spells(), defaultUrl).CreateCommand(),
+    new ImageClientCommand<long>("spell-images", "Spell images", uri => GetFactory(uri).SpellImages(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbSpellLevel>("spell-levels", "Spell Levels", uri => GetFactory(uri).SpellLevels(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbSpellState>("spell-states", "Spell States", uri => GetFactory(uri).SpellStates(), defaultUrl).CreateCommand(),
+    new ImageClientCommand<string>("spell-state-images", "Spell state images", uri => GetFactory(uri).SpellStateImages(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbSpellVariant>("spell-variants", "Spell Variants", uri => GetFactory(uri).SpellVariants(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbMonster>("monsters", "Monsters", uri => GetFactory(uri).Monsters(), defaultUrl).CreateCommand(),
+    new ImageClientCommand<long>("monster-images", "Monster images", uri => GetFactory(uri).MonsterImages(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbMonsterRace>("monster-races", "Monster Races", uri => GetFactory(uri).MonsterRaces(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbMonsterSuperRace>("monster-super-races", "Monster Super Races", uri => GetFactory(uri).MonsterSuperRaces(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbWorld>("worlds", "Worlds", uri => GetFactory(uri).Worlds(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbSuperArea>("super-areas", "Super Areas", uri => GetFactory(uri).SuperAreas(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbArea>("areas", "Areas", uri => GetFactory(uri).Areas(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbSubArea>("sub-areas", "Sub Areas", uri => GetFactory(uri).SubAreas(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbMap>("maps", "Maps", uri => GetFactory(uri).Maps(), defaultUrl).CreateCommand(),
+    new ScalableImageClientCommand<long>("map-images", "Map images", uri => GetFactory(uri).MapImages(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbMapPosition>("map-positions", "Map Positions", uri => GetFactory(uri).MapPositions(), defaultUrl).CreateCommand(),
+    new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand()
+};
+
+ParseResult parseResult = rootCommand.Parse(args);
+
+if (parseResult.Errors.Count != 0)
+{
+    foreach (ParseError parseError in parseResult.Errors)
+    {
+        Console.Error.WriteLine(parseError.Message);
+    }
+    return 1;
+}
+
+return await parseResult.InvokeAsync();
+
+IDofusDbClientsFactory GetFactory(Uri uri)
+{
+    return DofusDbClient.Create(uri, referrer);
+}

@@ -1,4 +1,4 @@
-name: Continuous Deployment - Publish Libraries
+name: Continuous Deployment - Publish DofusDB CLI
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       dry-run:
-        description: Skip the publication of packages to repos
+        description: Skip the publication to repos
         required: true
         type: boolean
         default: false
@@ -19,13 +19,13 @@ jobs:
       build-name: release
 
   build-publish:
-    runs-on: ubuntu-latest
+    name: Build DofusDB CLI
+    
+    runs-on: windows-latest
     needs: compute-version
     
     permissions:
-      actions: write
       contents: write
-      packages: write
     
     steps:
       - name: Checkout
@@ -38,15 +38,18 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Install MAUI
+        run: dotnet workload install maui
+
       - name: Build
-        run: dotnet build DofusSharp.Libraries.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.DofusDb.Cli.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Test
-        run: dotnet test DofusSharp.Libraries.Filter.slnf --configuration Release --no-build
-        
-      - name: Pack
-        run: dotnet pack DofusSharp.Libraries.Filter.slnf --output nuget/ --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
-      
+        run: dotnet test DofusSharp.DofusDb.Cli.Filter.slnf --configuration Release --no-build
+
+      - name: Publish
+        run: dotnet pack DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output nuget/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
+
       - name: Upload binaries as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -57,7 +60,7 @@ jobs:
       - name: Configure Github Nuget repository
         if: ${{ !inputs.dry-run }}
         run: dotnet nuget add source --username ismailbennani --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/ismailbennani/index.json"
-        
+
       - name: Publish nugets - Github
         if: ${{ !inputs.dry-run }}
         run: |

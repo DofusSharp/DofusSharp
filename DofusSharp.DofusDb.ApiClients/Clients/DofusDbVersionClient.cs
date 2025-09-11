@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using DofusSharp.Common;
+using DofusSharp.DofusDb.ApiClients.Models;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
@@ -22,7 +23,7 @@ class DofusDbVersionClient : IDofusDbVersionClient
         using HttpResponseMessage response = await httpClient.GetAsync(string.Empty, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        string? result = await response.Content.ReadFromJsonAsync<string>(cancellationToken);
+        string? result = await response.Content.ReadFromJsonAsync<string>(DofusDbModelsSourceGenerationContext.Default.String, cancellationToken);
         if (result == null)
         {
             throw new InvalidOperationException("Could not deserialize the version.");
