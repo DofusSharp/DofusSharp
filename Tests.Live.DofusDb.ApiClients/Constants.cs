@@ -2,5 +2,5 @@
 
 class Constants
 {
-    public static readonly Uri Referrer = new("https://github.com/ismailbennani/DofusSharp");
+    public static readonly Uri Referrer = new("https://github.com/DofusSharp/DofusSharp");
 }

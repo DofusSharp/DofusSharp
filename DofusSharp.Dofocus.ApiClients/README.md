@@ -37,4 +37,4 @@ Contributions are welcome! Please open issues or submit pull requests for bug fi
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the terms of the [MIT License](../LICENSE.md).

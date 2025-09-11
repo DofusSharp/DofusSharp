@@ -84,7 +84,7 @@ InstallDirRegKey HKCU "Software\DofusSharp\${Name}" ""
 !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
 
 !define MUI_FINISHPAGE_LINK "Best Crush is on GitHub"
-!define MUI_FINISHPAGE_LINK_LOCATION "https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush"
+!define MUI_FINISHPAGE_LINK_LOCATION "https://github.com/DofusSharp/DofusSharp/tree/main/BestCrush"
 
 !macro MUI_FINISHPAGE_SHORTCUT
  

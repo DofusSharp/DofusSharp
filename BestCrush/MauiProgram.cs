@@ -55,11 +55,11 @@ public static class MauiProgram
             builder.Services.AddScoped<ItemsService>();
 
 #if DEBUG
-            builder.Services.AddSingleton(DofusDbQuery.Beta(new Uri("https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush")));
-            builder.Services.AddSingleton(DofusDbClient.Beta(new Uri("https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush")));
+            builder.Services.AddSingleton(DofusDbQuery.Beta(new Uri("https://github.com/DofusSharp/DofusSharp/tree/main/BestCrush")));
+            builder.Services.AddSingleton(DofusDbClient.Beta(new Uri("https://github.com/DofusSharp/DofusSharp/tree/main/BestCrush")));
 #else
-            builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush")));
-            builder.Services.AddSingleton(DofusDbClient.Production(new Uri("https://github.com/ismailbennani/DofusSharp/tree/main/BestCrush")));
+            builder.Services.AddSingleton(DofusDbQuery.Production(new Uri("https://github.com/DofusSharp/DofusSharp/tree/main/BestCrush")));
+            builder.Services.AddSingleton(DofusDbClient.Production(new Uri("https://github.com/DofusSharp/DofusSharp/tree/main/BestCrush")));
 #endif
 
             builder.Services.AddSingleton(DofocusClient.Production());

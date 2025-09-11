@@ -19,7 +19,7 @@ dotnet tool install --global dofusdb
 
 ### Using binaries
 
-Download the latest release from the [GitHub releases page](https://github.com/ismailbennani/DofusSharp/releases/latest).
+Download the latest release from the [GitHub releases page](https://github.com/DofusSharp/DofusSharp/releases/latest).
 
 ## Usage
 
@@ -181,4 +181,4 @@ Contributions are welcome! Please open issues or submit pull requests for bug fi
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the terms of the [MIT License](../LICENSE.md).
