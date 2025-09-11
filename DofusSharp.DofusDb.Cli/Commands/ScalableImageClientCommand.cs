@@ -4,12 +4,18 @@ using DofusSharp.DofusDb.ApiClients.Models.Common;
 
 namespace DofusSharp.DofusDb.Cli.Commands;
 
-public class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbImageClient<TId>> clientFactory, Uri defaultUrl)
+public class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImageClient<TId>> clientFactory, Uri defaultUrl)
 {
     readonly Argument<TId> _idArgument = new("id")
     {
         Description = "Unique identifier of the resource.",
         Arity = ArgumentArity.ExactlyOne
+    };
+
+    readonly Option<DofusDbImageScale> _scaleOption = new("--scale")
+    {
+        Description = "Scale of the image to fetch.",
+        DefaultValueFactory = _ => DofusDbImageScale.Full
     };
 
     readonly Option<string> _outputFileOption = new("--output", "-o")
@@ -31,20 +37,21 @@ public class ImageClientCommand<TId>(string command, string name, Func<Uri, IDof
 
     Command CreateGetCommand()
     {
-        Command result = new("get", $"Get {name.ToLowerInvariant()} by id.") { Arguments = { _idArgument }, Options = { _outputFileOption, _baseUrlOption } };
+        Command result = new("get", $"Get {name.ToLowerInvariant()} by id.") { Arguments = { _idArgument }, Options = { _scaleOption, _outputFileOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 TId id = r.GetRequiredValue(_idArgument);
+                DofusDbImageScale scale = r.GetValue(_scaleOption);
                 string? outputFile = r.GetValue(_outputFileOption);
 
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbImageClient<TId> client = clientFactory(url);
+                IDofusDbScalableImageClient<TId> client = clientFactory(url);
 
-                Stream image = await client.GetImageAsync(id, cancellationToken);
+                Stream image = await client.GetImageAsync(id, scale, cancellationToken);
 
-                await using Stream stream = GetOutputStream(client, id, outputFile);
+                await using Stream stream = GetOutputStream(client, id, scale, outputFile);
                 await image.CopyToAsync(stream, cancellationToken);
             }
         );
@@ -52,7 +59,7 @@ public class ImageClientCommand<TId>(string command, string name, Func<Uri, IDof
         return result;
     }
 
-    FileStream GetOutputStream(IDofusDbImageClient<TId> client, TId id, string? outputFile)
+    FileStream GetOutputStream(IDofusDbImageClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile)
     {
         if (outputFile == null)
         {
@@ -62,7 +69,7 @@ public class ImageClientCommand<TId>(string command, string name, Func<Uri, IDof
                 ImageFormat.Png => ".png",
                 _ => ""
             };
-            outputFile = $"{command}-{id}{extension}";
+            outputFile = $"{command}-{id}-{scale.ToString().ToLowerInvariant()}{extension}";
         }
 
         string? directory = Path.GetDirectoryName(outputFile);

@@ -48,6 +48,7 @@ RootCommand rootCommand = new("A command line interface for DofusDB.")
     new TableClientCommand<DofusDbArea>("areas", "Areas", uri => GetFactory(uri).Areas(), defaultUrl).CreateCommand(),
     new TableClientCommand<DofusDbSubArea>("sub-areas", "Sub Areas", uri => GetFactory(uri).SubAreas(), defaultUrl).CreateCommand(),
     new TableClientCommand<DofusDbMap>("maps", "Maps", uri => GetFactory(uri).Maps(), defaultUrl).CreateCommand(),
+    new ScalableImageClientCommand<long>("map-images", "Map images", uri => GetFactory(uri).MapImages(), defaultUrl).CreateCommand(),
     new TableClientCommand<DofusDbMapPosition>("map-positions", "Map Positions", uri => GetFactory(uri).MapPositions(), defaultUrl).CreateCommand(),
     new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand()
 };
