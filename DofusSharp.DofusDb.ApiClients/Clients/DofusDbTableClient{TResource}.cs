@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using DofusSharp.Common;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
@@ -13,13 +14,13 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     readonly JsonSerializerOptions? _options;
     readonly DofusDbSearchRequestQueryParamsBuilder _queryParamsBuilder = new();
 
-    public DofusDbTableClient(Uri baseAddress, Uri? referrer = null)
+    public DofusDbTableClient(IJsonTypeInfoResolver typeInfoResolver, Uri baseAddress, Uri? referrer = null)
     {
         Referrer = referrer;
         BaseAddress = baseAddress;
         _options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
         {
-            TypeInfoResolver = DofusDbModelsSourceGenerationContext.Default,
+            TypeInfoResolver = typeInfoResolver,
             AllowOutOfOrderMetadataProperties = true,
             Converters =
             {
