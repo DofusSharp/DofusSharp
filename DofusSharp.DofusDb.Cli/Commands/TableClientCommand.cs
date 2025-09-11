@@ -1,14 +1,16 @@
 ﻿using System.CommandLine;
+using System.CommandLine.Parsing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using System.Text.RegularExpressions;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 
 namespace DofusSharp.DofusDb.Cli.Commands;
 
-public class TableClientCommand<TResource>(string command, string name, IDofusDbTableClient<TResource> client) where TResource: DofusDbResource
+public partial class TableClientCommand<TResource>(string command, string name, IDofusDbTableClient<TResource> client) where TResource: DofusDbResource
 {
     readonly Argument<long> _idArgument = new("id")
     {
@@ -33,11 +35,19 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
         CustomParser = r => r.Tokens.SelectMany(t => t.Value.Split(',')).ToArray()
     };
 
-    readonly Option<string[]> _sortOption = new("--sort")
+    readonly Option<Dictionary<string, DofusDbSearchQuerySortOrder>> _sortOption = new("--sort")
     {
         Description = "Comma separated list of fields to sorts the results by. Prefix with '-' for descending order.",
         Arity = ArgumentArity.ZeroOrMore,
-        CustomParser = r => r.Tokens.SelectMany(t => t.Value.Split(',')).ToArray()
+        CustomParser = ParseSortOption
+    };
+
+    readonly Option<IReadOnlyList<DofusDbSearchPredicate>> _filterOption = new("--filter")
+    {
+        Description =
+            "Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Example: --filter \"level>=10,name=Excalibur\"",
+        Arity = ArgumentArity.ZeroOrMore,
+        CustomParser = ParseFilterOption
     };
 
     readonly Option<string> _outputFileOption = new("--output", "-o")
@@ -69,14 +79,15 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
     Command CreateSearchCommand()
     {
         Command result = new("search", $"Search for {name.ToLowerInvariant()}.")
-            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _outputFileOption, _prettyPrintOption } };
+            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _outputFileOption, _prettyPrintOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 int? limit = r.GetValue(_limitOption);
                 int? skip = r.GetValue(_skipOption);
                 string[]? select = r.GetValue(_selectOption);
-                string[]? sort = r.GetValue(_sortOption);
+                Dictionary<string, DofusDbSearchQuerySortOrder>? sort = r.GetValue(_sortOption);
+                IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
 
@@ -84,7 +95,10 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(IReadOnlyList<TResource>));
 
                 IReadOnlyList<TResource> results = await client
-                    .MultiQuerySearchAsync(new DofusDbSearchQuery { Limit = limit, Skip = skip, Select = select ?? [], Sort = BuildSortQuery(sort) }, cancellationToken)
+                    .MultiQuerySearchAsync(
+                        new DofusDbSearchQuery { Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] },
+                        cancellationToken
+                    )
                     .ToListAsync(cancellationToken);
                 string serialized = JsonSerializer.Serialize(results, jsonTypeInfo);
 
@@ -98,17 +112,18 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
     Command CreateSearchQueryCommand()
     {
         Command result = new("search-query", $"Build the search query for {name.ToLowerInvariant()}.")
-            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _baseUrlOption } };
+            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _baseUrlOption } };
 
         result.SetAction(r =>
             {
                 int? limit = r.GetValue(_limitOption);
                 int? skip = r.GetValue(_skipOption);
                 string[]? select = r.GetValue(_selectOption);
-                string[]? sort = r.GetValue(_sortOption);
+                Dictionary<string, DofusDbSearchQuerySortOrder>? sort = r.GetValue(_sortOption);
+                IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
 
-                DofusDbSearchQuery query = new() { Limit = limit, Skip = skip, Select = select ?? [], Sort = BuildSortQuery(sort) };
+                DofusDbSearchQuery query = new() { Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] };
                 string queryString = query.ToQueryString();
 
                 if (string.IsNullOrWhiteSpace(queryString))
@@ -150,11 +165,13 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
 
     Command CreateCountCommand()
     {
-        Command result = new("count", $"Count {name.ToLowerInvariant()}.");
+        Command result = new("count", $"Count {name.ToLowerInvariant()}.") { Options = { _filterOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
-                int results = await client.CountAsync(cancellationToken);
+                IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
+
+                int results = await client.CountAsync(filter ?? [], cancellationToken);
                 Console.WriteLine(results);
             }
         );
@@ -162,12 +179,77 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
         return result;
     }
 
+    static Dictionary<string, DofusDbSearchQuerySortOrder> ParseSortOption(ArgumentResult r) =>
+        r.Tokens.SelectMany(t => t.Value.Split(',')).ToDictionary(s => s, s => s.StartsWith('-') ? DofusDbSearchQuerySortOrder.Descending : DofusDbSearchQuerySortOrder.Ascending);
+
+    static List<DofusDbSearchPredicate> ParseFilterOption(ArgumentResult r)
+    {
+        List<DofusDbSearchPredicate> result = [];
+
+        foreach (Token token in r.Tokens)
+        {
+            DofusDbSearchPredicate? predicate = ParseFilter(r, token.Value);
+            if (predicate is null)
+            {
+                continue;
+            }
+
+            result.Add(predicate);
+        }
+
+        return result;
+    }
+
+    static DofusDbSearchPredicate? ParseFilter(ArgumentResult result, string filterStr)
+    {
+        Regex regex = FilterRegex();
+        Match math = regex.Match(filterStr);
+        if (!math.Success)
+        {
+            result.AddError("Invalid filter format. Expected format: {field}{operator}{value}, where operator is one of =, !=, <, <=, >, >=.");
+        }
+
+        string field = math.Groups["field"].Value;
+        string op = math.Groups["operator"].Value;
+        string value = math.Groups["value"].Value;
+
+        switch (op)
+        {
+            case "=":
+            {
+                string[] values = value.Split(',');
+                if (values.Length == 1)
+                {
+                    return new DofusDbSearchPredicate.Eq(field, value);
+                }
+                return new DofusDbSearchPredicate.In(field, values);
+            }
+            case "!=":
+            {
+                string[] values = value.Split(',');
+                if (values.Length == 1)
+                {
+                    return new DofusDbSearchPredicate.NotEq(field, value);
+                }
+                return new DofusDbSearchPredicate.NotIn(field, values);
+            }
+            case "<":
+                return new DofusDbSearchPredicate.LessThan(field, value);
+            case "<=":
+                return new DofusDbSearchPredicate.LessThanOrEquals(field, value);
+            case ">":
+                return new DofusDbSearchPredicate.GreaterThan(field, value);
+            case ">=":
+                return new DofusDbSearchPredicate.GreaterThanOrEqual(field, value);
+            default:
+                result.AddError($"Invalid operator '{op}' in filter. Expected one of =, !=, <, <=, >, >=.");
+                return null;
+        }
+    }
+
     static JsonSerializerOptions BuildJsonSerializerOptions(bool prettyPrint) =>
         new(JsonSerializerDefaults.Web)
             { TypeInfoResolver = DofusDbModelsSourceGenerationContext.Default, WriteIndented = prettyPrint, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault };
-
-    static Dictionary<string, DofusDbSearchQuerySortOrder> BuildSortQuery(string[]? sort) =>
-        sort?.ToDictionary(s => s, s => s.StartsWith('-') ? DofusDbSearchQuerySortOrder.Descending : DofusDbSearchQuerySortOrder.Ascending) ?? [];
 
     static async Task WriteToStdoutOrFile(string? outputFile, string content, CancellationToken cancellationToken)
     {
@@ -186,4 +268,7 @@ public class TableClientCommand<TResource>(string command, string name, IDofusDb
             await File.WriteAllTextAsync(outputFile, content, cancellationToken);
         }
     }
+
+    [GeneratedRegex("(?<field>\\w+)(?<operator>=|!=|<|<=|>|>=)(?<value>.+)")]
+    private static partial Regex FilterRegex();
 }
