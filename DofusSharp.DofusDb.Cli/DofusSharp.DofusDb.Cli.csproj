@@ -14,11 +14,15 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <PackageId>dofusdb</PackageId>
         <Title>DofusDB CLI</Title>
         <Authors>Ismail Bennani</Authors>
         <Description>Query DofusDB data.</Description>
+        <Tags>Dofus DofusDb API CLI</Tags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/DofusSharp/DofusSharp</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>

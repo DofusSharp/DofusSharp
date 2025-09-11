@@ -13,6 +13,9 @@ Command line interface (CLI) tool that exposes the API clients from the [DofusSh
 ## Installation
 
 ### Using dotnet tool (recommended)
+
+Download [.NET 10](https://get.dot.net/10), then install `dofusdb`:
+
 ```shell
 dotnet tool install --global dofusdb
 ```
@@ -23,43 +26,102 @@ Download the latest release from the [GitHub releases page](https://github.com/D
 
 ## Usage
 
-There are different types of commands for different types of resources.
+```
+Description:
+  A command line interface for DofusDB.
+
+Utilisation :
+  dofusdb [command] [options]
+
+Options :
+  -?, -h, --help  Show help and usage information
+  --version       Afficher les informations de version
+
+Commandes :
+  game-version         Get the version of the game corresponding to the data
+  servers              Servers client
+  characteristics      Characteristics client
+  items                Items client
+  item-images          Item images client
+  item-types           Item Types client
+  item-super-types     Item Super Types client
+  item-sets            Item Sets client
+  jobs                 Jobs client
+  job-images           Job images client
+  recipes              Recipes client
+  skills               Skills client
+  spells               Spells client
+  spell-images         Spell images client
+  spell-levels         Spell Levels client
+  spell-states         Spell States client
+  spell-state-images   Spell State images client
+  spell-variants       Spell Variants client
+  monsters             Monsters client
+  monster-images       Monster images client
+  monster-races        Monster Races client
+  monster-super-races  Monster Super Races client
+  worlds               Worlds client
+  super-areas          Super Areas client
+  areas                Areas client
+  sub-areas            Sub Areas client
+  maps                 Maps client
+  map-images           Map images client
+  map-positions        Map Positions client
+  dungeons             Dungeons client
+```
 
 ### Game version
 
 ```
 Description:
-  Get the version of the game corresponding to the data.
+  Get the version of the game corresponding to the data
 
-Utilisation :
+Utilisation :
   dofusdb game-version [options]
 
-Options :
+Options :
+  --base <base>   Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
   -?, -h, --help  Show help and usage information
 ```
 
 ### Table data
 
-Resources endpoints that query tables of data (such as items, recipes, runes, etc.) have the following commands.
+```
+Description:
+  Items client
+
+Utilisation :
+  dofusdb items [command] [options]
+
+Options :
+  -?, -h, --help  Show help and usage information
+
+Commandes :
+  list         List all items
+  get <id>     Get items by id
+  build-query  Build the search query for items
+  count        Count items
+```
 
 #### `list`
 
 ```
 Description:
-  List all available items.
+  List all items
 
-Utilisation :
+Utilisation :
   dofusdb items list [options]
 
-Options :
-  --limit <limit>        Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size.
-  --skip <skip>          Number of results to skip.
-  --select <select>      Comma separated list of fields to include in the results. If not specified, all fields are included.
-  --sort <sort>          Comma separated list of fields to sorts the results by. Prefix with '-' for descending order.
-  --filter <filter>      Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. 
-                         Example: --filter "level>=10,name=Excalibur"
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console.
-  --pretty-print         Pretty print the JSON output.
+Options :
+  --limit <limit>        Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size
+  --skip <skip>          Number of results to skip
+  --select <select>      Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
+  --sort <sort>          Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
+  --filter <filter>      Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
+                         [example: --filter "level>=10,name.fr=Razielle|Goultard"]
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  --pretty-print         Pretty print the JSON output
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
 ```
 
@@ -107,17 +169,18 @@ Fetch a single resource by its unique identifier.
 
 ```
 Description:
-  Get items by id.
+  Get items by id
 
-Utilisation :
+Utilisation :
   dofusdb items get <id> [options]
 
-Arguments :
-  <id>  Unique identifier of the resource.
+Arguments :
+  <id>  Unique identifier of the resource
 
-Options :
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console.
-  --pretty-print         Pretty print the JSON output.
+Options :
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  --pretty-print         Pretty print the JSON output
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
 ```
 
@@ -132,14 +195,15 @@ Get the total count of resources that would be returned by the `list` command wi
 
 ```
 Description:
-  Count items.
+  Count items
 
-Utilisation :
+Utilisation :
   dofusdb items count [options]
 
-Options :
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. Example: 
-                     --filter "level>=10,name=Excalibur"
+Options :
+  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: 
+                     --filter "level>=10,name.fr=Razielle|Goultard"]
+  --base <base>      Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
 ```
 
@@ -154,19 +218,19 @@ Build the search query URL for the specified parameters without executing the re
 
 ```
 Description:
-  Build the search query for items.
+  Build the search query for items
 
-Utilisation :
+Utilisation :
   dofusdb items build-query [options]
 
-Options :
-  --limit <limit>    Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size.
-  --skip <skip>      Number of results to skip.
-  --select <select>  Comma separated list of fields to include in the results. If not specified, all fields are included.
-  --sort <sort>      Comma separated list of fields to sorts the results by. Prefix with '-' for descending order.
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. Example: 
-                     --filter "level>=10,name=Excalibur"
-  --base <base>      Base URL to use when building the query URL. [default: https://api.beta.dofusdb.fr/items/]
+Options :
+  --limit <limit>    Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size
+  --skip <skip>      Number of results to skip
+  --select <select>  Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
+  --sort <sort>      Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
+  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: 
+                     --filter "level>=10,name.fr=Razielle|Goultard"]
+  --base <base>      Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
 ```
 
@@ -174,6 +238,76 @@ Example:
 ```shell
     dofusdb items build-query --filter "level>=10" --sort level
 ```
+
+### Image data
+
+```
+Description:
+  Item images client
+
+Utilisation :
+  dofusdb item-images [command] [options]
+
+Options :
+  -?, -h, --help  Show help and usage information
+
+Commandes :
+  get <id>  Get item images by id
+```
+
+#### `get`
+
+```
+Description:
+  Get item images by id
+
+Utilisation :
+  dofusdb item-images get <id> [options]
+
+Arguments :
+  <id>  Unique identifier of the resource
+
+Options :
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -?, -h, --help         Show help and usage information
+```
+
+### Scalable image data
+
+```
+Description:
+  Map images client
+
+Utilisation :
+  dofusdb map-images [command] [options]
+
+Options :
+  -?, -h, --help  Show help and usage information
+
+Commandes :
+  get <id>  Get map images by i
+```
+
+### `get`
+
+```
+Description:
+  Get map images by id
+
+Utilisation :
+  dofusdb map-images get <id> [options]
+
+Arguments :
+  <id>  Unique identifier of the resource
+
+Options :
+  --scale <Full|Half|Quarter|ThreeQuarters>  Scale of the image to fetch [default: Full]
+  -o, --output <output>                      File to write the JSON output to. If not specified, the output will be written to the console
+  --base <base>                              Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -?, -h, --help                             Show help and usage information
+```
+
 
 ## Contributing
 

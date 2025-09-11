@@ -15,30 +15,30 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 {
     readonly Argument<long> _idArgument = new("id")
     {
-        Description = "Unique identifier of the resource.",
+        Description = "Unique identifier of the resource",
         Arity = ArgumentArity.ExactlyOne
     };
 
     readonly Option<int?> _limitOption = new("--limit")
     {
-        Description = "Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size."
+        Description = "Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size"
     };
 
     readonly Option<int?> _skipOption = new("--skip")
     {
-        Description = "Number of results to skip."
+        Description = "Number of results to skip"
     };
 
     readonly Option<string[]> _selectOption = new("--select")
     {
-        Description = "Comma separated list of fields to include in the results. If not specified, all fields are included. Example: --select \"id,name.fr,level\"",
+        Description = "Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select \"id,name.fr,level\"]",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = r => r.Tokens.SelectMany(t => t.Value.Split(',')).ToArray()
     };
 
     readonly Option<Dictionary<string, DofusDbSearchQuerySortOrder>> _sortOption = new("--sort")
     {
-        Description = "Comma separated list of fields to sorts the results by. Prefix with '-' for descending order. Example: --sort \"-level,name.fr\"",
+        Description = "Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort \"-level,name.fr\"]",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = ParseSortOption
     };
@@ -47,31 +47,31 @@ public partial class TableClientCommand<TResource>(string command, string name, 
     {
         Description = "Comma separated list of predicates to filter the results by. "
                       + "Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. "
-                      + "Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. "
-                      + "Example: --filter \"level>=10,name.fr=Razielle|Goultard\"",
+                      + "Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values "
+                      + "[example: --filter \"level>=10,name.fr=Razielle|Goultard\"]",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = ParseFilterOption
     };
 
     readonly Option<string> _outputFileOption = new("--output", "-o")
     {
-        Description = "File to write the JSON output to. If not specified, the output will be written to the console."
+        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
     };
 
     readonly Option<bool> _prettyPrintOption = new("--pretty-print")
     {
-        Description = "Pretty print the JSON output.",
+        Description = "Pretty print the JSON output",
         DefaultValueFactory = _ => false
     };
 
     readonly Option<string> _baseUrlOption = new("--base")
     {
-        Description = "Base URL to use when building the query URL.",
+        Description = "Base URL to use when building the query URL",
         DefaultValueFactory = _ => defaultUrl.ToString()
     };
 
     public Command CreateCommand() =>
-        new(command, $"{name} client.")
+        new(command, $"{name} client")
         {
             CreateListCommand(),
             CreateGetCommand(),
@@ -81,7 +81,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 
     Command CreateListCommand()
     {
-        Command result = new("list", $"List all {name.ToLowerInvariant()}.")
+        Command result = new("list", $"List all {name.ToLowerInvariant()}")
             { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _outputFileOption, _prettyPrintOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
@@ -117,7 +117,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 
     Command CreateGetCommand()
     {
-        Command result = new("get", $"Get {name.ToLowerInvariant()} by id.") { Arguments = { _idArgument }, Options = { _outputFileOption, _prettyPrintOption, _baseUrlOption } };
+        Command result = new("get", $"Get {name.ToLowerInvariant()} by id") { Arguments = { _idArgument }, Options = { _outputFileOption, _prettyPrintOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
@@ -143,7 +143,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 
     Command CreateBuildQueryCommand()
     {
-        Command result = new("build-query", $"Build the search query for {name.ToLowerInvariant()}.")
+        Command result = new("build-query", $"Build the search query for {name.ToLowerInvariant()}")
             { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _baseUrlOption } };
 
         result.SetAction(r =>
@@ -174,7 +174,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 
     Command CreateCountCommand()
     {
-        Command result = new("count", $"Count {name.ToLowerInvariant()}.") { Options = { _filterOption, _baseUrlOption } };
+        Command result = new("count", $"Count {name.ToLowerInvariant()}") { Options = { _filterOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
