@@ -8,8 +8,11 @@
         <Title>Dofocus API Clients</Title>
         <Authors>Ismail Bennani</Authors>
         <Description>API clients for the Dofocus API.</Description>
+        <Tags>Dofus Dofocus API</Tags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/DofusSharp/DofusSharp</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
