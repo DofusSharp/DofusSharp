@@ -21,7 +21,7 @@ jobs:
   build-publish:
     name: Build DofusDB CLI
     
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: compute-version
     
     permissions:
