@@ -31,14 +31,14 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 
     readonly Option<string[]> _selectOption = new("--select")
     {
-        Description = "Comma separated list of fields to include in the results. If not specified, all fields are included. Example: --select \"id,name.fr,level\"",
+        Description = "Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select \"id,name.fr,level\"]",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = r => r.Tokens.SelectMany(t => t.Value.Split(',')).ToArray()
     };
 
     readonly Option<Dictionary<string, DofusDbSearchQuerySortOrder>> _sortOption = new("--sort")
     {
-        Description = "Comma separated list of fields to sorts the results by. Prefix with '-' for descending order. Example: --sort \"-level,name.fr\"",
+        Description = "Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort \"-level,name.fr\"]",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = ParseSortOption
     };
@@ -47,8 +47,8 @@ public partial class TableClientCommand<TResource>(string command, string name, 
     {
         Description = "Comma separated list of predicates to filter the results by. "
                       + "Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. "
-                      + "Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. "
-                      + "Example: --filter \"level>=10,name.fr=Razielle|Goultard\"",
+                      + "Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values "
+                      + "[example: --filter \"level>=10,name.fr=Razielle|Goultard\"]",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = ParseFilterOption
     };
