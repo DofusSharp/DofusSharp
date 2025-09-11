@@ -81,11 +81,11 @@ jobs:
         # queries: security-extended,security-and-quality
 
     - name: Install MAUI
-      if: matrix.language == csharp && matrix.build-mode == 'manual'
+      if: matrix.language == 'csharp' && matrix.build-mode == 'manual'
       run: dotnet workload install maui
 
     - name: Build
-      if: matrix.language == csharp && matrix.build-mode == 'manual'
+      if: matrix.language == 'csharp' && matrix.build-mode == 'manual'
       run: dotnet build
 
     - name: Perform CodeQL Analysis
