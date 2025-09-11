@@ -13,6 +13,9 @@ Command line interface (CLI) tool that exposes the API clients from the [DofusSh
 ## Installation
 
 ### Using dotnet tool (recommended)
+
+Download [.NET 10](https://get.dot.net/10), then install `dofusdb`:
+
 ```shell
 dotnet tool install --global dofusdb
 ```
