@@ -5,7 +5,7 @@ dofusdb-api:
           - 'Tests.Live.DofusDb.ApiClients/*'
           - 'Tests.UnitTests.DofusDb.ApiClients/*'
 
-dofusdb-api:
+dofusdb-cli:
   - changed-files:
       - any-glob-to-any-file:
           - 'DofusSharp.DofusDb.Cli/*'
