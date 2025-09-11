@@ -8,30 +8,30 @@ public class ImageClientCommand<TId>(string command, string name, Func<Uri, IDof
 {
     readonly Argument<TId> _idArgument = new("id")
     {
-        Description = "Unique identifier of the resource.",
+        Description = "Unique identifier of the resource",
         Arity = ArgumentArity.ExactlyOne
     };
 
     readonly Option<string> _outputFileOption = new("--output", "-o")
     {
-        Description = "File to write the JSON output to. If not specified, the output will be written to the console."
+        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
     };
 
     readonly Option<string> _baseUrlOption = new("--base")
     {
-        Description = "Base URL to use when building the query URL.",
+        Description = "Base URL to use when building the query URL",
         DefaultValueFactory = _ => defaultUrl.ToString()
     };
 
     public Command CreateCommand() =>
-        new(command, $"{name} client.")
+        new(command, $"{name} client")
         {
             CreateGetCommand()
         };
 
     Command CreateGetCommand()
     {
-        Command result = new("get", $"Get {name.ToLowerInvariant()} by id.") { Arguments = { _idArgument }, Options = { _outputFileOption, _baseUrlOption } };
+        Command result = new("get", $"Get {name.ToLowerInvariant()} by id") { Arguments = { _idArgument }, Options = { _outputFileOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
