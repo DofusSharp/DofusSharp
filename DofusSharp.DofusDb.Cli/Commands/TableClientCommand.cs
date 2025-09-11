@@ -44,8 +44,10 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 
     readonly Option<IReadOnlyList<DofusDbSearchPredicate>> _filterOption = new("--filter")
     {
-        Description =
-            "Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Example: --filter \"level>=10,name=Excalibur\"",
+        Description = "Comma separated list of predicates to filter the results by. "
+                      + "Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. "
+                      + "Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. "
+                      + "Example: --filter \"level>=10,name=Excalibur\"",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = ParseFilterOption
     };
@@ -68,17 +70,17 @@ public partial class TableClientCommand<TResource>(string command, string name, 
     };
 
     public Command CreateCommand() =>
-        new(command, $"Query {name.ToLowerInvariant()} resources from DofusDB.")
+        new(command, $"List all available {name.ToLowerInvariant()}.")
         {
-            CreateSearchCommand(),
-            CreateSearchQueryCommand(),
+            CreateListCommand(),
+            CreateBuildQueryCommand(),
             CreateGetCommand(),
             CreateCountCommand()
         };
 
-    Command CreateSearchCommand()
+    Command CreateListCommand()
     {
-        Command result = new("search", $"Search for {name.ToLowerInvariant()}.")
+        Command result = new("list", $"Search for {name.ToLowerInvariant()}.")
             { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _outputFileOption, _prettyPrintOption } };
 
         result.SetAction(async (r, cancellationToken) =>
@@ -109,9 +111,9 @@ public partial class TableClientCommand<TResource>(string command, string name, 
         return result;
     }
 
-    Command CreateSearchQueryCommand()
+    Command CreateBuildQueryCommand()
     {
-        Command result = new("search-query", $"Build the search query for {name.ToLowerInvariant()}.")
+        Command result = new("build-query", $"Build the search query for {name.ToLowerInvariant()}.")
             { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _baseUrlOption } };
 
         result.SetAction(r =>
@@ -226,7 +228,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
             }
             case "!=":
             {
-                string[] values = value.Split(',');
+                string[] values = value.Split('|');
                 if (values.Length == 1)
                 {
                     return new DofusDbSearchPredicate.NotEq(field, value);
