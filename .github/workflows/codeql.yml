@@ -80,6 +80,12 @@ jobs:
         # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
 
+    - name: Install .NET 10.0
+      if: matrix.language == 'csharp' && matrix.build-mode == 'manual'
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '10.0.x'
+
     - name: Install MAUI
       if: matrix.language == 'csharp' && matrix.build-mode == 'manual'
       run: dotnet workload install maui
