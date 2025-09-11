@@ -9,6 +9,9 @@ changelog:
     - title: DofusDB API Clients
       labels:
         - dofusdb-api
+    - title: DofusDB CLI
+      labels:
+        - dofusdb-cli
     - title: Dofocus API Clients
       labels:
         - dofocus-api
