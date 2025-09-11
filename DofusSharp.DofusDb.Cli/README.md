@@ -32,7 +32,7 @@ Description:
   Get the version of the game corresponding to the data.
 
 Utilisation :
-  DofusSharp.DofusDb.Cli game-version [options]
+  dofusdb game-version [options]
 
 Options :
   -?, -h, --help  Show help and usage information
@@ -110,7 +110,7 @@ Description:
   Get items by id.
 
 Utilisation :
-  DofusSharp.DofusDb.Cli items get <id> [options]
+  dofusdb items get <id> [options]
 
 Arguments :
   <id>  Unique identifier of the resource.
@@ -135,7 +135,7 @@ Description:
   Count items.
 
 Utilisation :
-  DofusSharp.DofusDb.Cli items count [options]
+  dofusdb items count [options]
 
 Options :
   --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. Example: 
@@ -157,7 +157,7 @@ Description:
   Build the search query for items.
 
 Utilisation :
-  DofusSharp.DofusDb.Cli items build-query [options]
+  dofusdb items build-query [options]
 
 Options :
   --limit <limit>    Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size.
