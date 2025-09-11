@@ -102,9 +102,9 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                         cancellationToken
                     )
                     .ToListAsync(cancellationToken);
-                string serialized = JsonSerializer.Serialize(results, jsonTypeInfo);
 
-                await WriteToStdoutOrFile(outputFile, serialized, cancellationToken);
+                await using Stream stream = GetOutputStream(outputFile);
+                await JsonSerializer.SerializeAsync(stream, results, jsonTypeInfo, cancellationToken);
             }
         );
 
@@ -156,9 +156,9 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
 
                 TResource resource = await client.GetAsync(id, cancellationToken);
-                string serialized = JsonSerializer.Serialize(resource, jsonTypeInfo);
 
-                await WriteToStdoutOrFile(outputFile, serialized, cancellationToken);
+                await using Stream stream = GetOutputStream(outputFile);
+                await JsonSerializer.SerializeAsync(stream, resource, jsonTypeInfo, cancellationToken);
             }
         );
 
@@ -255,22 +255,20 @@ public partial class TableClientCommand<TResource>(string command, string name, 
         new(JsonSerializerDefaults.Web)
             { TypeInfoResolver = DofusDbModelsSourceGenerationContext.Default, WriteIndented = prettyPrint, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault };
 
-    static async Task WriteToStdoutOrFile(string? outputFile, string content, CancellationToken cancellationToken)
+    static Stream GetOutputStream(string? outputFile)
     {
         if (string.IsNullOrWhiteSpace(outputFile))
         {
-            Console.WriteLine(content);
+            return Console.OpenStandardOutput();
         }
-        else
-        {
-            string? directory = Path.GetDirectoryName(outputFile);
-            if (directory is not null && !Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
 
-            await File.WriteAllTextAsync(outputFile, content, cancellationToken);
+        string? directory = Path.GetDirectoryName(outputFile);
+        if (directory is not null && !Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
         }
+
+        return File.Create(outputFile);
     }
 
     [GeneratedRegex(
