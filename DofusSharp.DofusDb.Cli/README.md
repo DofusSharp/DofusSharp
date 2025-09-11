@@ -129,7 +129,6 @@ Options :
 
 Results can be paginated using the `--limit` and `--skip` options.
 
-Example:
 ```shell
     dofusdb items list --limit 50 --skip 100
 ```
@@ -138,7 +137,6 @@ Example:
 
 Results can be limited to specific fields using the `--select` option.
 
-Example:
 ```shell
     dofusdb items list --select id,name,level
 ```
@@ -147,7 +145,6 @@ Example:
 
 Results can be sorted by one or more fields using the `--sort` option. Prefix a field with `-` for descending order.
 
-Example:
 ```shell
     dofusdb items list --sort level,-name
 ```
@@ -156,7 +153,6 @@ Example:
 
 Results can be filtered using the `--filter` option. Each predicate is made of the name of the field, an operator (`=`, `!=`, `<`, `<=`, `>`, `>=`) and the value.
 
-Example:
 ```shell
     dofusdb items list --filter "level>=10,name=Excalibur"
 ```
@@ -184,11 +180,6 @@ Options :
   -?, -h, --help         Show help and usage information
 ```
 
-Example:
-```shell
-    dofusdb items get 123
-```
-
 #### `count`
 
 Get the total count of resources that would be returned by the `list` command with the same filters applied.
@@ -205,11 +196,6 @@ Options :
                      --filter "level>=10,name.fr=Razielle|Goultard"]
   --base <base>      Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
-```
-
-Example:
-```shell
-    dofusdb items count --filter "level>=10"
 ```
 
 #### `build-query`
@@ -232,11 +218,6 @@ Options :
                      --filter "level>=10,name.fr=Razielle|Goultard"]
   --base <base>      Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
-```
-
-Example:
-```shell
-    dofusdb items build-query --filter "level>=10" --sort level
 ```
 
 ### Image data
