@@ -84,7 +84,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download compiled application from artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: best-crush-${{ needs.compute-version.outputs.version-short }}-windows
           path: nsis/BestCrush/app/
