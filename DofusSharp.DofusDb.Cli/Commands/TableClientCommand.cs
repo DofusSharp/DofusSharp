@@ -30,14 +30,14 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 
     readonly Option<string[]> _selectOption = new("--select")
     {
-        Description = "Comma separated list of fields to include in the results. If not specified, all fields are included.",
+        Description = "Comma separated list of fields to include in the results. If not specified, all fields are included. Example: --select \"id,name.fr,level\"",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = r => r.Tokens.SelectMany(t => t.Value.Split(',')).ToArray()
     };
 
     readonly Option<Dictionary<string, DofusDbSearchQuerySortOrder>> _sortOption = new("--sort")
     {
-        Description = "Comma separated list of fields to sorts the results by. Prefix with '-' for descending order.",
+        Description = "Comma separated list of fields to sorts the results by. Prefix with '-' for descending order. Example: --sort \"-level,name.fr\"",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = ParseSortOption
     };
@@ -47,7 +47,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
         Description = "Comma separated list of predicates to filter the results by. "
                       + "Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. "
                       + "Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values. "
-                      + "Example: --filter \"level>=10,name=Excalibur\"",
+                      + "Example: --filter \"level>=10,name.fr=Razielle|Goultard\"",
         Arity = ArgumentArity.ZeroOrMore,
         CustomParser = ParseFilterOption
     };
@@ -182,7 +182,9 @@ public partial class TableClientCommand<TResource>(string command, string name, 
     }
 
     static Dictionary<string, DofusDbSearchQuerySortOrder> ParseSortOption(ArgumentResult r) =>
-        r.Tokens.SelectMany(t => t.Value.Split(',')).ToDictionary(s => s, s => s.StartsWith('-') ? DofusDbSearchQuerySortOrder.Descending : DofusDbSearchQuerySortOrder.Ascending);
+        r
+            .Tokens.SelectMany(t => t.Value.Split(','))
+            .ToDictionary(s => s.TrimStart('-', '+'), s => s.StartsWith('-') ? DofusDbSearchQuerySortOrder.Descending : DofusDbSearchQuerySortOrder.Ascending);
 
     static List<DofusDbSearchPredicate> ParseFilterOption(ArgumentResult r)
     {
@@ -219,7 +221,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
         {
             case "=":
             {
-                string[] values = value.Split(',');
+                string[] values = value.Split('|');
                 if (values.Length == 1)
                 {
                     return new DofusDbSearchPredicate.Eq(field, value);
@@ -271,6 +273,14 @@ public partial class TableClientCommand<TResource>(string command, string name, 
         }
     }
 
-    [GeneratedRegex("(?<field>\\w+)(?<operator>=|!=|<|<=|>|>=)(?<value>.+)")]
+    [GeneratedRegex(
+        "^(?<field>.+)(?<operator>=|!=|<|<=|>|>=)(?<value>.+)$",
+        RegexOptions.Compiled
+        | RegexOptions.CultureInvariant
+        | RegexOptions.IgnoreCase
+        | RegexOptions.Singleline
+        | RegexOptions.ExplicitCapture
+        | RegexOptions.IgnorePatternWhitespace
+    )]
     private static partial Regex FilterRegex();
 }
