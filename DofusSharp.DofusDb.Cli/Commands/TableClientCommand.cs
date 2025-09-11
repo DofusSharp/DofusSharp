@@ -10,7 +10,8 @@ using DofusSharp.DofusDb.ApiClients.Search;
 
 namespace DofusSharp.DofusDb.Cli.Commands;
 
-public partial class TableClientCommand<TResource>(string command, string name, IDofusDbTableClient<TResource> client) where TResource: DofusDbResource
+public partial class TableClientCommand<TResource>(string command, string name, Func<Uri, IDofusDbTableClient<TResource>> clientFactory, Uri defaultUrl)
+    where TResource: DofusDbResource
 {
     readonly Argument<long> _idArgument = new("id")
     {
@@ -66,22 +67,22 @@ public partial class TableClientCommand<TResource>(string command, string name, 
     readonly Option<string> _baseUrlOption = new("--base")
     {
         Description = "Base URL to use when building the query URL.",
-        DefaultValueFactory = _ => client.BaseAddress.ToString()
+        DefaultValueFactory = _ => defaultUrl.ToString()
     };
 
     public Command CreateCommand() =>
-        new(command, $"List all available {name.ToLowerInvariant()}.")
+        new(command, $"{name} client.")
         {
             CreateListCommand(),
-            CreateBuildQueryCommand(),
             CreateGetCommand(),
+            CreateBuildQueryCommand(),
             CreateCountCommand()
         };
 
     Command CreateListCommand()
     {
-        Command result = new("list", $"Search for {name.ToLowerInvariant()}.")
-            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _outputFileOption, _prettyPrintOption } };
+        Command result = new("list", $"List all {name.ToLowerInvariant()}.")
+            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _outputFileOption, _prettyPrintOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
@@ -92,10 +93,13 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
+                string? baseUrl = r.GetValue(_baseUrlOption);
 
                 JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(IReadOnlyList<TResource>));
 
+                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+                IDofusDbTableClient<TResource> client = clientFactory(url);
                 IReadOnlyList<TResource> results = await client
                     .MultiQuerySearchAsync(
                         new DofusDbSearchQuery { Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] },
@@ -105,6 +109,32 @@ public partial class TableClientCommand<TResource>(string command, string name, 
 
                 await using Stream stream = GetOutputStream(outputFile);
                 await JsonSerializer.SerializeAsync(stream, results, jsonTypeInfo, cancellationToken);
+            }
+        );
+
+        return result;
+    }
+
+    Command CreateGetCommand()
+    {
+        Command result = new("get", $"Get {name.ToLowerInvariant()} by id.") { Arguments = { _idArgument }, Options = { _outputFileOption, _prettyPrintOption, _baseUrlOption } };
+
+        result.SetAction(async (r, cancellationToken) =>
+            {
+                long id = r.GetRequiredValue(_idArgument);
+                string? outputFile = r.GetValue(_outputFileOption);
+                bool prettyPrint = r.GetValue(_prettyPrintOption);
+                string? baseUrl = r.GetValue(_baseUrlOption);
+
+                JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
+                JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
+
+                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+                IDofusDbTableClient<TResource> client = clientFactory(url);
+                TResource resource = await client.GetAsync(id, cancellationToken);
+
+                await using Stream stream = GetOutputStream(outputFile);
+                await JsonSerializer.SerializeAsync(stream, resource, jsonTypeInfo, cancellationToken);
             }
         );
 
@@ -142,38 +172,19 @@ public partial class TableClientCommand<TResource>(string command, string name, 
         return result;
     }
 
-    Command CreateGetCommand()
-    {
-        Command result = new("get", $"Get {name.ToLowerInvariant()} by id.") { Arguments = { _idArgument }, Options = { _outputFileOption, _prettyPrintOption } };
-
-        result.SetAction(async (r, cancellationToken) =>
-            {
-                long id = r.GetRequiredValue(_idArgument);
-                string? outputFile = r.GetValue(_outputFileOption);
-                bool prettyPrint = r.GetValue(_prettyPrintOption);
-
-                JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
-                JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
-
-                TResource resource = await client.GetAsync(id, cancellationToken);
-
-                await using Stream stream = GetOutputStream(outputFile);
-                await JsonSerializer.SerializeAsync(stream, resource, jsonTypeInfo, cancellationToken);
-            }
-        );
-
-        return result;
-    }
-
     Command CreateCountCommand()
     {
-        Command result = new("count", $"Count {name.ToLowerInvariant()}.") { Options = { _filterOption } };
+        Command result = new("count", $"Count {name.ToLowerInvariant()}.") { Options = { _filterOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
+                string? baseUrl = r.GetValue(_baseUrlOption);
 
+                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+                IDofusDbTableClient<TResource> client = clientFactory(url);
                 int results = await client.CountAsync(filter ?? [], cancellationToken);
+
                 Console.WriteLine(results);
             }
         );
