@@ -15,7 +15,7 @@ namespace DofusSharp.DofusDb.ApiClients.Clients;
 /// </summary>
 /// <param name="baseAddress">The base URL of the API to query.</param>
 /// <param name="referrer">The referer header to include in requests to the API.</param>
-class DofusDbClientsFactory(IJsonTypeInfoResolver typeInfoResolver, Uri baseAddress, Uri? referrer = null) : IDofusDbClientsFactory
+class DofusDbClientsFactory(Uri baseAddress, IJsonTypeInfoResolver typeInfoResolver, Uri? referrer = null) : IDofusDbClientsFactory
 {
     public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
 
