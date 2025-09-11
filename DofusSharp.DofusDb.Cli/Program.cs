@@ -21,6 +21,7 @@ IDofusDbClientsFactory factory = DofusDbClient.Production(referrer);
 
 RootCommand rootCommand = new("A command line interface for DofusDB.")
 {
+    new GameVersionCommand(factory.Version()).CreateCommand(),
     new TableClientCommand<DofusDbServer>("servers", "Servers", factory.Servers()).CreateCommand(),
     new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", factory.Characteristics()).CreateCommand(),
     new TableClientCommand<DofusDbItem>("items", "Items", factory.Items()).CreateCommand(),
