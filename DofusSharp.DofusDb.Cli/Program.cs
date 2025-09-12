@@ -21,6 +21,7 @@ Console.CancelKeyPress += (_, eventArgs) =>
 {
     cts.Cancel();
     eventArgs.Cancel = true;
+    AnsiConsole.MarkupLine("[dim]Received INT signal, stopping...[/]");
 };
 
 Uri referrer = new("https://github.com/DofusSharp/DofusSharp/tree/main/DofusSharp.DofusDb.Cli");
