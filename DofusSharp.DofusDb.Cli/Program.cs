@@ -55,16 +55,20 @@ RootCommand rootCommand = new("A command line interface for DofusDB.")
 
 ParseResult parseResult = rootCommand.Parse(args);
 
-if (parseResult.Errors.Count != 0)
+if (parseResult.Errors.Count == 0)
 {
-    foreach (ParseError parseError in parseResult.Errors)
-    {
-        Console.Error.WriteLine(parseError.Message);
-    }
-    return 1;
+    return await parseResult.InvokeAsync();
 }
 
-return await parseResult.InvokeAsync();
+foreach (ParseError parseError in parseResult.Errors)
+{
+    Console.Error.WriteLine(parseError.Message);
+}
+Console.Error.WriteLine();
+
+rootCommand.Parse("--help").Invoke();
+
+return 1;
 
 IDofusDbClientsFactory GetFactory(Uri uri)
 {
