@@ -12,6 +12,9 @@ using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.Cli.Commands;
+using Spectre.Console;
+
+AnsiConsole.Console = AnsiConsole.Create(new AnsiConsoleSettings { Out = new AnsiConsoleOutput(Console.Error) });
 
 CancellationTokenSource cts = new();
 Console.CancelKeyPress += (_, eventArgs) =>
@@ -87,9 +90,9 @@ if (parseResult.Errors.Count != 0)
 {
     foreach (ParseError parseError in parseResult.Errors)
     {
-        Console.Error.WriteLine(parseError.Message);
+        AnsiConsole.MarkupLine(parseError.Message);
     }
-    Console.Error.WriteLine();
+    AnsiConsole.WriteLine();
 
     await rootCommand.Parse("--help").InvokeAsync(cancellationToken: cts.Token);
 
@@ -105,16 +108,25 @@ try
 }
 catch (TaskCanceledException exn)
 {
-    Console.Error.WriteLine(debug ? $"Operation canceled by user.{Environment.NewLine}{exn}" : "Operation canceled by user.");
+    AnsiConsole.MarkupLine("[red]Operation canceled by user.[/]");
+    if (debug)
+    {
+        AnsiConsole.WriteException(exn);
+    }
     return 2;
 }
 catch (Exception exn)
 {
-    Console.Error.WriteLine(
-        debug
-            ? $"An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.{Environment.NewLine}{exn}"
-            : "An unexpected error occurred, use --debug for more details."
-    );
+    if (debug)
+    {
+        AnsiConsole.MarkupLine("[red]An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.[/]");
+        AnsiConsole.WriteException(exn);
+    }
+    else
+    {
+        AnsiConsole.MarkupLine("[red]An unexpected error occurred, use --debug for more details.[/]");
+    }
+
     return 3;
 }
 

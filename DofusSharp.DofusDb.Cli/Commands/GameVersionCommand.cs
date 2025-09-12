@@ -1,5 +1,6 @@
 ﻿using System.CommandLine;
 using DofusSharp.DofusDb.ApiClients;
+using Spectre.Console;
 
 namespace DofusSharp.DofusDb.Cli.Commands;
 
@@ -22,12 +23,18 @@ public class GameVersionCommand(Func<Uri, IDofusDbVersionClient> clientFactory, 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbVersionClient client = clientFactory(url);
 
-                if (!quiet)
+                Version version = null!;
+                if (quiet)
                 {
-                    await Console.Error.WriteLineAsync($"Executing query: {client.GetVersionQuery()}...");
+                    version = await client.GetVersionAsync(cancellationToken);
                 }
-
-                Version version = await client.GetVersionAsync(cancellationToken);
+                else
+                {
+                    await AnsiConsole
+                        .Status()
+                        .Spinner(Spinner.Known.Default)
+                        .StartAsync($"Executing query: {client.GetVersionQuery()}...", async _ => version = await client.GetVersionAsync(cancellationToken));
+                }
 
                 Console.WriteLine(version);
             }

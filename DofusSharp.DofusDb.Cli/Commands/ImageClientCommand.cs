@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
+using Spectre.Console;
 
 namespace DofusSharp.DofusDb.Cli.Commands;
 
@@ -43,12 +44,18 @@ public class ImageClientCommand<TId>(string command, string name, Func<Uri, IDof
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbImageClient<TId> client = clientFactory(url);
 
-                if (!quiet)
+                Stream image = null!;
+                if (quiet)
                 {
-                    await Console.Error.WriteLineAsync($"Executing query: {client.GetImageQuery(id)}...");
+                    image = await client.GetImageAsync(id, cancellationToken);
                 }
-
-                Stream image = await client.GetImageAsync(id, cancellationToken);
+                else
+                {
+                    await AnsiConsole
+                        .Status()
+                        .Spinner(Spinner.Known.Default)
+                        .StartAsync($"Executing query: {client.GetImageQuery(id)}...", async _ => image = await client.GetImageAsync(id, cancellationToken));
+                }
 
                 await using Stream stream = GetOutputStream(client, id, outputFile);
                 await image.CopyToAsync(stream, cancellationToken);

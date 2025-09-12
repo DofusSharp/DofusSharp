@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
+using Spectre.Console;
 
 namespace DofusSharp.DofusDb.Cli.Commands;
 
@@ -50,12 +51,18 @@ public class ScalableImageClientCommand<TId>(string command, string name, Func<U
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbScalableImageClient<TId> client = clientFactory(url);
 
-                if (!quiet)
+                Stream image = null!;
+                if (quiet)
                 {
-                    await Console.Error.WriteLineAsync($"Executing query: {client.GetImageQuery(id, scale)}...");
+                    image = await client.GetImageAsync(id, scale, cancellationToken);
                 }
-
-                Stream image = await client.GetImageAsync(id, scale, cancellationToken);
+                else
+                {
+                    await AnsiConsole
+                        .Status()
+                        .Spinner(Spinner.Known.Default)
+                        .StartAsync($"Executing query: {client.GetImageQuery(id, scale)}...", async _ => image = await client.GetImageAsync(id, scale, cancellationToken));
+                }
 
                 await using Stream stream = GetOutputStream(client, id, scale, outputFile);
                 await image.CopyToAsync(stream, cancellationToken);
