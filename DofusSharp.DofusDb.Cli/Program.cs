@@ -12,6 +12,14 @@ using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.Cli.Commands;
 
+CancellationTokenSource cts = new();
+Console.CancelKeyPress += (_, eventArgs) =>
+{
+    Console.WriteLine("Cancel event triggered");
+    cts.Cancel();
+    eventArgs.Cancel = true;
+};
+
 Uri referrer = new("https://github.com/DofusSharp/DofusSharp/tree/main/DofusSharp.DofusDb.Cli");
 #if DEBUG
 Uri defaultUrl = DofusDbClient.BetaUri;
@@ -57,7 +65,7 @@ ParseResult parseResult = rootCommand.Parse(args);
 
 if (parseResult.Errors.Count == 0)
 {
-    return await parseResult.InvokeAsync();
+    return await parseResult.InvokeAsync(cancellationToken: cts.Token);
 }
 
 foreach (ParseError parseError in parseResult.Errors)
@@ -66,7 +74,7 @@ foreach (ParseError parseError in parseResult.Errors)
 }
 Console.Error.WriteLine();
 
-rootCommand.Parse("--help").Invoke();
+await rootCommand.Parse("--help").InvokeAsync(cancellationToken: cts.Token);
 
 return 1;
 
