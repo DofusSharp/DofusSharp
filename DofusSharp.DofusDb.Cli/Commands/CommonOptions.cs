@@ -4,9 +4,9 @@ namespace DofusSharp.DofusDb.Cli.Commands;
 
 public static class CommonOptions
 {
-    public static readonly Option<bool> Verbose = new("--verbose", "-v")
+    public static readonly Option<bool> Verbose = new("--debug", "-d")
     {
-        Description = "Enables verbose output.",
+        Description = "Show debugging output.",
         Recursive = true
     };
 }

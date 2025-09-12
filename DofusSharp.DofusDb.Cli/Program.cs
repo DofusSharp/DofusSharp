@@ -74,9 +74,7 @@ ParseResult parseResult = rootCommand.Parse(args);
 
 if (parseResult.Errors.Count == 0)
 {
-    bool verbose = parseResult.CommandResult.GetValue(CommonOptions.Verbose);
-    string error;
-    Exception exception;
+    bool debug = parseResult.CommandResult.GetValue(CommonOptions.Verbose);
 
     try
     {
@@ -84,18 +82,18 @@ if (parseResult.Errors.Count == 0)
     }
     catch (TaskCanceledException exn)
     {
-        error = "Operation canceled by user.";
-        exception = exn;
+        Console.Error.WriteLine(debug ? $"Operation canceled by user.{Environment.NewLine}{exn}" : "Operation canceled by user.");
+        return 2;
     }
     catch (Exception exn)
     {
-        error = "An unexpected error occurred, please open an issue at ";
-        exception = exn;
+        Console.Error.WriteLine(
+            debug
+                ? $"An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.{Environment.NewLine}{exn}"
+                : "An unexpected error occurred, use --debug for more details."
+        );
+        return 3;
     }
-
-    Console.Error.WriteLine(verbose ? $"{exception}{Environment.NewLine}{error}" : $"{error} Use --verbose for more details.");
-
-    return 1;
 }
 
 foreach (ParseError parseError in parseResult.Errors)
