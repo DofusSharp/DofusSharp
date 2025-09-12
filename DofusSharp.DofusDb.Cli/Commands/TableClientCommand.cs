@@ -94,15 +94,49 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(IReadOnlyList<TResource>));
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+
+                ProgressSync<DofusDbTableClientExtensions.MultiSearchQueryProgress>? progress = quiet
+                    ? null
+                    : new ProgressSync<DofusDbTableClientExtensions.MultiSearchQueryProgress>(p =>
+                        {
+                            switch (p)
+                            {
+                                case DofusDbTableClientExtensions.MultiSearchCurrentCount currentCount:
+                                {
+                                    if (currentCount.AlreadyFetched != currentCount.TotalToFetch)
+                                    {
+                                        double ratio = (double)currentCount.AlreadyFetched / currentCount.TotalToFetch;
+                                        Console.Error.WriteLine($"[Progress] Fetched {currentCount.AlreadyFetched} of {currentCount.TotalToFetch} resources ({ratio:P0})...");
+                                    }
+                                    else
+                                    {
+                                        Console.Error.WriteLine($"[Done] Completed fetching {currentCount.AlreadyFetched} resources.");
+                                    }
+                                    break;
+                                }
+
+                                case DofusDbTableClientExtensions.MultiSearchNextQuery nextQuery:
+                                    Console.Error.WriteLine($"[Query] Next query: {baseUrl}?{nextQuery.NextQuery.ToQueryString()}");
+                                    break;
+                            }
+                        }
+                    );
+
+
                 IDofusDbTableClient<TResource> client = clientFactory(url);
                 IReadOnlyList<TResource> results = await client
                     .MultiQuerySearchAsync(
-                        new DofusDbSearchQuery { Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] },
+                        new DofusDbSearchQuery
+                        {
+                            Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? []
+                        },
+                        progress,
                         cancellationToken
                     )
                     .ToListAsync(cancellationToken);

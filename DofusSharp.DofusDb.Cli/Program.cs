@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
@@ -34,7 +35,7 @@ RootCommand rootCommand = new(
     """
 )
 {
-    Options = { CommonOptions.Verbose },
+    Options = { CommonOptions.Quiet, CommonOptions.Debug },
     Subcommands =
     {
         new GameVersionCommand(uri => GetFactory(uri).Version(), defaultUrl).CreateCommand(),
@@ -72,39 +73,50 @@ RootCommand rootCommand = new(
 
 ParseResult parseResult = rootCommand.Parse(args);
 
-if (parseResult.Errors.Count == 0)
+// ------ Parse error
+if (parseResult.Action is ParseErrorAction parseErrorAction)
 {
-    bool debug = parseResult.CommandResult.GetValue(CommonOptions.Verbose);
-
-    try
-    {
-        return await parseResult.InvokeAsync(new InvocationConfiguration { EnableDefaultExceptionHandler = false }, cts.Token);
-    }
-    catch (TaskCanceledException exn)
-    {
-        Console.Error.WriteLine(debug ? $"Operation canceled by user.{Environment.NewLine}{exn}" : "Operation canceled by user.");
-        return 2;
-    }
-    catch (Exception exn)
-    {
-        Console.Error.WriteLine(
-            debug
-                ? $"An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.{Environment.NewLine}{exn}"
-                : "An unexpected error occurred, use --debug for more details."
-        );
-        return 3;
-    }
+    parseErrorAction.ShowHelp = true;
+    parseErrorAction.ShowTypoCorrections = true;
+    parseErrorAction.Invoke(parseResult);
+    return 1;
 }
 
-foreach (ParseError parseError in parseResult.Errors)
+// ------ Other errors
+if (parseResult.Errors.Count != 0)
 {
-    Console.Error.WriteLine(parseError.Message);
+    foreach (ParseError parseError in parseResult.Errors)
+    {
+        Console.Error.WriteLine(parseError.Message);
+    }
+    Console.Error.WriteLine();
+
+    await rootCommand.Parse("--help").InvokeAsync(cancellationToken: cts.Token);
+
+    return 1;
 }
-Console.Error.WriteLine();
 
-await rootCommand.Parse("--help").InvokeAsync(cancellationToken: cts.Token);
+// ------ Command found
+bool debug = parseResult.CommandResult.GetValue(CommonOptions.Debug);
 
-return 1;
+try
+{
+    return await parseResult.InvokeAsync(new InvocationConfiguration { EnableDefaultExceptionHandler = false }, cts.Token);
+}
+catch (TaskCanceledException exn)
+{
+    Console.Error.WriteLine(debug ? $"Operation canceled by user.{Environment.NewLine}{exn}" : "Operation canceled by user.");
+    return 2;
+}
+catch (Exception exn)
+{
+    Console.Error.WriteLine(
+        debug
+            ? $"An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.{Environment.NewLine}{exn}"
+            : "An unexpected error occurred, use --debug for more details."
+    );
+    return 3;
+}
 
 IDofusDbClientsFactory GetFactory(Uri uri)
 {

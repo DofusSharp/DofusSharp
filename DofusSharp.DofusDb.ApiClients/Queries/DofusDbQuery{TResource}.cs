@@ -94,7 +94,7 @@ class DofusDbQuery<TResource>(IDofusDbTableClient<TResource> client) : IDofusDbQ
     ///     This method will perform as many requests as necessary to retrieve the requested number of results.
     /// </summary>
     /// <returns>The search result containing all resources matching the query.</returns>
-    public IAsyncEnumerable<TResource> ExecuteAsync(IProgress<(int Loaded, int Total)>? progress, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<TResource> ExecuteAsync(IProgress<DofusDbTableClientExtensions.MultiSearchQueryProgress>? progress, CancellationToken cancellationToken = default)
     {
         DofusDbSearchQuery query = BuildQuery();
         return client.MultiQuerySearchAsync(query, progress, cancellationToken);
