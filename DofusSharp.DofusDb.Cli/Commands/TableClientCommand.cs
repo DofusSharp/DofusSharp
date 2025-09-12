@@ -122,7 +122,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                                 }
 
                                 case DofusDbTableClientExtensions.MultiSearchNextQuery nextQuery:
-                                    Console.Error.WriteLine($"[Query] Next query: {baseUrl}?{nextQuery.NextQuery.ToQueryString()}");
+                                    Console.Error.WriteLine($"[Query] Next query: {url}?{nextQuery.NextQuery.ToQueryString()}");
                                     break;
                             }
                         }
@@ -159,11 +159,18 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+
+                if (!quiet)
+                {
+                    await Console.Error.WriteLineAsync($"Executing query: {url}{id}...");
+                }
+
                 IDofusDbTableClient<TResource> client = clientFactory(url);
                 TResource resource = await client.GetAsync(id, cancellationToken);
 
@@ -214,8 +221,16 @@ public partial class TableClientCommand<TResource>(string command, string name, 
             {
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+
+                if (!quiet)
+                {
+                    DofusDbSearchQuery query = new() { Limit = 0, Predicates = filter ?? [] };
+                    await Console.Error.WriteLineAsync($"Executing query: {url}?{query.ToQueryString()}...");
+                }
+
                 IDofusDbTableClient<TResource> client = clientFactory(url);
                 int results = await client.CountAsync(filter ?? [], cancellationToken);
 

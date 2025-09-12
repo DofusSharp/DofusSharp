@@ -31,7 +31,7 @@ RootCommand rootCommand = new(
     """
     A command-line interface for querying the DofusDB API.
     Each subcommand targets a different resource type. Use the help option on a subcommand to see the available operations for that resource.
-    Want to learn more? Visit us on GitHub: https://github.com/DofusSharp/DofusSharp/tree/main/DofusSharp.DofusDb.Cli
+    Want to learn more? Visit us on GitHub: https://github.com/DofusSharp/DofusSharp/tree/main/DofusSharp.DofusDb.Cli.
     """
 )
 {
