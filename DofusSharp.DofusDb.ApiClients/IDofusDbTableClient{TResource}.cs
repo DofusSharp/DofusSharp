@@ -20,6 +20,13 @@ public interface IDofusDbTableClient<TResource> : IDofusDbClient where TResource
     Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Get the URL of the resource with the specified ID.
+    ///     This URL is the one used by <see cref="GetAsync(long, CancellationToken)" />.
+    /// </summary>
+    /// <param name="id">The unique identifier of the resource to fetch.</param>
+    Uri GetQuery(long id);
+
+    /// <summary>
     ///     Fetch the number of resources available in the API.
     /// </summary>
     /// <param name="predicates">The collection of predicates to filter the resources. If empty, all resources are counted.</param>
@@ -28,12 +35,26 @@ public interface IDofusDbTableClient<TResource> : IDofusDbClient where TResource
     Task<int> CountAsync(IReadOnlyCollection<DofusDbSearchPredicate> predicates, CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Get the URL to fetch the number of resources available.
+    ///     This URL is the one used by <see cref="CountAsync(IReadOnlyCollection{DofusDbSearchPredicate}, CancellationToken)" />.
+    /// </summary>
+    /// <param name="predicates">The collection of predicates to filter the resources. If empty, all resources are counted.</param>
+    Uri CountQuery(IReadOnlyCollection<DofusDbSearchPredicate> predicates);
+
+    /// <summary>
     ///     Fetch a paginated list of resources from the API based on the provided search query.
     /// </summary>
     /// <param name="query">The search query containing pagination parameters.</param>
     /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>The search result containing the resources matching the query.</returns>
     Task<DofusDbSearchResult<TResource>> SearchAsync(DofusDbSearchQuery query, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Get the URL to fetch a paginated list of resources.
+    ///     This URL is the one used by <see cref="SearchAsync(DofusDbSearchQuery, CancellationToken)" />.
+    /// </summary>
+    /// <param name="query">The search query containing pagination parameters.</param>
+    Uri SearchQuery(DofusDbSearchQuery query);
 }
 
 public static class DofusDbTableClientExtensions

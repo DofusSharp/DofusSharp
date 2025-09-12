@@ -15,7 +15,7 @@ class DofocusServersClient(Uri baseAddress) : IDofocusServersClient
 
     public async Task<IReadOnlyCollection<DofocusServer>> GetServersAsync(CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory);
         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
 
         using HttpResponseMessage response = await httpClient.GetAsync("", cancellationToken);

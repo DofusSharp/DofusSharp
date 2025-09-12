@@ -2,13 +2,12 @@
 
 public static class HttpClientUtils
 {
-    public static HttpClient CreateHttpClient(IHttpClientFactory? clientFactory, Uri baseAddress, Uri? referrer = null)
+    public static HttpClient CreateHttpClient(IHttpClientFactory? clientFactory, Uri? referrer = null)
     {
         HttpClient? httpClient = null;
         try
         {
             httpClient = clientFactory?.CreateClient("DofusSharp") ?? new HttpClient();
-            httpClient.BaseAddress = baseAddress;
             if (referrer != null)
             {
                 httpClient.DefaultRequestHeaders.Referrer = referrer;

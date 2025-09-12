@@ -44,10 +44,16 @@ public class ScalableImageClientCommand<TId>(string command, string name, Func<U
                 TId id = r.GetRequiredValue(_idArgument);
                 DofusDbImageScale scale = r.GetValue(_scaleOption);
                 string? outputFile = r.GetValue(_outputFileOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbScalableImageClient<TId> client = clientFactory(url);
+
+                if (!quiet)
+                {
+                    await Console.Error.WriteLineAsync($"Executing query: {client.GetImageQuery(id, scale)}...");
+                }
 
                 Stream image = await client.GetImageAsync(id, scale, cancellationToken);
 

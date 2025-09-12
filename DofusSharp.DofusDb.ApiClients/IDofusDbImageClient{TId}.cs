@@ -20,4 +20,11 @@ public interface IDofusDbImageClient<in TId> : IDofusDbClient
     /// <param name="id">The unique identifier of the resource to fetch.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     Task<Stream> GetImageAsync(TId id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Get the URL of the image resource.
+    ///     This URL is the one used by <see cref="GetImageAsync(TId, CancellationToken)" />.
+    /// </summary>
+    /// <param name="id">The unique identifier of the resource to fetch.</param>
+    Uri GetImageQuery(TId id);
 }

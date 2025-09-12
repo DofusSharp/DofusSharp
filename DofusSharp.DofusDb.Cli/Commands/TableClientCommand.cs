@@ -100,6 +100,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(IReadOnlyList<TResource>));
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+                IDofusDbTableClient<TResource> client = clientFactory(url);
 
                 ProgressSync<DofusDbTableClientExtensions.MultiSearchQueryProgress>? progress = quiet
                     ? null
@@ -122,14 +123,13 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                                 }
 
                                 case DofusDbTableClientExtensions.MultiSearchNextQuery nextQuery:
-                                    Console.Error.WriteLine($"[Query] Next query: {url}?{nextQuery.NextQuery.ToQueryString()}");
+                                    Console.Error.WriteLine($"[Query] Next query: {client.SearchQuery(nextQuery.NextQuery)}");
                                     break;
                             }
                         }
                     );
 
 
-                IDofusDbTableClient<TResource> client = clientFactory(url);
                 IReadOnlyList<TResource> results = await client
                     .MultiQuerySearchAsync(
                         new DofusDbSearchQuery
@@ -165,13 +165,13 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+                IDofusDbTableClient<TResource> client = clientFactory(url);
 
                 if (!quiet)
                 {
-                    await Console.Error.WriteLineAsync($"Executing query: {url}{id}...");
+                    await Console.Error.WriteLineAsync($"Executing query: {client.GetQuery(id)}...");
                 }
 
-                IDofusDbTableClient<TResource> client = clientFactory(url);
                 TResource resource = await client.GetAsync(id, cancellationToken);
 
                 await using Stream stream = GetOutputStream(outputFile);
@@ -224,14 +224,13 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
+                IDofusDbTableClient<TResource> client = clientFactory(url);
 
                 if (!quiet)
                 {
-                    DofusDbSearchQuery query = new() { Limit = 0, Predicates = filter ?? [] };
-                    await Console.Error.WriteLineAsync($"Executing query: {url}?{query.ToQueryString()}...");
+                    await Console.Error.WriteLineAsync($"Executing query: {client.CountQuery(filter ?? [])}...");
                 }
 
-                IDofusDbTableClient<TResource> client = clientFactory(url);
                 int results = await client.CountAsync(filter ?? [], cancellationToken);
 
                 Console.WriteLine(results);

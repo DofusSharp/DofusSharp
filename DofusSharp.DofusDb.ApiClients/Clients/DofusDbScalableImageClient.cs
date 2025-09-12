@@ -21,6 +21,20 @@ class DofusDbScalableImageClient<TId> : IDofusDbScalableImageClient<TId>
 
     public async Task<Stream> GetImageAsync(TId id, DofusDbImageScale scale, CancellationToken cancellationToken = default)
     {
+        Uri url = GetImageQuery(id, scale);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, Referrer);
+
+        // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
+        HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        return await HttpResponseMessageStream.Create(response);
+    }
+
+    public Uri GetImageQuery(TId id) => GetImageQuery(id, DofusDbImageScale.Full);
+
+    public Uri GetImageQuery(TId id, DofusDbImageScale scale)
+    {
         string scaleString = scale switch
         {
             DofusDbImageScale.Full => "1",
@@ -30,12 +44,6 @@ class DofusDbScalableImageClient<TId> : IDofusDbScalableImageClient<TId>
             _ => throw new ArgumentOutOfRangeException(nameof(scale), scale, null)
         };
         string extension = ImageFormat.ToExtension();
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
-
-        // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
-        HttpResponseMessage response = await httpClient.GetAsync($"{scaleString}/{id}.{extension}", cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        return await HttpResponseMessageStream.Create(response);
+        return new Uri(BaseAddress, $"{scaleString}/{id}.{extension}");
     }
 }

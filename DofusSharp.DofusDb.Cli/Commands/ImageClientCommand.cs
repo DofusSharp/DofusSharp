@@ -37,10 +37,16 @@ public class ImageClientCommand<TId>(string command, string name, Func<Uri, IDof
             {
                 TId id = r.GetRequiredValue(_idArgument);
                 string? outputFile = r.GetValue(_outputFileOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbImageClient<TId> client = clientFactory(url);
+
+                if (!quiet)
+                {
+                    await Console.Error.WriteLineAsync($"Executing query: {client.GetImageQuery(id)}...");
+                }
 
                 Stream image = await client.GetImageAsync(id, cancellationToken);
 

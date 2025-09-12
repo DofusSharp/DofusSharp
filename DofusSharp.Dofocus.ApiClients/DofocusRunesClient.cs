@@ -17,7 +17,7 @@ class DofocusRunesClient(Uri baseAddress) : IDofocusRunesClient
 
     public async Task<IReadOnlyCollection<DofocusRune>> GetRunesAsync(CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory);
         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
 
         using HttpResponseMessage response = await httpClient.GetAsync("", cancellationToken);
@@ -34,7 +34,7 @@ class DofocusRunesClient(Uri baseAddress) : IDofocusRunesClient
 
     public async Task<PutRunePriceResponse> PutRunePriceAsync(long runeId, PutRunePriceRequest request, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory);
         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
 
         using HttpResponseMessage response = await httpClient.PutAsync($"{runeId}/prices", JsonContent.Create(request, options: _options), cancellationToken);

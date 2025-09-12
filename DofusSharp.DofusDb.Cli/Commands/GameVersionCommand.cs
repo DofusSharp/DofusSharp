@@ -17,9 +17,16 @@ public class GameVersionCommand(Func<Uri, IDofusDbVersionClient> clientFactory, 
         result.SetAction(async (r, cancellationToken) =>
             {
                 string? baseUrl = r.GetValue(_baseUrlOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbVersionClient client = clientFactory(url);
+
+                if (!quiet)
+                {
+                    await Console.Error.WriteLineAsync($"Executing query: {client.GetVersionQuery()}...");
+                }
+
                 Version version = await client.GetVersionAsync(cancellationToken);
 
                 Console.WriteLine(version);
