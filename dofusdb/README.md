@@ -1,8 +1,10 @@
 ﻿# [DofusDB](https://dofusdb.fr) CLI Tool
 
+Fetch data from the DofusDB API.
+
 ## Overview
 
-Command line interface (CLI) tool that exposes the API clients from the [DofusSharp.DofusDb.ApiClients](../DofusSharp.DofusDb.ApiClients) library. It allows users to interact with DofusDB resources and perform queries directly from the terminal.
+`dofusdb` is a command line interface (CLI) tool that exposes the API clients from the [DofusSharp.DofusDb.ApiClients](../DofusSharp.DofusDb.ApiClients) library. It allows users to interact with DofusDB resources and perform queries directly from the terminal.
 
 ## Features
 
