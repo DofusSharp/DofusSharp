@@ -16,27 +16,26 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     readonly JsonSerializerContext _context;
     readonly DofusDbSearchRequestQueryParamsBuilder _queryParamsBuilder = new();
 
-    public DofusDbTableClient(Uri baseAddress, Uri? referrer = null, JsonSerializerContext? context = null)
+    public DofusDbTableClient(Uri baseAddress, Uri? referrer = null)
     {
         Referrer = referrer;
         BaseAddress = baseAddress;
-        _context = context
-                   ?? new DofusDbModelsSourceGenerationContext(
-                       new JsonSerializerOptions(JsonSerializerDefaults.Web)
-                       {
-                           AllowOutOfOrderMetadataProperties = true,
-                           Converters =
-                           {
-                               new JsonStringEnumConverter<DofusDbGender>(),
-                               new JsonStringEnumConverter<ImageFormat>(),
-                               new JsonStringEnumConverter<DofusDbImageScale>(),
-                               new JsonStringEnumConverter<DofusDbLanguage>(),
-                               new DofusDbValueTupleJsonConverter<int, int>(),
-                               new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
-                               new DofusDbDateOnlyJsonConverter()
-                           }
-                       }
-                   );
+        _context = new DofusDbModelsSourceGenerationContext(
+            new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            {
+                AllowOutOfOrderMetadataProperties = true,
+                Converters =
+                {
+                    new JsonStringEnumConverter<DofusDbGender>(),
+                    new JsonStringEnumConverter<ImageFormat>(),
+                    new JsonStringEnumConverter<DofusDbImageScale>(),
+                    new JsonStringEnumConverter<DofusDbLanguage>(),
+                    new DofusDbValueTupleJsonConverter<int, int>(),
+                    new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
+                    new DofusDbDateOnlyJsonConverter()
+                }
+            }
+        );
     }
 
     public Uri BaseAddress { get; }

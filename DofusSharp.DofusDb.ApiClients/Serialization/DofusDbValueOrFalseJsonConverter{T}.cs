@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 
 namespace DofusSharp.DofusDb.ApiClients.Serialization;
@@ -14,7 +13,7 @@ class DofusDbValueOrFalseJsonConverter<T> : JsonConverter<DofusDbValueOrFalse<T>
             return new DofusDbValueOrFalse<T> { Value = default };
         }
 
-        T? value = (T?)JsonSerializer.Deserialize(ref reader, typeof(T), new DofusDbModelsSourceGenerationContext(options));
+        T? value = (T?)JsonSerializer.Deserialize(ref reader, options.GetTypeInfo(typeof(T)));
 
         return new DofusDbValueOrFalse<T> { Value = value };
     }
@@ -27,7 +26,7 @@ class DofusDbValueOrFalseJsonConverter<T> : JsonConverter<DofusDbValueOrFalse<T>
         }
         else
         {
-            JsonSerializer.Serialize(writer, value.Value, typeof(T), new DofusDbModelsSourceGenerationContext(options));
+            JsonSerializer.Serialize(writer, value.Value, options.GetTypeInfo(typeof(T)));
         }
     }
 }
