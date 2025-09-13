@@ -104,10 +104,13 @@ jobs:
         include:
           - runner: ubuntu-latest
             rid: linux-x64
+            output-name: dofusdb
           - runner: windows-latest
             rid: win-x64
+            output-name: dofusdb.exe
           - runner: macos-latest 
             rid: osx-x64
+            output-name: dofusdb
         
     runs-on: ${{ matrix.runner }}
 
@@ -130,7 +133,7 @@ jobs:
         run: dotnet publish DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output nuget/ --configuration Release --property RuntimeIdentifier=${{ matrix.rid }} --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Archive binaries
-        run: 7z a -tzip dist/dofusdb-${{ matrix.rid }}.zip dist/dofusdb.exe
+        run: 7z a -tzip dist/dofusdb-${{ matrix.rid }}.zip dist/${{ matrix.output-name }}
 
       - name: Upload binaries to release
         if: ${{ github.event_name == 'release' }}
