@@ -22,7 +22,8 @@ public class AchievementsClientTest
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search
-        DofusDbSearchQuery query = new();
+        // TODO: entity 8575 has an issue that causes the server to throw an error 500, remove the predicate once it is fixed
+        DofusDbSearchQuery query = new() { Predicates = [new DofusDbSearchPredicate.NotEq("id", "8575")] };
         DofusDbAchievement[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
         int count = await client.CountAsync(query.Predicates);
 
