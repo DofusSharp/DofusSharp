@@ -69,6 +69,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellState>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellVariant>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbTitle>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbOrnament>))]
 // Others
 [JsonSerializable(typeof(DofusDbSearchQuery))]
