@@ -1,4 +1,4 @@
-﻿namespace DofusSharp.DofusDb.Cli;
+﻿namespace dofusdb;
 
 class ProgressSync<T>(Action<T> callback) : IProgress<T>
 {

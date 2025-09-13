@@ -2,9 +2,9 @@
 using DofusSharp.DofusDb.ApiClients;
 using Spectre.Console;
 
-namespace DofusSharp.DofusDb.Cli.Commands;
+namespace dofusdb.Commands;
 
-public class GameVersionCommand(Func<Uri, IDofusDbVersionClient> clientFactory, Uri defaultUrl)
+class GameVersionCommand(Func<Uri, IDofusDbVersionClient> clientFactory, Uri defaultUrl)
 {
     readonly Option<string> _baseUrlOption = new("--base")
     {

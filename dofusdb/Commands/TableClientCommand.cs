@@ -9,9 +9,9 @@ using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 using Spectre.Console;
 
-namespace DofusSharp.DofusDb.Cli.Commands;
+namespace dofusdb.Commands;
 
-public partial class TableClientCommand<TResource>(string command, string name, Func<Uri, IDofusDbTableClient<TResource>> clientFactory, Uri defaultUrl)
+partial class TableClientCommand<TResource>(string command, string name, Func<Uri, IDofusDbTableClient<TResource>> clientFactory, Uri defaultUrl)
     where TResource: DofusDbResource
 {
     readonly Argument<long> _idArgument = new("id")

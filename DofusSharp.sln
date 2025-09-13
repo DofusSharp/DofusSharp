@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestCrush.Migrations", "Bes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.BestCrush", "Tests.BestCrush\Tests.BestCrush.csproj", "{47BB1501-943C-40B5-93F2-ED328DD4D235}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DofusSharp.DofusDb.Cli", "DofusSharp.DofusDb.Cli\DofusSharp.DofusDb.Cli.csproj", "{ECE4797A-1FDA-4152-B3BB-136DD0CFC0E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dofusdb", "dofusdb\dofusdb.csproj", "{ECE4797A-1FDA-4152-B3BB-136DD0CFC0E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

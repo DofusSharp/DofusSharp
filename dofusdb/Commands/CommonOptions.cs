@@ -1,8 +1,8 @@
 ﻿using System.CommandLine;
 
-namespace DofusSharp.DofusDb.Cli.Commands;
+namespace dofusdb.Commands;
 
-public static class CommonOptions
+static class CommonOptions
 {
     public static readonly Option<bool> Quiet = new("--quiet", "-q")
     {
