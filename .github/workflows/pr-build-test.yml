@@ -33,19 +33,30 @@ jobs:
           list-files: 'escape'
           filters: |
             dofusdb:
-              - 'DofusSharp.Common**'
-              - 'DofusSharp.DofusDb**'
-              - 'Tests.Live.DofusDb**'
-              - 'Tests.UnitTests.DofusDb**'
+              - 'DofusSharp.Common*'
+              - 'DofusSharp.Common*/**'
+              - 'DofusSharp.DofusDb*'
+              - 'DofusSharp.DofusDb*/**'
+              - 'Tests.Live.DofusDb*'
+              - 'Tests.Live.DofusDb*/**'
+              - 'Tests.UnitTests.DofusDb*'
+              - 'Tests.UnitTests.DofusDb*/**'
             dofocus:
-              - 'DofusSharp.Common**'
-              - 'DofusSharp.Dofocus**'
-              - 'Tests.Live.Dofocus**'
-              - 'Tests.UnitTests.Dofocus**'
+              - 'DofusSharp.Common*'
+              - 'DofusSharp.Common*/**'
+              - 'DofusSharp.Dofocus*'
+              - 'DofusSharp.Dofocus*/**'
+              - 'Tests.Live.Dofocus*'
+              - 'Tests.Live.Dofocus*/**'
+              - 'Tests.UnitTests.Dofocus*'
+              - 'Tests.UnitTests.Dofocus*/**'
             best-crush:
-              - 'DofusSharp.Common**'
-              - 'BestCrush**'
-              - 'Tests.BestCrush**'
+              - 'DofusSharp.Common*'
+              - 'DofusSharp.Common*/**'
+              - 'BestCrush*'
+              - 'BestCrush*/**'
+              - 'Tests.BestCrush*'
+              - 'Tests.BestCrush*/**'
   
   build-and-test-dofusdb:
     name: Build and test DofusDb

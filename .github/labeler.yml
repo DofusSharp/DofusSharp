@@ -1,27 +1,36 @@
 dofusdb-api:
   - changed-files:
       - any-glob-to-any-file:
-          - 'DofusSharp.DofusDb**'
-          - 'Tests.Live.DofusDb**'
-          - 'Tests.UnitTests.DofusDb**'
+          - 'DofusSharp.DofusDb*'
+          - 'DofusSharp.DofusDb*/**'
+          - 'Tests.Live.DofusDb*'
+          - 'Tests.Live.DofusDb*/**'
+          - 'Tests.UnitTests.DofusDb*'
+          - 'Tests.UnitTests.DofusDb*/**'
 
 dofusdb-cli:
   - changed-files:
       - any-glob-to-any-file:
-          - 'DofusSharp.DofusDb.Cli/**'
+          - 'DofusSharp.DofusDb.Cli/*'
+          - 'DofusSharp.DofusDb.Cli/*/**'
 
 dofocus-api:
   - changed-files:
       - any-glob-to-any-file:
-          - 'DofusSharp.Dofocus**'
-          - 'Tests.Live.Dofocus**'
-          - 'Tests.UnitTests.Dofocus**'
+          - 'DofusSharp.Dofocus*'
+          - 'DofusSharp.Dofocus*/**'
+          - 'Tests.Live.Dofocus*'
+          - 'Tests.Live.Dofocus*/**'
+          - 'Tests.UnitTests.Dofocus*'
+          - 'Tests.UnitTests.Dofocus*/**'
 
 best-crush:
   - changed-files:
       - any-glob-to-any-file:
-          - 'BestCrush**'
-          - 'Tests.BestCrush**'
+          - 'BestCrush*'
+          - 'BestCrush*/**'
+          - 'Tests.BestCrush*'
+          - 'Tests.BestCrush*/**'
 
 build:
   - changed-files:
