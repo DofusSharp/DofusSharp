@@ -1,4 +1,5 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
+using DofusSharp.DofusDb.ApiClients.Models.Criterion;
 
 namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
 
@@ -30,5 +31,5 @@ public class DofusDbAchievementObjective : DofusDbResource
     /// <summary>
     ///     A readable version of the criterion, as a list of strings or resources.
     /// </summary>
-    public IReadOnlyList<DofusDbStringOrResource>? ReadableCriterion { get; init; }
+    public DofusDbCriterion? ReadableCriterion { get; init; }
 }
