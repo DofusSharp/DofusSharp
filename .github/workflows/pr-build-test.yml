@@ -105,7 +105,7 @@ jobs:
       - name: Download test reports from artifacts
         uses: actions/download-artifact@v5
         with:
-          pattern: *-test-reports
+          pattern: '*-test-reports'
           path: test-reports/
 
       - name: Publish Test Results
@@ -127,7 +127,7 @@ jobs:
       - name: Download test reports from artifacts
         uses: actions/download-artifact@v5
         with:
-          pattern: *-coverage-reports
+          pattern: '*-coverage-reports'
           path: coverage-reports/
 
       - name: Install dotnet-coverage
