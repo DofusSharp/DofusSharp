@@ -52,9 +52,10 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
 public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContext
 {
-    static DofusDbModelsSourceGenerationContext()
-    {
-        InstanceOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+    public static DofusDbModelsSourceGenerationContext Instance { get; } = new(CreateOptions());
+
+    public static JsonSerializerOptions CreateOptions() =>
+        new(JsonSerializerDefaults.Web)
         {
             AllowOutOfOrderMetadataProperties = true,
             Converters =
@@ -70,9 +71,4 @@ public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContex
                 new DofusDbCriterionJsonConverter()
             }
         };
-        Instance = new DofusDbModelsSourceGenerationContext(InstanceOptions);
-    }
-
-    public static JsonSerializerOptions InstanceOptions { get; }
-    public static DofusDbModelsSourceGenerationContext Instance { get; }
 }

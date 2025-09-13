@@ -16,7 +16,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     {
         Referrer = referrer;
         BaseAddress = baseAddress;
-        _context = contextFactory?.Invoke(DofusDbModelsSourceGenerationContext.InstanceOptions) ?? DofusDbModelsSourceGenerationContext.Instance;
+        _context = contextFactory?.Invoke(DofusDbModelsSourceGenerationContext.CreateOptions()) ?? DofusDbModelsSourceGenerationContext.Instance;
     }
 
     public Uri BaseAddress { get; }

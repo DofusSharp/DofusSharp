@@ -85,7 +85,7 @@ public class DofusDbTableClientTest
 
         DofusDbResourceForTest result = await client.GetAsync(123);
 
-        result.Should().BeEquivalentTo(new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true });
+        result.Should().BeEquivalentTo(new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true }, opt => opt.ComparingByMembers<DofusDbResourceForTest>());
     }
 
     [Fact]
@@ -137,7 +137,8 @@ public class DofusDbTableClientTest
                         new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true },
                         new DofusDbResourceForTest { Prop1 = "Another Test", Prop2 = 24, Prop3 = false }
                     ]
-                }
+                },
+                opt => opt.ComparingByMembers<DofusDbResourceForTest>()
             );
     }
 
