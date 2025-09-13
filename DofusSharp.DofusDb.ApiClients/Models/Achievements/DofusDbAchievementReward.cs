@@ -1,4 +1,7 @@
-﻿namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
+using DofusSharp.DofusDb.ApiClients.Models.Titles;
+
+namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
 
 /// <summary>
 ///     A reward for completing an achievement.

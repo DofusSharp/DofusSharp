@@ -1,6 +1,6 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
 
-namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
+namespace DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 
 /// <summary>
 ///     An ornament rewarded for achievements.
