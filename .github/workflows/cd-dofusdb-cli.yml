@@ -24,7 +24,7 @@ jobs:
   build-publish:
     name: Build DofusDB CLI
     
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: compute-version
     
     permissions:
@@ -52,7 +52,7 @@ jobs:
         run: dotnet pack DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output nuget/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
         
       - name: Publish (release)
-        run: dotnet publish DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output dist/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet publish DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output dist/ --configuration Release --property RuntimeIdentifier=win-x64 --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Configure Github Nuget repository
         if: ${{ !inputs.dry-run }}
