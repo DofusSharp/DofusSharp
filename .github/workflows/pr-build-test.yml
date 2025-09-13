@@ -30,26 +30,27 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter-paths
         with:
+          list-files: 'escape'
           filters: |
             dofusdb:
-              - 'DofusSharp.Common*'
-              - 'DofusSharp.DofusDb*'
-              - 'Tests.Live.DofusDb*'
-              - 'Tests.UnitTests.DofusDb*'
+              - 'DofusSharp.Common**'
+              - 'DofusSharp.DofusDb**'
+              - 'Tests.Live.DofusDb**'
+              - 'Tests.UnitTests.DofusDb**'
             dofocus:
-              - 'DofusSharp.Common*'
-              - 'DofusSharp.Dofocus*'
-              - 'Tests.Live.Dofocus*'
-              - 'Tests.UnitTests.Dofocus*'
+              - 'DofusSharp.Common**'
+              - 'DofusSharp.Dofocus**'
+              - 'Tests.Live.Dofocus**'
+              - 'Tests.UnitTests.Dofocus**'
             best-crush:
-              - 'DofusSharp.Common*'
-              - 'BestCrush*'
-              - 'Tests.BestCrush*'
+              - 'DofusSharp.Common**'
+              - 'BestCrush**'
+              - 'Tests.BestCrush**'
   
   build-and-test-dofusdb:
     name: Build and test DofusDb
     needs: [compute-version, compute-changes]
-    if: needs.compute-changes.outputs.dofusdb-changed
+    if: needs.compute-changes.outputs.dofusdb-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
       solution-name: DofusSharp.DofusDb.Filter.slnf
@@ -60,7 +61,7 @@ jobs:
   build-and-test-dofocus:
     name: Build and test Dofocus
     needs: [ compute-version, compute-changes ]
-    if: needs.compute-changes.outputs.dofocus-changed
+    if: needs.compute-changes.outputs.dofocus-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
       solution-name: DofusSharp.Dofocus.Filter.slnf
@@ -71,7 +72,7 @@ jobs:
   build-and-test-best-crush:
     name: Build and test Best Crush
     needs: [ compute-version, compute-changes ]
-    if: needs.compute-changes.outputs.best-crush-changed
+    if: needs.compute-changes.outputs.best-crush-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln-maui.yml
     with:
       solution-name: BestCrush.Filter.slnf
