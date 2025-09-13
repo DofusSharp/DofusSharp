@@ -112,6 +112,7 @@ catch (TaskCanceledException exn)
     AnsiConsole.MarkupLine("[red]Operation canceled by user.[/]");
     if (debug)
     {
+        AnsiConsole.WriteLine("Details:");
         AnsiConsole.WriteException(exn);
     }
     return 2;
@@ -121,6 +122,7 @@ catch (Exception exn)
     if (debug)
     {
         AnsiConsole.MarkupLine("[red]An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.[/]");
+        AnsiConsole.WriteLine("Details:");
         AnsiConsole.WriteException(exn);
     }
     else

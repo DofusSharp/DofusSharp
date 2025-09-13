@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 
 namespace DofusSharp.DofusDb.ApiClients.Serialization;
@@ -13,10 +14,8 @@ class DofusDbValueOrFalseJsonConverter<T> : JsonConverter<DofusDbValueOrFalse<T>
             return new DofusDbValueOrFalse<T> { Value = default };
         }
 
-// There is no trim issue if the JsonSerializerOptions contains the proper TypeInfoResolver.
-#pragma warning disable IL2026
-        T? value = JsonSerializer.Deserialize<T>(ref reader, options);
-#pragma warning restore IL2026
+        T? value = (T?)JsonSerializer.Deserialize(ref reader, typeof(T), new DofusDbModelsSourceGenerationContext(options));
+
         return new DofusDbValueOrFalse<T> { Value = value };
     }
 
@@ -28,10 +27,7 @@ class DofusDbValueOrFalseJsonConverter<T> : JsonConverter<DofusDbValueOrFalse<T>
         }
         else
         {
-// There is no trim issue if the JsonSerializerOptions contains the proper TypeInfoResolver.
-#pragma warning disable IL2026
-            JsonSerializer.Serialize(writer, value.Value, options);
-#pragma warning restore IL2026
+            JsonSerializer.Serialize(writer, value.Value, typeof(T), new DofusDbModelsSourceGenerationContext(options));
         }
     }
 }
