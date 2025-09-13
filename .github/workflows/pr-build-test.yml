@@ -67,7 +67,7 @@ jobs:
       coverage-reports-artifact: dofocus-coverage-reports
   
   build-and-test-best-crush:
-    name: Build and test Dofocus
+    name: Build and test Best Crush
     needs: [ compute-version, compute-changes ]
     if: needs.compute-changes.outputs.best-crush-changed
     uses: ./.github/workflows/reusable-build-test-sln.yml
