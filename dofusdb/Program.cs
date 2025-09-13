@@ -5,6 +5,7 @@ using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using dofusdb.Commands;
 using DofusSharp.DofusDb.ApiClients;
+using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -73,7 +74,8 @@ RootCommand rootCommand = new(
         new ScalableImageClientCommand<long>("map-images", "Map images", uri => GetFactory(uri).MapImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbMapPosition>("map-positions", "Map Positions", uri => GetFactory(uri).MapPositions(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand(),
-        new TableClientCommand<DofusDbTitle>("titles", "Titles", uri => GetFactory(uri).Titles(), defaultUrl).CreateCommand()
+        new TableClientCommand<DofusDbTitle>("titles", "Titles", uri => GetFactory(uri).Titles(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbOrnament>("ornaments", "Ornaments", uri => GetFactory(uri).Ornaments(), defaultUrl).CreateCommand()
     }
 };
 
