@@ -39,7 +39,7 @@ jobs:
         run: dotnet workload install maui
 
       - name: Test
-        run: dotnet test DofusSharp.BestCrush.Filter.slnf --configuration Release
+        run: dotnet test BestCrush.Filter.slnf --configuration Release
 
       - name: Publish
         run: dotnet publish BestCrush/BestCrush.csproj --output nsis/BestCrush/app/ --configuration Release --framework net10.0-windows10.0.19041.0 --property Version=${{ needs.compute-version.outputs.version }} --property DebugSymbols=false --property DebugType=None
