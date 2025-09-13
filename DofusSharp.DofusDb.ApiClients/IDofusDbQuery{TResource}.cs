@@ -58,7 +58,7 @@ public interface IDofusDbQuery<TResource> where TResource: DofusDbResource
     ///     This method will perform as many requests as necessary to retrieve the requested number of results.
     /// </summary>
     /// <returns>The search result containing all resources matching the query.</returns>
-    IAsyncEnumerable<TResource> ExecuteAsync(IProgress<(int Loaded, int Total)>? progress, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<TResource> ExecuteAsync(IProgress<DofusDbTableClientExtensions.MultiSearchQueryProgress>? progress, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Count the number of results that the `ExecuteAsync` method would return.

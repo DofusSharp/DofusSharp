@@ -10,10 +10,18 @@ public interface IDofusDbScalableImageClient<in TId> : IDofusDbImageClient<TId>
 {
     /// <summary>
     ///     Fetches the image resource from the DofusDB API by its unique identifier.
-    ///     The image is returned as a stream containing a JPEG image.
+    ///     The image format is determined by the <see cref="ImageFormat" /> property.
     /// </summary>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
     /// <param name="scale">The scale of the image to fetch.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     Task<Stream> GetImageAsync(TId id, DofusDbImageScale scale, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Get the URL of the image resource.
+    ///     This URL is the one used by <see cref="GetImageAsync(TId, DofusDbImageScale, CancellationToken)" />.
+    /// </summary>
+    /// <param name="id">The unique identifier of the resource to fetch.</param>
+    /// <param name="scale">The scale of the image to fetch.</param>
+    Uri GetImageQuery(TId id, DofusDbImageScale scale);
 }

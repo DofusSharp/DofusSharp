@@ -90,13 +90,13 @@ public class GameDataUpgradeHandler(
     {
         IDofusDbQuery<DofusDbCharacteristic> characteristicsQuery = dofusDbQueryProvider.Characteristics();
         DofusDbCharacteristic[] characteristics = await characteristicsQuery
-            .ExecuteAsync(progress?.DeriveSubtask(0, 20).ToStepProgress("Récupération des caractéristiques"), cancellationToken)
+            .ExecuteAsync(progress?.DeriveSubtask(0, 20).ToMultiSearchProgress("Récupération des caractéristiques"), cancellationToken)
             .ToArrayAsync(cancellationToken);
         Dictionary<long, DofusDbCharacteristic> characteristicsDict = characteristics.Where(c => c.Id.HasValue).ToDictionary(c => c.Id!.Value, c => c);
 
         IDofusDbQuery<DofusDbRecipe> recipesQuery = dofusDbQueryProvider.Recipes();
         DofusDbRecipe[] recipes = await recipesQuery
-            .ExecuteAsync(progress?.DeriveSubtask(20, 60).ToStepProgress("Récupération des recettes"), cancellationToken)
+            .ExecuteAsync(progress?.DeriveSubtask(20, 60).ToMultiSearchProgress("Récupération des recettes"), cancellationToken)
             .ToArrayAsync(cancellationToken);
         Dictionary<long, DofusDbRecipe> recipesDict = recipes.Where(r => r.ResultId.HasValue).ToDictionary(c => c.ResultId!.Value, c => c);
 
@@ -104,7 +104,7 @@ public class GameDataUpgradeHandler(
         DofusDbItem[] equipments = await dofusDbQueryProvider
             .Items()
             .Where(i => equipmentTypes.Contains(i.TypeId!.Value))
-            .ExecuteAsync(progress?.DeriveSubtask(60, 100).ToStepProgress("Récupération des équipements"), cancellationToken)
+            .ExecuteAsync(progress?.DeriveSubtask(60, 100).ToMultiSearchProgress("Récupération des équipements"), cancellationToken)
             .ToArrayAsync(cancellationToken);
 
         DofusDbItem[] ingredients = equipments
@@ -267,7 +267,7 @@ public class GameDataUpgradeHandler(
         Dictionary<long, DofusDbItem> dofusDbRunes = await dofusDbQueryProvider
             .Items()
             .Where(i => i.TypeId == 78)
-            .ExecuteAsync(progress?.DeriveSubtask(0, 50).ToStepProgress("Récupération des runes"), cancellationToken)
+            .ExecuteAsync(progress?.DeriveSubtask(0, 50).ToMultiSearchProgress("Récupération des runes"), cancellationToken)
             .Where(i => i.Id.HasValue)
             .ToDictionaryAsync(i => i.Id!.Value, i => i, cancellationToken: cancellationToken);
 

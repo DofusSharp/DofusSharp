@@ -20,6 +20,13 @@ public interface IDofusDbTableClient<TResource> : IDofusDbClient where TResource
     Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Get the URL of the resource with the specified ID.
+    ///     This URL is the one used by <see cref="GetAsync(long, CancellationToken)" />.
+    /// </summary>
+    /// <param name="id">The unique identifier of the resource to fetch.</param>
+    Uri GetQuery(long id);
+
+    /// <summary>
     ///     Fetch the number of resources available in the API.
     /// </summary>
     /// <param name="predicates">The collection of predicates to filter the resources. If empty, all resources are counted.</param>
@@ -28,12 +35,26 @@ public interface IDofusDbTableClient<TResource> : IDofusDbClient where TResource
     Task<int> CountAsync(IReadOnlyCollection<DofusDbSearchPredicate> predicates, CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Get the URL to fetch the number of resources available.
+    ///     This URL is the one used by <see cref="CountAsync(IReadOnlyCollection{DofusDbSearchPredicate}, CancellationToken)" />.
+    /// </summary>
+    /// <param name="predicates">The collection of predicates to filter the resources. If empty, all resources are counted.</param>
+    Uri CountQuery(IReadOnlyCollection<DofusDbSearchPredicate> predicates);
+
+    /// <summary>
     ///     Fetch a paginated list of resources from the API based on the provided search query.
     /// </summary>
     /// <param name="query">The search query containing pagination parameters.</param>
     /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>The search result containing the resources matching the query.</returns>
     Task<DofusDbSearchResult<TResource>> SearchAsync(DofusDbSearchQuery query, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Get the URL to fetch a paginated list of resources.
+    ///     This URL is the one used by <see cref="SearchAsync(DofusDbSearchQuery, CancellationToken)" />.
+    /// </summary>
+    /// <param name="query">The search query containing pagination parameters.</param>
+    Uri SearchQuery(DofusDbSearchQuery query);
 }
 
 public static class DofusDbTableClientExtensions
@@ -109,7 +130,7 @@ public static class DofusDbTableClientExtensions
     public static async IAsyncEnumerable<TResource> MultiQuerySearchAsync<TResource>(
         this IDofusDbTableClient<TResource> client,
         DofusDbSearchQuery query,
-        IProgress<(int Loaded, int Total)>? progress,
+        IProgress<MultiSearchQueryProgress>? progress,
         [EnumeratorCancellation] CancellationToken cancellationToken = default
     ) where TResource: DofusDbResource
     {
@@ -117,11 +138,15 @@ public static class DofusDbTableClientExtensions
         int offset = query.Skip ?? 0;
 
         DofusDbSearchQuery firstQuery = new() { Limit = toFetch, Skip = offset, Sort = query.Sort, Select = query.Select, Predicates = query.Predicates };
+        progress?.Report(new MultiSearchCurrentCount(0, toFetch));
+        progress?.Report(new MultiSearchNextQuery(firstQuery));
+
         DofusDbSearchResult<TResource> firstResults = await SearchImplAsync(client, firstQuery, cancellationToken);
 
         int loaded = firstResults.Data.Count;
         int requested = Math.Min(query.Limit ?? int.MaxValue, firstResults.Total - (query.Skip ?? 0));
-        progress?.Report((loaded, requested));
+
+        progress?.Report(new MultiSearchCurrentCount(loaded, requested));
 
         foreach (TResource result in firstResults.Data)
         {
@@ -129,7 +154,7 @@ public static class DofusDbTableClientExtensions
         }
 
         offset += firstResults.Data.Count;
-        toFetch -= firstResults.Data.Count;
+        toFetch = requested - firstResults.Data.Count;
         int total = firstResults.Total;
 
         if (offset >= total)
@@ -137,15 +162,15 @@ public static class DofusDbTableClientExtensions
             yield break;
         }
 
-        progress?.Report((0, requested));
         while (toFetch > 0 && offset < total)
         {
             DofusDbSearchQuery currentQuery = new() { Limit = toFetch, Skip = offset, Sort = query.Sort, Select = query.Select, Predicates = query.Predicates };
+            progress?.Report(new MultiSearchNextQuery(currentQuery));
 
             DofusDbSearchResult<TResource> results = await SearchImplAsync(client, currentQuery, cancellationToken);
 
             loaded += results.Data.Count;
-            progress?.Report((loaded, requested));
+            progress?.Report(new MultiSearchCurrentCount(loaded, requested));
 
             foreach (TResource result in results.Data)
             {
@@ -167,9 +192,31 @@ public static class DofusDbTableClientExtensions
         {
             return await client.SearchAsync(currentQuery, cancellationToken);
         }
+        catch (TaskCanceledException)
+        {
+            throw;
+        }
         catch (Exception e)
         {
             throw new Exception($"Error while executing query {JsonSerializer.Serialize(currentQuery, DofusDbModelsSourceGenerationContext.Default.DofusDbSearchQuery)}", e);
         }
     }
+
+    /// <summary>
+    ///     Base class for progress of the multi search operation.
+    /// </summary>
+    public abstract record MultiSearchQueryProgress;
+
+    /// <summary>
+    ///     The search operation will execute a new query.
+    /// </summary>
+    /// <param name="NextQuery">The next query that will be executed. Null can either mean that the next query has not been computed yet, or that there is no more query to execute.</param>
+    public record MultiSearchNextQuery(DofusDbSearchQuery NextQuery) : MultiSearchQueryProgress;
+
+    /// <summary>
+    ///     The search operation has fetched additional results.
+    /// </summary>
+    /// <param name="AlreadyFetched">The number of items that have already been fetched from the server.</param>
+    /// <param name="TotalToFetch">The total number of items that will be fetched from the server.</param>
+    public record MultiSearchCurrentCount(int AlreadyFetched, int TotalToFetch) : MultiSearchQueryProgress;
 }

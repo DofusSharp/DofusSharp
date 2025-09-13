@@ -17,7 +17,9 @@ static class CommonMocks
         result.Setup(q => q.Skip(It.IsAny<int>())).Returns(result.Object);
         result.Setup(q => q.SortByAscending(It.IsAny<Expression<Func<T, object?>>>())).Returns(result.Object);
         result.Setup(q => q.SortByDescending(It.IsAny<Expression<Func<T, object?>>>())).Returns(result.Object);
-        result.Setup(q => q.ExecuteAsync(It.IsAny<IProgress<(int Loaded, int Total)>?>(), It.IsAny<CancellationToken>())).Returns(AsyncEnumerable.Empty<T>());
+        result
+            .Setup(q => q.ExecuteAsync(It.IsAny<IProgress<DofusDbTableClientExtensions.MultiSearchQueryProgress>?>(), It.IsAny<CancellationToken>()))
+            .Returns(AsyncEnumerable.Empty<T>());
         result.Setup(q => q.CountAsync(It.IsAny<CancellationToken>())).ReturnsAsync(0);
         return result;
     }

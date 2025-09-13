@@ -1,4 +1,6 @@
-﻿namespace BestCrush.Domain.Models;
+﻿using DofusSharp.DofusDb.ApiClients;
+
+namespace BestCrush.Domain.Models;
 
 public record struct ProgressMessage(string Message, double? Percent, bool Done = false);
 
@@ -20,11 +22,44 @@ public static class AsyncProgressExtensions
     ) =>
         progress.DeriveSubtask(100.0 * step / totalSteps, 100.0 * (step + 1) / totalSteps, messageFactory);
 
-    public static ProgressSync<(int Loaded, int Total)> ToStepProgress(this ProgressSync<ProgressMessage> progress, string message) =>
-        progress.Derive<(int, int)>(x => new ProgressMessage($"{message} {x.Item1}/{x.Item2}", 100.0 * x.Item1 / x.Item2, x.Item1 == x.Item2));
+    public static ProgressSync<DofusDbTableClientExtensions.MultiSearchQueryProgress> ToMultiSearchProgress(this ProgressSync<ProgressMessage> progress, string message) =>
+        new(p =>
+            {
+                switch (p)
+                {
+                    case DofusDbTableClientExtensions.MultiSearchCurrentCount currentCount:
+                        progress.Report(
+                            new ProgressMessage(
+                                $"{message} {currentCount.AlreadyFetched}/{currentCount.TotalToFetch}",
+                                100.0 * currentCount.AlreadyFetched / currentCount.TotalToFetch,
+                                currentCount.AlreadyFetched == currentCount.TotalToFetch
+                            )
+                        );
+                        break;
+                }
+            }
+        );
 
-    public static ProgressSync<(int Loaded, int Total)> ToStepProgress(this ProgressSync<ProgressMessage> progress, Func<(int Loaded, int Total), string> messageFactory) =>
-        progress.Derive<(int, int)>(x => new ProgressMessage(messageFactory.Invoke(x), 100.0 * x.Item1 / x.Item2, x.Item1 == x.Item2));
+    public static ProgressSync<DofusDbTableClientExtensions.MultiSearchQueryProgress> ToMultiSearchProgress(
+        this ProgressSync<ProgressMessage> progress,
+        Func<(int Loaded, int Total), string> messageFactory
+    ) =>
+        new(p =>
+            {
+                switch (p)
+                {
+                    case DofusDbTableClientExtensions.MultiSearchCurrentCount currentCount:
+                        progress.Report(
+                            new ProgressMessage(
+                                messageFactory.Invoke((currentCount.AlreadyFetched, currentCount.TotalToFetch)),
+                                100.0 * currentCount.AlreadyFetched / currentCount.TotalToFetch,
+                                currentCount.AlreadyFetched == currentCount.TotalToFetch
+                            )
+                        );
+                        break;
+                }
+            }
+        );
 
     public static void Report(this IProgress<ProgressMessage> progress, string message, double? percent = null, bool done = false) =>
         progress.Report(new ProgressMessage(message, percent, done));

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
+using Spectre.Console;
 
 namespace DofusSharp.DofusDb.Cli.Commands;
 
@@ -94,18 +95,83 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(IReadOnlyList<TResource>));
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbTableClient<TResource> client = clientFactory(url);
-                IReadOnlyList<TResource> results = await client
-                    .MultiQuerySearchAsync(
-                        new DofusDbSearchQuery { Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] },
-                        cancellationToken
-                    )
-                    .ToListAsync(cancellationToken);
+
+                IReadOnlyList<TResource> results = null!;
+                if (quiet)
+                {
+                    results = await client
+                        .MultiQuerySearchAsync(
+                            new DofusDbSearchQuery
+                            {
+                                Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? []
+                            },
+                            cancellationToken
+                        )
+                        .ToListAsync(cancellationToken);
+                }
+                else
+                {
+                    await AnsiConsole
+                        .Progress()
+                        .AutoRefresh(false)
+                        .Columns(new SpinnerColumn(), new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn())
+                        .StartAsync(async ctx =>
+                            {
+                                ProgressTask tsk = ctx.AddTask("Fetching resources").IsIndeterminate();
+
+                                ProgressSync<DofusDbTableClientExtensions.MultiSearchQueryProgress>? progress = quiet
+                                    ? null
+                                    : new ProgressSync<DofusDbTableClientExtensions.MultiSearchQueryProgress>(p =>
+                                        {
+                                            switch (p)
+                                            {
+                                                case DofusDbTableClientExtensions.MultiSearchCurrentCount currentCount:
+                                                {
+                                                    if (currentCount.AlreadyFetched == currentCount.TotalToFetch)
+                                                    {
+                                                        tsk
+                                                            .IsIndeterminate(false)
+                                                            .Value(currentCount.AlreadyFetched)
+                                                            .MaxValue(currentCount.TotalToFetch)
+                                                            .Description($"[{currentCount.AlreadyFetched}/{currentCount.TotalToFetch}] Done fetching resources".EscapeMarkup());
+                                                        tsk.StopTask();
+                                                    }
+                                                    else
+                                                    {
+                                                        tsk.IsIndeterminate(false).Value(currentCount.AlreadyFetched).MaxValue(currentCount.TotalToFetch);
+                                                    }
+                                                    ctx.Refresh();
+                                                    break;
+                                                }
+
+                                                case DofusDbTableClientExtensions.MultiSearchNextQuery nextQuery:
+                                                    tsk.Description($"[{tsk.Value}/{tsk.MaxValue}] {client.SearchQuery(nextQuery.NextQuery)}...".EscapeMarkup());
+                                                    ctx.Refresh();
+                                                    break;
+                                            }
+                                        }
+                                    );
+
+                                results = await client
+                                    .MultiQuerySearchAsync(
+                                        new DofusDbSearchQuery
+                                        {
+                                            Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? []
+                                        },
+                                        progress,
+                                        cancellationToken
+                                    )
+                                    .ToListAsync(cancellationToken);
+                            }
+                        );
+                }
 
                 await using Stream stream = GetOutputStream(outputFile);
                 await JsonSerializer.SerializeAsync(stream, results, jsonTypeInfo, cancellationToken);
@@ -125,13 +191,27 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbTableClient<TResource> client = clientFactory(url);
-                TResource resource = await client.GetAsync(id, cancellationToken);
+
+                TResource resource = null!;
+                if (quiet)
+                {
+                    resource = await client.GetAsync(id, cancellationToken);
+                }
+                else
+                {
+                    await AnsiConsole
+                        .Status()
+                        .Spinner(Spinner.Known.Default)
+                        .StartAsync($"Executing query: {client.GetQuery(id)}...", async _ => resource = await client.GetAsync(id, cancellationToken));
+                }
+
 
                 await using Stream stream = GetOutputStream(outputFile);
                 await JsonSerializer.SerializeAsync(stream, resource, jsonTypeInfo, cancellationToken);
@@ -180,10 +260,28 @@ public partial class TableClientCommand<TResource>(string command, string name, 
             {
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
+                bool quiet = r.GetValue(CommonOptions.Quiet);
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbTableClient<TResource> client = clientFactory(url);
-                int results = await client.CountAsync(filter ?? [], cancellationToken);
+
+                if (!quiet)
+                {
+                    await Console.Error.WriteLineAsync($"Executing query: {client.CountQuery(filter ?? [])}...");
+                }
+
+                int results = 0;
+                if (quiet)
+                {
+                    results = await client.CountAsync(filter ?? [], cancellationToken);
+                }
+                else
+                {
+                    await AnsiConsole
+                        .Status()
+                        .Spinner(Spinner.Known.Default)
+                        .StartAsync($"Executing query: {client.CountQuery(filter ?? [])}...", async _ => results = await client.CountAsync(filter ?? [], cancellationToken));
+                }
 
                 Console.WriteLine(results);
             }

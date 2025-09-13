@@ -10,4 +10,10 @@ public interface IDofusDbVersionClient : IDofusDbClient
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     Task<Version> GetVersionAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Get the URL to fetch the current version.
+    ///     This URL is the one used by <see cref="GetVersionAsync(CancellationToken)" />.
+    /// </summary>
+    Uri GetVersionQuery();
 }

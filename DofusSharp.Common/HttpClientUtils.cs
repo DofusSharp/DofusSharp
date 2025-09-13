@@ -2,7 +2,7 @@
 
 public static class HttpClientUtils
 {
-    public static HttpClient CreateHttpClient(IHttpClientFactory? clientFactory, Uri baseAddress, Uri? referrer = null)
+    public static HttpClient CreateHttpClient(IHttpClientFactory? clientFactory, Uri? baseAddress = null, Uri? referrer = null)
     {
         HttpClient? httpClient = null;
         try

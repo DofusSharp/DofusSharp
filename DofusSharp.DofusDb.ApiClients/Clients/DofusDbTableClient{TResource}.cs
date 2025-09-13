@@ -38,8 +38,9 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
 
     public async Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default)
     {
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
-        using HttpResponseMessage response = await httpClient.GetAsync($"{id}", cancellationToken);
+        Uri url = GetQuery(id);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
+        using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
 #pragma warning disable IL2026
@@ -53,13 +54,13 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         return result;
     }
 
+    public Uri GetQuery(long id) => new(BaseAddress, $"{id}");
+
     public async Task<int> CountAsync(IReadOnlyCollection<DofusDbSearchPredicate> predicates, CancellationToken cancellationToken = default)
     {
-        DofusDbSearchQuery query = new() { Limit = 0, Predicates = predicates };
-        string queryParams = _queryParamsBuilder.BuildQueryParams(query);
-
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
-        using HttpResponseMessage response = await httpClient.GetAsync($"?{queryParams}", cancellationToken);
+        Uri url = CountQuery(predicates);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
+        using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
 #pragma warning disable IL2026
@@ -73,13 +74,18 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         return result.Total;
     }
 
+    public Uri CountQuery(IReadOnlyCollection<DofusDbSearchPredicate> predicates)
+    {
+        DofusDbSearchQuery query = new() { Limit = 0, Predicates = predicates };
+        string queryParams = _queryParamsBuilder.BuildQueryParams(query);
+        return new Uri(BaseAddress, $"?{queryParams}");
+    }
+
     public async Task<DofusDbSearchResult<TResource>> SearchAsync(DofusDbSearchQuery query, CancellationToken cancellationToken = default)
     {
-        string queryParams = _queryParamsBuilder.BuildQueryParams(query);
-        string requestUri = string.IsNullOrWhiteSpace(queryParams) ? string.Empty : $"?{queryParams}";
-
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, BaseAddress, Referrer);
-        using HttpResponseMessage response = await httpClient.GetAsync(requestUri, cancellationToken);
+        Uri url = SearchQuery(query);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
+        using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
 #pragma warning disable IL2026
@@ -91,5 +97,12 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         }
 
         return result;
+    }
+
+    public Uri SearchQuery(DofusDbSearchQuery query)
+    {
+        string queryParams = _queryParamsBuilder.BuildQueryParams(query);
+        string requestUri = string.IsNullOrWhiteSpace(queryParams) ? string.Empty : $"?{queryParams}";
+        return new Uri(BaseAddress, requestUri);
     }
 }
