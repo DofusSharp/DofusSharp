@@ -3,6 +3,7 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using dofusdb.Commands;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
@@ -11,7 +12,6 @@ using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
-using DofusSharp.DofusDb.Cli.Commands;
 using Spectre.Console;
 
 AnsiConsole.Console = AnsiConsole.Create(new AnsiConsoleSettings { Out = new AnsiConsoleOutput(Console.Error) });
@@ -24,7 +24,7 @@ Console.CancelKeyPress += (_, eventArgs) =>
     AnsiConsole.MarkupLine("[dim]Received INT signal, stopping...[/]");
 };
 
-Uri referrer = new("https://github.com/DofusSharp/DofusSharp/tree/main/DofusSharp.DofusDb.Cli");
+Uri referrer = new("https://github.com/DofusSharp/DofusSharp/tree/main/dofusdb");
 #if DEBUG
 Uri defaultUrl = DofusDbClient.BetaUri;
 #else
@@ -35,7 +35,7 @@ RootCommand rootCommand = new(
     """
     A command-line interface for querying the DofusDB API.
     Each subcommand targets a different resource type. Use the help option on a subcommand to see the available operations for that resource.
-    Want to learn more? Visit us on GitHub: https://github.com/DofusSharp/DofusSharp/tree/main/DofusSharp.DofusDb.Cli.
+    Want to learn more? Visit us on GitHub: https://github.com/DofusSharp/DofusSharp/tree/main/dofusdb.
     """
 )
 {
@@ -112,7 +112,8 @@ catch (TaskCanceledException exn)
     AnsiConsole.MarkupLine("[red]Operation canceled by user.[/]");
     if (debug)
     {
-        AnsiConsole.WriteException(exn);
+        AnsiConsole.WriteLine("Details:");
+        AnsiConsole.WriteLine(exn.ToString());
     }
     return 2;
 }
@@ -121,7 +122,8 @@ catch (Exception exn)
     if (debug)
     {
         AnsiConsole.MarkupLine("[red]An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.[/]");
-        AnsiConsole.WriteException(exn);
+        AnsiConsole.WriteLine("Details:");
+        AnsiConsole.WriteLine(exn.ToString());
     }
     else
     {

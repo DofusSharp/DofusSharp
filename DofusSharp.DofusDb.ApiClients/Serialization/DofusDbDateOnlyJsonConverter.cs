@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using DofusSharp.DofusDb.ApiClients.Models;
 
 namespace DofusSharp.DofusDb.ApiClients.Serialization;
 
@@ -12,22 +13,14 @@ class DofusDbDateOnlyJsonConverter : JsonConverter<DateOnly>
         switch (reader.TokenType)
         {
             case JsonTokenType.Number:
-// There is no trim issue if the JsonSerializerOptions contains the proper TypeInfoResolver.
-#pragma warning disable IL2026
-                double value = JsonSerializer.Deserialize<double>(ref reader, options);
-#pragma warning restore IL2026
+                double value = (double?)JsonSerializer.Deserialize(ref reader, options.GetTypeInfo(typeof(double))) ?? 0;
                 DateTime dateTime = DateTime.UnixEpoch.AddMilliseconds(value);
                 return DateOnly.FromDateTime(dateTime);
             default:
-// There is no trim issue if the JsonSerializerOptions contains the proper TypeInfoResolver.
-#pragma warning disable IL2026
-                return JsonSerializer.Deserialize<DateOnly>(ref reader, options);
-#pragma warning restore IL2026
+                return (DateOnly?)JsonSerializer.Deserialize(ref reader, options.GetTypeInfo(typeof(DateOnly))) ?? default;
         }
     }
 
-// There is no trim issue if the JsonSerializerOptions contains the proper TypeInfoResolver.
-#pragma warning disable IL2026
-    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options) => JsonSerializer.Serialize(writer, value, options);
-#pragma warning restore IL2026
+    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options) =>
+        JsonSerializer.Serialize(writer, value, typeof(DateOnly), new DofusDbModelsSourceGenerationContext(options));
 }

@@ -1,9 +1,11 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 using DofusSharp.Common;
 using DofusSharp.DofusDb.ApiClients.Models;
+using DofusSharp.DofusDb.ApiClients.Models.Common;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Search;
 using DofusSharp.DofusDb.ApiClients.Serialization;
 
@@ -11,25 +13,29 @@ namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TResource: DofusDbResource
 {
-    readonly JsonSerializerOptions? _options;
+    readonly JsonSerializerContext _context;
     readonly DofusDbSearchRequestQueryParamsBuilder _queryParamsBuilder = new();
 
-    public DofusDbTableClient(IJsonTypeInfoResolver typeInfoResolver, Uri baseAddress, Uri? referrer = null)
+    public DofusDbTableClient(Uri baseAddress, Uri? referrer = null, Func<JsonSerializerOptions, JsonSerializerContext>? contextFactory = null)
     {
         Referrer = referrer;
         BaseAddress = baseAddress;
-        _options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+        JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
         {
-            TypeInfoResolver = typeInfoResolver,
             AllowOutOfOrderMetadataProperties = true,
             Converters =
             {
-                new JsonStringEnumConverter(),
-                new DofusDbValueOrFalseJsonConverterFactory(),
-                new DofusDbValueTupleJsonConverterFactory(),
+                new JsonStringEnumConverter<DofusDbGender>(),
+                new JsonStringEnumConverter<ImageFormat>(),
+                new JsonStringEnumConverter<DofusDbImageScale>(),
+                new JsonStringEnumConverter<DofusDbLanguage>(),
+                new DofusDbValueTupleJsonConverter<int, int>(),
+                new DofusDbValueTupleJsonConverter<int, double>(),
+                new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
                 new DofusDbDateOnlyJsonConverter()
             }
         };
+        _context = contextFactory?.Invoke(options) ?? new DofusDbModelsSourceGenerationContext(options);
     }
 
     public Uri BaseAddress { get; }
@@ -43,10 +49,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-#pragma warning disable IL2026
-        TResource? result = await response.Content.ReadFromJsonAsync<TResource>(_options, cancellationToken);
-#pragma warning restore IL2026
-        if (result == null)
+        if (await response.Content.ReadFromJsonAsync(typeof(TResource), _context, cancellationToken) is not TResource result)
         {
             throw new InvalidOperationException("Could not deserialize the response content.");
         }
@@ -63,10 +66,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-#pragma warning disable IL2026
-        DofusDbSearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<DofusDbSearchResult<TResource>>(_options, cancellationToken);
-#pragma warning restore IL2026
-        if (result == null)
+        if (await response.Content.ReadFromJsonAsync(typeof(DofusDbSearchResult<TResource>), _context, cancellationToken) is not DofusDbSearchResult<TResource> result)
         {
             throw new InvalidOperationException("Could not deserialize the search result.");
         }
@@ -88,10 +88,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-#pragma warning disable IL2026
-        DofusDbSearchResult<TResource>? result = await response.Content.ReadFromJsonAsync<DofusDbSearchResult<TResource>>(_options, cancellationToken);
-#pragma warning restore IL2026
-        if (result == null)
+        if (await response.Content.ReadFromJsonAsync(typeof(DofusDbSearchResult<TResource>), _context, cancellationToken) is not DofusDbSearchResult<TResource> result)
         {
             throw new InvalidOperationException("Could not deserialize the search result.");
         }

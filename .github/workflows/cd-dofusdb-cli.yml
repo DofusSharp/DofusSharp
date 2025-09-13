@@ -41,10 +41,10 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Build
-        run: dotnet build DofusSharp.DofusDb.Cli.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.DofusDb.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Test
-        run: dotnet test DofusSharp.DofusDb.Cli.Filter.slnf --configuration Release --no-build
+        run: dotnet test DofusSharp.DofusDb.Filter.slnf --configuration Release --no-build
 
   build-publish-nuget:
     name: Pack DofusDB CLI and push to nuget
@@ -67,7 +67,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Pack
-        run: dotnet pack DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output nuget/ --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet pack dofusdb/dofusdb.csproj --output nuget/ --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Configure Github Nuget repository
         if: ${{ !inputs.dry-run }}
@@ -130,10 +130,13 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Publish
-        run: dotnet publish DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output dist/ --configuration Release --property RuntimeIdentifier=${{ matrix.rid }} --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet publish dofusdb/dofusdb.csproj --output dist/ --configuration Release --property RuntimeIdentifier=${{ matrix.rid }} --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Archive binaries
-        run: 7z a -tzip dist/dofusdb-${{ matrix.rid }}.zip dist/${{ matrix.output-name }}
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          cd dist
+          7z a -tzip dofusdb-${{ matrix.rid }}.zip ${{ matrix.output-name }}
 
       - name: Upload binaries to release
         if: ${{ github.event_name == 'release' }}
@@ -148,6 +151,6 @@ jobs:
         if: ${{ github.event_name != 'release' }}
         uses: actions/upload-artifact@v4
         with:
-          path: dist/dofusdb-${{ matrix.rid }}.zip
-          name: dofusdb-${{ matrix.rid }}.zip
+          path: dist/${{ matrix.output-name }}
+          name: dofusdb-${{ matrix.rid }}
           if-no-files-found: error

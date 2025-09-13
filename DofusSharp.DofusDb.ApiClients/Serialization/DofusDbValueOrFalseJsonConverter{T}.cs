@@ -13,10 +13,8 @@ class DofusDbValueOrFalseJsonConverter<T> : JsonConverter<DofusDbValueOrFalse<T>
             return new DofusDbValueOrFalse<T> { Value = default };
         }
 
-// There is no trim issue if the JsonSerializerOptions contains the proper TypeInfoResolver.
-#pragma warning disable IL2026
-        T? value = JsonSerializer.Deserialize<T>(ref reader, options);
-#pragma warning restore IL2026
+        T? value = (T?)JsonSerializer.Deserialize(ref reader, options.GetTypeInfo(typeof(T)));
+
         return new DofusDbValueOrFalse<T> { Value = value };
     }
 
@@ -28,10 +26,7 @@ class DofusDbValueOrFalseJsonConverter<T> : JsonConverter<DofusDbValueOrFalse<T>
         }
         else
         {
-// There is no trim issue if the JsonSerializerOptions contains the proper TypeInfoResolver.
-#pragma warning disable IL2026
-            JsonSerializer.Serialize(writer, value.Value, options);
-#pragma warning restore IL2026
+            JsonSerializer.Serialize(writer, value.Value, options.GetTypeInfo(typeof(T)));
         }
     }
 }

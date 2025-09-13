@@ -3,9 +3,9 @@ using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using Spectre.Console;
 
-namespace DofusSharp.DofusDb.Cli.Commands;
+namespace dofusdb.Commands;
 
-public class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImageClient<TId>> clientFactory, Uri defaultUrl)
+class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImageClient<TId>> clientFactory, Uri defaultUrl)
 {
     readonly Argument<TId> _idArgument = new("id")
     {
