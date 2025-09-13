@@ -41,10 +41,10 @@ jobs:
         run: dotnet workload install maui
 
       - name: Build
-        run: dotnet build DofusSharp.BestCrush.Filter.slnf --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build BestCrush.Filter.slnf --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Tests
-        run: dotnet test DofusSharp.BestCrush.Filter.slnf --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
+        run: dotnet test BestCrush.Filter.slnf --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
 
       - name: Upload test reports as artifact
         if: ${{ always() }}
