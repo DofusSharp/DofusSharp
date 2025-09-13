@@ -5,6 +5,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
+using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -37,6 +38,12 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonDerivedType(typeof(DofusDbMonsterBeta), "MonsterData")]
 [JsonDerivedType(typeof(DofusDbMonsterRace), "MonsterRaces")]
 [JsonDerivedType(typeof(DofusDbMonsterSuperRace), "MonsterSuperRaces")]
+[JsonDerivedType(typeof(DofusDbMount), "Mounts")]
+[JsonDerivedType(typeof(DofusDbMountBeta), "MountData")]
+[JsonDerivedType(typeof(DofusDbMountFamily), "MountFamilies")]
+[JsonDerivedType(typeof(DofusDbMountFamilyBeta), "MountFamilyData")]
+[JsonDerivedType(typeof(DofusDbMountBehavior), "MountBehaviors")]
+[JsonDerivedType(typeof(DofusDbMountBehaviorBeta), "MountBehaviorData")]
 [JsonDerivedType(typeof(DofusDbServer), "Servers")]
 [JsonDerivedType(typeof(DofusDbSpell), "Spells")]
 [JsonDerivedType(typeof(DofusDbSpellLevel), "SpellLevels")]

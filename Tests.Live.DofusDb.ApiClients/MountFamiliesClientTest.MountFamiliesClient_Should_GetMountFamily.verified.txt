@@ -1,0 +1,13 @@
+﻿{
+  HeadUri: tx_pictoMuldo,
+  Name: {
+    De: Seequagga,
+    En: Seemyool,
+    Es: Mulagua,
+    Fr: Muldo,
+    Pt: Marmula
+  },
+  Id: 5,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

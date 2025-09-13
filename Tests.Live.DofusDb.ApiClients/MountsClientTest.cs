@@ -1,29 +1,29 @@
 ﻿using DofusSharp.DofusDb.ApiClients;
-using DofusSharp.DofusDb.ApiClients.Models.Jobs;
+using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
 
 namespace Tests.Live.DofusDb.ApiClients;
 
-public class JobsClientTest
+public class MountsClientTest
 {
     [Fact]
-    public async Task JobsClient_Should_GetJob()
+    public async Task MountsClient_Should_GetMount()
     {
-        IDofusDbTableClient<DofusDbJob> client = DofusDbClient.Beta(Constants.Referrer).Jobs();
-        DofusDbJob value = await client.GetAsync(11);
+        IDofusDbTableClient<DofusDbMount> client = DofusDbClient.Beta(Constants.Referrer).Mounts();
+        DofusDbMount value = await client.GetAsync(11);
         await Verify(value);
     }
 
     [Fact]
-    public async Task JobsClient_Should_SearchJobs()
+    public async Task MountsClient_Should_SearchMounts()
     {
-        IDofusDbTableClient<DofusDbJob> client = DofusDbClient.Beta(Constants.Referrer).Jobs();
+        IDofusDbTableClient<DofusDbMount> client = DofusDbClient.Beta(Constants.Referrer).Mounts();
 
         // we don't want to assert results here because they might change with each update, we just want to ensure that all the items are parsed correctly
         // which means that no exception is thrown during the search
         DofusDbSearchQuery query = new();
-        DofusDbJob[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
+        DofusDbMount[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
         int count = await client.CountAsync(query.Predicates);
 
         results.Length.Should().Be(count);
