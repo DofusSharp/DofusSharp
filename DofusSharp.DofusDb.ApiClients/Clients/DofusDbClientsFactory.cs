@@ -1,4 +1,5 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -61,4 +62,5 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbCli
     public IDofusDbTableClient<DofusDbDungeon> Dungeons() => new DofusDbTableClient<DofusDbDungeon>(new Uri(baseAddress, "dungeons/"), referrer);
 
     public IDofusDbTableClient<DofusDbTitle> Titles() => new DofusDbTableClient<DofusDbTitle>(new Uri(baseAddress, "titles/"), referrer);
+    public IDofusDbTableClient<DofusDbOrnament> Ornaments() => new DofusDbTableClient<DofusDbOrnament>(new Uri(baseAddress, "ornaments/"), referrer);
 }
