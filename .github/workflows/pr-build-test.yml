@@ -72,7 +72,7 @@ jobs:
     name: Build and test Best Crush
     needs: [ compute-version, compute-changes ]
     if: needs.compute-changes.outputs.best-crush-changed
-    uses: ./.github/workflows/reusable-build-test-sln.yml
+    uses: ./.github/workflows/reusable-build-test-sln-maui.yml
     with:
       solution-name: BestCrush.Filter.slnf
       version: ${{ needs.compute-version.outputs.version }}
