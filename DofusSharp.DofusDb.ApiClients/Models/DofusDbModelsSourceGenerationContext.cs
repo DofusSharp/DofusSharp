@@ -9,6 +9,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
+using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -47,6 +48,9 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonster>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonsterRace>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonsterSuperRace>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbMount>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbMountFamily>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbMountBehavior>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbServer>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpell>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellLevel>))]

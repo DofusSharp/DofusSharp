@@ -11,6 +11,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
+using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -67,6 +68,9 @@ RootCommand rootCommand = new(
         new ImageClientCommand<long>("monster-images", "Monster images", uri => GetFactory(uri).MonsterImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbMonsterRace>("monster-races", "Monster Races", uri => GetFactory(uri).MonsterRaces(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbMonsterSuperRace>("monster-super-races", "Monster Super Races", uri => GetFactory(uri).MonsterSuperRaces(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbMount>("mounts", "Mounts", uri => GetFactory(uri).Mounts(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbMountFamily>("mount-families", "Mount Families", uri => GetFactory(uri).MountFamilies(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbMountBehavior>("mount-behaviors", "MountBehaviors", uri => GetFactory(uri).MountBehaviors(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbWorld>("worlds", "Worlds", uri => GetFactory(uri).Worlds(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbSuperArea>("super-areas", "Super Areas", uri => GetFactory(uri).SuperAreas(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbArea>("areas", "Areas", uri => GetFactory(uri).Areas(), defaultUrl).CreateCommand(),

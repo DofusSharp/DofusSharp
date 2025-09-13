@@ -5,6 +5,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
+using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -29,6 +30,9 @@ public interface IDofusDbQueryProvider
     IDofusDbQuery<DofusDbMonster> Monsters();
     IDofusDbQuery<DofusDbMonsterRace> MonsterRaces();
     IDofusDbQuery<DofusDbMonsterSuperRace> MonsterSuperRaces();
+    IDofusDbQuery<DofusDbMount> Mounts();
+    IDofusDbQuery<DofusDbMountFamily> MountFamilies();
+    IDofusDbQuery<DofusDbMountBehavior> MountBehaviors();
     IDofusDbQuery<DofusDbWorld> Worlds();
     IDofusDbQuery<DofusDbSuperArea> SuperAreas();
     IDofusDbQuery<DofusDbArea> Areas();

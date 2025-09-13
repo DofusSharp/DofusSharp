@@ -1,9 +1,11 @@
-﻿namespace DofusSharp.DofusDb.ApiClients.Models.Spells;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Spells;
+
+namespace DofusSharp.DofusDb.ApiClients.Models.Effects;
 
 /// <summary>
 ///     An effect of a spell.
 /// </summary>
-public class DofusDbSpellEffect
+public class DofusDbEffectInstance
 {
     /// <summary>
     ///     The unique identifier of the effect.
