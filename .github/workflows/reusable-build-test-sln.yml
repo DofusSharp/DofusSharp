@@ -45,7 +45,7 @@ jobs:
         run: dotnet test DofusSharp.DofusDb.Filter.slnf --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
 
       - name: Upload test reports as artifact
-        if: ${{ always() && inputs.test-reports-artifact != null }}
+        if: ${{ !cancelled() && inputs.test-reports-artifact != null }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.test-reports-artifact }}
@@ -56,7 +56,7 @@ jobs:
             TestResults/**/*.json
 
       - name: Upload coverage reports as artifact
-        if: ${{ always() && inputs.coverage-reports-artifact != null }}
+        if: ${{ !cancelled() && inputs.coverage-reports-artifact != null }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.coverage-reports-artifact }}

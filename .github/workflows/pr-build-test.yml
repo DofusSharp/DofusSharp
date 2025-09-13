@@ -81,6 +81,7 @@ jobs:
 
   publish-test-reports:
     name: Publish test reports
+    if: (!cancelled())
     needs: [build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush]
     runs-on: ubuntu-latest
 
@@ -114,6 +115,7 @@ jobs:
 
   publish-coverage-reports:
     name: Publish coverage reports
+    if: (!cancelled())
     needs: [build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush]
     runs-on: ubuntu-latest
 
