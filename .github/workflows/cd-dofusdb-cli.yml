@@ -130,7 +130,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Publish
-        run: dotnet publish DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output nuget/ --configuration Release --property RuntimeIdentifier=${{ matrix.rid }} --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet publish DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output dist/ --configuration Release --property RuntimeIdentifier=${{ matrix.rid }} --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Archive binaries
         run: 7z a -tzip dist/dofusdb-${{ matrix.rid }}.zip dist/${{ matrix.output-name }}
