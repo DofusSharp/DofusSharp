@@ -13,7 +13,6 @@
         <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
         <SelfContained>true</SelfContained>
         <PublishSingleFile>true</PublishSingleFile>
-        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
     </PropertyGroup>
 
     <PropertyGroup>
