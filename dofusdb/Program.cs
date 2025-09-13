@@ -3,6 +3,7 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using System.Runtime.CompilerServices;
 using dofusdb.Commands;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
@@ -13,6 +14,9 @@ using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using Spectre.Console;
+
+Console.WriteLine($"RuntimeFeature.IsDynamicCodeSupported: {RuntimeFeature.IsDynamicCodeSupported}");
+Console.WriteLine($"RuntimeFeature.IsDynamicCodeCompiled: {RuntimeFeature.IsDynamicCodeCompiled}");
 
 AnsiConsole.Console = AnsiConsole.Create(new AnsiConsoleSettings { Out = new AnsiConsoleOutput(Console.Error) });
 
@@ -113,7 +117,7 @@ catch (TaskCanceledException exn)
     if (debug)
     {
         AnsiConsole.WriteLine("Details:");
-        AnsiConsole.WriteException(exn);
+        AnsiConsole.WriteLine(exn.ToString());
     }
     return 2;
 }
@@ -123,7 +127,7 @@ catch (Exception exn)
     {
         AnsiConsole.MarkupLine("[red]An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.[/]");
         AnsiConsole.WriteLine("Details:");
-        AnsiConsole.WriteException(exn);
+        AnsiConsole.WriteLine(exn.ToString());
     }
     else
     {
