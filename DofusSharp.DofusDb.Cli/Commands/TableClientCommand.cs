@@ -20,14 +20,21 @@ public partial class TableClientCommand<TResource>(string command, string name, 
         Arity = ArgumentArity.ExactlyOne
     };
 
-    readonly Option<int?> _limitOption = new("--limit")
+    readonly Option<int> _limitOption = new("--limit")
     {
-        Description = "Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size"
+        Description = "Maximum number of results to retrieve. If the value exceeds the API’s maximum page size, multiple requests will be performed",
+        DefaultValueFactory = _ => 10
     };
 
-    readonly Option<int?> _skipOption = new("--skip")
+    readonly Option<bool> _allOption = new("--all", "-a")
     {
-        Description = "Number of results to skip"
+        Description = "Fetch all available results, ignoring --limit. The --skip option is still honored when this option is set"
+    };
+
+    readonly Option<int> _skipOption = new("--skip")
+    {
+        Description = "Number of results to skip",
+        DefaultValueFactory = _ => 0
     };
 
     readonly Option<string[]> _selectOption = new("--select")
@@ -83,10 +90,11 @@ public partial class TableClientCommand<TResource>(string command, string name, 
     Command CreateListCommand()
     {
         Command result = new("list", $"List all {name.ToLowerInvariant()}")
-            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _outputFileOption, _prettyPrintOption, _baseUrlOption } };
+            { Options = { _allOption, _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _outputFileOption, _prettyPrintOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
+                bool all = r.GetValue(_allOption);
                 int? limit = r.GetValue(_limitOption);
                 int? skip = r.GetValue(_skipOption);
                 string[]? select = r.GetValue(_selectOption);
@@ -103,18 +111,11 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbTableClient<TResource> client = clientFactory(url);
 
+                DofusDbSearchQuery query = new() { Limit = all ? null : limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] };
                 IReadOnlyList<TResource> results = null!;
                 if (quiet)
                 {
-                    results = await client
-                        .MultiQuerySearchAsync(
-                            new DofusDbSearchQuery
-                            {
-                                Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? []
-                            },
-                            cancellationToken
-                        )
-                        .ToListAsync(cancellationToken);
+                    results = await client.MultiQuerySearchAsync(query, cancellationToken).ToListAsync(cancellationToken);
                 }
                 else
                 {
@@ -159,16 +160,7 @@ public partial class TableClientCommand<TResource>(string command, string name, 
                                         }
                                     );
 
-                                results = await client
-                                    .MultiQuerySearchAsync(
-                                        new DofusDbSearchQuery
-                                        {
-                                            Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? []
-                                        },
-                                        progress,
-                                        cancellationToken
-                                    )
-                                    .ToListAsync(cancellationToken);
+                                results = await client.MultiQuerySearchAsync(query, progress, cancellationToken).ToListAsync(cancellationToken);
                             }
                         );
                 }
