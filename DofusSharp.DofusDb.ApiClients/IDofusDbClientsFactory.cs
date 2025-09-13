@@ -44,4 +44,5 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbDungeon> Dungeons();
     IDofusDbTableClient<DofusDbTitle> Titles();
     IDofusDbTableClient<DofusDbOrnament> Ornaments();
+    IDofusDbImageClient<long> OrnamentImages();
 }

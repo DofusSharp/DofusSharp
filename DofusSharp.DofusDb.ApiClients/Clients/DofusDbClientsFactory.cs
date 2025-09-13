@@ -63,4 +63,5 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbCli
 
     public IDofusDbTableClient<DofusDbTitle> Titles() => new DofusDbTableClient<DofusDbTitle>(new Uri(baseAddress, "titles/"), referrer);
     public IDofusDbTableClient<DofusDbOrnament> Ornaments() => new DofusDbTableClient<DofusDbOrnament>(new Uri(baseAddress, "ornaments/"), referrer);
+    public IDofusDbImageClient<long> OrnamentImages() => new DofusDbImageClient<long>(new Uri(baseAddress, "img/ornaments/"), ImageFormat.Png, referrer);
 }
