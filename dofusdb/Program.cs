@@ -3,7 +3,6 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.Runtime.CompilerServices;
 using dofusdb.Commands;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
@@ -14,9 +13,6 @@ using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using Spectre.Console;
-
-Console.WriteLine($"RuntimeFeature.IsDynamicCodeSupported: {RuntimeFeature.IsDynamicCodeSupported}");
-Console.WriteLine($"RuntimeFeature.IsDynamicCodeCompiled: {RuntimeFeature.IsDynamicCodeCompiled}");
 
 AnsiConsole.Console = AnsiConsole.Create(new AnsiConsoleSettings { Out = new AnsiConsoleOutput(Console.Error) });
 
