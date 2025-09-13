@@ -133,7 +133,9 @@ jobs:
         run: dotnet publish dofusdb/dofusdb.csproj --output dist/ --configuration Release --property RuntimeIdentifier=${{ matrix.rid }} --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Archive binaries
-        run: 7z a -tzip dist/dofusdb-${{ matrix.rid }}.zip dist/${{ matrix.output-name }}
+        run: |
+          cd dist
+          7z a -tzip dofusdb-${{ matrix.rid }}.zip ${{ matrix.output-name }}
 
       - name: Upload binaries to release
         if: ${{ github.event_name == 'release' }}
