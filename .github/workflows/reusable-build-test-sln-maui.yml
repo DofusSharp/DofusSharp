@@ -1,0 +1,63 @@
+name: Reusable - Build and test SLN(F)
+
+on:
+  workflow_call:
+    inputs:
+      solution-name:
+        description: The name of the solution to build and test
+        type: string
+      test-reports-artifact:
+        description: The name of the artifact with test reports
+        type: string
+      coverage-reports-artifact:
+        description: The name of the artifact with test reports
+        type: string
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-sln:
+    name: Build and test ${{ inputs.solution-name }}
+    runs-on: windows-latest
+      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Install .NET 10.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install MAUI
+        run: dotnet workload install maui
+
+      - name: Build
+        run: dotnet build DofusSharp.DofusDb.Filter.slnf --property Version=${{ needs.compute-version.outputs.version }}
+
+      - name: Tests
+        run: dotnet test DofusSharp.DofusDb.Filter.slnf --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
+
+      - name: Upload test reports as artifact
+        if: ${{ always() && inputs.test-reports-artifact != null }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.test-reports-artifact }}
+          path: |
+            TestResults/**/*.xml
+            !TestResults/**/*.cobertura*.xml
+            TestResults/**/*.trx
+            TestResults/**/*.json
+
+      - name: Upload coverage reports as artifact
+        if: ${{ always() && inputs.coverage-reports-artifact != null }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.coverage-reports-artifact }}
+          path: TestResults/**/*.cobertura.xml

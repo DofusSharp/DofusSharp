@@ -1,0 +1,180 @@
+name: Pull Request - Build and test
+
+on:
+  pull_request:
+    branches: main
+  workflow_dispatch:
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+permissions:
+  contents: read
+
+jobs:
+  compute-version:
+    name: Compute version
+    uses: ./.github/workflows/reusable-compute-version.yml
+    with:
+      build-name: pr
+  
+  compute-changes:
+    runs-on: ubuntu-latest
+    
+    outputs:
+      - dofusdb-changed: ${{ steps.filter-paths.outputs.dofusdb }}
+      - dofocus-changed: ${{ steps.filter-paths.outputs.dofocus }}
+      - best-crush-changed: ${{ steps.filter-paths.outputs.best-crush }}
+    
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: filter-paths
+        with:
+          filters: |
+            dofusdb:
+              - 'DofusSharp.Common*'
+              - 'DofusSharp.DofusDb*'
+              - 'Tests.Live.DofusDb*'
+              - 'Tests.UnitTests.DofusDb*'
+            dofocus:
+              - 'DofusSharp.Common*'
+              - 'DofusSharp.Dofocus*'
+              - 'Tests.Live.Dofocus*'
+              - 'Tests.UnitTests.Dofocus*'
+            best-crush:
+              - 'DofusSharp.Common*'
+              - 'BestCrush*'
+              - 'Tests.BestCrush*'
+  
+  build-and-test-dofusdb:
+    name: Build and test DofusDb
+    needs: [compute-version, compute-changes]
+    if: needs.compute-changes.outputs.dofusdb-changed
+    uses: ./.github/workflows/reusable-build-test-sln.yml
+    with:
+      solution-name: DofusSharp.DofusDb.Filter.slnf
+      test-reports-artifact: dofusdb-test-reports
+      coverage-reports-artifact: dofusdb-coverage-reports
+  
+  build-and-test-dofocus:
+    name: Build and test Dofocus
+    needs: [ compute-version, compute-changes ]
+    if: needs.compute-changes.outputs.dofocus-changed
+    uses: ./.github/workflows/reusable-build-test-sln.yml
+    with:
+      solution-name: DofusSharp.Dofocus.Filter.slnf
+      test-reports-artifact: dofocus-test-reports
+      coverage-reports-artifact: dofocus-coverage-reports
+  
+  build-and-test-best-crush:
+    name: Build and test Dofocus
+    needs: [ compute-version, compute-changes ]
+    if: needs.compute-changes.outputs.best-crush-changed
+    uses: ./.github/workflows/reusable-build-test-sln.yml
+    with:
+      solution-name: BestCrush.Filter.slnf
+      test-reports-artifact: best-crush-test-reports
+      coverage-reports-artifact: best-crush-coverage-reports
+
+  publish-test-reports:
+    name: Publish test reports
+    needs: [build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush]
+    runs-on: ubuntu-latest
+
+    permissions:
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Download DofusDB test reports from artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: dofusdb-test-reports
+          path: test-reports/
+          
+      - name: Download Dofocus test reports from artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: dofocus-test-reports
+          path: test-reports/
+          
+      - name: Download Best Crush test reports from artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: best-crush-test-reports
+          path: test-reports/
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: test-reports/*
+
+  publish-coverage-reports:
+    name: Publish coverage reports
+    needs: [build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush]
+    runs-on: ubuntu-latest
+
+    permissions:
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Download DofusDB coverage reports from artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: dofusdb-coverage-reports
+          path: coverage-reports/
+
+      - name: Download Dofocus coverage reports from artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: dofocus-coverage-reports
+          path: coverage-reports/
+
+      - name: Download Best Crush coverage reports from artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: best-crush-coverage-reports
+          path: coverage-reports/
+
+      - name: Install dotnet-coverage
+        run: dotnet tool install -g dotnet-coverage
+
+      - name: Merge coverage files
+        run: dotnet-coverage merge coverage-reports/**/*.cobertura.xml --output coverage-reports/coverage.cobertura.xml --output-format cobertura
+
+      - name: Create coverage report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage-reports/coverage.cobertura.xml
+          badge: true
+          fail_below_min: false
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 80'
+
+      - name: Prepend title to coverage markdown
+        run: sed -i '1s;^;## Coverage ;' code-coverage-results.md
+
+      - name: Add Coverage as Job Summary
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Add Coverage as Check Run
+        uses: LouisBrunner/checks-action@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Coverage
+          conclusion: success
+          output: |
+            { "summary": "Code coverage report" }
+          output_text_description_file: code-coverage-results.md
+
+      - name: Add Coverage as PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          recreate: true
+          path: code-coverage-results.md
