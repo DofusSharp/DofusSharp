@@ -39,7 +39,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     public async Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default)
     {
         Uri url = GetQuery(id);
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
@@ -59,7 +59,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     public async Task<int> CountAsync(IReadOnlyCollection<DofusDbSearchPredicate> predicates, CancellationToken cancellationToken = default)
     {
         Uri url = CountQuery(predicates);
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
@@ -84,7 +84,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     public async Task<DofusDbSearchResult<TResource>> SearchAsync(DofusDbSearchQuery query, CancellationToken cancellationToken = default)
     {
         Uri url = SearchQuery(query);
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 

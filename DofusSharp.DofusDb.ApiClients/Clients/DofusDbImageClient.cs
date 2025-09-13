@@ -26,7 +26,7 @@ class DofusDbImageClient<TId> : IDofusDbImageClient<TId>
     public async Task<Stream> GetImageAsync(TId id, CancellationToken cancellationToken = default)
     {
         Uri url = GetImageQuery(id);
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
 
         // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
         HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);

@@ -20,7 +20,7 @@ class DofusDbVersionClient : IDofusDbVersionClient
     public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
     {
         Uri url = GetVersionQuery();
-        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, Referrer);
+        using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
