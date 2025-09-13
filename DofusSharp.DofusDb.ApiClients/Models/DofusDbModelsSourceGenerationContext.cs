@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Criterion;
@@ -21,6 +22,11 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchQuery))]
 // Search results: all concrete search results must be listed here, there is currently no way to tell the generation context that it must combine a generic type with
 // all the types it already knows
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementCategory>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementObjective>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementReward>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementRewardBeta>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievement>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeapon>))]

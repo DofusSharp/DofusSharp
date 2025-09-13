@@ -1,4 +1,5 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -61,6 +62,17 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbCli
     public IDofusDbScalableImageClient<long> MapImages() => new DofusDbScalableImageClient<long>(new Uri(baseAddress, "img/maps/"), ImageFormat.Jpeg, referrer);
     public IDofusDbTableClient<DofusDbMapPosition> MapPositions() => new DofusDbTableClient<DofusDbMapPosition>(new Uri(baseAddress, "map-positions/"), referrer);
     public IDofusDbTableClient<DofusDbDungeon> Dungeons() => new DofusDbTableClient<DofusDbDungeon>(new Uri(baseAddress, "dungeons/"), referrer);
+
+    public IDofusDbTableClient<DofusDbAchievement> Achievements() => new DofusDbTableClient<DofusDbAchievement>(new Uri(baseAddress, "achievements/"), referrer);
+
+    public IDofusDbTableClient<DofusDbAchievementObjective> AchievementObjectives() =>
+        new DofusDbTableClient<DofusDbAchievementObjective>(new Uri(baseAddress, "achievement-objectives/"), referrer);
+
+    public IDofusDbTableClient<DofusDbAchievementReward> AchievementRewards() =>
+        new DofusDbTableClient<DofusDbAchievementReward>(new Uri(baseAddress, "achievement-rewards/"), referrer);
+
+    public IDofusDbTableClient<DofusDbAchievementCategory> AchievementCategories() =>
+        new DofusDbTableClient<DofusDbAchievementCategory>(new Uri(baseAddress, "achievement-categories/"), referrer);
 
     public IDofusDbTableClient<DofusDbTitle> Titles() => new DofusDbTableClient<DofusDbTitle>(new Uri(baseAddress, "titles/"), referrer);
     public IDofusDbTableClient<DofusDbOrnament> Ornaments() => new DofusDbTableClient<DofusDbOrnament>(new Uri(baseAddress, "ornaments/"), referrer);

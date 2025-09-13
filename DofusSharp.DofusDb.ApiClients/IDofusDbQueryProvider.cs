@@ -1,4 +1,5 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
@@ -35,6 +36,10 @@ public interface IDofusDbQueryProvider
     IDofusDbQuery<DofusDbMap> Maps();
     IDofusDbQuery<DofusDbMapPosition> MapPositions();
     IDofusDbQuery<DofusDbDungeon> Dungeons();
+    IDofusDbQuery<DofusDbAchievement> Achievements();
+    IDofusDbQuery<DofusDbAchievementObjective> AchievementObjectives();
+    IDofusDbQuery<DofusDbAchievementReward> AchievementRewards();
+    IDofusDbQuery<DofusDbAchievementCategory> AchievementCategories();
     IDofusDbQuery<DofusDbTitle> Titles();
     IDofusDbQuery<DofusDbOrnament> Ornaments();
 }

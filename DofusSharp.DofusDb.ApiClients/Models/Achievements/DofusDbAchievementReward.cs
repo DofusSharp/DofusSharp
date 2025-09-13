@@ -1,7 +1,22 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
 namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
+
+/// <inheritdoc cref="DofusDbAchievementReward" />
+/// <remarks>
+///     The BETA version of DofusDB uses a different type discriminator for weapons: the className fields is AchievementRewardData instead of AchievementRewards for the prod
+///     environment.
+///     This model is an exact copy of <see cref="DofusDbAchievementReward" /> that is mapped to the new discriminator.
+/// </remarks>
+public class DofusDbAchievementRewardBeta : DofusDbAchievementReward
+{
+    /// <summary>
+    ///     The criteria required to obtain the reward.
+    /// </summary>
+    public string? Criterions { get; init; }
+}
 
 /// <summary>
 ///     A reward for completing an achievement.
@@ -21,12 +36,12 @@ public class DofusDbAchievementReward : DofusDbResource
     /// <summary>
     ///     The ratio of kamas rewarded.
     /// </summary>
-    public int? KamasRatio { get; init; }
+    public double? KamasRatio { get; init; }
 
     /// <summary>
     ///     The ratio of experience rewarded.
     /// </summary>
-    public int? ExperienceRatio { get; init; }
+    public double? ExperienceRatio { get; init; }
 
     /// <summary>
     ///     Whether the kamas reward scales with player level.
@@ -37,6 +52,11 @@ public class DofusDbAchievementReward : DofusDbResource
     ///     The list of item IDs rewarded.
     /// </summary>
     public IReadOnlyCollection<long>? ItemsReward { get; init; }
+
+    /// <summary>
+    ///     The list of items rewarded.
+    /// </summary>
+    public IReadOnlyCollection<DofusDbItem>? Items { get; init; }
 
     /// <summary>
     ///     The quantities of each item rewarded.

@@ -20,6 +20,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonDerivedType(typeof(DofusDbAchievementCategory), "AchievementCategories")]
 [JsonDerivedType(typeof(DofusDbAchievementObjective), "AchievementObjectives")]
 [JsonDerivedType(typeof(DofusDbAchievementReward), "AchievementRewards")]
+[JsonDerivedType(typeof(DofusDbAchievementRewardBeta), "AchievementRewardData")]
 [JsonDerivedType(typeof(DofusDbAchievement), "Achievements")]
 [JsonDerivedType(typeof(DofusDbCharacteristic), "Characteristics")]
 [JsonDerivedType(typeof(DofusDbItem), "Items")]
