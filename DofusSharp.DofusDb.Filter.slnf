@@ -4,7 +4,7 @@
     "projects": [
       "DofusSharp.Common\\DofusSharp.Common.csproj",
       "DofusSharp.DofusDb.ApiClients\\DofusSharp.DofusDb.ApiClients.csproj",
-      "DofusSharp.DofusDb.Cli\\DofusSharp.DofusDb.Cli.csproj",
+      "dofusdb\\dofusdb.csproj",
       "Tests.Live.DofusDb.ApiClients\\Tests.Live.DofusDb.ApiClients.csproj",
       "Tests.UnitTests.DofusDb.ApiClients\\Tests.UnitTests.DofusDb.ApiClients.csproj"
     ]
