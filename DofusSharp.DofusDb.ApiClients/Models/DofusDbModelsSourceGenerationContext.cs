@@ -2,6 +2,8 @@
 using System.Text.Json.Serialization;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+using DofusSharp.DofusDb.ApiClients.Models.Common;
+using DofusSharp.DofusDb.ApiClients.Models.Criterion;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
@@ -10,70 +12,67 @@ using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 using DofusSharp.DofusDb.ApiClients.Search;
+using DofusSharp.DofusDb.ApiClients.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients.Models;
 
-// Resources
-[JsonSerializable(typeof(DofusDbCharacteristic))]
-[JsonSerializable(typeof(DofusDbItem))]
-[JsonSerializable(typeof(DofusDbWeapon))]
-[JsonSerializable(typeof(DofusDbWeaponBeta))]
-[JsonSerializable(typeof(DofusDbItemType))]
-[JsonSerializable(typeof(DofusDbItemSuperType))]
-[JsonSerializable(typeof(DofusDbItemSet))]
-[JsonSerializable(typeof(DofusDbJob))]
-[JsonSerializable(typeof(DofusDbRecipe))]
-[JsonSerializable(typeof(DofusDbSkill))]
-[JsonSerializable(typeof(DofusDbMap))]
-[JsonSerializable(typeof(DofusDbMapPosition))]
-[JsonSerializable(typeof(DofusDbArea))]
-[JsonSerializable(typeof(DofusDbSubArea))]
-[JsonSerializable(typeof(DofusDbSuperArea))]
-[JsonSerializable(typeof(DofusDbWorld))]
-[JsonSerializable(typeof(DofusDbMonster))]
-[JsonSerializable(typeof(DofusDbMonsterRace))]
-[JsonSerializable(typeof(DofusDbMonsterSuperRace))]
-[JsonSerializable(typeof(DofusDbDungeon))]
-[JsonSerializable(typeof(DofusDbServer))]
-[JsonSerializable(typeof(DofusDbSpell))]
-[JsonSerializable(typeof(DofusDbSpellLevel))]
-[JsonSerializable(typeof(DofusDbSpellState))]
-[JsonSerializable(typeof(DofusDbSpellType))]
-[JsonSerializable(typeof(DofusDbSpellVariant))]
-[JsonSerializable(typeof(DofusDbTitle))]
-[JsonSerializable(typeof(DofusDbOrnament))]
-// Search results
+[JsonSerializable(typeof(DofusDbResource))]
+[JsonSerializable(typeof(DofusDbCriterion))]
+[JsonSerializable(typeof(DofusDbSearchQuery))]
+// Search results: all concrete search results must be listed here, there is currently no way to tell the generation context that it must combine a generic type with
+// all the types it already knows
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeapon>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeaponBeta>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemType>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemSuperType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemSet>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemSuperType>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbJob>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbRecipe>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSkill>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbArea>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbDungeon>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMap>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMapPosition>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbArea>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSubArea>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSuperArea>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbWorld>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonster>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonsterRace>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonsterSuperRace>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbDungeon>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbServer>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpell>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellLevel>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellState>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellVariant>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbTitle>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbOrnament>))]
-// Others
-[JsonSerializable(typeof(DofusDbSearchQuery))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbTitle>))]
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
 public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContext
 {
+    static DofusDbModelsSourceGenerationContext()
+    {
+        InstanceOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+        {
+            AllowOutOfOrderMetadataProperties = true,
+            Converters =
+            {
+                new JsonStringEnumConverter<DofusDbGender>(),
+                new JsonStringEnumConverter<ImageFormat>(),
+                new JsonStringEnumConverter<DofusDbImageScale>(),
+                new JsonStringEnumConverter<DofusDbLanguage>(),
+                new DofusDbValueTupleJsonConverter<int, int>(),
+                new DofusDbValueTupleJsonConverter<int, double>(),
+                new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
+                new DofusDbDateOnlyJsonConverter(),
+                new DofusDbCriterionJsonConverter()
+            }
+        };
+        Instance = new DofusDbModelsSourceGenerationContext(InstanceOptions);
+    }
+
+    public static JsonSerializerOptions InstanceOptions { get; }
+    public static DofusDbModelsSourceGenerationContext Instance { get; }
 }

@@ -1,13 +1,12 @@
 ﻿using System.Net;
-using System.Text.Json.Serialization;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Clients;
-using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Moq;
 using Moq.Contrib.HttpClient;
+using Tests.UnitTests.DofusDb.ApiClients.Utils;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
@@ -182,15 +181,4 @@ public class DofusDbTableClientTest
 
         httpHandlerMock.VerifyRequest(HttpMethod.Get, requestUrl);
     }
-
-    public class DofusDbResourceForTest : DofusDbResource
-    {
-        public string Prop1 { get; set; } = "";
-        public int Prop2 { get; set; }
-        public bool Prop3 { get; set; }
-    }
 }
-
-[JsonSerializable(typeof(DofusDbTableClientTest.DofusDbResourceForTest))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbTableClientTest.DofusDbResourceForTest>))]
-partial class DofusDbTestSourceContext : JsonSerializerContext;

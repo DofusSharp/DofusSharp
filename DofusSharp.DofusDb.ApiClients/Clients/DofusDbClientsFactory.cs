@@ -19,6 +19,7 @@ namespace DofusSharp.DofusDb.ApiClients.Clients;
 class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbClientsFactory
 {
     public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
+    public IDofusDbCriterionClient Criterion() => new DofusDbCriterionClient(new Uri(baseAddress, "criterion/"), referrer);
 
     public IDofusDbTableClient<DofusDbServer> Servers() => new DofusDbTableClient<DofusDbServer>(new Uri(baseAddress, "servers/"), referrer);
 
