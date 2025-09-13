@@ -30,26 +30,38 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter-paths
         with:
+          list-files: 'escape'
           filters: |
             dofusdb:
               - 'DofusSharp.Common*'
+              - 'DofusSharp.Common*/**'
               - 'DofusSharp.DofusDb*'
+              - 'DofusSharp.DofusDb*/**'
               - 'Tests.Live.DofusDb*'
+              - 'Tests.Live.DofusDb*/**'
               - 'Tests.UnitTests.DofusDb*'
+              - 'Tests.UnitTests.DofusDb*/**'
             dofocus:
               - 'DofusSharp.Common*'
+              - 'DofusSharp.Common*/**'
               - 'DofusSharp.Dofocus*'
+              - 'DofusSharp.Dofocus*/**'
               - 'Tests.Live.Dofocus*'
+              - 'Tests.Live.Dofocus*/**'
               - 'Tests.UnitTests.Dofocus*'
+              - 'Tests.UnitTests.Dofocus*/**'
             best-crush:
               - 'DofusSharp.Common*'
+              - 'DofusSharp.Common*/**'
               - 'BestCrush*'
+              - 'BestCrush*/**'
               - 'Tests.BestCrush*'
+              - 'Tests.BestCrush*/**'
   
   build-and-test-dofusdb:
     name: Build and test DofusDb
     needs: [compute-version, compute-changes]
-    if: needs.compute-changes.outputs.dofusdb-changed
+    if: needs.compute-changes.outputs.dofusdb-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
       solution-name: DofusSharp.DofusDb.Filter.slnf
@@ -60,7 +72,7 @@ jobs:
   build-and-test-dofocus:
     name: Build and test Dofocus
     needs: [ compute-version, compute-changes ]
-    if: needs.compute-changes.outputs.dofocus-changed
+    if: needs.compute-changes.outputs.dofocus-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
       solution-name: DofusSharp.Dofocus.Filter.slnf
@@ -71,7 +83,7 @@ jobs:
   build-and-test-best-crush:
     name: Build and test Best Crush
     needs: [ compute-version, compute-changes ]
-    if: needs.compute-changes.outputs.best-crush-changed
+    if: needs.compute-changes.outputs.best-crush-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln-maui.yml
     with:
       solution-name: BestCrush.Filter.slnf
@@ -90,22 +102,10 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Download DofusDB test reports from artifacts
+      - name: Download test reports from artifacts
         uses: actions/download-artifact@v5
         with:
-          name: dofusdb-test-reports
-          path: test-reports/
-          
-      - name: Download Dofocus test reports from artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: dofocus-test-reports
-          path: test-reports/
-          
-      - name: Download Best Crush test reports from artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: best-crush-test-reports
+          pattern: '*-test-reports'
           path: test-reports/
 
       - name: Publish Test Results
@@ -124,22 +124,10 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Download DofusDB coverage reports from artifacts
+      - name: Download test reports from artifacts
         uses: actions/download-artifact@v5
         with:
-          name: dofusdb-coverage-reports
-          path: coverage-reports/
-
-      - name: Download Dofocus coverage reports from artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: dofocus-coverage-reports
-          path: coverage-reports/
-
-      - name: Download Best Crush coverage reports from artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: best-crush-coverage-reports
+          pattern: '*-coverage-reports'
           path: coverage-reports/
 
       - name: Install dotnet-coverage
