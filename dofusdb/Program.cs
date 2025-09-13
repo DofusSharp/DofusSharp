@@ -5,6 +5,7 @@ using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using dofusdb.Commands;
 using DofusSharp.DofusDb.ApiClients;
+using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -12,6 +13,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
+using DofusSharp.DofusDb.ApiClients.Models.Titles;
 using Spectre.Console;
 
 AnsiConsole.Console = AnsiConsole.Create(new AnsiConsoleSettings { Out = new AnsiConsoleOutput(Console.Error) });
@@ -43,6 +45,7 @@ RootCommand rootCommand = new(
     Subcommands =
     {
         new GameVersionCommand(uri => GetFactory(uri).Version(), defaultUrl).CreateCommand(),
+        new GameCriterionCommand(uri => GetFactory(uri).Criterion(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbServer>("servers", "Servers", uri => GetFactory(uri).Servers(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbItem>("items", "Items", uri => GetFactory(uri).Items(), defaultUrl).CreateCommand(),
@@ -71,7 +74,10 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbMap>("maps", "Maps", uri => GetFactory(uri).Maps(), defaultUrl).CreateCommand(),
         new ScalableImageClientCommand<long>("map-images", "Map images", uri => GetFactory(uri).MapImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbMapPosition>("map-positions", "Map Positions", uri => GetFactory(uri).MapPositions(), defaultUrl).CreateCommand(),
-        new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand()
+        new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbTitle>("titles", "Titles", uri => GetFactory(uri).Titles(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbOrnament>("ornaments", "Ornaments", uri => GetFactory(uri).Ornaments(), defaultUrl).CreateCommand(),
+        new ImageClientCommand<long>("ornament-images", "Ornaments images", uri => GetFactory(uri).OrnamentImages(), defaultUrl).CreateCommand()
     }
 };
 

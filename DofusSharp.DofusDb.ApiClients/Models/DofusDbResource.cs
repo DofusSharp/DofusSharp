@@ -37,6 +37,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonDerivedType(typeof(DofusDbSuperArea), "SuperAreas")]
 [JsonDerivedType(typeof(DofusDbWorld), "WorldMaps")]
 [JsonDerivedType(typeof(DofusDbMonster), "Monsters")]
+[JsonDerivedType(typeof(DofusDbMonsterBeta), "MonsterData")]
 [JsonDerivedType(typeof(DofusDbMonsterRace), "MonsterRaces")]
 [JsonDerivedType(typeof(DofusDbMonsterSuperRace), "MonsterSuperRaces")]
 [JsonDerivedType(typeof(DofusDbServer), "Servers")]
@@ -47,7 +48,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonDerivedType(typeof(DofusDbSpellVariant), "SpellVariants")]
 [JsonDerivedType(typeof(DofusDbOrnament), "Ornaments")]
 [JsonDerivedType(typeof(DofusDbTitle), "Titles")]
-public abstract class DofusDbResource
+public abstract class DofusDbResource : IEquatable<DofusDbResource>
 {
     /// <summary>
     ///     The unique identifier of the resource.
@@ -63,4 +64,40 @@ public abstract class DofusDbResource
     ///     The last update date of the resource in the database.
     /// </summary>
     public DateTimeOffset? UpdatedAt { get; init; }
+
+    public bool Equals(DofusDbResource? other)
+    {
+        if (other?.Id is null)
+        {
+            return false;
+        }
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+        return Id == other.Id;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null)
+        {
+            return false;
+        }
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+        if (obj.GetType() != GetType())
+        {
+            return false;
+        }
+        return Equals((DofusDbResource)obj);
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
+
+    public static bool operator ==(DofusDbResource? left, DofusDbResource? right) => Equals(left, right);
+
+    public static bool operator !=(DofusDbResource? left, DofusDbResource? right) => !Equals(left, right);
 }

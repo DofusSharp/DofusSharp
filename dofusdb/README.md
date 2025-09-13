@@ -30,17 +30,22 @@ Download the latest release from the [GitHub releases page](https://github.com/D
 
 ```
 Description:
-  A command line interface for DofusDB.
+  A command-line interface for querying the DofusDB API.
+  Each subcommand targets a different resource type. Use the help option on a subcommand to see the available operations for that resource.
+  Want to learn more? Visit us on GitHub: https://github.com/DofusSharp/DofusSharp/tree/main/dofusdb.
 
 Utilisation :
   dofusdb [command] [options]
 
 Options :
+  -q, --quiet     Display less output
+  -d, --debug     Show debugging output
   -?, -h, --help  Show help and usage information
   --version       Afficher les informations de version
 
 Commandes :
   game-version         Get the version of the game corresponding to the data
+  criterion <id>       Parse a criterion string into a JSON array with more information
   servers              Servers client
   characteristics      Characteristics client
   items                Items client
@@ -70,6 +75,9 @@ Commandes :
   map-images           Map images client
   map-positions        Map Positions client
   dungeons             Dungeons client
+  titles               Titles client
+  ornaments            Ornaments client
+  ornament-images      Ornaments images client
 ```
 
 ### Game version
@@ -82,8 +90,10 @@ Utilisation :
   dofusdb game-version [options]
 
 Options :
-  --base <base>   Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  --base <base>   Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help  Show help and usage information
+  -q, --quiet     Display less output
+  -d, --debug     Show debugging output
 ```
 
 ### Table data
@@ -97,6 +107,8 @@ Utilisation :
 
 Options :
   -?, -h, --help  Show help and usage information
+  -q, --quiet     Display less output
+  -d, --debug     Show debugging output
 
 Commandes :
   list         List all items
@@ -115,16 +127,19 @@ Utilisation :
   dofusdb items list [options]
 
 Options :
-  --limit <limit>        Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size
-  --skip <skip>          Number of results to skip
+  -a, --all              Fetch all available results, ignoring --limit. The --skip option is still honored when this option is set
+  --limit <limit>        Maximum number of results to retrieve. If the value exceeds the API’s maximum page size, multiple requests will be performed [default: 10]
+  --skip <skip>          Number of results to skip [default: 0]
   --select <select>      Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
   --sort <sort>          Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
   --filter <filter>      Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
                          [example: --filter "level>=10,name.fr=Razielle|Goultard"]
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
-  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
 ```
 
 ##### Pagination
@@ -176,10 +191,12 @@ Arguments :
   <id>  Unique identifier of the resource
 
 Options :
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
-  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
 ```
 
 #### `count`
@@ -196,8 +213,10 @@ Utilisation :
 Options :
   --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: 
                      --filter "level>=10,name.fr=Razielle|Goultard"]
-  --base <base>      Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
+  -q, --quiet        Display less output
+  -d, --debug        Show debugging output
 ```
 
 #### `build-query`
@@ -212,14 +231,16 @@ Utilisation :
   dofusdb items build-query [options]
 
 Options :
-  --limit <limit>    Number of results to get. This might lead to multiple requests if the limit exceeds the API's maximum page size
-  --skip <skip>      Number of results to skip
+  --limit <limit>    Maximum number of results to retrieve. If the value exceeds the API’s maximum page size, multiple requests will be performed [default: 10]
+  --skip <skip>      Number of results to skip [default: 0]
   --select <select>  Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
   --sort <sort>      Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
   --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: 
                      --filter "level>=10,name.fr=Razielle|Goultard"]
-  --base <base>      Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
+  -q, --quiet        Display less output
+  -d, --debug        Show debugging output
 ```
 
 ### Image data
@@ -233,6 +254,8 @@ Utilisation :
 
 Options :
   -?, -h, --help  Show help and usage information
+  -q, --quiet     Display less output
+  -d, --debug     Show debugging output
 
 Commandes :
   get <id>  Get item images by id
@@ -252,8 +275,10 @@ Arguments :
 
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
-  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
 ```
 
 ### Scalable image data
@@ -267,9 +292,11 @@ Utilisation :
 
 Options :
   -?, -h, --help  Show help and usage information
+  -q, --quiet     Display less output
+  -d, --debug     Show debugging output
 
 Commandes :
-  get <id>  Get map images by i
+  get <id>  Get map images by id
 ```
 
 ### `get`
@@ -287,8 +314,32 @@ Arguments :
 Options :
   --scale <Full|Half|Quarter|ThreeQuarters>  Scale of the image to fetch [default: Full]
   -o, --output <output>                      File to write the JSON output to. If not specified, the output will be written to the console
-  --base <base>                              Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  --base <base>                              Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help                             Show help and usage information
+  -q, --quiet                                Display less output
+  -d, --debug                                Show debugging output
+```
+
+### Criterion
+
+```
+Description:
+  Parse a criterion string into a JSON array with more information
+
+Utilisation :
+  dofusdb criterion <id> [options]
+
+Arguments :
+  <id>  Criterion to parse
+
+Options :
+  --lang <En|Fr>         Language to request
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
+  --pretty-print         Pretty print the JSON output
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
 ```
 
 

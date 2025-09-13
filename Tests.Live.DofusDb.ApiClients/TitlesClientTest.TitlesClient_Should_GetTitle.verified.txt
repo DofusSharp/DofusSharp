@@ -1,0 +1,21 @@
+﻿{
+  Visible: false,
+  CategoryId: 6,
+  NameMale: {
+    De: Wa Wabbit-Besieger,
+    En: Wa Wabbit Slayer,
+    Es: Asesino del Wey Wabbit,
+    Fr: Pourfendeur du Wa Wabbit,
+    Pt: Exterminador do Wei Wabbit
+  },
+  NameFemale: {
+    De: Wa Wabbit-Besiegerin,
+    En: Wa Wabbit Slayer,
+    Es: Asesina del Wey Wabbit,
+    Fr: Pourfendeuse du Wa Wabbit,
+    Pt: Exterminadora do Wei Wabbit
+  },
+  Id: 11,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

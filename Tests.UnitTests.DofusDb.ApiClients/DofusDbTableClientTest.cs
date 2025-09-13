@@ -1,13 +1,12 @@
 ﻿using System.Net;
-using System.Text.Json.Serialization;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Clients;
-using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Moq;
 using Moq.Contrib.HttpClient;
+using Tests.UnitTests.DofusDb.ApiClients.Utils;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
@@ -86,7 +85,7 @@ public class DofusDbTableClientTest
 
         DofusDbResourceForTest result = await client.GetAsync(123);
 
-        result.Should().BeEquivalentTo(new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true });
+        result.Should().BeEquivalentTo(new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true }, opt => opt.ComparingByMembers<DofusDbResourceForTest>());
     }
 
     [Fact]
@@ -138,7 +137,8 @@ public class DofusDbTableClientTest
                         new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true },
                         new DofusDbResourceForTest { Prop1 = "Another Test", Prop2 = 24, Prop3 = false }
                     ]
-                }
+                },
+                opt => opt.ComparingByMembers<DofusDbResourceForTest>()
             );
     }
 
@@ -182,15 +182,4 @@ public class DofusDbTableClientTest
 
         httpHandlerMock.VerifyRequest(HttpMethod.Get, requestUrl);
     }
-
-    public class DofusDbResourceForTest : DofusDbResource
-    {
-        public string Prop1 { get; set; } = "";
-        public int Prop2 { get; set; }
-        public bool Prop3 { get; set; }
-    }
 }
-
-[JsonSerializable(typeof(DofusDbTableClientTest.DofusDbResourceForTest))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbTableClientTest.DofusDbResourceForTest>))]
-partial class DofusDbTestSourceContext : JsonSerializerContext;

@@ -1,14 +1,19 @@
-﻿namespace DofusSharp.DofusDb.ApiClients.Models.Common;
+using System.Text.Json.Serialization;
 
+namespace DofusSharp.DofusDb.ApiClients.Models.Common;
+
+[JsonPolymorphic(IgnoreUnrecognizedTypeDiscriminators = true, UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor)]
+[JsonDerivedType(typeof(StringCase))]
+[JsonDerivedType(typeof(ResourceCase))]
 public abstract class DofusDbStringOrResource
 {
     public class StringCase : DofusDbStringOrResource
     {
-        public string? String { get; init; }
+        public string? Value { get; init; }
     }
 
     public class ResourceCase : DofusDbStringOrResource
     {
-        public DofusDbResource? Resource { get; init; }
+        public DofusDbResource? Value { get; init; }
     }
 }

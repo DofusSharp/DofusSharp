@@ -1,10 +1,12 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
+using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
 namespace DofusSharp.DofusDb.ApiClients.Queries;
 
@@ -39,4 +41,7 @@ class DofusDbQueryProvider(IDofusDbClientsFactory factory) : IDofusDbQueryProvid
     public IDofusDbQuery<DofusDbMap> Maps() => new DofusDbQuery<DofusDbMap>(factory.Maps());
     public IDofusDbQuery<DofusDbMapPosition> MapPositions() => new DofusDbQuery<DofusDbMapPosition>(factory.MapPositions());
     public IDofusDbQuery<DofusDbDungeon> Dungeons() => new DofusDbQuery<DofusDbDungeon>(factory.Dungeons());
+
+    public IDofusDbQuery<DofusDbTitle> Titles() => new DofusDbQuery<DofusDbTitle>(factory.Titles());
+    public IDofusDbQuery<DofusDbOrnament> Ornaments() => new DofusDbQuery<DofusDbOrnament>(factory.Ornaments());
 }

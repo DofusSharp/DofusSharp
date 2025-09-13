@@ -1,4 +1,5 @@
-﻿using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -6,6 +7,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
+using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
@@ -17,6 +19,7 @@ namespace DofusSharp.DofusDb.ApiClients.Clients;
 class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbClientsFactory
 {
     public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
+    public IDofusDbCriterionClient Criterion() => new DofusDbCriterionClient(new Uri(baseAddress, "criterion/"), referrer);
 
     public IDofusDbTableClient<DofusDbServer> Servers() => new DofusDbTableClient<DofusDbServer>(new Uri(baseAddress, "servers/"), referrer);
 
@@ -58,4 +61,8 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbCli
     public IDofusDbScalableImageClient<long> MapImages() => new DofusDbScalableImageClient<long>(new Uri(baseAddress, "img/maps/"), ImageFormat.Jpeg, referrer);
     public IDofusDbTableClient<DofusDbMapPosition> MapPositions() => new DofusDbTableClient<DofusDbMapPosition>(new Uri(baseAddress, "map-positions/"), referrer);
     public IDofusDbTableClient<DofusDbDungeon> Dungeons() => new DofusDbTableClient<DofusDbDungeon>(new Uri(baseAddress, "dungeons/"), referrer);
+
+    public IDofusDbTableClient<DofusDbTitle> Titles() => new DofusDbTableClient<DofusDbTitle>(new Uri(baseAddress, "titles/"), referrer);
+    public IDofusDbTableClient<DofusDbOrnament> Ornaments() => new DofusDbTableClient<DofusDbOrnament>(new Uri(baseAddress, "ornaments/"), referrer);
+    public IDofusDbImageClient<long> OrnamentImages() => new DofusDbImageClient<long>(new Uri(baseAddress, "img/ornaments/"), ImageFormat.Png, referrer);
 }
