@@ -22,9 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      - dofusdb-changed: ${{ steps.filter-paths.outputs.dofusdb }}
-      - dofocus-changed: ${{ steps.filter-paths.outputs.dofocus }}
-      - best-crush-changed: ${{ steps.filter-paths.outputs.best-crush }}
+      - dofusdb-changed: 
+          description: Whether the DofusDB assemblies have changed
+          value: ${{ steps.filter-paths.outputs.dofusdb }}
+      - dofocus-changed: 
+          description: Whether the Dofocus assemblies have changed
+          value: ${{ steps.filter-paths.outputs.dofocus }}
+      - best-crush-changed: 
+          description: Whether the Best Crush assemblies have changed
+          value: ${{ steps.filter-paths.outputs.best-crush }}
     
     steps:
       - uses: dorny/paths-filter@v2
