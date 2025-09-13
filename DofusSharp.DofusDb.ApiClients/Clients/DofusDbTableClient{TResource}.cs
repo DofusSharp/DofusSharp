@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using DofusSharp.Common;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Search;
 using DofusSharp.DofusDb.ApiClients.Serialization;
@@ -30,8 +31,8 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
                                new JsonStringEnumConverter<ImageFormat>(),
                                new JsonStringEnumConverter<DofusDbImageScale>(),
                                new JsonStringEnumConverter<DofusDbLanguage>(),
-                               new DofusDbValueOrFalseJsonConverterFactory(),
-                               new DofusDbValueTupleJsonConverterFactory(),
+                               new DofusDbValueTupleJsonConverter<int, int>(),
+                               new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
                                new DofusDbDateOnlyJsonConverter()
                            }
                        }
