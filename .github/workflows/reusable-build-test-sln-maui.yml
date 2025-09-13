@@ -6,6 +6,9 @@ on:
       solution-name:
         description: The name of the solution to build and test
         type: string
+      version:
+        description: The version to use
+        type: string
       test-reports-artifact:
         description: The name of the artifact with test reports
         type: string
@@ -38,8 +41,8 @@ jobs:
       - name: Install MAUI
         run: dotnet workload install maui
 
-      - name: Build
-        run: dotnet build ${{ inputs.solution-name }} --property Version=${{ needs.compute-version.outputs.version }}
+      - name: Build v${{ inputs.version }}
+        run: dotnet build ${{ inputs.solution-name }} --property Version=${{ inputs.version }}
 
       - name: Tests
         run: dotnet test ${{ inputs.solution-name }} --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
