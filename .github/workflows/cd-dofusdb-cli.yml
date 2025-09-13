@@ -48,15 +48,11 @@ jobs:
       - name: Test
         run: dotnet test DofusSharp.DofusDb.Cli.Filter.slnf --configuration Release --no-build
 
-      - name: Publish
+      - name: Pack (nuget)
         run: dotnet pack DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output nuget/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
-
-      - name: Upload binaries as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: libraries
-          path: nuget/*.nupkg
-          if-no-files-found: error
+        
+      - name: Publish (release)
+        run: dotnet publish DofusSharp.DofusDb.Cli/DofusSharp.DofusDb.Cli.csproj --output dist/ --configuration Release --no-build --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Configure Github Nuget repository
         if: ${{ !inputs.dry-run }}
@@ -75,3 +71,31 @@ jobs:
           for filename in nuget/*.nupkg; do
               dotnet nuget push "$filename" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}
           done
+
+      - name: Upload tool as artifact
+        if: ${{ github.event_name != 'release' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: libraries
+          path: nuget/*.nupkg
+          if-no-files-found: error
+
+      - name: Archive binaries
+        run: 7z a -tzip dist/dofusdb-win64.zip dist/dofusdb.exe
+
+      - name: Upload binaries to release
+        if: ${{ github.event_name == 'release' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/dofusdb-win64.zip
+          asset_name: dofusdb-win64.zip
+          tag: ${{ github.ref }}
+
+      - name: Upload binaries as artifact
+        if: ${{ github.event_name != 'release' }}
+        uses: actions/upload-artifact@v4
+        with:
+          path: dist/dofusdb-win64.zip
+          name: dofusdb-win64.zip
+          if-no-files-found: error
