@@ -1,0 +1,77 @@
+﻿namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
+
+/// <summary>
+///     A reward for completing an achievement.
+/// </summary>
+public class DofusDbAchievementReward : DofusDbResource
+{
+    /// <summary>
+    ///     The unique identifier of the achievement this reward is for.
+    /// </summary>
+    public long? AchievementId { get; init; }
+
+    /// <summary>
+    ///     The criteria required to obtain the reward.
+    /// </summary>
+    public string? Criteria { get; init; }
+
+    /// <summary>
+    ///     The ratio of kamas rewarded.
+    /// </summary>
+    public int? KamasRatio { get; init; }
+
+    /// <summary>
+    ///     The ratio of experience rewarded.
+    /// </summary>
+    public int? ExperienceRatio { get; init; }
+
+    /// <summary>
+    ///     Whether the kamas reward scales with player level.
+    /// </summary>
+    public bool? KamasScaleWithPlayerLevel { get; init; }
+
+    /// <summary>
+    ///     The list of item IDs rewarded.
+    /// </summary>
+    public IReadOnlyCollection<long>? ItemsReward { get; init; }
+
+    /// <summary>
+    ///     The quantities of each item rewarded.
+    /// </summary>
+    public IReadOnlyCollection<int>? ItemsQuantityReward { get; init; }
+
+    /// <summary>
+    ///     The list of emote IDs rewarded.
+    /// </summary>
+    public IReadOnlyCollection<long>? EmotesReward { get; init; }
+
+    /// <summary>
+    ///     The list of spell IDs rewarded.
+    /// </summary>
+    public IReadOnlyCollection<long>? SpellsReward { get; init; }
+
+    /// <summary>
+    ///     The list of title IDs rewarded.
+    /// </summary>
+    public IReadOnlyCollection<long>? TitlesReward { get; init; }
+
+    /// <summary>
+    ///     The list of title objects rewarded.
+    /// </summary>
+    public IReadOnlyCollection<DofusDbTitle>? Titles { get; init; }
+
+    /// <summary>
+    ///     The list of ornament IDs rewarded.
+    /// </summary>
+    public IReadOnlyCollection<long>? OrnamentsReward { get; init; }
+
+    /// <summary>
+    ///     The list of ornament objects rewarded.
+    /// </summary>
+    public IReadOnlyCollection<DofusDbOrnament>? Ornaments { get; init; }
+
+    /// <summary>
+    ///     The number of guild points rewarded.
+    /// </summary>
+    public int? GuildPoints { get; init; }
+}

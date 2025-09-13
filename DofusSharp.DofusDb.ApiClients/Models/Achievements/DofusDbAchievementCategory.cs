@@ -2,79 +2,43 @@
 
 namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
 
+/// <summary>
+///     A category of achievements in the game.
+/// </summary>
 public class DofusDbAchievementCategory : DofusDbResource
 {
+    /// <summary>
+    ///     The unique identifier of the parent category, if any.
+    /// </summary>
     public long? ParentId { get; init; }
+
+    /// <summary>
+    ///     The icon associated with the category.
+    /// </summary>
     public string? Icon { get; init; }
+
+    /// <summary>
+    ///     The order in which the category is displayed.
+    /// </summary>
     public int? Order { get; init; }
+
+    /// <summary>
+    ///     The color code for the category.
+    /// </summary>
     public string? Color { get; init; }
+
+    /// <summary>
+    ///     The list of achievement IDs belonging to this category.
+    /// </summary>
     public IReadOnlyCollection<long>? AchievementIds { get; init; }
+
+    /// <summary>
+    ///     The criterion for the visibility of the category.
+    /// </summary>
     public string? VisibilityCriterion { get; init; }
+
+    /// <summary>
+    ///     The name of the category.
+    /// </summary>
     public DofusDbMultiLangString? Name { get; init; }
-}
-
-public class DofusDbAchievementObjective : DofusDbResource
-{
-    public long? AchievementId { get; init; }
-    public int? Order { get; init; }
-    public string? Criterion { get; init; }
-    public DofusDbMultiLangString? Name { get; init; }
-    public IReadOnlyList<DofusDbStringOrResource>? ReadableCriterion { get; init; }
-}
-
-public class DofusDbAchievementReward : DofusDbResource
-{
-    public long? AchievementId { get; init; }
-    public string? Criteria { get; init; }
-    public int? KamasRatio { get; init; }
-    public int? ExperienceRatio { get; init; }
-    public bool? KamasScaleWithPlayerLevel { get; init; }
-    public IReadOnlyCollection<long>? ItemsReward { get; init; }
-    public IReadOnlyCollection<int>? ItemsQuantityReward { get; init; }
-    public IReadOnlyCollection<long>? EmotesReward { get; init; }
-    public IReadOnlyCollection<long>? SpellsReward { get; init; }
-    public IReadOnlyCollection<long>? TitlesReward { get; init; }
-    public IReadOnlyCollection<DofusDbTitle>? Titles { get; init; }
-    public IReadOnlyCollection<long>? OrnamentsReward { get; init; }
-    public IReadOnlyCollection<DofusDbOrnament>? Ornaments { get; init; }
-    public int? GuildPoints { get; init; }
-}
-
-public class DofusDbAchievement : DofusDbResource
-{
-    public long? CategoryId { get; init; }
-    public long? IconId { get; init; }
-    public IReadOnlyCollection<long>? ObjectiveIds { get; init; }
-    public IReadOnlyCollection<long>? RewardIds { get; init; }
-    public DofusDbMultiLangString? Name { get; init; }
-    public DofusDbMultiLangString? Description { get; init; }
-    public DofusDbMultiLangString? Slug { get; init; }
-    public DofusDbAchievementNeeds? Need { get; init; }
-    public string? Img { get; init; }
-}
-
-public class DofusDbAchievementNeeds
-{
-    public IReadOnlyCollection<long>? Items { get; init; }
-    public IReadOnlyCollection<long>? Quantities { get; init; }
-    public IReadOnlyCollection<long>? Quests { get; init; }
-    public IReadOnlyCollection<long>? Achievements { get; init; }
-}
-
-public class DofusDbTitle : DofusDbResource
-{
-    public bool? Visible { get; init; }
-    public long? CategoryId { get; init; }
-    public DofusDbMultiLangString? NameMale { get; init; }
-    public DofusDbMultiLangString? NameFemale { get; init; }
-}
-
-public class DofusDbOrnament : DofusDbResource
-{
-    public bool? Visible { get; init; }
-    public long? AssetId { get; init; }
-    public long? IconId { get; init; }
-    public int? Order { get; init; }
-    public DofusDbMultiLangString? Name { get; init; }
-    public string? Img { get; init; }
 }
