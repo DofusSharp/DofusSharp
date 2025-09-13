@@ -40,11 +40,8 @@ jobs:
       - name: Install MAUI
         run: dotnet workload install maui
 
-      - name: Restore dependencies
-        run: dotnet restore
-
       - name: Build
-        run: dotnet build DofusSharp.BestCrush.Filter.slnf --no-restore --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.BestCrush.Filter.slnf --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Tests
         run: dotnet test DofusSharp.BestCrush.Filter.slnf --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
