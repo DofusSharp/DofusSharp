@@ -99,12 +99,13 @@ jobs:
     name: Build DofusDB CLI
     needs: [compute-version, build-test]
     strategy:
-      - runner: ubuntu-latest
-        rid: linux-x64
-      - runner: windows-latest
-        rid: win-x64
-      - runner: macos-latest 
-        rid: osx-x64
+      matrix:
+        - runner: ubuntu-latest
+          rid: linux-x64
+        - runner: windows-latest
+          rid: win-x64
+        - runner: macos-latest 
+          rid: osx-x64
         
     runs-on: ${{ matrix.runner }}
 
