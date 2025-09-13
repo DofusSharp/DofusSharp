@@ -53,6 +53,7 @@ jobs:
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
       solution-name: DofusSharp.DofusDb.Filter.slnf
+      version: ${{ needs.compute-version.outputs.version }}
       test-reports-artifact: dofusdb-test-reports
       coverage-reports-artifact: dofusdb-coverage-reports
   
@@ -63,6 +64,7 @@ jobs:
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
       solution-name: DofusSharp.Dofocus.Filter.slnf
+      version: ${{ needs.compute-version.outputs.version }}
       test-reports-artifact: dofocus-test-reports
       coverage-reports-artifact: dofocus-coverage-reports
   
@@ -73,6 +75,7 @@ jobs:
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
       solution-name: BestCrush.Filter.slnf
+      version: ${{ needs.compute-version.outputs.version }}
       test-reports-artifact: best-crush-test-reports
       coverage-reports-artifact: best-crush-coverage-reports
 
