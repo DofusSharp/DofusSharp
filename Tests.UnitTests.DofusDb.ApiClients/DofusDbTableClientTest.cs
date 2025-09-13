@@ -21,7 +21,7 @@ public class DofusDbTableClientTest
         httpHandlerMock
             .SetupRequest(HttpMethod.Get, "http://base.com?$limit=0")
             .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 123, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), contextFactory: options => new DofusDbTestSourceContext(options))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -38,7 +38,7 @@ public class DofusDbTableClientTest
         httpHandlerMock
             .SetupRequest(HttpMethod.Get, "http://base.com?$limit=0")
             .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"), options => new DofusDbTestSourceContext(options))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -62,7 +62,7 @@ public class DofusDbTableClientTest
         httpHandlerMock
             .SetupRequest(HttpMethod.Get, requestUrl)
             .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), contextFactory: options => new DofusDbTestSourceContext(options))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -79,7 +79,7 @@ public class DofusDbTableClientTest
         httpHandlerMock
             .SetupRequest(HttpMethod.Get, "http://base.com/123")
             .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbResourceForTest { Prop1 = "Test", Prop2 = 42, Prop3 = true });
-        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), contextFactory: options => new DofusDbTestSourceContext(options))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -94,7 +94,7 @@ public class DofusDbTableClientTest
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123").ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbResourceForTest());
-        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"), options => new DofusDbTestSourceContext(options))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -121,7 +121,7 @@ public class DofusDbTableClientTest
                     ]
                 }
             );
-        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), contextFactory: options => new DofusDbTestSourceContext(options))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -149,7 +149,7 @@ public class DofusDbTableClientTest
         httpHandlerMock
             .SetupRequest(HttpMethod.Get, "http://base.com")
             .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), new Uri("http://referrer.com"), options => new DofusDbTestSourceContext(options))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -173,7 +173,7 @@ public class DofusDbTableClientTest
         httpHandlerMock
             .SetupRequest(HttpMethod.Get, requestUrl)
             .ReturnsJsonResponse(HttpStatusCode.OK, new DofusDbSearchResult<DofusDbResourceForTest> { Total = 0, Limit = 0, Skip = 0, Data = [] });
-        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"))
+        DofusDbTableClient<DofusDbResourceForTest> client = new(new Uri("http://base.com"), contextFactory: options => new DofusDbTestSourceContext(options))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };

@@ -16,27 +16,26 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     readonly JsonSerializerContext _context;
     readonly DofusDbSearchRequestQueryParamsBuilder _queryParamsBuilder = new();
 
-    public DofusDbTableClient(Uri baseAddress, Uri? referrer = null)
+    public DofusDbTableClient(Uri baseAddress, Uri? referrer = null, Func<JsonSerializerOptions, JsonSerializerContext>? contextFactory = null)
     {
         Referrer = referrer;
         BaseAddress = baseAddress;
-        _context = new DofusDbModelsSourceGenerationContext(
-            new JsonSerializerOptions(JsonSerializerDefaults.Web)
+        JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
+        {
+            AllowOutOfOrderMetadataProperties = true,
+            Converters =
             {
-                AllowOutOfOrderMetadataProperties = true,
-                Converters =
-                {
-                    new JsonStringEnumConverter<DofusDbGender>(),
-                    new JsonStringEnumConverter<ImageFormat>(),
-                    new JsonStringEnumConverter<DofusDbImageScale>(),
-                    new JsonStringEnumConverter<DofusDbLanguage>(),
-                    new DofusDbValueTupleJsonConverter<int, int>(),
-                    new DofusDbValueTupleJsonConverter<int, double>(),
-                    new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
-                    new DofusDbDateOnlyJsonConverter()
-                }
+                new JsonStringEnumConverter<DofusDbGender>(),
+                new JsonStringEnumConverter<ImageFormat>(),
+                new JsonStringEnumConverter<DofusDbImageScale>(),
+                new JsonStringEnumConverter<DofusDbLanguage>(),
+                new DofusDbValueTupleJsonConverter<int, int>(),
+                new DofusDbValueTupleJsonConverter<int, double>(),
+                new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
+                new DofusDbDateOnlyJsonConverter()
             }
-        );
+        };
+        _context = contextFactory?.Invoke(options) ?? new DofusDbModelsSourceGenerationContext(options);
     }
 
     public Uri BaseAddress { get; }
