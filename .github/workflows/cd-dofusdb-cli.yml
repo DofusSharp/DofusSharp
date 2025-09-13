@@ -47,7 +47,7 @@ jobs:
         run: dotnet test DofusSharp.DofusDb.Cli.Filter.slnf --configuration Release --no-build
 
   build-publish-nuget:
-    name: Build DofusDB CLI
+    name: Pack DofusDB CLI and push to nuget
     runs-on: ubuntu-latest
     needs: [compute-version, build-test]
     
@@ -96,7 +96,7 @@ jobs:
           if-no-files-found: error
 
   build-publish-binaries:
-    name: Build DofusDB CLI
+    name: Publish DofusDB CLI and push to release
     needs: [compute-version, build-test]
     strategy:
       matrix:
