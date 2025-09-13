@@ -11,8 +11,8 @@ dofusdb-api:
 dofusdb-cli:
   - changed-files:
       - any-glob-to-any-file:
-          - 'DofusSharp.DofusDb.Cli/*'
-          - 'DofusSharp.DofusDb.Cli/*/**'
+          - 'DofusSharp.DofusDb.Cli*'
+          - 'DofusSharp.DofusDb.Cli*/**'
 
 dofocus-api:
   - changed-files:

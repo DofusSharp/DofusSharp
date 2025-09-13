@@ -102,22 +102,10 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Download DofusDB test reports from artifacts
+      - name: Download test reports from artifacts
         uses: actions/download-artifact@v5
         with:
-          name: dofusdb-test-reports
-          path: test-reports/
-          
-      - name: Download Dofocus test reports from artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: dofocus-test-reports
-          path: test-reports/
-          
-      - name: Download Best Crush test reports from artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: best-crush-test-reports
+          pattern: *-test-reports
           path: test-reports/
 
       - name: Publish Test Results
@@ -136,22 +124,10 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Download DofusDB coverage reports from artifacts
+      - name: Download test reports from artifacts
         uses: actions/download-artifact@v5
         with:
-          name: dofusdb-coverage-reports
-          path: coverage-reports/
-
-      - name: Download Dofocus coverage reports from artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: dofocus-coverage-reports
-          path: coverage-reports/
-
-      - name: Download Best Crush coverage reports from artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: best-crush-coverage-reports
+          pattern: *-coverage-reports
           path: coverage-reports/
 
       - name: Install dotnet-coverage
