@@ -1,8 +1,13 @@
-name: Continuous Integration - PR Build & Test
+name: Pull Request - Dofocus
 
 on:
   pull_request:
     branches: main
+    paths:
+      - 'DofusSharp.Dofocus*'
+      - 'Tests.Live.Dofocus*'
+      - 'Tests.UnitTests.Dofocus*'
+      
   workflow_dispatch:
 
 env:
@@ -33,17 +38,14 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Install MAUI
-        run: dotnet workload install maui
-
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.Dofocus.Filter.slnf --no-restore --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Tests
-        run: dotnet test --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
+        run: dotnet test DofusSharp.Dofocus.Filter.slnf --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
 
       - name: Upload test reports as artifact
         if: ${{ always() }}

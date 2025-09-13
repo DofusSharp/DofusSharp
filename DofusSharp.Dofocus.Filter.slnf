@@ -1,0 +1,11 @@
+﻿{
+  "solution": {
+    "path": "DofusSharp.sln",
+    "projects": [
+      "DofusSharp.Common\\DofusSharp.Common.csproj",
+      "DofusSharp.Dofocus.ApiClients\\DofusSharp.Dofocus.ApiClients.csproj",
+      "Tests.Live.Dofocus.ApiClients\\Tests.Live.Dofocus.ApiClients.csproj",
+      "Tests.UnitTests.Dofocus.ApiClients\\Tests.UnitTests.Dofocus.ApiClients.csproj"
+    ]
+  }
+}
