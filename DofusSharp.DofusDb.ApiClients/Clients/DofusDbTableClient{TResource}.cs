@@ -31,6 +31,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
                     new JsonStringEnumConverter<DofusDbImageScale>(),
                     new JsonStringEnumConverter<DofusDbLanguage>(),
                     new DofusDbValueTupleJsonConverter<int, int>(),
+                    new DofusDbValueTupleJsonConverter<int, double>(),
                     new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
                     new DofusDbDateOnlyJsonConverter()
                 }
