@@ -1,0 +1,17 @@
+﻿{
+  Visible: true,
+  AssetId: 1,
+  IconId: 0,
+  Order: 1,
+  Name: {
+    De: Stufe 100,
+    En: Level 100,
+    Es: Nivel 100,
+    Fr: Niveau 100,
+    Pt: Nível 100
+  },
+  Img: https://api.beta.dofusdb.fr/img/ornaments/0.png,
+  Id: 13,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

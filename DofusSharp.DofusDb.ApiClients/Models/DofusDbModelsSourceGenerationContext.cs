@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -40,6 +41,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSpellType))]
 [JsonSerializable(typeof(DofusDbSpellVariant))]
 [JsonSerializable(typeof(DofusDbTitle))]
+[JsonSerializable(typeof(DofusDbOrnament))]
 // Search results
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
@@ -68,6 +70,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellVariant>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbTitle>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbOrnament>))]
 // Others
 [JsonSerializable(typeof(DofusDbSearchQuery))]
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
