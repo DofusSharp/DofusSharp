@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Parsing;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
 using DofusSharp.DofusDb.ApiClients;
@@ -11,8 +10,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-partial class TableClientCommand<TResource>(string command, string name, Func<Uri, IDofusDbTableClient<TResource>> clientFactory, Uri defaultUrl)
-    where TResource: DofusDbResource
+partial class TableClientCommand<TResource>(string command, string name, Func<Uri, IDofusDbTableClient<TResource>> clientFactory, Uri defaultUrl) where TResource: DofusDbResource
 {
     readonly Argument<long> _idArgument = new("id")
     {
@@ -63,7 +61,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
 
     readonly Option<string> _outputFileOption = new("--output", "-o")
     {
-        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
+        Description = "File to write the JSON output to. If not specified, the output will be written to stdout"
     };
 
     readonly Option<bool> _prettyPrintOption = new("--pretty-print")
@@ -105,7 +103,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.Quiet);
 
-                JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
+                JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(IReadOnlyList<TResource>));
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
@@ -165,7 +163,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                         );
                 }
 
-                await using Stream stream = GetOutputStream(outputFile);
+                await using Stream stream = Utils.GetOutputStream(outputFile);
                 await JsonSerializer.SerializeAsync(stream, results, jsonTypeInfo, cancellationToken);
             }
         );
@@ -185,7 +183,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.Quiet);
 
-                JsonSerializerOptions options = BuildJsonSerializerOptions(prettyPrint);
+                JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
@@ -205,7 +203,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 }
 
 
-                await using Stream stream = GetOutputStream(outputFile);
+                await using Stream stream = Utils.GetOutputStream(outputFile);
                 await JsonSerializer.SerializeAsync(stream, resource, jsonTypeInfo, cancellationToken);
             }
         );
@@ -350,26 +348,6 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 result.AddError($"Invalid operator '{op}' in filter. Expected one of =, !=, <, <=, >, >=.");
                 return null;
         }
-    }
-
-    static JsonSerializerOptions BuildJsonSerializerOptions(bool prettyPrint) =>
-        new(JsonSerializerDefaults.Web)
-            { TypeInfoResolver = DofusDbModelsSourceGenerationContext.Default, WriteIndented = prettyPrint, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault };
-
-    static Stream GetOutputStream(string? outputFile)
-    {
-        if (string.IsNullOrWhiteSpace(outputFile))
-        {
-            return Console.OpenStandardOutput();
-        }
-
-        string? directory = Path.GetDirectoryName(outputFile);
-        if (directory is not null && !Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
-        return File.Create(outputFile);
     }
 
     [GeneratedRegex(

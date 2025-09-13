@@ -126,7 +126,8 @@ public class DofusDbQuerySearchTest
                     Visibility = null,
                     ChangeVersion = null,
                     TooltipExpirationDate = null
-                }
+                },
+                opt => opt.ComparingByMembers<DofusDbItem>()
             );
     }
 

@@ -13,6 +13,7 @@ namespace DofusSharp.DofusDb.ApiClients;
 public interface IDofusDbClientsFactory
 {
     IDofusDbVersionClient Version();
+    IDofusDbCriterionClient Criterion();
     IDofusDbTableClient<DofusDbServer> Servers();
     IDofusDbTableClient<DofusDbCharacteristic> Characteristics();
     IDofusDbTableClient<DofusDbItem> Items();

@@ -3,11 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using DofusSharp.Common;
 using DofusSharp.DofusDb.ApiClients.Models;
-using DofusSharp.DofusDb.ApiClients.Models.Common;
-using DofusSharp.DofusDb.ApiClients.Models.Items;
-using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Search;
-using DofusSharp.DofusDb.ApiClients.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
@@ -20,22 +16,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
     {
         Referrer = referrer;
         BaseAddress = baseAddress;
-        JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
-        {
-            AllowOutOfOrderMetadataProperties = true,
-            Converters =
-            {
-                new JsonStringEnumConverter<DofusDbGender>(),
-                new JsonStringEnumConverter<ImageFormat>(),
-                new JsonStringEnumConverter<DofusDbImageScale>(),
-                new JsonStringEnumConverter<DofusDbLanguage>(),
-                new DofusDbValueTupleJsonConverter<int, int>(),
-                new DofusDbValueTupleJsonConverter<int, double>(),
-                new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
-                new DofusDbDateOnlyJsonConverter()
-            }
-        };
-        _context = contextFactory?.Invoke(options) ?? new DofusDbModelsSourceGenerationContext(options);
+        _context = contextFactory?.Invoke(DofusDbModelsSourceGenerationContext.CreateOptions()) ?? DofusDbModelsSourceGenerationContext.Instance;
     }
 
     public Uri BaseAddress { get; }
