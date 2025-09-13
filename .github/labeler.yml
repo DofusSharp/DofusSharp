@@ -1,9 +1,9 @@
 dofusdb-api:
   - changed-files:
       - any-glob-to-any-file:
-          - 'DofusSharp.DofusDb.ApiClients/*'
-          - 'Tests.Live.DofusDb.ApiClients/*'
-          - 'Tests.UnitTests.DofusDb.ApiClients/*'
+          - 'DofusSharp.DofusDb*'
+          - 'Tests.Live.DofusDb*'
+          - 'Tests.UnitTests.DofusDb*'
 
 dofusdb-cli:
   - changed-files:
@@ -13,16 +13,15 @@ dofusdb-cli:
 dofocus-api:
   - changed-files:
       - any-glob-to-any-file:
-          - 'DofusSharp.Dofocus.ApiClients/*'
-          - 'Tests.Live.Dofocus.ApiClients/*'
-          - 'Tests.UnitTests.Dofocus.ApiClients/*'
+          - 'DofusSharp.Dofocus*'
+          - 'Tests.Live.Dofocus*'
+          - 'Tests.UnitTests.Dofocus*'
 
 best-crush:
   - changed-files:
       - any-glob-to-any-file:
-          - 'BestCrush/*'
-          - 'BestCrush.Domain/*'
-          - 'BestCrush.Migrations/*'
+          - 'BestCrush*'
+          - 'Tests.BestCrush*'
 
 build:
   - changed-files:

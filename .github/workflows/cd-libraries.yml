@@ -41,14 +41,25 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      # DofusDB
       - name: Build
-        run: dotnet build DofusSharp.Libraries.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet build DofusSharp.DofusDb.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
 
       - name: Test
-        run: dotnet test DofusSharp.Libraries.Filter.slnf --configuration Release --no-build
+        run: dotnet test DofusSharp.DofusDb.Filter.slnf --configuration Release --no-build
         
       - name: Pack
-        run: dotnet pack DofusSharp.Libraries.Filter.slnf --output nuget/ --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+        run: dotnet pack DofusSharp.DofusDb.Filter.slnf --output nuget/ --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+
+      # Dofocus
+      - name: Build
+        run: dotnet build DofusSharp.Dofocus.Filter.slnf --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
+
+      - name: Test
+        run: dotnet test DofusSharp.Dofocus.Filter.slnf --configuration Release --no-build
+        
+      - name: Pack
+        run: dotnet pack DofusSharp.Dofocus.Filter.slnf --output nuget/ --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
       
       - name: Upload binaries as artifact
         uses: actions/upload-artifact@v4
