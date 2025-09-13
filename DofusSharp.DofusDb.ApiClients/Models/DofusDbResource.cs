@@ -1,5 +1,52 @@
-﻿namespace DofusSharp.DofusDb.ApiClients.Models;
+﻿using System.Text.Json.Serialization;
+using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
+using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Models.Jobs;
+using DofusSharp.DofusDb.ApiClients.Models.Maps;
+using DofusSharp.DofusDb.ApiClients.Models.Monsters;
+using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Spells;
 
+namespace DofusSharp.DofusDb.ApiClients.Models;
+
+[JsonPolymorphic(
+    TypeDiscriminatorPropertyName = "className",
+    IgnoreUnrecognizedTypeDiscriminators = true,
+    UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor
+)]
+[JsonDerivedType(typeof(DofusDbAchievementCategory), "AchievementCategories")]
+[JsonDerivedType(typeof(DofusDbAchievementObjective), "AchievementObjectives")]
+[JsonDerivedType(typeof(DofusDbAchievementReward), "AchievementRewards")]
+[JsonDerivedType(typeof(DofusDbAchievement), "Achievements")]
+[JsonDerivedType(typeof(DofusDbCharacteristic), "Characteristics")]
+[JsonDerivedType(typeof(DofusDbItem), "Items")]
+[JsonDerivedType(typeof(DofusDbWeapon), "Weapons")]
+[JsonDerivedType(typeof(DofusDbWeaponBeta), "WeaponData")]
+[JsonDerivedType(typeof(DofusDbItemSet), "ItemSets")]
+[JsonDerivedType(typeof(DofusDbItemSuperType), "ItemSuperTypes")]
+[JsonDerivedType(typeof(DofusDbItemType), "ItemTypes")]
+[JsonDerivedType(typeof(DofusDbJob), "Jobs")]
+[JsonDerivedType(typeof(DofusDbRecipe), "Recipes")]
+[JsonDerivedType(typeof(DofusDbSkill), "Skills")]
+[JsonDerivedType(typeof(DofusDbArea), "Areas")]
+[JsonDerivedType(typeof(DofusDbDungeon), "Dungeons")]
+[JsonDerivedType(typeof(DofusDbMap), "Maps")]
+[JsonDerivedType(typeof(DofusDbMapPosition), "MapPositions")]
+[JsonDerivedType(typeof(DofusDbSubArea), "SubAreas")]
+[JsonDerivedType(typeof(DofusDbSuperArea), "SuperAreas")]
+[JsonDerivedType(typeof(DofusDbWorld), "WorldMaps")]
+[JsonDerivedType(typeof(DofusDbMonster), "Monsters")]
+[JsonDerivedType(typeof(DofusDbMonsterRace), "MonsterRaces")]
+[JsonDerivedType(typeof(DofusDbMonsterSuperRace), "MonsterSuperRaces")]
+[JsonDerivedType(typeof(DofusDbServer), "Servers")]
+[JsonDerivedType(typeof(DofusDbSpell), "Spells")]
+[JsonDerivedType(typeof(DofusDbSpellLevel), "SpellLevels")]
+[JsonDerivedType(typeof(DofusDbSpellState), "SpellStates")]
+[JsonDerivedType(typeof(DofusDbSpellType), "SpellTypes")]
+[JsonDerivedType(typeof(DofusDbSpellVariant), "SpellVariants")]
+[JsonDerivedType(typeof(DofusDbOrnament), "Ornaments")]
+[JsonDerivedType(typeof(DofusDbTitle), "Titles")]
 public abstract class DofusDbResource
 {
     /// <summary>
