@@ -10,7 +10,7 @@ namespace dofusdb.Commands;
 
 class GameCriterionCommand(Func<Uri, IDofusDbCriterionClient> clientFactory, Uri defaultUrl)
 {
-    readonly Argument<string> _criterionArgument = new("id")
+    readonly Argument<string> _criterionArgument = new("criterion")
     {
         Description = "Criterion to parse",
         Arity = ArgumentArity.ExactlyOne
