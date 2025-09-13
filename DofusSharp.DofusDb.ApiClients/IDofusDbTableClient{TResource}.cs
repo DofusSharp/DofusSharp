@@ -145,7 +145,6 @@ public static class DofusDbTableClientExtensions
 
         int loaded = firstResults.Data.Count;
         int requested = Math.Min(query.Limit ?? int.MaxValue, firstResults.Total - (query.Skip ?? 0));
-        toFetch = requested - loaded;
 
         progress?.Report(new MultiSearchCurrentCount(loaded, requested));
 
@@ -155,7 +154,7 @@ public static class DofusDbTableClientExtensions
         }
 
         offset += firstResults.Data.Count;
-        toFetch -= firstResults.Data.Count;
+        toFetch = requested - firstResults.Data.Count;
         int total = firstResults.Total;
 
         if (offset >= total)
