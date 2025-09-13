@@ -6,6 +6,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
+using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
@@ -58,4 +59,6 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbCli
     public IDofusDbScalableImageClient<long> MapImages() => new DofusDbScalableImageClient<long>(new Uri(baseAddress, "img/maps/"), ImageFormat.Jpeg, referrer);
     public IDofusDbTableClient<DofusDbMapPosition> MapPositions() => new DofusDbTableClient<DofusDbMapPosition>(new Uri(baseAddress, "map-positions/"), referrer);
     public IDofusDbTableClient<DofusDbDungeon> Dungeons() => new DofusDbTableClient<DofusDbDungeon>(new Uri(baseAddress, "dungeons/"), referrer);
+
+    public IDofusDbTableClient<DofusDbTitle> Titles() => new DofusDbTableClient<DofusDbTitle>(new Uri(baseAddress, "titles/"), referrer);
 }

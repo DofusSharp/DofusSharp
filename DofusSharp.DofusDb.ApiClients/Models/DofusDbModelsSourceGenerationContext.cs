@@ -7,6 +7,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
+using DofusSharp.DofusDb.ApiClients.Models.Titles;
 using DofusSharp.DofusDb.ApiClients.Search;
 
 namespace DofusSharp.DofusDb.ApiClients.Models;
@@ -38,6 +39,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSpellState))]
 [JsonSerializable(typeof(DofusDbSpellType))]
 [JsonSerializable(typeof(DofusDbSpellVariant))]
+[JsonSerializable(typeof(DofusDbTitle))]
 // Search results
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
@@ -65,6 +67,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellState>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellVariant>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbTitle>))]
 // Others
 [JsonSerializable(typeof(DofusDbSearchQuery))]
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
