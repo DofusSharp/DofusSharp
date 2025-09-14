@@ -52,17 +52,14 @@ class AlmanaxCommand(Func<Uri, IDofusDbAlmanaxCalendarClient> clientFactory, Uri
                 DofusDbAlmanaxCalendar almanax = null!;
                 if (quiet)
                 {
-                    almanax = await client.GetAlmanaxCalendarAsync(date, cancellationToken);
+                    almanax = await client.GetAlmanaxAsync(date, cancellationToken);
                 }
                 else
                 {
                     await AnsiConsole
                         .Status()
                         .Spinner(Spinner.Known.Default)
-                        .StartAsync(
-                            $"Executing query: {client.GetAlmanaxCalendarQuery(date)}...",
-                            async _ => almanax = await client.GetAlmanaxCalendarAsync(date, cancellationToken)
-                        );
+                        .StartAsync($"Executing query: {client.GetAlmanaxQuery(date)}...", async _ => almanax = await client.GetAlmanaxAsync(date, cancellationToken));
                 }
 
                 await using Stream stream = Utils.GetOutputStream(outputFile);

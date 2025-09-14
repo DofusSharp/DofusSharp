@@ -6,9 +6,9 @@ using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 /// <inheritdoc />
-class DofusDbAlmanaxCalendarClient : IDofusDbAlmanaxCalendarClient
+class DofusDbAlmanaxClient : IDofusDbAlmanaxCalendarClient
 {
-    public DofusDbAlmanaxCalendarClient(Uri baseAddress, Uri? referrer = null)
+    public DofusDbAlmanaxClient(Uri baseAddress, Uri? referrer = null)
     {
         Referrer = referrer;
         BaseAddress = baseAddress;
@@ -18,9 +18,9 @@ class DofusDbAlmanaxCalendarClient : IDofusDbAlmanaxCalendarClient
     public Uri? Referrer { get; }
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
-    public async Task<DofusDbAlmanaxCalendar> GetAlmanaxCalendarAsync(DateOnly date, CancellationToken cancellationToken = default)
+    public async Task<DofusDbAlmanaxCalendar> GetAlmanaxAsync(DateOnly date, CancellationToken cancellationToken = default)
     {
-        Uri url = GetAlmanaxCalendarQuery(date);
+        Uri url = GetAlmanaxQuery(date);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -28,5 +28,5 @@ class DofusDbAlmanaxCalendarClient : IDofusDbAlmanaxCalendarClient
                ?? throw new InvalidOperationException("Could not deserialize the version.");
     }
 
-    public Uri GetAlmanaxCalendarQuery(DateOnly date) => new(BaseAddress, "?date=" + date.ToString("MM/dd/yyyy"));
+    public Uri GetAlmanaxQuery(DateOnly date) => new(BaseAddress, "?date=" + date.ToString("MM/dd/yyyy"));
 }

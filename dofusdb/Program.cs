@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using dofusdb.Commands;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -55,6 +56,7 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbAchievementCategory>("achievement-categories", "Achievement Categories", uri => GetFactory(uri).AchievementCategories(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementObjective>("achievement-objectives", "Achievement Objectives", uri => GetFactory(uri).AchievementObjectives(), defaultUrl).CreateCommand(),
         new AlmanaxCommand(uri => GetFactory(uri).Almanax(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbAlmanaxCalendar>("almanax-calendars", "AlmanaxCalendars", uri => GetFactory(uri).AlmanaxCalendars(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbServer>("servers", "Servers", uri => GetFactory(uri).Servers(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbItem>("items", "Items", uri => GetFactory(uri).Items(), defaultUrl).CreateCommand(),

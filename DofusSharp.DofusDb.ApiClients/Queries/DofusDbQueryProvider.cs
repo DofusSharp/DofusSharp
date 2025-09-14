@@ -1,4 +1,5 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -14,6 +15,7 @@ namespace DofusSharp.DofusDb.ApiClients.Queries;
 
 class DofusDbQueryProvider(IDofusDbClientsFactory factory) : IDofusDbQueryProvider
 {
+    public IDofusDbQuery<DofusDbAlmanaxCalendar> AlmanaxCalendars() => new DofusDbQuery<DofusDbAlmanaxCalendar>(factory.AlmanaxCalendars());
     public IDofusDbQuery<DofusDbServer> Servers() => new DofusDbQuery<DofusDbServer>(factory.Servers());
     public IDofusDbQuery<DofusDbCharacteristic> Characteristics() => new DofusDbQuery<DofusDbCharacteristic>(factory.Characteristics());
     public IDofusDbQuery<DofusDbItem> Items() => new DofusDbQuery<DofusDbItem>(factory.Items());

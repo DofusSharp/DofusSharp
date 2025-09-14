@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Criterion;
@@ -28,6 +29,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementReward>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementRewardBeta>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievement>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlmanaxCalendar>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeapon>))]

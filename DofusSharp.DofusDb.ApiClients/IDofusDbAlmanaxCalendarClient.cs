@@ -12,12 +12,12 @@ public interface IDofusDbAlmanaxCalendarClient : IDofusDbClient
     /// </summary>
     /// <param name="date">The specific day for which to retrieve the Almanax calendar data.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    Task<DofusDbAlmanaxCalendar> GetAlmanaxCalendarAsync(DateOnly date, CancellationToken cancellationToken = default);
+    Task<DofusDbAlmanaxCalendar> GetAlmanaxAsync(DateOnly date, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Get the URL to fetch the current almanax.
-    ///     This URL is the one used by <see cref="GetAlmanaxCalendarAsync(CancellationToken)" />.
+    ///     This URL is the one used by <see cref="GetAlmanaxAsync" />.
     /// </summary>
     /// <param name="date">The specific day for which to retrieve the Almanax calendar data.</param>
-    Uri GetAlmanaxCalendarQuery(DateOnly date);
+    Uri GetAlmanaxQuery(DateOnly date);
 }

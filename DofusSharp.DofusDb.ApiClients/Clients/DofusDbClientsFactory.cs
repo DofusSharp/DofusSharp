@@ -1,4 +1,5 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
@@ -24,8 +25,9 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbCli
 
     public IDofusDbVersionClient Version() => new DofusDbVersionClient(new Uri(baseAddress, "version/"), referrer);
     public IDofusDbCriterionClient Criterion() => new DofusDbCriterionClient(new Uri(baseAddress, "criterion/"), referrer);
+    public IDofusDbTableClient<DofusDbAlmanaxCalendar> AlmanaxCalendars() => new DofusDbTableClient<DofusDbAlmanaxCalendar>(new Uri(baseAddress, "almanax-calendars/"), referrer);
     public IDofusDbTableClient<DofusDbServer> Servers() => new DofusDbTableClient<DofusDbServer>(new Uri(baseAddress, "servers/"), referrer);
-    public IDofusDbAlmanaxCalendarClient Almanax() => new DofusDbAlmanaxCalendarClient(new Uri(baseAddress, "almanax/"), referrer);
+    public IDofusDbAlmanaxCalendarClient Almanax() => new DofusDbAlmanaxClient(new Uri(baseAddress, "almanax/"), referrer);
     public IDofusDbTableClient<DofusDbCharacteristic> Characteristics() => new DofusDbTableClient<DofusDbCharacteristic>(new Uri(baseAddress, "characteristics/"), referrer);
     public IDofusDbTableClient<DofusDbItem> Items() => new DofusDbTableClient<DofusDbItem>(new Uri(baseAddress, "items/"), referrer);
     public IDofusDbImageClient<long> ItemImages() => new DofusDbImageClient<long>(new Uri(baseAddress, "img/items/"), ImageFormat.Png, referrer);
