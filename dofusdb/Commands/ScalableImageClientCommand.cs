@@ -5,7 +5,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImagesClient<TId>> clientFactory, Uri defaultUrl)
+class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImagesClient<TId>> clientFactory)
 {
     readonly Argument<TId> _idArgument = new("id")
     {
@@ -19,12 +19,6 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
         DefaultValueFactory = _ => DofusDbImageScale.Full
     };
 
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
-    };
-
     public Command CreateCommand() =>
         new(command, $"{name} client")
         {
@@ -34,18 +28,17 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
     Command CreateGetCommand()
     {
         Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
-            { Arguments = { _idArgument }, Options = { _scaleOption, CommonOptions.OutputFileOption, _baseUrlOption } };
+            { Arguments = { _idArgument }, Options = { _scaleOption, CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 TId id = r.GetRequiredValue(_idArgument);
                 DofusDbImageScale scale = r.GetValue(_scaleOption);
-                string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
 
-                string? baseUrl = r.GetValue(_baseUrlOption);
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbScalableImagesClient<TId> client = clientFactory(url);
+                IDofusDbScalableImagesClient<TId> client = clientFactory(new Uri(baseUrl));
 
                 Stream image = null!;
                 if (quiet)

@@ -10,7 +10,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-partial class TableClientCommand<TResource>(string command, string name, Func<Uri, IDofusDbTableClient<TResource>> clientFactory, Uri defaultUrl) where TResource: DofusDbResource
+partial class TableClientCommand<TResource>(string command, string name, Func<Uri, IDofusDbTableClient<TResource>> clientFactory) where TResource: DofusDbResource
 {
     readonly Argument<long> _idArgument = new("id")
     {
@@ -59,12 +59,6 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
         CustomParser = ParseFilterOption
     };
 
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
-    };
-
     public Command CreateCommand() =>
         new(command, $"{name} client")
         {
@@ -81,7 +75,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
             Options =
             {
                 _allOption, _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, CommonOptions.OutputFileOption,
-                CommonOptions.PrettyPrintOption, _baseUrlOption
+                CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption
             }
         };
 
@@ -95,14 +89,13 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(IReadOnlyList<TResource>));
 
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbTableClient<TResource> client = clientFactory(url);
+                IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
 
                 DofusDbSearchQuery query = new() { Limit = all ? null : limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] };
                 IReadOnlyList<TResource> results = null!;
@@ -169,21 +162,20 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     Command CreateGetCommand()
     {
         Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
-            { Arguments = { _idArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, _baseUrlOption } };
+            { Arguments = { _idArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 long id = r.GetRequiredValue(_idArgument);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
 
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbTableClient<TResource> client = clientFactory(url);
+                IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
 
                 TResource resource = null!;
                 if (quiet)
@@ -210,7 +202,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     Command CreateBuildQueryCommand()
     {
         Command result = new("build-query", $"Build the search query for {name.ToLowerInvariant()}")
-            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, _baseUrlOption } };
+            { Options = { _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(r =>
             {
@@ -219,7 +211,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 string[]? select = r.GetValue(_selectOption);
                 Dictionary<string, DofusDbSearchQuerySortOrder>? sort = r.GetValue(_sortOption);
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
 
                 DofusDbSearchQuery query = new() { Limit = limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] };
                 string queryString = query.ToQueryString();
@@ -240,16 +232,15 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
 
     Command CreateCountCommand()
     {
-        Command result = new("count", $"Count {name.ToLowerInvariant()}") { Options = { _filterOption, _baseUrlOption } };
+        Command result = new("count", $"Count {name.ToLowerInvariant()}") { Options = { _filterOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbTableClient<TResource> client = clientFactory(url);
+                IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
 
                 if (!quiet)
                 {

@@ -7,7 +7,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlmanaxCalendarClient> clientFactory, Uri defaultUrl)
+class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlmanaxCalendarClient> clientFactory)
 {
     readonly Argument<DateOnly> _dateArgument = new("date")
     {
@@ -15,28 +15,22 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
         DefaultValueFactory = _ => DateOnly.FromDateTime(DateTime.Today)
     };
 
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
-    };
-
     public Command CreateCommand()
     {
-        Command result = new(command, description) { Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, _baseUrlOption } };
+        Command result = new(command, description)
+            { Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption } };
         result.SetAction(async (r, cancellationToken) =>
             {
                 DateOnly date = r.GetRequiredValue(_dateArgument);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbAlmanaxCalendar));
 
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbAlmanaxCalendarClient client = clientFactory(url);
+                IDofusDbAlmanaxCalendarClient client = clientFactory(new Uri(baseUrl));
 
                 DofusDbAlmanaxCalendar almanax = null!;
                 if (quiet)

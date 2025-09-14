@@ -8,7 +8,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class GameCriterionCommand(string command, string description, Func<Uri, IDofusDbCriterionClient> clientFactory, Uri defaultUrl)
+class GameCriterionCommand(string command, string description, Func<Uri, IDofusDbCriterionClient> clientFactory)
 {
     readonly Argument<string> _criterionArgument = new("criterion")
     {
@@ -21,12 +21,6 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
         Description = "Language to request"
     };
 
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
-    };
-
     public Command CreateCommand()
     {
         Command result = new(command, description)
@@ -36,7 +30,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
             {
                 _langOption,
                 CommonOptions.OutputFileOption,
-                CommonOptions.PrettyPrintOption, _baseUrlOption
+                CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption
             }
         };
         result.SetAction(async (r, cancellationToken) =>
@@ -45,14 +39,13 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
                 DofusDbLanguage lang = r.GetValue(_langOption);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbCriterion));
 
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbCriterionClient client = clientFactory(url);
+                IDofusDbCriterionClient client = clientFactory(new Uri(baseUrl));
 
                 DofusDbCriterion? parsedCriterion = null!;
                 if (quiet)
