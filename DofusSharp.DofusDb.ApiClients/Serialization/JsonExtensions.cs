@@ -9,9 +9,9 @@ public static class JsonExtensions
     /// <summary>
     ///     Get the typed <see cref="JsonTypeInfo{T}" /> for the specified type.
     /// </summary>
-    /// <remark>
+    /// <remarks>
     ///     Backporting of API approved for .NET 11: https://github.com/dotnet/runtime/issues/118468
-    /// </remark>
+    /// </remarks>
     public static JsonTypeInfo<T> GetTypeInfo<T>(this JsonSerializerOptions options) => (JsonTypeInfo<T>)options.GetTypeInfo(typeof(T));
 
     public static JsonTypeInfo<T> GetTypeInfo<T>(this JsonSerializerContext context) => (JsonTypeInfo<T>)context.Options.GetTypeInfo(typeof(T));
