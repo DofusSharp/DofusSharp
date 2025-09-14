@@ -17,12 +17,7 @@ class DofusDbScalableImagesClient<TId>(Uri baseAddress, ImageFormat imageFormat,
     {
         Uri url = GetImageQuery(id, scale);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
-
-        // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
-        HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        return await HttpResponseMessageStream.Create(response);
+        return await httpClient.GetImageStreamAsync(url, cancellationToken);
     }
 
     public Uri GetImageQuery(TId id) => GetImageQuery(id, DofusDbImageScale.Full);
