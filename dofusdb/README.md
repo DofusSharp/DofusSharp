@@ -77,6 +77,7 @@ Commandes :
   characteristics         Characteristics client
   criterion <criterion>   Parse a criterion string into a JSON array with more information
   dungeons                Dungeons client
+  game-version            Get the version of the game corresponding to the data
   items                   Items client
   item-images             Item images client
   item-sets               Item Sets client
@@ -109,7 +110,6 @@ Commandes :
   spell-variants          Spell Variants client
   sub-areas               Sub Areas client
   super-areas             Super Areas client
-  game-version            Get the version of the game corresponding to the data
   worlds                  Worlds client
 ```
 
