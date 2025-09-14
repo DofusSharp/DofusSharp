@@ -10,6 +10,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Social;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
@@ -26,9 +27,11 @@ class DofusDbQueryProvider(IDofusDbClientsFactory factory) : IDofusDbQueryProvid
     public IDofusDbQuery<DofusDbAlmanaxCalendar>       AlmanaxCalendars()      => new DofusDbQuery<DofusDbAlmanaxCalendar>(factory.AlmanaxCalendars());
     public IDofusDbQuery<DofusDbAlignmentRank>         AlignmentRanks()        => new DofusDbQuery<DofusDbAlignmentRank>(factory.AlignmentRanks());
     public IDofusDbQuery<DofusDbAlignmentSide>         AlignmentSides()        => new DofusDbQuery<DofusDbAlignmentSide>(factory.AlignmentSides());
+    public IDofusDbQuery<DofusDbAllianceRight>         AllianceRights()        => new DofusDbQuery<DofusDbAllianceRight>(factory.AllianceRights());
     public IDofusDbQuery<DofusDbArea>                  Areas()                 => new DofusDbQuery<DofusDbArea>(factory.Areas());
     public IDofusDbQuery<DofusDbCharacteristic>        Characteristics()       => new DofusDbQuery<DofusDbCharacteristic>(factory.Characteristics());
     public IDofusDbQuery<DofusDbDungeon>               Dungeons()              => new DofusDbQuery<DofusDbDungeon>(factory.Dungeons());
+    public IDofusDbQuery<DofusDbGuildRight>            GuildRights()           => new DofusDbQuery<DofusDbGuildRight>(factory.GuildRights());
     public IDofusDbQuery<DofusDbItem>                  Items()                 => new DofusDbQuery<DofusDbItem>(factory.Items());
     public IDofusDbQuery<DofusDbItemSet>               ItemSets()              => new DofusDbQuery<DofusDbItemSet>(factory.ItemSets());
     public IDofusDbQuery<DofusDbItemSuperType>         ItemSuperTypes()        => new DofusDbQuery<DofusDbItemSuperType>(factory.ItemSuperTypes());

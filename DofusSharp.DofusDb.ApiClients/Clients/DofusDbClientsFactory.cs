@@ -12,6 +12,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Social;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
@@ -34,10 +35,12 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOption
     public IDofusDbTableClient<DofusDbAchievementReward>     AchievementRewards()     => new DofusDbTableClient<DofusDbAchievementReward>     (new Uri(baseAddress, "achievement-rewards/"),     referrer,            options);
     public IDofusDbTableClient<DofusDbAlignmentRank>         AlignmentRanks()         => new DofusDbTableClient<DofusDbAlignmentRank>         (new Uri(baseAddress, "alignment-ranks/"),         referrer,            options);
     public IDofusDbTableClient<DofusDbAlignmentSide>         AlignmentSides()         => new DofusDbTableClient<DofusDbAlignmentSide>         (new Uri(baseAddress, "alignment-sides/"),         referrer,            options);
+    public IDofusDbTableClient<DofusDbAllianceRight>         AllianceRights()         => new DofusDbTableClient<DofusDbAllianceRight>         (new Uri(baseAddress, "alliance-rights/"),         referrer,            options);
     public IDofusDbTableClient<DofusDbAlmanaxCalendar>       AlmanaxCalendars()       => new DofusDbTableClient<DofusDbAlmanaxCalendar>       (new Uri(baseAddress, "almanax-calendars/"),       referrer,            options);
     public IDofusDbTableClient<DofusDbArea>                  Areas()                  => new DofusDbTableClient<DofusDbArea>                  (new Uri(baseAddress, "areas/"),                   referrer,            options);
     public IDofusDbTableClient<DofusDbCharacteristic>        Characteristics()        => new DofusDbTableClient<DofusDbCharacteristic>        (new Uri(baseAddress, "characteristics/"),         referrer,            options);
     public IDofusDbTableClient<DofusDbDungeon>               Dungeons()               => new DofusDbTableClient<DofusDbDungeon>               (new Uri(baseAddress, "dungeons/"),                referrer,            options);
+    public IDofusDbTableClient<DofusDbGuildRight>            GuildRights()            => new DofusDbTableClient<DofusDbGuildRight>            (new Uri(baseAddress, "guild-rights/"),            referrer,            options);
     public IDofusDbTableClient<DofusDbItem>                  Items()                  => new DofusDbTableClient<DofusDbItem>                  (new Uri(baseAddress, "items/"),                   referrer,            options);
     public IDofusDbTableClient<DofusDbItemSet>               ItemSets()               => new DofusDbTableClient<DofusDbItemSet>               (new Uri(baseAddress, "item-sets/"),               referrer,            options);
     public IDofusDbTableClient<DofusDbItemSuperType>         ItemSuperTypes()         => new DofusDbTableClient<DofusDbItemSuperType>         (new Uri(baseAddress, "item-super-types/"),        referrer,            options);

@@ -1,0 +1,14 @@
+﻿{
+  Order: 3,
+  GroupId: 3,
+  Name: {
+    De: Perzeptauren der Mitglieder ändern,
+    En: Modify members' perceptors,
+    Es: Modificar los recaudadores de los miembros,
+    Fr: Modifier les percepteurs des membres,
+    Pt: Modificar os coletores dos membros
+  },
+  Id: 11,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

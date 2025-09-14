@@ -1,0 +1,14 @@
+﻿{
+  Order: 0,
+  GroupId: 6,
+  Name: {
+    De: Auf die Koppel zugreifen,
+    En: Use paddocks,
+    Es: Utilizar los cercados,
+    Fr: Utiliser les enclos,
+    Pt: Utilizar os cercados
+  },
+  Id: 10,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

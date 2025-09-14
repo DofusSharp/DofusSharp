@@ -15,6 +15,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Social;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 using DofusSharp.DofusDb.ApiClients.Search;
@@ -27,45 +28,47 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchQuery))]
 // Search results: all concrete search results must be listed here, there is currently no way to tell the generation context that it must combine a generic type with
 // all the types it already knows
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievement>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementCategory>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementObjective>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementReward>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievement>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAllianceRight>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlmanaxCalendar>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlignmentRank>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlignmentSide>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlmanaxCalendar>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbArea>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbDungeon>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbGuildRight>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeapon>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemSet>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemSuperType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbJob>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbRecipe>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbSkill>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbArea>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbDungeon>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMap>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMapPosition>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbSubArea>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbSuperArea>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbWorld>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonster>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonsterRace>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMonsterSuperRace>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMount>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbMountFamily>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMountBehavior>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbMountFamily>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbNpc>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbNpcMessage>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbOrnament>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbRecipe>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbServer>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbSkill>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpell>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellLevel>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellState>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellVariant>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbOrnament>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbSubArea>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbSuperArea>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbTitle>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeapon>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbWorld>))]
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
 public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContext
 {

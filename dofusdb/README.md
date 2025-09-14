@@ -74,12 +74,14 @@ Commandes :
   almanax <date>          Get the almanax of the given day [default: 14/09/2025]
   alignment-ranks         Alignment Ranks client
   alignment-sides         Alignment Sides client
+  alliance-rights         Alliance Rights client
   almanax-calendars       AlmanaxCalendars client
   areas                   Areas client
   characteristics         Characteristics client
   criterion <criterion>   Parse a criterion string into a JSON array with more information
   dungeons                Dungeons client
   game-version            Get the version of the game corresponding to the data
+  guild-rights            Guild Rights client
   items                   Items client
   item-images             Item images client
   item-sets               Item Sets client

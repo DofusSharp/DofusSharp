@@ -10,6 +10,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Social;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
@@ -33,9 +34,11 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbAlmanaxCalendar>       AlmanaxCalendars();
     IDofusDbTableClient<DofusDbAlignmentRank>         AlignmentRanks();
     IDofusDbTableClient<DofusDbAlignmentSide>         AlignmentSides();
+    IDofusDbTableClient<DofusDbAllianceRight>         AllianceRights();
     IDofusDbTableClient<DofusDbArea>                  Areas();
     IDofusDbTableClient<DofusDbCharacteristic>        Characteristics();
     IDofusDbTableClient<DofusDbDungeon>               Dungeons();
+    IDofusDbTableClient<DofusDbGuildRight>            GuildRights();
     IDofusDbTableClient<DofusDbItem>                  Items();
     IDofusDbTableClient<DofusDbItemSet>               ItemSets();
     IDofusDbTableClient<DofusDbItemSuperType>         ItemSuperTypes();
