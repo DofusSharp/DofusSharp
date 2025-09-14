@@ -8,7 +8,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class GameCriterionCommand(Func<Uri, IDofusDbCriterionClient> clientFactory, Uri defaultUrl)
+class GameCriterionCommand(string command, string description, Func<Uri, IDofusDbCriterionClient> clientFactory, Uri defaultUrl)
 {
     readonly Argument<string> _criterionArgument = new("criterion")
     {
@@ -40,7 +40,7 @@ class GameCriterionCommand(Func<Uri, IDofusDbCriterionClient> clientFactory, Uri
 
     public Command CreateCommand()
     {
-        Command result = new("criterion", "Parse a criterion string into a JSON array with more information")
+        Command result = new(command, description)
         {
             Arguments = { _criterionArgument },
             Options =
