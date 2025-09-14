@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
@@ -30,6 +31,8 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementObjective>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementReward>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievement>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlignmentRank>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlignmentSide>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlmanaxCalendar>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]

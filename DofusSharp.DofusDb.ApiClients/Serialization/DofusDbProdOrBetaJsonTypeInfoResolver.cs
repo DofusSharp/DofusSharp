@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization.Metadata;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
@@ -44,6 +45,8 @@ static class DofusDbProdOrBetaJsonTypeInfoResolver
                 new JsonDerivedType(typeof(DofusDbAchievementObjective), useBetaModels ? "AchievementObjectiveData" : "AchievementObjectives"),
                 new JsonDerivedType(typeof(DofusDbAchievementReward), useBetaModels ? "AchievementRewardData" : "AchievementRewards"),
                 new JsonDerivedType(typeof(DofusDbAchievement), useBetaModels ? "AchievementData" : "Achievements"),
+                new JsonDerivedType(typeof(DofusDbAlignmentRank), useBetaModels ? "AlignmentRankData" : "AlignmentRanks"),
+                new JsonDerivedType(typeof(DofusDbAlignmentSide), useBetaModels ? "AlignmentSideData" : "AlignmentSides"),
                 new JsonDerivedType(typeof(DofusDbAlmanaxCalendar), useBetaModels ? "AlmanaxCalendarData" : "AlmanaxCalendars"),
                 new JsonDerivedType(typeof(DofusDbCharacteristic), useBetaModels ? "CharacteristicData" : "Characteristics"),
                 new JsonDerivedType(typeof(DofusDbItem), useBetaModels ? "ItemData" : "Items"),

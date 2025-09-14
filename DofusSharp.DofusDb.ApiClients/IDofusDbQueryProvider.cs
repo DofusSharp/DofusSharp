@@ -1,4 +1,5 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
@@ -26,6 +27,8 @@ public interface IDofusDbQueryProvider
     IDofusDbQuery<DofusDbAchievementObjective>  AchievementObjectives();
     IDofusDbQuery<DofusDbAchievementReward>     AchievementRewards();
     IDofusDbQuery<DofusDbAlmanaxCalendar>       AlmanaxCalendars();
+    IDofusDbQuery<DofusDbAlignmentRank>         AlignmentRanks();
+    IDofusDbQuery<DofusDbAlignmentSide>         AlignmentSides();
     IDofusDbQuery<DofusDbArea>                  Areas();
     IDofusDbQuery<DofusDbCharacteristic>        Characteristics();
     IDofusDbQuery<DofusDbDungeon>               Dungeons();
