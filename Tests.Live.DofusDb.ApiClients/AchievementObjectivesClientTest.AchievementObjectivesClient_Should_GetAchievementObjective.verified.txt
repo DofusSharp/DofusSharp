@@ -1,0 +1,26 @@
+﻿{
+  AchievementId: 95,
+  Order: 2,
+  Criterion: (ER>6,0),
+  Name: {
+    De: Wilder roter Dracotruter,
+    En: Wild Ginger Dragoturkey,
+    Es: Dragopavo pelirrojo salvaje,
+    Fr: Dragodinde Rousse Sauvage,
+    Pt: Dragoperu ruivo selvagem
+  },
+  ReadableCriterion: {
+    Value: [
+      {
+        Value: Avoir capturé 
+      },
+      {
+        Id: 6,
+        Type: Mounts
+      }
+    ]
+  },
+  Id: 74,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
