@@ -1,0 +1,391 @@
+﻿{
+  NpcId: 1638,
+  CategoryId: 12,
+  Dates: [
+    26/09/*
+  ],
+  ItemIds: [
+    11110
+  ],
+  Items: [
+    {
+      TypeId: 39,
+      Type: {
+        Name: {
+          De: Erz,
+          En: Ore,
+          Es: Mineral,
+          Fr: Minerai,
+          Pt: Minério
+        },
+        SuperTypeId: 9,
+        SuperType: {
+          Name: {
+            De: Ressource,
+            En: Resource,
+            Es: Recurso,
+            Fr: Ressource,
+            Pt: Recurso
+          },
+          Id: 9,
+          CreatedAt: DateTimeOffset_1,
+          UpdatedAt: DateTimeOffset_2
+        },
+        CategoryId: 2,
+        IsInEncyclopedia: true,
+        RawZone: ,
+        CraftXpRatio: -1,
+        EvolutiveTypeId: 0,
+        Id: 39,
+        CreatedAt: DateTimeOffset_3,
+        UpdatedAt: DateTimeOffset_4
+      },
+      Name: {
+        De: Obsidian,
+        En: Obsidian,
+        Es: Obsidiana,
+        Fr: Obsidienne,
+        Pt: Obsidiana
+      },
+      Slug: {
+        De: obsidian,
+        En: obsidian,
+        Es: obsidiana,
+        Fr: obsidienne,
+        Pt: obsidiana
+      },
+      Description: {
+        De: Dieses Gestein ist hart genug, um Glas zu ritzen und es ist so düster, dass ihr beim längeren Anblick in Depressionen verfallt. Sprich, es ist das ideale Material für einen Grabstein!,
+        En: Hard enough to scratch glass and dark enough to sap your morale, this rock has lost all of the heat of the lava from which it came. It would be perfect as a tombstone, as long as it's not your own.,
+        Es: Lo bastante dura como para rallar el cristal y lo bastante oscura como para rallarte la moral, esta roca ha perdido todo el calor de la lava de la que nació. Es una piedra perfecta para una lápida, ¡siempre que no sea la tuya!,
+        Fr: Assez dure pour rayer le verre et assez sombre pour vous saper le moral, cette roche a tout perdu de la chaleur de la lave dont elle est issue. En tout cas, elle sera parfaite pour une pierre tombale, tant que ce n'est pas la vôtre.,
+        Pt: Duro o suficiente para arranhar vidro e negro o suficiente para sugar sua moral, esta pedra perdeu todo o seu calor da lava de onde veio. Seria perfeita para um túmulo, desde que não seja o seu.
+      },
+      ImportantNotice: {},
+      Level: 200,
+      RealWeight: 5,
+      Price: 0,
+      Img: https://api.beta.dofusdb.fr/img/items/39112.png,
+      ItemSetId: -1,
+      ItemSet: {
+        IsFalse: true
+      },
+      HideEffects: false,
+      FavoriteSubAreasBonus: 0,
+      IconId: 39112,
+      AppearanceId: 0,
+      IsColorable: false,
+      HasLivingObjectSkinJntMood: false,
+      HasRecipe: false,
+      RecipeSlots: 0,
+      RecipeIds: [
+        12728,
+        15660,
+        19160,
+        20163,
+        24307,
+        24429
+      ],
+      RecipesThatUse: [
+        12728,
+        15660,
+        19160,
+        20163
+      ],
+      CraftXpRatio: -1.0,
+      SecretRecipe: false,
+      Usable: false,
+      Targetable: false,
+      NonUsableOnAnother: false,
+      NeedUseConfirm: false,
+      ResourcesBySubarea: [
+        {
+          Item1: 604,
+          Item2: 9
+        },
+        {
+          Item1: 609,
+          Item2: 8
+        },
+        {
+          Item1: 610,
+          Item2: 6
+        },
+        {
+          Item1: 652,
+          Item2: 4
+        },
+        {
+          Item1: 902,
+          Item2: 3
+        },
+        {
+          Item1: 1021,
+          Item2: 1
+        }
+      ],
+      DropMonsterIds: [
+        2918
+      ],
+      DropSubAreaIds: [
+        609
+      ],
+      RecyclingNuggets: 0.027000000700354576,
+      QuestsThatUse: [
+        965
+      ],
+      StartLegendaryTreasureHunt: 0,
+      LegendaryTreasureHuntThatReward: 0,
+      Flags: 1092,
+      Exchangeable: true,
+      Etheral: false,
+      Enhanceable: true,
+      IsSaleable: true,
+      IsLegendary: false,
+      Id: 11110,
+      CreatedAt: DateTimeOffset_5,
+      UpdatedAt: DateTimeOffset_6
+    }
+  ],
+  Quantities: [
+    30
+  ],
+  QuestIds: [
+    965
+  ],
+  Types: [
+    7
+  ],
+  Npc: {
+    DialogMessages: [
+      {
+        Item1: 12280,
+        Item2: 355790
+      },
+      {
+        Item1: 12281,
+        Item2: 1064943
+      },
+      {
+        Item1: 12286,
+        Item2: 355796
+      },
+      {
+        Item1: 12282,
+        Item2: 1064944
+      },
+      {
+        Item1: 12283,
+        Item2: 1064945
+      },
+      {
+        Item1: 12284,
+        Item2: 1064946
+      },
+      {
+        Item1: 12287,
+        Item2: 355797
+      },
+      {
+        Item1: 12288,
+        Item2: 355789
+      },
+      {
+        Item1: 12289,
+        Item2: 1064953
+      },
+      {
+        Item1: 12290,
+        Item2: 1064954
+      },
+      {
+        Item1: 12291,
+        Item2: 1064955
+      },
+      {
+        Item1: 12292,
+        Item2: 1064956
+      }
+    ],
+    DialogReplies: [
+      {
+        Item1: 13969,
+        Item2: 1064950
+      },
+      {
+        Item1: 13978,
+        Item2: 1064961
+      },
+      {
+        Item1: 13968,
+        Item2: 1064949
+      },
+      {
+        Item1: 13971,
+        Item2: 369306
+      },
+      {
+        Item1: 13972,
+        Item2: 1064962
+      },
+      {
+        Item1: 13977,
+        Item2: 1064960
+      },
+      {
+        Item1: 13967,
+        Item2: 1064948
+      },
+      {
+        Item1: 13966,
+        Item2: 1064947
+      },
+      {
+        Item1: 13965,
+        Item2: 369576
+      },
+      {
+        Item1: 73879,
+        Item2: 1064951
+      },
+      {
+        Item1: 73880,
+        Item2: 1064952
+      },
+      {
+        Item1: 13976,
+        Item2: 1064959
+      },
+      {
+        Item1: 13975,
+        Item2: 1064958
+      },
+      {
+        Item1: 13974,
+        Item2: 1064957
+      },
+      {
+        Item1: 13973,
+        Item2: 369304
+      }
+    ],
+    Actions: [
+      3
+    ],
+    Gender: Masculine,
+    Look: {1979|1972|1=5534355},
+    AnimFunList: [
+      {
+        AnimId: 1045,
+        EntityId: 1638,
+        AnimName: AnimAttaque0,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 1046,
+        EntityId: 1638,
+        AnimName: AnimAttaque12,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 1047,
+        EntityId: 1638,
+        AnimName: AnimAttaque13,
+        AnimWeight: 1.0
+      },
+      {
+        AnimId: 1048,
+        EntityId: 1638,
+        AnimName: AnimAttaque15,
+        AnimWeight: 3.0
+      },
+      {
+        AnimId: 1049,
+        EntityId: 1638,
+        AnimName: AnimAttaque2,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 1050,
+        EntityId: 1638,
+        AnimName: AnimAttaque4,
+        AnimWeight: 3.0
+      },
+      {
+        AnimId: 1051,
+        EntityId: 1638,
+        AnimName: AnimAttaque8,
+        AnimWeight: 1.0
+      },
+      {
+        AnimId: 1052,
+        EntityId: 1638,
+        AnimName: AnimAttaque6,
+        AnimWeight: 1.0
+      }
+    ],
+    FastAnimsFun: false,
+    TooltipVisible: true,
+    DialogData: [
+      {
+        Id: 4895,
+        MessageId: 12280,
+        MoodId: 2,
+        BubblePosition: -1
+      }
+    ],
+    DefaultSkinId: -1,
+    Name: {
+      De: Nufrank,
+      En: Nufrank,
+      Es: Nufrank,
+      Fr: Nufrank,
+      Pt: Nufrank
+    },
+    Id: 1638,
+    CreatedAt: DateTimeOffset_7,
+    UpdatedAt: DateTimeOffset_8
+  },
+  ObjectiveId: 5811,
+  MeridiaIllustrationId: -1,
+  Name: {
+    De: Ergiebige Erzadern,
+    En: Plenty of ore,
+    Es: Abundancia de minerales,
+    Fr: Minerai abondant,
+    Pt: Minério abundante
+  },
+  Desc: {
+    De: Die Menge an <b>Dolomit</b> und <b>Obsidian</b>, die Bergleute gewinnen, wird um 125 % erhöht.,
+    En: The quantity of <b>Dolomite</b> and <b>Obsidian</b> collected by miners is increased by 125%.,
+    Es: La cantidad de <b>dolomita</b> y de <b>obsidiana</b> que consiguen los mineros aumenta un 125%.,
+    Fr: Les quantités de <b>Dolomite</b> et d'<b>Obsidienne</b> récupérées par les Mineurs sont augmentées de 125 %.,
+    Pt: As quantidades de <b>Dolomita</b> e de <b>Obsidiana</b> obtidas pelos mineiros têm um aumento de 125%.
+  },
+  MeriaDescription: {
+    De: Nufrank ist der Hapideid der Härte. Unter seinem Einfluss stumpfen selbst die weichsten Herzen ab und die Körper werden hart wie Stein. Mit ihm wird einfach alles hart: Das Brot, die Schläge, die Zähne, das Leben. Aber das, was ihm am Besten gelingt, sind die Eier ... Die sind natürlich hart gekocht, wie könnte es auch anders sein.,
+    En: Nufrank is the Meridia of Hardness. Under his influence, even the softest hearts will grow cold and hard and the flabbiest bellies will become as solid as a rock. He makes everything harder: butter, punches, teeth, and – *sob* – just life in general. His speciality is, naturally, hard-boiled eggs.,
+    Es: Nufrank es el santo de la dureza. Bajo su influencia, los corazones más tiernos se endurecen, y los cuerpos se hacen resistentes como la piedra. Con él, todo se vuelve duro: el pan, los golpes, la cara, la vida... Pero lo que mejor se le da son los huevos... duros, obviamente.,
+    Fr: Nufrank est le Méryde de la dureté. Sous son influence, les cœurs les plus tendres s'endurcissent et les corps deviennent résistants comme de la pierre. Avec lui, tout devient dur : le pain, les coups, les dents, la vie. Mais ce qu'il réussit le mieux, ce sont les œufs... durs eux aussi, évidemment.,
+    Pt: Nufrank é o Merida da Dureza. Sob sua influência, os corações mais ternos viram pedra e os corpos se tornam resistentes como aço. Com ele por perto, tudo endurece: o pão, as pancadas, a cara, a vida. Mas o que ele faz de melhor mesmo são os ovos... com a gema dura, é claro.
+  },
+  MeriaEffect: {
+    De: Der Tag scheint nicht einfach zu werden, denn heute kann nichts euer Herz erweichen: Es ist steinhart, wie Obsidian. Steine werdet ihr heute zur Genüge finden, vor allem wenn ihr im Bergwerk Erz abbauen wollt. Aber nur die Harten kommen durch, also lasst euch dadurch nicht weichklopfen!,
+    En: It's going to be a long, hard day. Today, nothing can soften your heart of stone, impassive as obsidian. You might feel hard done-by, but tough cheese! Why not raise your spirits by going to mine some stones underground?,
+    Es: Va a ser un día difícil. Hoy nada podrá enternecer tu corazón de piedra, que estará duro como la obsidiana. Pero si, precisamente, lo que quieres son piedras, podrás recolectar con total tranquilidad si te apetece minar. ¡Mantente firme y todo irá bien!,
+    Fr: La journée s'annonce difficile. Aujourd'hui, rien ne pourra attendrir votre cœur de pierre, qui sera dur comme l'obsidienne. Mais des pierres, justement, vous pourrez en récolter à loisir si l'envie vous prend d'aller miner. Restez ferme, sans mollir, et tout devrait bien se passer !,
+    Pt: Vai ser um dia difícil. Hoje, nada vai amolecer seu coração de pedra, que estará mais duro que uma obsidiana. Mas se são justamente pedras que você está procurando, você poderá coletar minérios, com muita tranquilidade e quando quiser. Continue firme, sem fraquejar, e tudo ficará bem!
+  },
+  Rubrikabrax: {
+    De: Habt ihr euch schon gefragt, was den Legendären Mega-Krachler so legendär macht? Es ist sein Körper, der hart wie Diamant ist. Viele Abenteurer und natürlich besonders die Abenteurerinnen waren von der Härte all seiner Muskeln beeindruckt. Man erzählt sich auch, dass er unerschütterlich sei ...,
+    En: The Legendary Crackler is as, well, legendary as he is because his whole body is as hard and rough as diamond. Many adventurers have been mighty impressed by how firm all his muscles are, and if the stories are anything to go by, he's totally unshakable!,
+    Es: Si el Crujidor Legendario es tan... legendario, es porque su cuerpo es duro como el diamante. Muchos han sido los aventureros, y las aventureras, claro, impresionados por la firmeza de sus músculos. Se dice, incluso, que es inquebrantable...,
+    Fr: Si le Craqueleur Légendaire est aussi... légendaire, c'est que son corps est dur comme le diamant. Nombreux sont les aventuriers, et les aventurières bien sûr, qui ont été impressionnés par la fermeté de tous ses muscles. On raconte en effet qu'il est inébranlable...,
+    Pt: Se o Smagador Legendário é tão... legendário, é porque seu corpo é duro como um diamante. Muitos aventureiros, e aventureiras também, ficaram impressionados com a firmeza de todos os seus músculos. Conta-se que ele é realmente inabalável...
+  },
+  CelebrationName: {},
+  CelebrationDescription: {},
+  Id: 11,
+  CreatedAt: DateTimeOffset_9,
+  UpdatedAt: DateTimeOffset_10
+}

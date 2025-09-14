@@ -1,4 +1,4 @@
-﻿namespace DofusSharp.DofusDb.ApiClients.Models;
+namespace DofusSharp.DofusDb.ApiClients.Models;
 
 public abstract class DofusDbResource : IEquatable<DofusDbResource>
 {

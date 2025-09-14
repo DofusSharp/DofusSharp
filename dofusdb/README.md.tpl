@@ -37,6 +37,20 @@ This will help you discover available commands and options more efficiently when
 
 ## Usage
 
+Types of clients:
+- **Game version**: get the current game version
+- **Almanax**: get the almanax data for a specific date
+- **Criterion**: parse a criterion string into a structured object
+- **Table data**: such as `items`, `recipes`, etc.
+  - `list`: fetch rows of data from an API
+  - `get`: fetch a single row of data by its unique identifier
+  - `count`: get the total count of rows matching the specified filters
+- **Image data**: such as `item-images`, `job-images` etc.
+  - `get`: fetch a single image by its unique identifier
+- **Scalable image data**: such as `map-images` etc.
+  - `get`: fetch a single image by its unique identifier, with optional `--scale` flag
+
+Usage:
 ```
 {{run:dofusdb --help}}
 ```
@@ -45,6 +59,18 @@ This will help you discover available commands and options more efficiently when
 
 ```
 {{run:dofusdb game-version --help}}
+```
+
+### Almanax
+
+```
+{{run:dofusdb almanax --help}}
+```
+
+### Criterion
+
+```
+{{run:dofusdb criterion --help}}
 ```
 
 ### Table data
@@ -139,12 +165,6 @@ Build the search query URL for the specified parameters without executing the re
 
 ```
 {{run:dofusdb map-images get --help}}
-```
-
-### Criterion
-
-```
-{{run:dofusdb criterion --help}}
 ```
 
 ## Contributing
