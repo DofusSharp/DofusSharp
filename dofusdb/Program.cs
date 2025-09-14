@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.CommandLine;
+using System.CommandLine.Help;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.Runtime.CompilerServices;
@@ -44,7 +45,7 @@ RootCommand rootCommand = new(
     """
 )
 {
-    Options = { CommonOptions.Quiet, CommonOptions.Debug },
+    Options = { CommonOptions.QuietOption, CommonOptions.DebugOption },
     Subcommands =
     {
         // @formatter:max_line_length 9999
@@ -119,7 +120,7 @@ if (parseResult.Errors.Count != 0)
 }
 
 // ------ Command found
-bool debug = parseResult.CommandResult.GetValue(CommonOptions.Debug);
+bool debug = parseResult.CommandResult.GetValue(CommonOptions.DebugOption);
 
 try
 {
