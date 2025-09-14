@@ -14,6 +14,9 @@ using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
+/// <summary>
+///     Factory for creating DofusDb query objects.
+/// </summary>
 public interface IDofusDbQueryProvider
 {
     // @formatter:off

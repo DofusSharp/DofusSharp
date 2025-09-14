@@ -7,6 +7,7 @@ using DofusSharp.DofusDb.ApiClients.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
+/// <inheritdoc />
 class DofusDbTableClient<TResource>(Uri baseAddress, Uri? referrer, JsonSerializerOptions options) : IDofusDbTableClient<TResource> where TResource: DofusDbResource
 {
     readonly DofusDbSearchRequestQueryParamsBuilder _queryParamsBuilder = new();

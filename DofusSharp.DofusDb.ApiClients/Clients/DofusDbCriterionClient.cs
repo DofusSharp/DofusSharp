@@ -8,7 +8,8 @@ using DofusSharp.DofusDb.ApiClients.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
-public class DofusDbCriterionClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions options) : IDofusDbCriterionClient
+/// <inheritdoc />
+class DofusDbCriterionClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions options) : IDofusDbCriterionClient
 {
     public Uri BaseAddress { get; } = baseAddress;
     public Uri? Referrer { get; } = referrer;

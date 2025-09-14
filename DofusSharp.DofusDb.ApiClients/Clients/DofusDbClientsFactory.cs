@@ -16,9 +16,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
-/// <summary>
-///     Factory for creating DofusDb API clients.
-/// </summary>
+/// <inheritdoc />
 /// <param name="baseAddress">The base URL of the API to query.</param>
 /// <param name="referrer">The referer header to include in requests to the API.</param>
 class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOptions options) : IDofusDbClientsFactory
