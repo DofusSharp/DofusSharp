@@ -136,4 +136,9 @@ public class DofusDbBreed : DofusDbResource
     ///     The URL of the breed's transparent image.
     /// </summary>
     public string? ImgTransparent { get; init; }
+
+    /// <summary>
+    ///     The heads available for this breed.
+    /// </summary>
+    public DofusDbBreedHeads? Heads { get; init; }
 }

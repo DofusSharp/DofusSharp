@@ -243,6 +243,10 @@
   },
   Img: https://api.beta.dofusdb.fr/img/breeds/symbol_1.png,
   ImgTransparent: https://api.beta.dofusdb.fr/img/breeds/logo_transparent_1.png,
+  Heads: {
+    Male: https://api.beta.dofusdb.fr/img/heads/SmallHead_10.png,
+    Female: https://api.beta.dofusdb.fr/img/heads/SmallHead_11.png
+  },
   Id: 1,
   CreatedAt: DateTimeOffset_1,
   UpdatedAt: DateTimeOffset_2
