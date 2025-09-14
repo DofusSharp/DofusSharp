@@ -54,6 +54,7 @@ RootCommand rootCommand = new(
         new ImageClientCommand<long>("achievement-images", "Achievements images", uri => GetFactory(uri).AchievementImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementCategory>("achievement-categories", "Achievement Categories", uri => GetFactory(uri).AchievementCategories(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementObjective>("achievement-objectives", "Achievement Objectives", uri => GetFactory(uri).AchievementObjectives(), defaultUrl).CreateCommand(),
+        new AlmanaxCommand(uri => GetFactory(uri).Almanax(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbServer>("servers", "Servers", uri => GetFactory(uri).Servers(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbItem>("items", "Items", uri => GetFactory(uri).Items(), defaultUrl).CreateCommand(),
