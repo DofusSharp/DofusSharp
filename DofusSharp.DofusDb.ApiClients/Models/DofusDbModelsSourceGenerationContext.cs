@@ -15,6 +15,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Social;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 using DofusSharp.DofusDb.ApiClients.Search;
@@ -31,10 +32,12 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementObjective>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementReward>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievement>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAllianceRight>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlignmentRank>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlignmentSide>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlmanaxCalendar>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbGuildRight>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeapon>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemSet>))]

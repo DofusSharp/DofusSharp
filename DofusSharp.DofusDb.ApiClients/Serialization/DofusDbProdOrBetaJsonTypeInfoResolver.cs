@@ -13,6 +13,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Social;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
@@ -45,10 +46,13 @@ static class DofusDbProdOrBetaJsonTypeInfoResolver
                 new JsonDerivedType(typeof(DofusDbAchievementObjective), useBetaModels ? "AchievementObjectiveData" : "AchievementObjectives"),
                 new JsonDerivedType(typeof(DofusDbAchievementReward), useBetaModels ? "AchievementRewardData" : "AchievementRewards"),
                 new JsonDerivedType(typeof(DofusDbAchievement), useBetaModels ? "AchievementData" : "Achievements"),
+                new JsonDerivedType(typeof(DofusDbAllianceRight), useBetaModels ? "AllianceRightData" : "AllianceRights"),
                 new JsonDerivedType(typeof(DofusDbAlignmentRank), useBetaModels ? "AlignmentRankData" : "AlignmentRanks"),
                 new JsonDerivedType(typeof(DofusDbAlignmentSide), useBetaModels ? "AlignmentSideData" : "AlignmentSides"),
                 new JsonDerivedType(typeof(DofusDbAlmanaxCalendar), useBetaModels ? "AlmanaxCalendarData" : "AlmanaxCalendars"),
                 new JsonDerivedType(typeof(DofusDbCharacteristic), useBetaModels ? "CharacteristicData" : "Characteristics"),
+                new JsonDerivedType(typeof(DofusDbDungeon), useBetaModels ? "DungeonData" : "Dungeons"),
+                new JsonDerivedType(typeof(DofusDbGuildRight), useBetaModels ? "GuildRightData" : "GuildRights"),
                 new JsonDerivedType(typeof(DofusDbItem), useBetaModels ? "ItemData" : "Items"),
                 new JsonDerivedType(typeof(DofusDbWeapon), useBetaModels ? "WeaponData" : "Weapons"),
                 new JsonDerivedType(typeof(DofusDbItemSet), useBetaModels ? "ItemSetData" : "ItemSets"),
@@ -58,7 +62,6 @@ static class DofusDbProdOrBetaJsonTypeInfoResolver
                 new JsonDerivedType(typeof(DofusDbRecipe), useBetaModels ? "RecipeData" : "Recipes"),
                 new JsonDerivedType(typeof(DofusDbSkill), useBetaModels ? "SkillData" : "Skills"),
                 new JsonDerivedType(typeof(DofusDbArea), useBetaModels ? "AreaData" : "Areas"),
-                new JsonDerivedType(typeof(DofusDbDungeon), useBetaModels ? "DungeonData" : "Dungeons"),
                 new JsonDerivedType(typeof(DofusDbMap), useBetaModels ? "MapData" : "Maps"),
                 new JsonDerivedType(typeof(DofusDbMapPosition), useBetaModels ? "MapPositionData" : "MapPositions"),
                 new JsonDerivedType(typeof(DofusDbSubArea), useBetaModels ? "SubAreaData" : "SubAreas"),

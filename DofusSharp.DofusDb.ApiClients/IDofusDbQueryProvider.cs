@@ -10,6 +10,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Social;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
@@ -27,11 +28,13 @@ public interface IDofusDbQueryProvider
     IDofusDbQuery<DofusDbAchievementObjective>  AchievementObjectives();
     IDofusDbQuery<DofusDbAchievementReward>     AchievementRewards();
     IDofusDbQuery<DofusDbAlmanaxCalendar>       AlmanaxCalendars();
+    IDofusDbQuery<DofusDbAllianceRight>         AllianceRights();
     IDofusDbQuery<DofusDbAlignmentRank>         AlignmentRanks();
     IDofusDbQuery<DofusDbAlignmentSide>         AlignmentSides();
     IDofusDbQuery<DofusDbArea>                  Areas();
     IDofusDbQuery<DofusDbCharacteristic>        Characteristics();
     IDofusDbQuery<DofusDbDungeon>               Dungeons();
+    IDofusDbQuery<DofusDbGuildRight>            GuildRights();
     IDofusDbQuery<DofusDbItem>                  Items();
     IDofusDbQuery<DofusDbItemSet>               ItemSets();
     IDofusDbQuery<DofusDbItemSuperType>         ItemSuperTypes();

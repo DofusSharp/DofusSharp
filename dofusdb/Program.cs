@@ -19,6 +19,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Models.Social;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using Spectre.Console;
 
@@ -58,8 +59,10 @@ RootCommand rootCommand = new(
         new AlmanaxCommand("almanax", "Get the almanax of the given day", uri => GetFactory(uri).Almanax(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAlignmentRank>("alignment-ranks", "Alignment Ranks", uri => GetFactory(uri).AlignmentRanks(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAlignmentSide>("alignment-sides", "Alignment Sides", uri => GetFactory(uri).AlignmentSides(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbAllianceRight>("alliance-rights", "Alliance Rights", uri => GetFactory(uri).AllianceRights(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAlmanaxCalendar>("almanax-calendars", "AlmanaxCalendars", uri => GetFactory(uri).AlmanaxCalendars(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbArea>("areas", "Areas", uri => GetFactory(uri).Areas(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbGuildRight>("guild-rights", "Guild Rights", uri => GetFactory(uri).GuildRights(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
         new GameCriterionCommand("criterion", "Parse a criterion string into a JSON array with more information", uri => GetFactory(uri).Criterion(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand(),
