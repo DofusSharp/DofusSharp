@@ -3,7 +3,7 @@ name: Pull Request - Build and test
 on:
   pull_request:
     branches: main
-    types: [ review_requested, ready_for_review ]
+    types: [ opened, synchronize, review_requested, ready_for_review ]
   workflow_dispatch:
 
 env:
