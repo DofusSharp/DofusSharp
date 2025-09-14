@@ -1,0 +1,15 @@
+﻿{
+  MessageSkinId: -1,
+  MessageBubblePosition: -1,
+  MessageNpcMoodId: 2,
+  Message: {
+    De: Oha! Ich habe Besuch! Wie schön euch zu sehen, in diesem entlegenen Winkel von Amakna kommt sonst niemand vorbei. Da ihr mir eine solche Freude macht, will ich euch die große Gunst erweisen, alle eure Fragen zu beantworten, egal wie idiotisch sie auch sein mögen.,
+    En: Woohoo! Someone's paying me a visit! There's never anyone this side of Amakna. In fact, I'm so pleased, I'll answer your questions, no matter how stupid they are.,
+    Es: ¡Yuju! ¡Alguien viene a visitarme! Nunca viene nadie por esta zona de Amakna. Tu presencia me agrada tanto que contestaré a todas tus preguntas, aunque sean de lo más estúpidas.,
+    Fr: Youha ! Quelqu'un qui vient me rendre visite ! Il n'y a jamais personne de ce côté d'Amakna. Ça me fait tellement plaisir que je vais accepter de répondre à vos questions, aussi idiotes soient-elles.,
+    Pt: Iupiii! Alguém veio me visitar! Nunca vem ninguém para esses cantos de Amakna. Estou tão contente que aceitarei responder às suas perguntas, mesmo que sejam estúpidas.
+  },
+  Id: 36,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

@@ -1,0 +1,382 @@
+﻿{
+  DialogMessages: [
+    {
+      Item1: 81,
+      Item2: 950194
+    },
+    {
+      Item1: 19203,
+      Item2: 480540
+    },
+    {
+      Item1: 20327,
+      Item2: 502218
+    },
+    {
+      Item1: 20328,
+      Item2: 502217
+    },
+    {
+      Item1: 7086,
+      Item2: 596894
+    },
+    {
+      Item1: 82,
+      Item2: 17406
+    },
+    {
+      Item1: 24613,
+      Item2: 670536
+    },
+    {
+      Item1: 30058,
+      Item2: 743397
+    },
+    {
+      Item1: 9663,
+      Item2: 744699
+    },
+    {
+      Item1: 84,
+      Item2: 659368
+    },
+    {
+      Item1: 40614,
+      Item2: 950201
+    },
+    {
+      Item1: 20322,
+      Item2: 504461
+    },
+    {
+      Item1: 54224,
+      Item2: 1049324
+    },
+    {
+      Item1: 19204,
+      Item2: 480535
+    },
+    {
+      Item1: 19207,
+      Item2: 480527
+    },
+    {
+      Item1: 19205,
+      Item2: 759173
+    },
+    {
+      Item1: 19206,
+      Item2: 480529
+    },
+    {
+      Item1: 19208,
+      Item2: 765243
+    },
+    {
+      Item1: 19209,
+      Item2: 480526
+    },
+    {
+      Item1: 20329,
+      Item2: 502216
+    },
+    {
+      Item1: 83,
+      Item2: 466912
+    },
+    {
+      Item1: 19202,
+      Item2: 480542
+    },
+    {
+      Item1: 24614,
+      Item2: 1007748
+    },
+    {
+      Item1: 24978,
+      Item2: 1007749
+    },
+    {
+      Item1: 30059,
+      Item2: 743398
+    },
+    {
+      Item1: 30060,
+      Item2: 743401
+    },
+    {
+      Item1: 40615,
+      Item2: 950202
+    },
+    {
+      Item1: 40616,
+      Item2: 950203
+    },
+    {
+      Item1: 20323,
+      Item2: 502224
+    },
+    {
+      Item1: 20325,
+      Item2: 502222
+    },
+    {
+      Item1: 20324,
+      Item2: 502223
+    },
+    {
+      Item1: 20326,
+      Item2: 502219
+    },
+    {
+      Item1: 54225,
+      Item2: 1049325
+    },
+    {
+      Item1: 54226,
+      Item2: 1049326
+    }
+  ],
+  DialogReplies: [
+    {
+      Item1: 22894,
+      Item2: 476999
+    },
+    {
+      Item1: 24296,
+      Item2: 503101
+    },
+    {
+      Item1: 24299,
+      Item2: 503109
+    },
+    {
+      Item1: 6662,
+      Item2: 598312
+    },
+    {
+      Item1: 78,
+      Item2: 466910
+    },
+    {
+      Item1: 29551,
+      Item2: 667316
+    },
+    {
+      Item1: 36127,
+      Item2: 743405
+    },
+    {
+      Item1: 10142,
+      Item2: 22813
+    },
+    {
+      Item1: 80,
+      Item2: 659367
+    },
+    {
+      Item1: 52901,
+      Item2: 839045
+    },
+    {
+      Item1: 24295,
+      Item2: 503103
+    },
+    {
+      Item1: 72692,
+      Item2: 1049323
+    },
+    {
+      Item1: 22888,
+      Item2: 477005
+    },
+    {
+      Item1: 22893,
+      Item2: 481131
+    },
+    {
+      Item1: 22891,
+      Item2: 481132
+    },
+    {
+      Item1: 24298,
+      Item2: 503111
+    },
+    {
+      Item1: 79,
+      Item2: 466911
+    },
+    {
+      Item1: 29553,
+      Item2: 667309
+    },
+    {
+      Item1: 29552,
+      Item2: 667133
+    },
+    {
+      Item1: 36123,
+      Item2: 743400
+    },
+    {
+      Item1: 36125,
+      Item2: 743403
+    },
+    {
+      Item1: 36126,
+      Item2: 743404
+    },
+    {
+      Item1: 22883,
+      Item2: 659366
+    },
+    {
+      Item1: 22884,
+      Item2: 481137
+    },
+    {
+      Item1: 52904,
+      Item2: 839054
+    },
+    {
+      Item1: 24291,
+      Item2: 503096
+    },
+    {
+      Item1: 24294,
+      Item2: 503105
+    },
+    {
+      Item1: 72696,
+      Item2: 1049330
+    },
+    {
+      Item1: 22887,
+      Item2: 477004
+    },
+    {
+      Item1: 22892,
+      Item2: 477001
+    },
+    {
+      Item1: 22890,
+      Item2: 477002
+    },
+    {
+      Item1: 22889,
+      Item2: 481135
+    },
+    {
+      Item1: 22896,
+      Item2: 476997
+    },
+    {
+      Item1: 22895,
+      Item2: 481130
+    },
+    {
+      Item1: 24297,
+      Item2: 503110
+    },
+    {
+      Item1: 22886,
+      Item2: 481134
+    },
+    {
+      Item1: 22885,
+      Item2: 477010
+    },
+    {
+      Item1: 29699,
+      Item2: 667314
+    },
+    {
+      Item1: 29961,
+      Item2: 667047
+    },
+    {
+      Item1: 36122,
+      Item2: 743399
+    },
+    {
+      Item1: 36124,
+      Item2: 743402
+    },
+    {
+      Item1: 52903,
+      Item2: 839053
+    },
+    {
+      Item1: 52902,
+      Item2: 950204
+    },
+    {
+      Item1: 24290,
+      Item2: 503098
+    },
+    {
+      Item1: 24293,
+      Item2: 503107
+    },
+    {
+      Item1: 24289,
+      Item2: 503141
+    },
+    {
+      Item1: 24292,
+      Item2: 503094
+    },
+    {
+      Item1: 72695,
+      Item2: 1049329
+    },
+    {
+      Item1: 72693,
+      Item2: 1049327
+    },
+    {
+      Item1: 72694,
+      Item2: 1049328
+    }
+  ],
+  Actions: [
+    3
+  ],
+  Gender: Masculine,
+  Look: {954},
+  AnimFunList: [
+    {
+      AnimId: 900,
+      EntityId: 37,
+      AnimName: AnimAttaque0,
+      AnimWeight: 1.0
+    },
+    {
+      AnimId: 901,
+      EntityId: 37,
+      AnimName: AnimAttaque1,
+      AnimWeight: 2.0
+    }
+  ],
+  FastAnimsFun: false,
+  TooltipVisible: true,
+  DialogData: [
+    {
+      Id: 71,
+      MessageId: 81,
+      MoodId: 2,
+      BubblePosition: -1
+    }
+  ],
+  DefaultSkinId: -1,
+  Name: {
+    De: Amine,
+    En: Amine,
+    Es: Amino,
+    Fr: Amine,
+    Pt: Amino
+  },
+  Id: 37,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
