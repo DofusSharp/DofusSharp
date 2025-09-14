@@ -38,34 +38,34 @@ public class DofusDbBreed : DofusDbResource
     public long? FemaleArtwork { get; init; }
 
     /// <summary>
-    ///     The stat points cost and values for increasing strength.
+    ///     The stat point thresholds and costs for Strength.
     /// </summary>
-    public IReadOnlyList<(int Value, int Cost)>? StatsPointsForStrength { get; init; }
+    public IReadOnlyList<(int Threshold, int Cost)>? StatsPointsForStrength { get; init; }
 
     /// <summary>
-    ///     The stat points cost and values for increasing intelligence.
+    ///     The stat point thresholds and costs for Intelligence.
     /// </summary>
-    public IReadOnlyList<(int Value, int Cost)>? StatsPointsForIntelligence { get; init; }
+    public IReadOnlyList<(int Threshold, int Cost)>? StatsPointsForIntelligence { get; init; }
 
     /// <summary>
-    ///     The stat points cost and values for increasing chance.
+    ///     The stat point thresholds and costs for Chance.
     /// </summary>
-    public IReadOnlyList<(int Value, int Cost)>? StatsPointsForChance { get; init; }
+    public IReadOnlyList<(int Threshold, int Cost)>? StatsPointsForChance { get; init; }
 
     /// <summary>
-    ///     The stat points cost and values for increasing agility.
+    ///     The stat point thresholds and costs for Agility.
     /// </summary>
-    public IReadOnlyList<(int Value, int Cost)>? StatsPointsForAgility { get; init; }
+    public IReadOnlyList<(int Threshold, int Cost)>? StatsPointsForAgility { get; init; }
 
     /// <summary>
-    ///     The stat points cost and values for increasing vitality.
+    ///     The stat point thresholds and costs for Vitality.
     /// </summary>
-    public IReadOnlyList<(int Value, int Cost)>? StatsPointsForVitality { get; init; }
+    public IReadOnlyList<(int Threshold, int Cost)>? StatsPointsForVitality { get; init; }
 
     /// <summary>
-    ///     The stat points cost and values for increasing wisdom.
+    ///     The stat point thresholds and costs for Wisdom.
     /// </summary>
-    public IReadOnlyList<(int Value, int Cost)>? StatsPointsForWisdom { get; init; }
+    public IReadOnlyList<(int Threshold, int Cost)>? StatsPointsForWisdom { get; init; }
 
     /// <summary>
     ///     The unique identifiers of spells available to this breed.
