@@ -1,21 +1,22 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using System.Web;
 using DofusSharp.Common;
-using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Models.Criterion;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
+using DofusSharp.DofusDb.ApiClients.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 public class DofusDbCriterionClient : IDofusDbCriterionClient
 {
-    readonly DofusDbModelsSourceGenerationContext _context;
+    readonly JsonSerializerOptions _options;
 
-    public DofusDbCriterionClient(Uri baseAddress, Uri? referrer = null)
+    public DofusDbCriterionClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions options)
     {
         Referrer = referrer;
         BaseAddress = baseAddress;
-        _context = DofusDbModelsSourceGenerationContext.Instance;
+        _options = options;
     }
 
     public Uri BaseAddress { get; }
@@ -34,7 +35,7 @@ public class DofusDbCriterionClient : IDofusDbCriterionClient
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        DofusDbCriterion? result = await response.Content.ReadFromJsonAsync(_context.DofusDbCriterion, cancellationToken);
+        DofusDbCriterion? result = await response.Content.ReadFromJsonAsync(_options.GetTypeInfo<DofusDbCriterion>(), cancellationToken);
         if (result == null)
         {
             throw new InvalidOperationException("Could not deserialize the criterion.");

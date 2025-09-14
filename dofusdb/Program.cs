@@ -165,7 +165,7 @@ catch (Exception exn)
 
 IDofusDbClientsFactory GetFactory(Uri uri)
 {
-    return DofusDbClient.Create(uri, referrer);
+    return DofusDbClient.CreateProductionFactory(uri, referrer);
 }
 
 void WriteException(Exception exn)

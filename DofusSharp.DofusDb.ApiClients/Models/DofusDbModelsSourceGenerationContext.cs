@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
@@ -63,12 +64,21 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
 public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContext
 {
-    public static DofusDbModelsSourceGenerationContext Instance { get; } = new(CreateOptions());
+    /// <summary>
+    ///     Get a <see cref="JsonSerializerOptions" /> with information for all DofusDb models, using production models.
+    /// </summary>
+    public static JsonSerializerOptions ProdOptions => CreateOptions(false);
 
-    public static JsonSerializerOptions CreateOptions() =>
+    /// <summary>
+    ///     Get a <see cref="JsonSerializerOptions" /> with information for all DofusDb models, using beta models.
+    /// </summary>
+    public static JsonSerializerOptions BetaOptions => CreateOptions(true);
+
+    static JsonSerializerOptions CreateOptions(bool useBetaModels) =>
         new(JsonSerializerDefaults.Web)
         {
             AllowOutOfOrderMetadataProperties = true,
+            TypeInfoResolver = Default.WithAddedModifier(ti => DofusDbProdOrBetaJsonTypeInfoResolver.Modifier(ti, useBetaModels)),
             Converters =
             {
                 new JsonStringEnumConverter<DofusDbGender>(),
