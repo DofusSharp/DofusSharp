@@ -5,7 +5,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImageClient<TId>> clientFactory, Uri defaultUrl)
+class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImagesClient<TId>> clientFactory)
 {
     readonly Argument<TId> _idArgument = new("id")
     {
@@ -19,17 +19,6 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
         DefaultValueFactory = _ => DofusDbImageScale.Full
     };
 
-    readonly Option<string> _outputFileOption = new("--output", "-o")
-    {
-        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
-    };
-
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
-    };
-
     public Command CreateCommand() =>
         new(command, $"{name} client")
         {
@@ -38,18 +27,18 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
 
     Command CreateGetCommand()
     {
-        Command result = new("get", $"Get {name.ToLowerInvariant()} by id") { Arguments = { _idArgument }, Options = { _scaleOption, _outputFileOption, _baseUrlOption } };
+        Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
+            { Arguments = { _idArgument }, Options = { _scaleOption, CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 TId id = r.GetRequiredValue(_idArgument);
                 DofusDbImageScale scale = r.GetValue(_scaleOption);
-                string? outputFile = r.GetValue(_outputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
 
-                string? baseUrl = r.GetValue(_baseUrlOption);
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbScalableImageClient<TId> client = clientFactory(url);
+                IDofusDbScalableImagesClient<TId> client = clientFactory(new Uri(baseUrl));
 
                 Stream image = null!;
                 if (quiet)
@@ -72,7 +61,7 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
         return result;
     }
 
-    FileStream GetOutputStream(IDofusDbImageClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile)
+    FileStream GetOutputStream(IDofusDbImagesClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile)
     {
         if (outputFile == null)
         {

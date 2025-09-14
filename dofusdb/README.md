@@ -79,7 +79,7 @@ Commandes :
   alignment-ranks         Alignment Ranks client
   alignment-sides         Alignment Sides client
   alliance-rights         Alliance Rights client
-  almanax <date>          Get the almanax of the given day [default: 14/09/2025]
+  almanax <date>          Get the almanax of the given day [default: 15/09/2025]
   almanax-calendars       AlmanaxCalendars client
   alterations             Alterations client
   areas                   Areas client
@@ -151,7 +151,7 @@ Utilisation :
   dofusdb almanax [<date>] [options]
 
 Arguments :
-  <date>  The specific day for which to retrieve the Almanax calendar data (format: MM/DD/YYYY) [default: 14/09/2025]
+  <date>  The specific day for which to retrieve the Almanax calendar data (format: MM/DD/YYYY) [default: 15/09/2025]
 
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
@@ -362,7 +362,7 @@ Arguments :
   <id>  Unique identifier of the resource
 
 Options :
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
   --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
@@ -401,7 +401,7 @@ Arguments :
 
 Options :
   --scale <Full|Half|Quarter|ThreeQuarters>  Scale of the image to fetch [default: Full]
-  -o, --output <output>                      File to write the JSON output to. If not specified, the output will be written to the console
+  -o, --output <output>                      File to write the JSON output to. If not specified, an arbitrary file name will be used
   --base <base>                              Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help                             Show help and usage information
   -q, --quiet                                Display less output
@@ -441,7 +441,7 @@ Arguments :
   <symbol-id>  The unique identifier of the breed symbol to retrieve. Symbol ID = Breed ID)
 
 Options :
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
   --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
@@ -461,7 +461,7 @@ Arguments :
   <logo-id>  The unique identifier of the breed logo to retrieve. Logo ID = Breed ID
 
 Options :
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
   --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
@@ -481,7 +481,7 @@ Arguments :
   <head-id>  The unique identifier of the breed head to retrieve. Male head ID = breed ID × 10, female head ID = breed ID × 10 + 1
 
 Options :
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
   --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output

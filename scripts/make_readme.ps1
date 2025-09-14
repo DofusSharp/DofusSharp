@@ -52,3 +52,5 @@ while ($Match.Success) {
 $Result += $Template
 
 Out-File -FilePath $OutputPath -InputObject $Result -Encoding UTF8
+
+Write-Host "README generated successfully at '$OutputPath'."

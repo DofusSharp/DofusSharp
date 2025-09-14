@@ -5,23 +5,12 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbImageClient<TId>> clientFactory, Uri defaultUrl)
+class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbImagesClient<TId>> clientFactory)
 {
     readonly Argument<TId> _idArgument = new("id")
     {
         Description = "Unique identifier of the resource",
         Arity = ArgumentArity.ExactlyOne
-    };
-
-    readonly Option<string> _outputFileOption = new("--output", "-o")
-    {
-        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
-    };
-
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
     };
 
     public Command CreateCommand() =>
@@ -32,16 +21,17 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
 
     Command CreateGetCommand()
     {
-        Command result = new("get", $"Get {name.ToLowerInvariant()} by id") { Arguments = { _idArgument }, Options = { _outputFileOption, _baseUrlOption } };
+        Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
+            { Arguments = { _idArgument }, Options = { CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 TId id = r.GetRequiredValue(_idArgument);
-                string? outputFile = r.GetValue(_outputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbImageClient<TId> client = clientFactory(url);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
+
+                IDofusDbImagesClient<TId> client = clientFactory(new Uri(baseUrl));
 
                 Stream image = null!;
                 if (quiet)
@@ -64,7 +54,7 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
         return result;
     }
 
-    FileStream GetOutputStream(IDofusDbImageClient<TId> client, TId id, string? outputFile)
+    FileStream GetOutputStream(IDofusDbImagesClient<TId> client, TId id, string? outputFile)
     {
         if (outputFile == null)
         {

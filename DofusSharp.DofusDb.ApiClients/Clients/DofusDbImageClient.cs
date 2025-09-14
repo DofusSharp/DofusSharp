@@ -4,9 +4,9 @@ using DofusSharp.DofusDb.ApiClients.Models.Common;
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 /// <inheritdoc />
-class DofusDbImageClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? referrer, string? prefix) : IDofusDbImageClient<TId>
+class DofusDbImagesClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? referrer, string? prefix) : IDofusDbImagesClient<TId>
 {
-    public DofusDbImageClient(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null) : this(baseAddress, imageFormat, referrer, null)
+    public DofusDbImagesClient(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null) : this(baseAddress, imageFormat, referrer, null)
     {
     }
 
@@ -20,12 +20,7 @@ class DofusDbImageClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? ref
     {
         Uri url = GetImageQuery(id);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
-
-        // NOTE: DO NOT dispose the response here, it will be disposed later when the resulting stream is disposed.
-        HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        return await HttpResponseMessageStream.Create(response);
+        return await httpClient.GetImageStreamAsync(url, cancellationToken);
     }
 
     public Uri GetImageQuery(TId id)

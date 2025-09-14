@@ -8,7 +8,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class GameCriterionCommand(string command, string description, Func<Uri, IDofusDbCriterionClient> clientFactory, Uri defaultUrl)
+class GameCriterionCommand(string command, string description, Func<Uri, IDofusDbCriterionClient> clientFactory)
 {
     readonly Argument<string> _criterionArgument = new("criterion")
     {
@@ -21,23 +21,6 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
         Description = "Language to request"
     };
 
-    readonly Option<string> _outputFileOption = new("--output", "-o")
-    {
-        Description = "File to write the JSON output to. If not specified, the output will be written to stdout"
-    };
-
-    readonly Option<bool> _prettyPrintOption = new("--pretty-print")
-    {
-        Description = "Pretty print the JSON output",
-        DefaultValueFactory = _ => false
-    };
-
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
-    };
-
     public Command CreateCommand()
     {
         Command result = new(command, description)
@@ -46,24 +29,23 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
             Options =
             {
                 _langOption,
-                _outputFileOption,
-                _prettyPrintOption, _baseUrlOption
+                CommonOptions.OutputFileOption,
+                CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption
             }
         };
         result.SetAction(async (r, cancellationToken) =>
             {
                 string criterion = r.GetRequiredValue(_criterionArgument);
                 DofusDbLanguage lang = r.GetValue(_langOption);
-                string? outputFile = r.GetValue(_outputFileOption);
-                bool prettyPrint = r.GetValue(_prettyPrintOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
+                bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbCriterion));
 
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbCriterionClient client = clientFactory(url);
+                IDofusDbCriterionClient client = clientFactory(new Uri(baseUrl));
 
                 DofusDbCriterion? parsedCriterion = null!;
                 if (quiet)

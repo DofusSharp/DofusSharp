@@ -4,24 +4,17 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class GameVersionCommand(string command, string description, Func<Uri, IDofusDbVersionClient> clientFactory, Uri defaultUrl)
+class GameVersionCommand(string command, string description, Func<Uri, IDofusDbVersionClient> clientFactory)
 {
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
-    };
-
     public Command CreateCommand()
     {
-        Command result = new(command, description) { Options = { _baseUrlOption } };
+        Command result = new(command, description) { Options = { CommonOptions.BaseUrlOption } };
         result.SetAction(async (r, cancellationToken) =>
             {
-                string? baseUrl = r.GetValue(_baseUrlOption);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbVersionClient client = clientFactory(url);
+                IDofusDbVersionClient client = clientFactory(new Uri(baseUrl));
 
                 Version version = null!;
                 if (quiet)

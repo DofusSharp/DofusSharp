@@ -4,19 +4,8 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class BreedImageClientCommand(string command, Func<Uri, IDofusDbBreedImagesClient> clientFactory, Uri defaultUrl)
+class BreedImageClientCommand(string command, Func<Uri, IDofusDbBreedImagesClient> clientFactory)
 {
-    readonly Option<string> _outputFileOption = new("--output", "-o")
-    {
-        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
-    };
-
-    readonly Option<string> _baseUrlOption = new("--base")
-    {
-        Description = "Base URL to use when building the query URL",
-        DefaultValueFactory = _ => defaultUrl.ToString()
-    };
-
     public Command CreateCommand() =>
         new(command, "Breed images client")
         {
@@ -33,16 +22,16 @@ class BreedImageClientCommand(string command, Func<Uri, IDofusDbBreedImagesClien
             Arity = ArgumentArity.ExactlyOne
         };
 
-        Command result = new("symbol", "Retrieve the symbol image for a breed using its ID") { Arguments = { symbolIdArgument }, Options = { _outputFileOption, _baseUrlOption } };
+        Command result = new("symbol", "Retrieve the symbol image for a breed using its ID")
+            { Arguments = { symbolIdArgument }, Options = { CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 long id = r.GetRequiredValue(symbolIdArgument);
-                string? outputFile = r.GetValue(_outputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbBreedImagesClient client = clientFactory(url);
+                string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
+                IDofusDbBreedImagesClient client = clientFactory(new Uri(baseUrl));
 
                 Stream image = null!;
                 if (quiet)
@@ -73,16 +62,16 @@ class BreedImageClientCommand(string command, Func<Uri, IDofusDbBreedImagesClien
             Arity = ArgumentArity.ExactlyOne
         };
 
-        Command result = new("logo", "Retrieve the logo image for a breed using its ID") { Arguments = { logoIdArgument }, Options = { _outputFileOption, _baseUrlOption } };
+        Command result = new("logo", "Retrieve the logo image for a breed using its ID")
+            { Arguments = { logoIdArgument }, Options = { CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 long id = r.GetRequiredValue(logoIdArgument);
-                string? outputFile = r.GetValue(_outputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbBreedImagesClient client = clientFactory(url);
+                string? baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
+                IDofusDbBreedImagesClient client = clientFactory(new Uri(baseUrl));
 
                 Stream image = null!;
                 if (quiet)
@@ -113,16 +102,16 @@ class BreedImageClientCommand(string command, Func<Uri, IDofusDbBreedImagesClien
             Arity = ArgumentArity.ExactlyOne
         };
 
-        Command result = new("head", "Retrieve the head image for a breed using its ID") { Arguments = { headIdArgument }, Options = { _outputFileOption, _baseUrlOption } };
+        Command result = new("head", "Retrieve the head image for a breed using its ID")
+            { Arguments = { headIdArgument }, Options = { CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 long id = r.GetRequiredValue(headIdArgument);
-                string? outputFile = r.GetValue(_outputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
-                string? baseUrl = r.GetValue(_baseUrlOption);
-                Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbBreedImagesClient client = clientFactory(url);
+                string? baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
+                IDofusDbBreedImagesClient client = clientFactory(new Uri(baseUrl));
 
                 Stream image = null!;
                 if (quiet)
