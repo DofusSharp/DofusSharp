@@ -37,6 +37,7 @@ jobs:
               - 'DofusSharp.Common*/**'
               - 'DofusSharp.DofusDb*'
               - 'DofusSharp.DofusDb*/**'
+              - 'dofusdb*/**'
               - 'Tests.Live.DofusDb*'
               - 'Tests.Live.DofusDb*/**'
               - 'Tests.UnitTests.DofusDb*'
