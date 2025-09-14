@@ -5,16 +5,10 @@ using DofusSharp.DofusDb.ApiClients.Models;
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 /// <inheritdoc />
-class DofusDbVersionClient : IDofusDbVersionClient
+class DofusDbVersionClient(Uri baseAddress, Uri? referrer = null) : IDofusDbVersionClient
 {
-    public DofusDbVersionClient(Uri baseAddress, Uri? referrer = null)
-    {
-        Referrer = referrer;
-        BaseAddress = baseAddress;
-    }
-
-    public Uri BaseAddress { get; }
-    public Uri? Referrer { get; }
+    public Uri BaseAddress { get; } = baseAddress;
+    public Uri? Referrer { get; } = referrer;
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
     public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)

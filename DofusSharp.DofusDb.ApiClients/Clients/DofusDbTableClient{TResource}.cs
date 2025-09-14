@@ -7,20 +7,12 @@ using DofusSharp.DofusDb.ApiClients.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
-class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TResource: DofusDbResource
+class DofusDbTableClient<TResource>(Uri baseAddress, Uri? referrer, JsonSerializerOptions options) : IDofusDbTableClient<TResource> where TResource: DofusDbResource
 {
-    readonly JsonSerializerOptions _options;
     readonly DofusDbSearchRequestQueryParamsBuilder _queryParamsBuilder = new();
 
-    public DofusDbTableClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions options)
-    {
-        Referrer = referrer;
-        BaseAddress = baseAddress;
-        _options = options;
-    }
-
-    public Uri BaseAddress { get; }
-    public Uri? Referrer { get; }
+    public Uri BaseAddress { get; } = baseAddress;
+    public Uri? Referrer { get; } = referrer;
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
     public async Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default)
@@ -30,7 +22,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        if (await response.Content.ReadFromJsonAsync(_options.GetTypeInfo<TResource>(), cancellationToken) is not { } result)
+        if (await response.Content.ReadFromJsonAsync(options.GetTypeInfo<TResource>(), cancellationToken) is not { } result)
         {
             throw new InvalidOperationException("Could not deserialize the response content.");
         }
@@ -47,7 +39,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        if (await response.Content.ReadFromJsonAsync(_options.GetTypeInfo<DofusDbSearchResult<TResource>>(), cancellationToken) is not { } result)
+        if (await response.Content.ReadFromJsonAsync(options.GetTypeInfo<DofusDbSearchResult<TResource>>(), cancellationToken) is not { } result)
         {
             throw new InvalidOperationException("Could not deserialize the search result.");
         }
@@ -69,7 +61,7 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        if (await response.Content.ReadFromJsonAsync(_options.GetTypeInfo<DofusDbSearchResult<TResource>>(), cancellationToken) is not { } result)
+        if (await response.Content.ReadFromJsonAsync(options.GetTypeInfo<DofusDbSearchResult<TResource>>(), cancellationToken) is not { } result)
         {
             throw new InvalidOperationException("Could not deserialize the search result.");
         }

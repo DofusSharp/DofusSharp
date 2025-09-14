@@ -3,18 +3,11 @@ using DofusSharp.DofusDb.ApiClients.Models.Common;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
-class DofusDbScalableImageClient<TId> : IDofusDbScalableImageClient<TId>
+class DofusDbScalableImageClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null) : IDofusDbScalableImageClient<TId>
 {
-    public DofusDbScalableImageClient(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null)
-    {
-        BaseAddress = baseAddress;
-        ImageFormat = imageFormat;
-        Referrer = referrer;
-    }
-
-    public Uri BaseAddress { get; }
-    public ImageFormat ImageFormat { get; }
-    public Uri? Referrer { get; }
+    public Uri BaseAddress { get; } = baseAddress;
+    public ImageFormat ImageFormat { get; } = imageFormat;
+    public Uri? Referrer { get; } = referrer;
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
     public Task<Stream> GetImageAsync(TId id, CancellationToken cancellationToken = default) => GetImageAsync(id, DofusDbImageScale.Full, cancellationToken);

@@ -8,19 +8,10 @@ using DofusSharp.DofusDb.ApiClients.Serialization;
 
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
-public class DofusDbCriterionClient : IDofusDbCriterionClient
+public class DofusDbCriterionClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions options) : IDofusDbCriterionClient
 {
-    readonly JsonSerializerOptions _options;
-
-    public DofusDbCriterionClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions options)
-    {
-        Referrer = referrer;
-        BaseAddress = baseAddress;
-        _options = options;
-    }
-
-    public Uri BaseAddress { get; }
-    public Uri? Referrer { get; }
+    public Uri BaseAddress { get; } = baseAddress;
+    public Uri? Referrer { get; } = referrer;
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
     public async Task<DofusDbCriterion?> ParseCriterionAsync(string criterion, DofusDbLanguage? language = null, CancellationToken cancellationToken = default)
@@ -35,7 +26,7 @@ public class DofusDbCriterionClient : IDofusDbCriterionClient
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        DofusDbCriterion? result = await response.Content.ReadFromJsonAsync(_options.GetTypeInfo<DofusDbCriterion>(), cancellationToken);
+        DofusDbCriterion? result = await response.Content.ReadFromJsonAsync(options.GetTypeInfo<DofusDbCriterion>(), cancellationToken);
         if (result == null)
         {
             throw new InvalidOperationException("Could not deserialize the criterion.");

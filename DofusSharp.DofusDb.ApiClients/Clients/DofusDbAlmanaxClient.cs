@@ -7,19 +7,10 @@ using DofusSharp.DofusDb.ApiClients.Serialization;
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 /// <inheritdoc />
-class DofusDbAlmanaxClient : IDofusDbAlmanaxCalendarClient
+class DofusDbAlmanaxClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions options) : IDofusDbAlmanaxCalendarClient
 {
-    readonly JsonSerializerOptions _options;
-
-    public DofusDbAlmanaxClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions options)
-    {
-        _options = options;
-        Referrer = referrer;
-        BaseAddress = baseAddress;
-    }
-
-    public Uri BaseAddress { get; }
-    public Uri? Referrer { get; }
+    public Uri BaseAddress { get; } = baseAddress;
+    public Uri? Referrer { get; } = referrer;
     public IHttpClientFactory? HttpClientFactory { get; set; }
 
     public async Task<DofusDbAlmanaxCalendar> GetAlmanaxAsync(DateOnly date, CancellationToken cancellationToken = default)
@@ -28,7 +19,7 @@ class DofusDbAlmanaxClient : IDofusDbAlmanaxCalendarClient
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync(_options.GetTypeInfo<DofusDbAlmanaxCalendar>(), cancellationToken)
+        return await response.Content.ReadFromJsonAsync(options.GetTypeInfo<DofusDbAlmanaxCalendar>(), cancellationToken)
                ?? throw new InvalidOperationException("Could not deserialize the almanax calendar.");
     }
 
