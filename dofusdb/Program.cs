@@ -94,6 +94,14 @@ RootCommand rootCommand = new(
     }
 };
 
+if (Environment.GetEnvironmentVariable("COLUMNS") is { } columnsStr && int.TryParse(columnsStr, out int columns) && columns > 0)
+{
+    if (rootCommand.Options.OfType<HelpOption>().FirstOrDefault() is { Action: HelpAction helpAction })
+    {
+        helpAction.MaxWidth = columns;
+    }
+}
+
 ParseResult parseResult = rootCommand.Parse(args);
 
 // ------ Parse error
