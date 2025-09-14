@@ -27,14 +27,3 @@ public class DofusDbAlignmentRank : DofusDbResource
     /// </summary>
     public DofusDbMultiLangString? Description { get; init; }
 }
-
-/// <summary>
-///     An alignment side in the game.
-/// </summary>
-public class DofusDbAlignmentSide : DofusDbResource
-{
-    /// <summary>
-    ///     The name of the alignment side.
-    /// </summary>
-    public DofusDbMultiLangString? Name { get; init; }
-}
