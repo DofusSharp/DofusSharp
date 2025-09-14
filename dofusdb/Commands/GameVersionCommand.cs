@@ -4,7 +4,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class GameVersionCommand(Func<Uri, IDofusDbVersionClient> clientFactory, Uri defaultUrl)
+class GameVersionCommand(string command, string description, Func<Uri, IDofusDbVersionClient> clientFactory, Uri defaultUrl)
 {
     readonly Option<string> _baseUrlOption = new("--base")
     {
@@ -14,7 +14,7 @@ class GameVersionCommand(Func<Uri, IDofusDbVersionClient> clientFactory, Uri def
 
     public Command CreateCommand()
     {
-        Command result = new("game-version", "Get the version of the game corresponding to the data") { Options = { _baseUrlOption } };
+        Command result = new(command, description) { Options = { _baseUrlOption } };
         result.SetAction(async (r, cancellationToken) =>
             {
                 string? baseUrl = r.GetValue(_baseUrlOption);

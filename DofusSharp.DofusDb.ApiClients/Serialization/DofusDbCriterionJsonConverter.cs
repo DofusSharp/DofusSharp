@@ -4,7 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Criterion;
 
 namespace DofusSharp.DofusDb.ApiClients.Serialization;
 
-public class DofusDbCriterionJsonConverter : JsonConverter<DofusDbCriterion>
+class DofusDbCriterionJsonConverter : JsonConverter<DofusDbCriterion>
 {
     #region Read
 

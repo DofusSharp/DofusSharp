@@ -7,7 +7,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class AlmanaxCommand(Func<Uri, IDofusDbAlmanaxCalendarClient> clientFactory, Uri defaultUrl)
+class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlmanaxCalendarClient> clientFactory, Uri defaultUrl)
 {
     readonly Argument<DateOnly> _dateArgument = new("date")
     {
@@ -34,7 +34,7 @@ class AlmanaxCommand(Func<Uri, IDofusDbAlmanaxCalendarClient> clientFactory, Uri
 
     public Command CreateCommand()
     {
-        Command result = new("almanax", "Get the almanax of the given day") { Arguments = { _dateArgument }, Options = { _outputFileOption, _prettyPrintOption, _baseUrlOption } };
+        Command result = new(command, description) { Arguments = { _dateArgument }, Options = { _outputFileOption, _prettyPrintOption, _baseUrlOption } };
         result.SetAction(async (r, cancellationToken) =>
             {
                 DateOnly date = r.GetRequiredValue(_dateArgument);
