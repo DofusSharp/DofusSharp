@@ -37,3 +37,15 @@ public class DofusDbOrnament : DofusDbResource
     /// </summary>
     public string? Img { get; init; }
 }
+
+public static class DofusDbOrnamentImagesExtensions
+{
+    /// <summary>
+    ///     Gets the icon image stream for the specified ornament using the provided factory to create the image client.
+    /// </summary>
+    /// <param name="ornament">The ornament whose icon to fetch.</param>
+    /// <param name="factory">The factory to create the image client.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<Stream> GetIconAsync(this DofusDbOrnament ornament, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        ornament.IconId.HasValue ? factory.OrnamentImages().GetImageAsync(ornament.IconId.Value, cancellationToken) : throw new ArgumentNullException(nameof(ornament.IconId));
+}

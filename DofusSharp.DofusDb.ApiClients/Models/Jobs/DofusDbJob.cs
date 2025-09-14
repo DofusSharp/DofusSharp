@@ -27,3 +27,15 @@ public class DofusDbJob : DofusDbResource
     /// </summary>
     public DofusDbMultiLangString? Name { get; init; }
 }
+
+public static class DofusDbJobImagesExtensions
+{
+    /// <summary>
+    ///     Retrieves the icon image stream for the specified job using the provided factory.
+    /// </summary>
+    /// <param name="job">The job whose icon is to be retrieved.</param>
+    /// <param name="factory">The factory to create the image client.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<Stream> GetIconAsync(this DofusDbJob job, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        job.IconId.HasValue ? factory.JobImages().GetImageAsync(job.IconId.Value, cancellationToken) : throw new ArgumentNullException(nameof(job.IconId));
+}

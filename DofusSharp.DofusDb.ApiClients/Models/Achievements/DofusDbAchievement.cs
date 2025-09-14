@@ -52,3 +52,17 @@ public class DofusDbAchievement : DofusDbResource
     /// </summary>
     public string? Img { get; init; }
 }
+
+public static class DofusDbAchievementImagesExtensions
+{
+    /// <summary>
+    ///     Retrieves the image stream for the achievement's icon using the provided factory.
+    /// </summary>
+    /// <param name="achievement">The achievement whose icon image is to be retrieved.</param>
+    /// <param name="factory">The factory used to create the image client.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<Stream> GetIconAsync(this DofusDbAchievement achievement, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        achievement.IconId.HasValue
+            ? factory.AchievementImages().GetImageAsync(achievement.IconId.Value, cancellationToken)
+            : throw new ArgumentNullException(nameof(achievement.IconId));
+}

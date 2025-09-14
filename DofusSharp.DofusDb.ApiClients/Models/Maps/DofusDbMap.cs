@@ -1,4 +1,6 @@
-﻿namespace DofusSharp.DofusDb.ApiClients.Models.Maps;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
+
+namespace DofusSharp.DofusDb.ApiClients.Models.Maps;
 
 /// <summary>
 ///     A map in the game.
@@ -135,4 +137,22 @@ public class DofusDbMap : DofusDbResource
     ///     The number of cells in the map.
     /// </summary>
     public int? CellsCount { get; init; }
+}
+
+public static class DofusDbMapImagesExtensions
+{
+    /// <summary>
+    ///     Fetches the image of the map.
+    /// </summary>
+    /// <param name="map">The map to fetch the image for.</param>
+    /// <param name="factory">The factory to create the client from.</param>
+    /// <param name="scale">The scale of the image to fetch.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<Stream> GetImageAsync(
+        this DofusDbMap map,
+        IDofusDbClientsFactory factory,
+        DofusDbImageScale scale = DofusDbImageScale.Full,
+        CancellationToken cancellationToken = default
+    ) =>
+        map.Id.HasValue ? factory.MapImages().GetImageAsync(map.Id.Value, scale, cancellationToken) : throw new ArgumentNullException(nameof(map.Id));
 }

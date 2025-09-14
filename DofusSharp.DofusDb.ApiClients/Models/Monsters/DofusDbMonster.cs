@@ -222,3 +222,15 @@ public class DofusDbMonster : DofusDbResource
     /// </summary>
     public DofusDbMonster? CorrespondingMiniBoss { get; init; }
 }
+
+public static class DofusDbMonsterImagesExtensions
+{
+    /// <summary>
+    ///     Fetches the graphics image associated with the monster using the provided factory to create the image client.
+    /// </summary>
+    /// <param name="monster">The monster for which to fetch the graphics image.</param>
+    /// <param name="factory">The factory used to create the image client.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<Stream> GetGfxAsync(this DofusDbMonster monster, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        monster.GfxId.HasValue ? factory.MonsterImages().GetImageAsync(monster.GfxId.Value, cancellationToken) : throw new ArgumentNullException(nameof(monster.GfxId));
+}
