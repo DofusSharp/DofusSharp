@@ -156,6 +156,132 @@
   Types: [
     6
   ],
+  Npc: {
+    DialogMessages: [
+      {
+        Item1: 15237,
+        Item2: 508887
+      },
+      {
+        Item1: 15238,
+        Item2: 1057479
+      },
+      {
+        Item1: 15239,
+        Item2: 393013
+      },
+      {
+        Item1: 15240,
+        Item2: 1057480
+      },
+      {
+        Item1: 15241,
+        Item2: 1057481
+      }
+    ],
+    DialogReplies: [
+      {
+        Item1: 17926,
+        Item2: 365591
+      },
+      {
+        Item1: 17925,
+        Item2: 393014
+      },
+      {
+        Item1: 17922,
+        Item2: 365585
+      },
+      {
+        Item1: 17924,
+        Item2: 365583
+      },
+      {
+        Item1: 17921,
+        Item2: 365586
+      },
+      {
+        Item1: 17923,
+        Item2: 365584
+      }
+    ],
+    Actions: [
+      3
+    ],
+    Gender: Masculine,
+    Look: {1979|1990|1=8235599},
+    AnimFunList: [
+      {
+        AnimId: 3187,
+        EntityId: 1958,
+        AnimName: AnimAttaque0,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 3188,
+        EntityId: 1958,
+        AnimName: AnimAttaque12,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 3189,
+        EntityId: 1958,
+        AnimName: AnimAttaque13,
+        AnimWeight: 1.0
+      },
+      {
+        AnimId: 3190,
+        EntityId: 1958,
+        AnimName: AnimAttaque15,
+        AnimWeight: 3.0
+      },
+      {
+        AnimId: 3191,
+        EntityId: 1958,
+        AnimName: AnimAttaque2,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 3192,
+        EntityId: 1958,
+        AnimName: AnimAttaque4,
+        AnimWeight: 3.0
+      },
+      {
+        AnimId: 3193,
+        EntityId: 1958,
+        AnimName: AnimAttaque8,
+        AnimWeight: 1.0
+      },
+      {
+        AnimId: 3194,
+        EntityId: 1958,
+        AnimName: AnimAttaque10,
+        AnimWeight: 1.0
+      }
+    ],
+    FastAnimsFun: false,
+    TooltipVisible: true,
+    DialogData: [
+      {
+        Id: 5344,
+        MessageId: 15237,
+        MoodId: 2,
+        BubblePosition: -1
+      }
+    ],
+    DefaultSkinId: -1,
+    Name: {
+      De: Mikart,
+      En: Mikart,
+      Es: Mikart,
+      Fr: Mikart,
+      Pt: Mikart
+    },
+    Id: 1958,
+    CreatedAt: DateTimeOffset_7,
+    UpdatedAt: DateTimeOffset_8
+  },
   ObjectiveId: 6915,
   MeridiaIllustrationId: -1,
   Name: {
@@ -196,6 +322,6 @@
   CelebrationName: {},
   CelebrationDescription: {},
   Id: 291,
-  CreatedAt: DateTimeOffset_7,
-  UpdatedAt: DateTimeOffset_8
+  CreatedAt: DateTimeOffset_9,
+  UpdatedAt: DateTimeOffset_10
 }

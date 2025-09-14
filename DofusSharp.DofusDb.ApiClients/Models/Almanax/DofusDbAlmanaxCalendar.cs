@@ -1,5 +1,6 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
+using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 
 namespace DofusSharp.DofusDb.ApiClients.Models.Almanax;
 
@@ -14,6 +15,7 @@ public class DofusDbAlmanaxCalendar : DofusDbResource
     public IReadOnlyCollection<long>? Quantities { get; init; }
     public IReadOnlyCollection<long>? QuestIds { get; init; }
     public IReadOnlyCollection<long>? Types { get; init; }
+    public DofusDbNpc? Npc { get; init; }
     public long? ObjectiveId { get; init; }
     public long? MeridiaIllustrationId { get; init; }
     public DofusDbMultiLangString? Name { get; init; }

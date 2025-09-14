@@ -156,6 +156,196 @@
   Types: [
     7
   ],
+  Npc: {
+    DialogMessages: [
+      {
+        Item1: 12280,
+        Item2: 355790
+      },
+      {
+        Item1: 12281,
+        Item2: 1064943
+      },
+      {
+        Item1: 12286,
+        Item2: 355796
+      },
+      {
+        Item1: 12282,
+        Item2: 1064944
+      },
+      {
+        Item1: 12283,
+        Item2: 1064945
+      },
+      {
+        Item1: 12284,
+        Item2: 1064946
+      },
+      {
+        Item1: 12287,
+        Item2: 355797
+      },
+      {
+        Item1: 12288,
+        Item2: 355789
+      },
+      {
+        Item1: 12289,
+        Item2: 1064953
+      },
+      {
+        Item1: 12290,
+        Item2: 1064954
+      },
+      {
+        Item1: 12291,
+        Item2: 1064955
+      },
+      {
+        Item1: 12292,
+        Item2: 1064956
+      }
+    ],
+    DialogReplies: [
+      {
+        Item1: 13969,
+        Item2: 1064950
+      },
+      {
+        Item1: 13978,
+        Item2: 1064961
+      },
+      {
+        Item1: 13968,
+        Item2: 1064949
+      },
+      {
+        Item1: 13971,
+        Item2: 369306
+      },
+      {
+        Item1: 13972,
+        Item2: 1064962
+      },
+      {
+        Item1: 13977,
+        Item2: 1064960
+      },
+      {
+        Item1: 13967,
+        Item2: 1064948
+      },
+      {
+        Item1: 13966,
+        Item2: 1064947
+      },
+      {
+        Item1: 13965,
+        Item2: 369576
+      },
+      {
+        Item1: 73879,
+        Item2: 1064951
+      },
+      {
+        Item1: 73880,
+        Item2: 1064952
+      },
+      {
+        Item1: 13976,
+        Item2: 1064959
+      },
+      {
+        Item1: 13975,
+        Item2: 1064958
+      },
+      {
+        Item1: 13974,
+        Item2: 1064957
+      },
+      {
+        Item1: 13973,
+        Item2: 369304
+      }
+    ],
+    Actions: [
+      3
+    ],
+    Gender: Masculine,
+    Look: {1979|1972|1=5534355},
+    AnimFunList: [
+      {
+        AnimId: 1045,
+        EntityId: 1638,
+        AnimName: AnimAttaque0,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 1046,
+        EntityId: 1638,
+        AnimName: AnimAttaque12,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 1047,
+        EntityId: 1638,
+        AnimName: AnimAttaque13,
+        AnimWeight: 1.0
+      },
+      {
+        AnimId: 1048,
+        EntityId: 1638,
+        AnimName: AnimAttaque15,
+        AnimWeight: 3.0
+      },
+      {
+        AnimId: 1049,
+        EntityId: 1638,
+        AnimName: AnimAttaque2,
+        AnimWeight: 2.0
+      },
+      {
+        AnimId: 1050,
+        EntityId: 1638,
+        AnimName: AnimAttaque4,
+        AnimWeight: 3.0
+      },
+      {
+        AnimId: 1051,
+        EntityId: 1638,
+        AnimName: AnimAttaque8,
+        AnimWeight: 1.0
+      },
+      {
+        AnimId: 1052,
+        EntityId: 1638,
+        AnimName: AnimAttaque6,
+        AnimWeight: 1.0
+      }
+    ],
+    FastAnimsFun: false,
+    TooltipVisible: true,
+    DialogData: [
+      {
+        Id: 4895,
+        MessageId: 12280,
+        MoodId: 2,
+        BubblePosition: -1
+      }
+    ],
+    DefaultSkinId: -1,
+    Name: {
+      De: Nufrank,
+      En: Nufrank,
+      Es: Nufrank,
+      Fr: Nufrank,
+      Pt: Nufrank
+    },
+    Id: 1638,
+    CreatedAt: DateTimeOffset_7,
+    UpdatedAt: DateTimeOffset_8
+  },
   ObjectiveId: 5811,
   MeridiaIllustrationId: -1,
   Name: {
@@ -196,6 +386,6 @@
   CelebrationName: {},
   CelebrationDescription: {},
   Id: 11,
-  CreatedAt: DateTimeOffset_7,
-  UpdatedAt: DateTimeOffset_8
+  CreatedAt: DateTimeOffset_9,
+  UpdatedAt: DateTimeOffset_10
 }
