@@ -30,12 +30,8 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        if (await response.Content.ReadFromJsonAsync(typeof(TResource), _context, cancellationToken) is not TResource result)
-        {
-            throw new InvalidOperationException("Could not deserialize the response content.");
-        }
-
-        return result;
+        return await response.Content.ReadFromJsonAsync(typeof(TResource), _context, cancellationToken) as TResource
+               ?? throw new InvalidOperationException("Could not deserialize the response content.");
     }
 
     public Uri GetQuery(long id) => new(BaseAddress, $"{id}");
@@ -47,11 +43,9 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        if (await response.Content.ReadFromJsonAsync(typeof(DofusDbSearchResult<TResource>), _context, cancellationToken) is not DofusDbSearchResult<TResource> result)
-        {
-            throw new InvalidOperationException("Could not deserialize the search result.");
-        }
-
+        DofusDbSearchResult<TResource> result =
+            await response.Content.ReadFromJsonAsync(typeof(DofusDbSearchResult<TResource>), _context, cancellationToken) as DofusDbSearchResult<TResource>
+            ?? throw new InvalidOperationException("Could not deserialize the search result.");
         return result.Total;
     }
 
@@ -69,12 +63,8 @@ class DofusDbTableClient<TResource> : IDofusDbTableClient<TResource> where TReso
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        if (await response.Content.ReadFromJsonAsync(typeof(DofusDbSearchResult<TResource>), _context, cancellationToken) is not DofusDbSearchResult<TResource> result)
-        {
-            throw new InvalidOperationException("Could not deserialize the search result.");
-        }
-
-        return result;
+        return await response.Content.ReadFromJsonAsync(typeof(DofusDbSearchResult<TResource>), _context, cancellationToken) as DofusDbSearchResult<TResource>
+               ?? throw new InvalidOperationException("Could not deserialize the search result.");
     }
 
     public Uri SearchQuery(DofusDbSearchQuery query)
