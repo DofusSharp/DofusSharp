@@ -4,13 +4,13 @@ namespace dofusdb.Commands;
 
 static class CommonOptions
 {
-    public static readonly Option<bool> Quiet = new("--quiet", "-q")
+    public static readonly Option<bool> QuietOption = new("--quiet", "-q")
     {
         Description = "Display less output",
         Recursive = true
     };
 
-    public static readonly Option<bool> Debug = new("--debug", "-d")
+    public static readonly Option<bool> DebugOption = new("--debug", "-d")
     {
         Description = "Show debugging output",
         Recursive = true
