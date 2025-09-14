@@ -1,38 +1,39 @@
 ﻿using System.Text.Json;
 using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Models.Criterion;
+using DofusSharp.DofusDb.ApiClients.Serialization;
 using FluentAssertions;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
 public class DofusDbCriterionJsonConverterTest
 {
-    readonly DofusDbModelsSourceGenerationContext _context;
+    readonly JsonSerializerOptions _options;
 
     public DofusDbCriterionJsonConverterTest()
     {
-        _context = DofusDbModelsSourceGenerationContext.Instance;
+        _options = DofusDbModelsSourceGenerationContext.ProdOptions;
         AssertionOptions.FormattingOptions.MaxDepth = 10;
     }
 
     [Fact]
     public void Deserialize_ShouldDeserializeSimpleCriterion_Text()
     {
-        DofusDbCriterion? deserialized = JsonSerializer.Deserialize("""["TEXT"]""", _context.DofusDbCriterion);
+        DofusDbCriterion? deserialized = JsonSerializer.Deserialize("""["TEXT"]""", _options.GetTypeInfo<DofusDbCriterion>());
         deserialized.Should().Be(new DofusDbCriterionText("TEXT"));
     }
 
     [Fact]
     public void Deserialize_ShouldDeserializeSimpleCriterion_Resource()
     {
-        DofusDbCriterion? deserialized = JsonSerializer.Deserialize("""[{"type":"titles","id":42}]""", _context.DofusDbCriterion);
+        DofusDbCriterion? deserialized = JsonSerializer.Deserialize("""[{"type":"titles","id":42}]""", _options.GetTypeInfo<DofusDbCriterion>());
         deserialized.Should().Be(new DofusDbCriterionResource(42, DofusDbCriterionResourceType.Titles));
     }
 
     [Fact]
     public void Deserialize_ShouldDeserializeSimpleCriterion_Collection()
     {
-        DofusDbCriterion? deserialized = JsonSerializer.Deserialize("""[["TEXT BEFORE",{"type":"titles","id":42},"TEXT AFTER"]]""", _context.DofusDbCriterion);
+        DofusDbCriterion? deserialized = JsonSerializer.Deserialize("""[["TEXT BEFORE",{"type":"titles","id":42},"TEXT AFTER"]]""", _options.GetTypeInfo<DofusDbCriterion>());
         deserialized
             .Should()
             .Be(
@@ -49,7 +50,7 @@ public class DofusDbCriterionJsonConverterTest
     [Fact]
     public void Deserialize_ShouldDeserializeSimpleCriterion_Operation()
     {
-        DofusDbCriterion? deserialized = JsonSerializer.Deserialize("""["TEXT BEFORE","\u0026","TEXT AFTER"]""", _context.DofusDbCriterion);
+        DofusDbCriterion? deserialized = JsonSerializer.Deserialize("""["TEXT BEFORE","\u0026","TEXT AFTER"]""", _options.GetTypeInfo<DofusDbCriterion>());
         deserialized.Should().Be(new DofusDbCriterionOperation(new DofusDbCriterionText("TEXT BEFORE"), DofusDbCriterionOperator.And, new DofusDbCriterionText("TEXT AFTER")));
     }
 
@@ -59,7 +60,7 @@ public class DofusDbCriterionJsonConverterTest
     {
         DofusDbCriterion? deserialized = JsonSerializer.Deserialize(
             """[["TEXT BEFORE",{"type":"titles","id":42},["TEXT MIDDLE",{"type":"titles","id":42},"TEXT AFTER"]]]""",
-            _context.DofusDbCriterion
+            _options.GetTypeInfo<DofusDbCriterion>()
         );
         deserialized
             .Should()
@@ -85,7 +86,7 @@ public class DofusDbCriterionJsonConverterTest
     {
         DofusDbCriterion? deserialized = JsonSerializer.Deserialize(
             """["TEXT BEFORE BEFORE","\u0026","TEXT BEFORE","\u0026","TEXT AFTER","\u0026","TEXT AFTER AFTER"]""",
-            _context.DofusDbCriterion
+            _options.GetTypeInfo<DofusDbCriterion>()
         );
         deserialized
             .Should()
@@ -107,7 +108,7 @@ public class DofusDbCriterionJsonConverterTest
     {
         DofusDbCriterion? deserialized = JsonSerializer.Deserialize(
             """["TEXT BEFORE BEFORE","|","TEXT BEFORE","|","TEXT AFTER","|","TEXT AFTER AFTER"]""",
-            _context.DofusDbCriterion
+            _options.GetTypeInfo<DofusDbCriterion>()
         );
         deserialized
             .Should()
@@ -129,7 +130,7 @@ public class DofusDbCriterionJsonConverterTest
     {
         DofusDbCriterion? deserialized = JsonSerializer.Deserialize(
             """["TEXT BEFORE BEFORE","|","TEXT BEFORE","\u0026",["TEXT AFTER","|","TEXT AFTER AFTER"]]""",
-            _context.DofusDbCriterion
+            _options.GetTypeInfo<DofusDbCriterion>()
         );
         deserialized
             .Should()
@@ -151,7 +152,7 @@ public class DofusDbCriterionJsonConverterTest
     {
         DofusDbCriterion? deserialized = JsonSerializer.Deserialize(
             """[["TEXT BEFORE BEFORE","|","TEXT BEFORE"],"\u0026","TEXT AFTER","|","TEXT AFTER AFTER"]""",
-            _context.DofusDbCriterion
+            _options.GetTypeInfo<DofusDbCriterion>()
         );
         deserialized
             .Should()
@@ -172,7 +173,7 @@ public class DofusDbCriterionJsonConverterTest
     public void Serialize_ShouldSerializeSimpleCriterion_Text()
     {
         DofusDbCriterionText criterion = new("TEXT");
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""["TEXT"]""");
     }
 
@@ -180,7 +181,7 @@ public class DofusDbCriterionJsonConverterTest
     public void Serialize_ShouldSerializeSimpleCriterion_Resource()
     {
         DofusDbCriterionResource criterion = new(42, DofusDbCriterionResourceType.Titles);
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""[{"id":42,"type":"titles"}]""");
     }
 
@@ -194,7 +195,7 @@ public class DofusDbCriterionJsonConverterTest
                 new DofusDbCriterionText("TEXT AFTER")
             ]
         );
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""[["TEXT BEFORE",{"id":42,"type":"titles"},"TEXT AFTER"]]""");
     }
 
@@ -202,7 +203,7 @@ public class DofusDbCriterionJsonConverterTest
     public void Serialize_ShouldSerializeSimpleCriterion_Operation()
     {
         DofusDbCriterionOperation criterion = new(new DofusDbCriterionText("TEXT BEFORE"), DofusDbCriterionOperator.And, new DofusDbCriterionText("TEXT AFTER"));
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""["TEXT BEFORE","\u0026","TEXT AFTER"]""");
     }
 
@@ -222,7 +223,7 @@ public class DofusDbCriterionJsonConverterTest
                 )
             ]
         );
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""[["TEXT BEFORE",{"id":42,"type":"titles"},["TEXT MIDDLE",{"id":42,"type":"titles"},"TEXT AFTER"]]]""");
     }
 
@@ -234,7 +235,7 @@ public class DofusDbCriterionJsonConverterTest
             DofusDbCriterionOperator.And,
             new DofusDbCriterionOperation(new DofusDbCriterionText("TEXT AFTER"), DofusDbCriterionOperator.And, new DofusDbCriterionText("TEXT AFTER AFTER"))
         );
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""["TEXT BEFORE BEFORE","\u0026","TEXT BEFORE","\u0026","TEXT AFTER","\u0026","TEXT AFTER AFTER"]""");
     }
 
@@ -246,7 +247,7 @@ public class DofusDbCriterionJsonConverterTest
             DofusDbCriterionOperator.Or,
             new DofusDbCriterionOperation(new DofusDbCriterionText("TEXT AFTER"), DofusDbCriterionOperator.Or, new DofusDbCriterionText("TEXT AFTER AFTER"))
         );
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""["TEXT BEFORE BEFORE","|","TEXT BEFORE","|","TEXT AFTER","|","TEXT AFTER AFTER"]""");
     }
 
@@ -258,7 +259,7 @@ public class DofusDbCriterionJsonConverterTest
             DofusDbCriterionOperator.And,
             new DofusDbCriterionOperation(new DofusDbCriterionText("TEXT AFTER"), DofusDbCriterionOperator.Or, new DofusDbCriterionText("TEXT AFTER AFTER"))
         );
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""[["TEXT BEFORE BEFORE","|","TEXT BEFORE"],"\u0026",["TEXT AFTER","|","TEXT AFTER AFTER"]]""");
     }
 
@@ -270,7 +271,7 @@ public class DofusDbCriterionJsonConverterTest
             DofusDbCriterionOperator.Or,
             new DofusDbCriterionOperation(new DofusDbCriterionText("TEXT AFTER"), DofusDbCriterionOperator.And, new DofusDbCriterionText("TEXT AFTER AFTER"))
         );
-        string serialized = JsonSerializer.Serialize(criterion, _context.DofusDbCriterion);
+        string serialized = JsonSerializer.Serialize(criterion, _options.GetTypeInfo<DofusDbCriterion>());
         serialized.Should().Be("""["TEXT BEFORE BEFORE","\u0026","TEXT BEFORE","|","TEXT AFTER","\u0026","TEXT AFTER AFTER"]""");
     }
 }

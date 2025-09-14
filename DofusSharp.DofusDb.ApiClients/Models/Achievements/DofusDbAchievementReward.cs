@@ -4,20 +4,6 @@ using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
 namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
 
-/// <inheritdoc cref="DofusDbAchievementReward" />
-/// <remarks>
-///     The BETA version of DofusDB uses a different type discriminator for achievement rewards: the className fields is AchievementRewardData instead of AchievementRewards for the prod
-///     environment.
-///     This model is an exact copy of <see cref="DofusDbAchievementReward" /> that is mapped to the new discriminator.
-/// </remarks>
-public class DofusDbAchievementRewardBeta : DofusDbAchievementReward
-{
-    /// <summary>
-    ///     The criteria required to obtain the reward.
-    /// </summary>
-    public string? Criterions { get; init; }
-}
-
 /// <summary>
 ///     A reward for completing an achievement.
 /// </summary>

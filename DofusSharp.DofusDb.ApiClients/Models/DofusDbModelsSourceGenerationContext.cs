@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
@@ -28,13 +29,11 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementCategory>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementObjective>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementReward>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementRewardBeta>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievement>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlmanaxCalendar>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeapon>))]
-[JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeaponBeta>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemSet>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemSuperType>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItemType>))]
@@ -67,12 +66,21 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
 public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContext
 {
-    public static DofusDbModelsSourceGenerationContext Instance { get; } = new(CreateOptions());
+    /// <summary>
+    ///     Get a <see cref="JsonSerializerOptions" /> with information for all DofusDb models, using production models.
+    /// </summary>
+    public static JsonSerializerOptions ProdOptions => CreateOptions(false);
 
-    public static JsonSerializerOptions CreateOptions() =>
+    /// <summary>
+    ///     Get a <see cref="JsonSerializerOptions" /> with information for all DofusDb models, using beta models.
+    /// </summary>
+    public static JsonSerializerOptions BetaOptions => CreateOptions(true);
+
+    static JsonSerializerOptions CreateOptions(bool useBetaModels) =>
         new(JsonSerializerDefaults.Web)
         {
             AllowOutOfOrderMetadataProperties = true,
+            TypeInfoResolver = Default.WithAddedModifier(ti => DofusDbProdOrBetaJsonTypeInfoResolver.Modifier(ti, useBetaModels)),
             Converters =
             {
                 new JsonStringEnumConverter<DofusDbGender>(),
