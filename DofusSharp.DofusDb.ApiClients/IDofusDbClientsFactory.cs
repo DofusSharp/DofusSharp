@@ -16,6 +16,7 @@ public interface IDofusDbClientsFactory
 {
     IDofusDbVersionClient Version();
     IDofusDbCriterionClient Criterion();
+    IDofusDbAlmanaxCalendarClient Almanax();
     IDofusDbTableClient<DofusDbServer> Servers();
     IDofusDbTableClient<DofusDbCharacteristic> Characteristics();
     IDofusDbTableClient<DofusDbItem> Items();

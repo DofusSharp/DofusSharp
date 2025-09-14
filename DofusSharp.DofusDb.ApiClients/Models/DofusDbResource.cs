@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -24,6 +25,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonDerivedType(typeof(DofusDbAchievementRewardBeta), "AchievementRewardData")]
 [JsonDerivedType(typeof(DofusDbAchievement), "Achievements")]
 [JsonDerivedType(typeof(DofusDbAchievementBeta), "AchievementData")]
+[JsonDerivedType(typeof(DofusDbAlmanaxCalendar), "AlmanaxCalendars")]
 [JsonDerivedType(typeof(DofusDbCharacteristic), "Characteristics")]
 [JsonDerivedType(typeof(DofusDbItem), "Items")]
 [JsonDerivedType(typeof(DofusDbItemBeta), "ItemData")]
