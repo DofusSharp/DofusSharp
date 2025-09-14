@@ -6,7 +6,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models.Achievements;
 
 /// <inheritdoc cref="DofusDbAchievementReward" />
 /// <remarks>
-///     The BETA version of DofusDB uses a different type discriminator for weapons: the className fields is AchievementRewardData instead of AchievementRewards for the prod
+///     The BETA version of DofusDB uses a different type discriminator for achievement rewards: the className fields is AchievementRewardData instead of AchievementRewards for the prod
 ///     environment.
 ///     This model is an exact copy of <see cref="DofusDbAchievementReward" /> that is mapped to the new discriminator.
 /// </remarks>

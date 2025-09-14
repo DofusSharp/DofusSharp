@@ -8,8 +8,8 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
-using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
+using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -74,6 +74,7 @@ public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContex
                 new JsonStringEnumConverter<ImageFormat>(),
                 new JsonStringEnumConverter<DofusDbImageScale>(),
                 new JsonStringEnumConverter<DofusDbLanguage>(),
+                new JsonStringEnumConverter<DofusDbCriterionResourceType>(JsonNamingPolicy.KebabCaseLower),
                 new DofusDbValueTupleJsonConverter<int, int>(),
                 new DofusDbValueTupleJsonConverter<int, double>(),
                 new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),

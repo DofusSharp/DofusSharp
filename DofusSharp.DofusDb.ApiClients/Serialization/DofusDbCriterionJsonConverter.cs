@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Models.Criterion;
 
 namespace DofusSharp.DofusDb.ApiClients.Serialization;
@@ -30,7 +29,7 @@ public class DofusDbCriterionJsonConverter : JsonConverter<DofusDbCriterion>
             {
                 // We found an operator, it means that this criterion is an operation
                 reader.Read();
-                DofusDbCriterion left = currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionCollection(currentSegment);
+                DofusDbCriterion left = currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionSequence(currentSegment);
                 return ReadOperation(ref reader, left, op, typeToConvert, options);
             }
             else
@@ -42,7 +41,7 @@ public class DofusDbCriterionJsonConverter : JsonConverter<DofusDbCriterion>
         }
 
         // Reaching this point means that we got through the whole array of values without encountering any operator
-        return currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionCollection(currentSegment);
+        return currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionSequence(currentSegment);
     }
 
     DofusDbCriterionOperation ReadOperation(ref Utf8JsonReader reader, DofusDbCriterion left, DofusDbCriterionOperator op, Type typeToConvert, JsonSerializerOptions options)
@@ -66,12 +65,12 @@ public class DofusDbCriterionJsonConverter : JsonConverter<DofusDbCriterion>
                 if (precedence >= 0)
                 {
                     // if left operator is stronger than right operator, it should be executed first
-                    DofusDbCriterionOperation newLeft = new(left, op, currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionCollection(currentSegment));
+                    DofusDbCriterionOperation newLeft = new(left, op, currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionSequence(currentSegment));
                     return ReadOperation(ref reader, newLeft, newOp, typeToConvert, options);
                 }
 
                 // else the right operator should be executed first
-                DofusDbCriterion segment = currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionCollection(currentSegment);
+                DofusDbCriterion segment = currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionSequence(currentSegment);
                 DofusDbCriterionOperation right = ReadOperation(ref reader, segment, newOp, typeToConvert, options);
                 return new DofusDbCriterionOperation(left, op, right);
             }
@@ -85,7 +84,7 @@ public class DofusDbCriterionJsonConverter : JsonConverter<DofusDbCriterion>
         }
 
         // Reaching this point means that we got through the whole array of values without encountering any operator
-        return new DofusDbCriterionOperation(left, op, currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionCollection(currentSegment));
+        return new DofusDbCriterionOperation(left, op, currentSegment.Count == 1 ? currentSegment.Single() : new DofusDbCriterionSequence(currentSegment));
     }
 
     static bool IsNextValueOperator(ref Utf8JsonReader reader, out DofusDbCriterionOperator op)
@@ -110,7 +109,8 @@ public class DofusDbCriterionJsonConverter : JsonConverter<DofusDbCriterion>
         reader.TokenType switch
         {
             JsonTokenType.String => new DofusDbCriterionText(reader.GetString()),
-            _ => new DofusDbCriterionResource((DofusDbResource?)JsonSerializer.Deserialize(ref reader, options.GetTypeInfo(typeof(DofusDbResource))))
+            _ => (DofusDbCriterionResource?)JsonSerializer.Deserialize(ref reader, options.GetTypeInfo(typeof(DofusDbCriterionResource)))
+                 ?? throw new InvalidOperationException("Could not deserialize resource.")
         };
 
     static bool TryDeserializeOperator(string value, out DofusDbCriterionOperator op)
@@ -155,16 +155,9 @@ public class DofusDbCriterionJsonConverter : JsonConverter<DofusDbCriterion>
                 }
                 break;
             case DofusDbCriterionResource resource:
-                if (resource.Value is null)
-                {
-                    writer.WriteNullValue();
-                }
-                else
-                {
-                    JsonSerializer.Serialize(writer, resource.Value, options.GetTypeInfo(resource.Value.GetType()));
-                }
+                JsonSerializer.Serialize(writer, resource, options.GetTypeInfo(typeof(DofusDbCriterionResource)));
                 break;
-            case DofusDbCriterionCollection collection:
+            case DofusDbCriterionSequence collection:
                 writer.WriteStartArray();
                 foreach (DofusDbCriterion criterion in collection.Value)
                 {

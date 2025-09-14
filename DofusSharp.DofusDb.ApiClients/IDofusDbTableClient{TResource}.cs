@@ -9,15 +9,17 @@ namespace DofusSharp.DofusDb.ApiClients;
 ///     A client for interacting with table data from the DofusDB API.
 /// </summary>
 /// <typeparam name="TResource">The type of resource to fetch from the API.</typeparam>
-public interface IDofusDbTableClient<TResource> : IDofusDbClient where TResource: DofusDbResource
+public interface IDofusDbTableClient<TResource> : IDofusDbTableClient where TResource: DofusDbResource
 {
+    async Task<DofusDbResource> IDofusDbTableClient.GetAsync(long id, CancellationToken cancellationToken) => await GetAsync(id, cancellationToken);
+
     /// <summary>
     ///     Fetch the resource with the specified ID from the API.
     /// </summary>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
     /// <param name="cancellationToken">The cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>The resource with the specified ID.</returns>
-    Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default);
+    new Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Get the URL of the resource with the specified ID.

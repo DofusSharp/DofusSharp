@@ -15,25 +15,12 @@
         Value: Avoir capturé 
       },
       {
-        Value: {
-          FamilyId: 1,
-          Look: {639||1=16747520,2=16747520,3=16747520,4=7758915|120},
-          CertificateId: 7809,
-          Name: {
-            De: Wilder roter Dracotruter,
-            En: Wild Ginger Dragoturkey,
-            Es: Dragopavo pelirrojo salvaje,
-            Fr: Dragodinde Rousse Sauvage,
-            Pt: Dragoperu ruivo selvagem
-          },
-          Id: 6,
-          CreatedAt: DateTimeOffset_1,
-          UpdatedAt: DateTimeOffset_2
-        }
+        Id: 6,
+        Type: Mounts
       }
     ]
   },
   Id: 74,
-  CreatedAt: DateTimeOffset_3,
-  UpdatedAt: DateTimeOffset_4
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
 }

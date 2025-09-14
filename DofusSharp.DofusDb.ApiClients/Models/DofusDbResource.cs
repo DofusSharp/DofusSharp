@@ -5,8 +5,8 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
-using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
+using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -23,8 +23,10 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonDerivedType(typeof(DofusDbAchievementReward), "AchievementRewards")]
 [JsonDerivedType(typeof(DofusDbAchievementRewardBeta), "AchievementRewardData")]
 [JsonDerivedType(typeof(DofusDbAchievement), "Achievements")]
+[JsonDerivedType(typeof(DofusDbAchievementBeta), "AchievementData")]
 [JsonDerivedType(typeof(DofusDbCharacteristic), "Characteristics")]
 [JsonDerivedType(typeof(DofusDbItem), "Items")]
+[JsonDerivedType(typeof(DofusDbItemBeta), "ItemData")]
 [JsonDerivedType(typeof(DofusDbWeapon), "Weapons")]
 [JsonDerivedType(typeof(DofusDbWeaponBeta), "WeaponData")]
 [JsonDerivedType(typeof(DofusDbItemSet), "ItemSets")]

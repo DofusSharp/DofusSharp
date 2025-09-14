@@ -42,7 +42,7 @@ public class DofusDbCriterionJsonConverterTest
         deserialized
             .Should()
             .Be(
-                new DofusDbCriterionCollection(
+                new DofusDbCriterionSequence(
                     [
                         new DofusDbCriterionText("TEXT BEFORE"),
                         new DofusDbCriterionResource(new DofusDbTitle { Id = 42 }),
@@ -70,11 +70,11 @@ public class DofusDbCriterionJsonConverterTest
         deserialized
             .Should()
             .Be(
-                new DofusDbCriterionCollection(
+                new DofusDbCriterionSequence(
                     [
                         new DofusDbCriterionText("TEXT BEFORE"),
                         new DofusDbCriterionResource(new DofusDbTitle { Id = 42 }),
-                        new DofusDbCriterionCollection(
+                        new DofusDbCriterionSequence(
                             [
                                 new DofusDbCriterionText("TEXT MIDDLE"),
                                 new DofusDbCriterionResource(new DofusDbTitle { Id = 42 }),
@@ -193,7 +193,7 @@ public class DofusDbCriterionJsonConverterTest
     [Fact]
     public void Serialize_ShouldSerializeSimpleCriterion_Collection()
     {
-        DofusDbCriterionCollection criterion = new(
+        DofusDbCriterionSequence criterion = new(
             [
                 new DofusDbCriterionText("TEXT BEFORE"),
                 new DofusDbCriterionResource(new DofusDbTitle { Id = 42 }),
@@ -215,11 +215,11 @@ public class DofusDbCriterionJsonConverterTest
     [Fact]
     public void Serialize_ShouldSerializeNestedCollections()
     {
-        DofusDbCriterionCollection criterion = new(
+        DofusDbCriterionSequence criterion = new(
             [
                 new DofusDbCriterionText("TEXT BEFORE"),
                 new DofusDbCriterionResource(new DofusDbTitle { Id = 42 }),
-                new DofusDbCriterionCollection(
+                new DofusDbCriterionSequence(
                     [
                         new DofusDbCriterionText("TEXT MIDDLE"),
                         new DofusDbCriterionResource(new DofusDbTitle { Id = 42 }),
