@@ -6,12 +6,9 @@ changelog:
     - title: Best Crush
       labels:
         - best-crush
-    - title: DofusDB CLI
+    - title: DofusDB API Clients and CLI
       labels:
-        - dofusdb-cli
-    - title: DofusDB API Clients
-      labels:
-        - dofusdb-api
+        - dofusdb
     - title: Dofocus API Clients
       labels:
         - dofocus-api

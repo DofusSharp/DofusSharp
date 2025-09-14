@@ -1,17 +1,13 @@
-dofusdb-api:
+dofusdb:
   - changed-files:
       - any-glob-to-any-file:
+          - 'dofusdb*/**'
           - 'DofusSharp.DofusDb*'
           - 'DofusSharp.DofusDb*/**'
           - 'Tests.Live.DofusDb*'
           - 'Tests.Live.DofusDb*/**'
           - 'Tests.UnitTests.DofusDb*'
           - 'Tests.UnitTests.DofusDb*/**'
-
-dofusdb-cli:
-  - changed-files:
-      - any-glob-to-any-file:
-          - 'dofusdb*/**'
 
 dofocus-api:
   - changed-files:
