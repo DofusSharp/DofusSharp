@@ -1,5 +1,6 @@
 using System.Text.Json;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
@@ -31,6 +32,8 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOption
     public IDofusDbTableClient<DofusDbAchievementCategory>   AchievementCategories()  => new DofusDbTableClient<DofusDbAchievementCategory>   (new Uri(baseAddress, "achievement-categories/"),  referrer,            options);
     public IDofusDbTableClient<DofusDbAchievementObjective>  AchievementObjectives()  => new DofusDbTableClient<DofusDbAchievementObjective>  (new Uri(baseAddress, "achievement-objectives/"),  referrer,            options);
     public IDofusDbTableClient<DofusDbAchievementReward>     AchievementRewards()     => new DofusDbTableClient<DofusDbAchievementReward>     (new Uri(baseAddress, "achievement-rewards/"),     referrer,            options);
+    public IDofusDbTableClient<DofusDbAlignmentRank>         AlignmentRanks()         => new DofusDbTableClient<DofusDbAlignmentRank>         (new Uri(baseAddress, "alignment-ranks/"),         referrer,            options);
+    public IDofusDbTableClient<DofusDbAlignmentSide>         AlignmentSides()         => new DofusDbTableClient<DofusDbAlignmentSide>         (new Uri(baseAddress, "alignment-sides/"),         referrer,            options);
     public IDofusDbTableClient<DofusDbAlmanaxCalendar>       AlmanaxCalendars()       => new DofusDbTableClient<DofusDbAlmanaxCalendar>       (new Uri(baseAddress, "almanax-calendars/"),       referrer,            options);
     public IDofusDbTableClient<DofusDbArea>                  Areas()                  => new DofusDbTableClient<DofusDbArea>                  (new Uri(baseAddress, "areas/"),                   referrer,            options);
     public IDofusDbTableClient<DofusDbCharacteristic>        Characteristics()        => new DofusDbTableClient<DofusDbCharacteristic>        (new Uri(baseAddress, "characteristics/"),         referrer,            options);

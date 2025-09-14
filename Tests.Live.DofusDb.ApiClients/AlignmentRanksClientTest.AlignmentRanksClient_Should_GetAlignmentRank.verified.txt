@@ -1,0 +1,21 @@
+﻿{
+  OrderId: 3,
+  MinimumAlignment: 100,
+  Name: {
+    De: Bewahrer des Wissens,
+    En: Guardian of Knowledge,
+    Es: Guardián del conocimiento,
+    Fr: Gardien du Savoir,
+    Pt: Guardião do Conhecimento
+  },
+  Description: {
+    De: -,
+    En: -,
+    Es: -,
+    Fr: -,
+    Pt: -
+  },
+  Id: 11,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

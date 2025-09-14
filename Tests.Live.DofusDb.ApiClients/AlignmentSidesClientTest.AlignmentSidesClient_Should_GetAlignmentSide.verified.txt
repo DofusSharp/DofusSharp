@@ -1,0 +1,12 @@
+﻿{
+  Name: {
+    De: Brâk,
+    En: Brakmarian,
+    Es: Brakmariano,
+    Fr: Brâkmarien,
+    Pt: Brakmariano
+  },
+  Id: 2,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
