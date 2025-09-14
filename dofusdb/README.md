@@ -44,40 +44,43 @@ Options :
   --version       Afficher les informations de version
 
 Commandes :
-  game-version         Get the version of the game corresponding to the data
-  criterion <id>       Parse a criterion string into a JSON array with more information
-  servers              Servers client
-  characteristics      Characteristics client
-  items                Items client
-  item-images          Item images client
-  item-types           Item Types client
-  item-super-types     Item Super Types client
-  item-sets            Item Sets client
-  jobs                 Jobs client
-  job-images           Job images client
-  recipes              Recipes client
-  skills               Skills client
-  spells               Spells client
-  spell-images         Spell images client
-  spell-levels         Spell Levels client
-  spell-states         Spell States client
-  spell-state-images   Spell State images client
-  spell-variants       Spell Variants client
-  monsters             Monsters client
-  monster-images       Monster images client
-  monster-races        Monster Races client
-  monster-super-races  Monster Super Races client
-  worlds               Worlds client
-  super-areas          Super Areas client
-  areas                Areas client
-  sub-areas            Sub Areas client
-  maps                 Maps client
-  map-images           Map images client
-  map-positions        Map Positions client
-  dungeons             Dungeons client
-  titles               Titles client
-  ornaments            Ornaments client
-  ornament-images      Ornaments images client
+  game-version           Get the version of the game corresponding to the data
+  criterion <criterion>  Parse a criterion string into a JSON array with more information
+  servers                Servers client
+  characteristics        Characteristics client
+  items                  Items client
+  item-images            Item images client
+  item-types             Item Types client
+  item-super-types       Item Super Types client
+  item-sets              Item Sets client
+  jobs                   Jobs client
+  job-images             Job images client
+  recipes                Recipes client
+  skills                 Skills client
+  spells                 Spells client
+  spell-images           Spell images client
+  spell-levels           Spell Levels client
+  spell-states           Spell States client
+  spell-state-images     Spell State images client
+  spell-variants         Spell Variants client
+  monsters               Monsters client
+  monster-images         Monster images client
+  monster-races          Monster Races client
+  monster-super-races    Monster Super Races client
+  mounts                 Mounts client
+  mount-families         Mount Families client
+  mount-behaviors        MountBehaviors client
+  worlds                 Worlds client
+  super-areas            Super Areas client
+  areas                  Areas client
+  sub-areas              Sub Areas client
+  maps                   Maps client
+  map-images             Map images client
+  map-positions          Map Positions client
+  dungeons               Dungeons client
+  titles                 Titles client
+  ornaments              Ornaments client
+  ornament-images        Ornaments images client
 ```
 
 ### Game version

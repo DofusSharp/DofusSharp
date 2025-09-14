@@ -4,6 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
+using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -33,6 +34,10 @@ class DofusDbQueryProvider(IDofusDbClientsFactory factory) : IDofusDbQueryProvid
     public IDofusDbQuery<DofusDbMonster> Monsters() => new DofusDbQuery<DofusDbMonster>(factory.Monsters());
     public IDofusDbQuery<DofusDbMonsterRace> MonsterRaces() => new DofusDbQuery<DofusDbMonsterRace>(factory.MonsterRaces());
     public IDofusDbQuery<DofusDbMonsterSuperRace> MonsterSuperRaces() => new DofusDbQuery<DofusDbMonsterSuperRace>(factory.MonsterSuperRaces());
+
+    public IDofusDbQuery<DofusDbMount> Mounts() => new DofusDbQuery<DofusDbMount>(factory.Mounts());
+    public IDofusDbQuery<DofusDbMountFamily> MountFamilies() => new DofusDbQuery<DofusDbMountFamily>(factory.MountFamilies());
+    public IDofusDbQuery<DofusDbMountBehavior> MountBehaviors() => new DofusDbQuery<DofusDbMountBehavior>(factory.MountBehaviors());
 
     public IDofusDbQuery<DofusDbWorld> Worlds() => new DofusDbQuery<DofusDbWorld>(factory.Worlds());
     public IDofusDbQuery<DofusDbSuperArea> SuperAreas() => new DofusDbQuery<DofusDbSuperArea>(factory.SuperAreas());

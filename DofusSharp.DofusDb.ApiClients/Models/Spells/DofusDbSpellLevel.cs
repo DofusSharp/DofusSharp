@@ -1,4 +1,6 @@
-﻿namespace DofusSharp.DofusDb.ApiClients.Models.Spells;
+﻿using DofusSharp.DofusDb.ApiClients.Models.Effects;
+
+namespace DofusSharp.DofusDb.ApiClients.Models.Spells;
 
 /// <summary>
 ///     A spell level in the game. Each spell has multiple levels with different properties.
@@ -68,7 +70,7 @@ public class DofusDbSpellLevel : DofusDbResource
     /// <summary>
     ///     The collection of effects applied on a critical hit.
     /// </summary>
-    public IReadOnlyCollection<DofusDbSpellEffect>? CriticalEffects { get; init; }
+    public IReadOnlyCollection<DofusDbEffectInstance>? CriticalEffects { get; init; }
 
     /// <summary>
     ///     The collection of preview zones for the spell at this level.
@@ -78,7 +80,7 @@ public class DofusDbSpellLevel : DofusDbResource
     /// <summary>
     ///     The collection of effects applied when casting the spell.
     /// </summary>
-    public IReadOnlyCollection<DofusDbSpellEffect>? Effects { get; init; }
+    public IReadOnlyCollection<DofusDbEffectInstance>? Effects { get; init; }
 
     /// <summary>
     ///     Indicates whether the spell must be cast in a straight line.

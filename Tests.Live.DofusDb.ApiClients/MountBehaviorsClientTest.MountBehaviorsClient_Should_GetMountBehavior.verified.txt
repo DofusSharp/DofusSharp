@@ -1,0 +1,19 @@
+﻿{
+  Name: {
+    De: Ausdauernd,
+    En: Hardy,
+    Es: Resistente,
+    Fr: Endurante,
+    Pt: Resistente
+  },
+  Description: {
+    De: Ein ausdauerndes Reittier steigert seine Ausdauer viel schneller als ein normales Reittier.,
+    En: A mount with the "Hardy" trait will gain Maturity more quickly than a normal mount.,
+    Es: Una montura resistente se vuelve resistente más rápido que una montura normal.,
+    Fr: Une monture endurante devient plus rapidement endurante qu'une monture normale.,
+    Pt: Uma montaria resistente torna-se resistente mais rápido do que uma montaria normal.
+  },
+  Id: 5,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}
