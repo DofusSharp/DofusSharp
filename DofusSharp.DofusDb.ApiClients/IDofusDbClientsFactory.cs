@@ -4,8 +4,8 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
-using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
+using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -49,6 +49,7 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbMapPosition> MapPositions();
     IDofusDbTableClient<DofusDbDungeon> Dungeons();
     IDofusDbTableClient<DofusDbAchievement> Achievements();
+    IDofusDbImageClient<long> AchievementImages();
     IDofusDbTableClient<DofusDbAchievementObjective> AchievementObjectives();
     IDofusDbTableClient<DofusDbAchievementReward> AchievementRewards();
     IDofusDbTableClient<DofusDbAchievementCategory> AchievementCategories();

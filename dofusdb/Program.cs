@@ -50,6 +50,7 @@ RootCommand rootCommand = new(
         new GameVersionCommand(uri => GetFactory(uri).Version(), defaultUrl).CreateCommand(),
         new GameCriterionCommand(uri => GetFactory(uri).Criterion(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievement>("achievements", "Achievements", uri => GetFactory(uri).Achievements(), defaultUrl).CreateCommand(),
+        new ImageClientCommand<long>("achievement-images", "Achievements images", uri => GetFactory(uri).AchievementImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementCategory>("achievement-categories", "Achievement Categories", uri => GetFactory(uri).AchievementCategories(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementObjective>("achievements", "Achievement Objectives", uri => GetFactory(uri).AchievementObjectives(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbServer>("servers", "Servers", uri => GetFactory(uri).Servers(), defaultUrl).CreateCommand(),
