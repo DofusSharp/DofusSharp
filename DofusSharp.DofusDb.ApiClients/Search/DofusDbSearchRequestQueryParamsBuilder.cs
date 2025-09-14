@@ -53,7 +53,7 @@ class DofusDbSearchRequestQueryParamsBuilder
                 builder.Add(FormatNestedFieldName([..path, p.Field]), p.Value);
                 break;
             case DofusDbSearchPredicate.NotEq p:
-                builder.Add(FormatNestedFieldName([..path, p.Field, "$neq"]), p.Value);
+                builder.Add(FormatNestedFieldName([..path, p.Field, "$ne"]), p.Value);
                 break;
             case DofusDbSearchPredicate.In p:
                 foreach (string value in p.Value)

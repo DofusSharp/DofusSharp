@@ -4,6 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
+using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
@@ -39,6 +40,10 @@ public interface IDofusDbQueryProvider
     IDofusDbQuery<DofusDbMap> Maps();
     IDofusDbQuery<DofusDbMapPosition> MapPositions();
     IDofusDbQuery<DofusDbDungeon> Dungeons();
+    IDofusDbQuery<DofusDbAchievement> Achievements();
+    IDofusDbQuery<DofusDbAchievementObjective> AchievementObjectives();
+    IDofusDbQuery<DofusDbAchievementReward> AchievementRewards();
+    IDofusDbQuery<DofusDbAchievementCategory> AchievementCategories();
     IDofusDbQuery<DofusDbTitle> Titles();
     IDofusDbQuery<DofusDbOrnament> Ornaments();
 }
