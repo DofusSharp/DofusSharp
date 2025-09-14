@@ -1,0 +1,249 @@
+﻿{
+  MaleLook: {1|10||53},
+  FemaleLook: {1|11||52},
+  CreatureBonesId: 15,
+  StatsPointsForStrength: [
+    {
+      Item2: 1
+    },
+    {
+      Item1: 100,
+      Item2: 2
+    },
+    {
+      Item1: 200,
+      Item2: 3
+    },
+    {
+      Item1: 300,
+      Item2: 4
+    }
+  ],
+  StatsPointsForIntelligence: [
+    {
+      Item2: 1
+    },
+    {
+      Item1: 100,
+      Item2: 2
+    },
+    {
+      Item1: 200,
+      Item2: 3
+    },
+    {
+      Item1: 300,
+      Item2: 4
+    }
+  ],
+  StatsPointsForChance: [
+    {
+      Item2: 1
+    },
+    {
+      Item1: 100,
+      Item2: 2
+    },
+    {
+      Item1: 200,
+      Item2: 3
+    },
+    {
+      Item1: 300,
+      Item2: 4
+    }
+  ],
+  StatsPointsForAgility: [
+    {
+      Item2: 1
+    },
+    {
+      Item1: 100,
+      Item2: 2
+    },
+    {
+      Item1: 200,
+      Item2: 3
+    },
+    {
+      Item1: 300,
+      Item2: 4
+    }
+  ],
+  StatsPointsForVitality: [
+    {
+      Item2: 1
+    }
+  ],
+  StatsPointsForWisdom: [
+    {
+      Item2: 3
+    }
+  ],
+  BreedSpellsId: [
+    12983,
+    12978,
+    12984,
+    12976,
+    12981,
+    12979,
+    12977,
+    12993,
+    12995,
+    12989,
+    12994,
+    12986,
+    12992,
+    12990,
+    12987,
+    12985,
+    13020,
+    13011,
+    14434,
+    12991,
+    12988,
+    12982
+  ],
+  BreedRoles: [
+    {
+      RoleId: 7,
+      Value: 2,
+      Order: -1,
+      Description: {
+        De: Rolle,
+        En: Role,
+        Es: Rol,
+        Fr: Rôle,
+        Pt: Função
+      }
+    },
+    {
+      RoleId: 6,
+      Value: 4,
+      Order: -1,
+      Description: {
+        De: Rolle,
+        En: Role,
+        Es: Rol,
+        Fr: Rôle,
+        Pt: Função
+      }
+    },
+    {
+      RoleId: 5,
+      Value: 7,
+      Order: -1,
+      Description: {
+        De: Rolle,
+        En: Role,
+        Es: Rol,
+        Fr: Rôle,
+        Pt: Função
+      }
+    },
+    {
+      RoleId: 4,
+      Value: 0,
+      Order: -1,
+      Description: {
+        De: Rolle,
+        En: Role,
+        Es: Rol,
+        Fr: Rôle,
+        Pt: Função
+      }
+    },
+    {
+      RoleId: 3,
+      Value: 8,
+      Order: 1,
+      Description: {
+        De: Verringert den von Verbündeten erlittenen Schaden und den durch Gegner verursachten Schaden. Platziert schützende Schilde.,
+        En: Reduces damage suffered by their allies and damage inflicted by their opponents. Places protective shields.,
+        Es: Reduce el daño recibido por sus aliados y los daños infligidos por sus adversarios. Pone escudos que protegen.,
+        Fr: Réduit les dommages subis par ses alliés et les dommages occasionnés par ses adversaires. Pose des boucliers qui protègent.,
+        Pt: Reduz os danos sofridos pelos aliados e os danos infligidos pelos adversários. Coloca escudos que protegem.
+      }
+    },
+    {
+      RoleId: 1,
+      Value: 7,
+      Order: 3,
+      Description: {
+        De: Entzieht Attribute sowie Aktionspunkte, Bewegungspunkte und Reichweite mit Zaubern und Glyphen.,
+        En: Steals characteristics and removes Action Points, Movement Points and range with their spells and glyphs.,
+        Es: Roba características y retira puntos de acción, de movimiento y alcance con sus hechizos y sus glifos.,
+        Fr: Vole des caractéristiques et retire des points d'action, de mouvement, et de la portée avec ses sorts et ses glyphes.,
+        Pt: Rouba características e retira pontos de ação, de movimento e alcance com seus feitiços e glifos.
+      }
+    },
+    {
+      RoleId: 2,
+      Value: 8,
+      Order: 2,
+      Description: {
+        De: Hält über Zauber und Glyphen Kontakt zum Gegner.,
+        En: Uses their spells and glyphs to keep opponents adjacent to them.,
+        Es: Mantiene a sus contrincantes en contacto con sus hechizos y sus glifos.,
+        Fr: Maintient ses adversaires au contact avec ses sorts et ses glyphes.,
+        Pt: Mantém seus adversários em contato com seus feitiços e glifos.
+      }
+    },
+    {
+      RoleId: 8,
+      Value: 3,
+      Order: -1,
+      Description: {
+        De: Rolle,
+        En: Role,
+        Es: Rol,
+        Fr: Rôle,
+        Pt: Função
+      }
+    }
+  ],
+  MaleColors: [
+    15047528,
+    7814953,
+    14185518,
+    4809554,
+    5319189,
+    5984835
+  ],
+  FemaleColors: [
+    15047528,
+    7814953,
+    14185518,
+    4809554,
+    5319189,
+    5984835
+  ],
+  Complexity: 2,
+  SortIndex: 6,
+  ShortName: {
+    De: Féca,
+    En: Feca,
+    Es: Feca,
+    Fr: Féca,
+    Pt: Feca
+  },
+  Description: {
+    De: Fécas sind loyale Beschützer und Meister der Defensive. Darum werden sie in jeder Abenteurergruppe geschätzt und geehrt. Doch haben sie nicht nur mächtige Schutzzauber zu ihrer Verfügung, sondern haben auch die Magie mächtiger Siegel gemeistert. Sobald es hart auf hart kommt, zeichnen die Fécas ihre Glyphen auf den Boden!,
+    En: Fecas are faithful protectors, always on the defensive. They hold an important place in groups of adventurers because of their protective powers enabling them to take massive hits in stride. They're also experts in the art of magic signs - when there's going to be a fight, the Fecas get out their glyphs!,
+    Es: Los fecas son leales protectores que siempre están en guardia. Los grupos de aventureros se los rifan por sus armaduras elementales, además de por su capacidad de encajar golpes duros. Son maestros del arte de los símbolos mágicos: unos defensores fuera de serie que sacan sus glifos cuando hay guerra.,
+    Fr: Les Fécas sont de loyaux protecteurs toujours sur la défensive. Ils sont appréciés dans les groupes d'aventuriers pour leurs armures élémentaires et leur capacité à encaisser les coups durs. Ils sont également maîtres dans l'art des signes magiques : quand il va y avoir du grabuge, les Fécas sortent leurs glyphes !,
+    Pt: Os Fecas são protetores leais e ficam sempre na defensiva. Eles são muito apreciados pelos grupos de aventureiros graças às suas armaduras elementares capazes de suportar até mesmo os golpes mais pesados. São também mestres na arte dos símbolos mágicos: ao primeiro sinal de briga, os Fecas já sacam seus glifos!
+  },
+  GameplayDescription: {
+    De: Beschützer,
+    En: Protector,
+    Es: Protector,
+    Fr: Protecteur,
+    Pt: Protetor
+  },
+  Img: https://api.beta.dofusdb.fr/img/breeds/symbol_1.png,
+  ImgTransparent: https://api.beta.dofusdb.fr/img/breeds/logo_transparent_1.png,
+  Id: 1,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

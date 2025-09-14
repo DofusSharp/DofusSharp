@@ -11,6 +11,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
+using DofusSharp.DofusDb.ApiClients.Models.Breeds;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -66,6 +67,7 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbAlteration>("alterations", "Alterations", uri => GetFactory(uri).Alterations(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbArea>("areas", "Areas", uri => GetFactory(uri).Areas(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbBreed>("breeds", "Breeds", uri => GetFactory(uri).Breeds(), defaultUrl).CreateCommand(),
         new GameCriterionCommand("criterion", "Parse a criterion string into a JSON array with more information", uri => GetFactory(uri).Criterion(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand(),
         new GameVersionCommand("game-version", "Get the version of the game corresponding to the data", uri => GetFactory(uri).Version(), defaultUrl).CreateCommand(),
