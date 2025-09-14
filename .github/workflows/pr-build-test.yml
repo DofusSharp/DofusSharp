@@ -12,7 +12,7 @@ env:
 permissions:
   contents: read
 
-jobs:  
+jobs:
   compute-changes:
     runs-on: ubuntu-latest
     
