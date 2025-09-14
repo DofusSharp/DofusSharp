@@ -37,5 +37,5 @@ public static class DofusDbJobImagesExtensions
     /// <param name="factory">The factory to create the image client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     public static Task<Stream> GetIconAsync(this DofusDbJob job, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        job.IconId.HasValue ? factory.JobImages().GetImageAsync(job.IconId.Value, cancellationToken) : throw new ArgumentNullException(nameof(job.IconId));
+        job.IconId.HasValue ? factory.JobImages().GetImageAsync(job.IconId.Value, cancellationToken) : throw new InvalidOperationException("Job does not have an associated icon.");
 }

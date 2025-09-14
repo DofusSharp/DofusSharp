@@ -377,5 +377,7 @@ public static class DofusDbItemImagesExtensions
     /// <param name="factory">The factory to use to create the image client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     public static Task<Stream> GetIconAsync(this DofusDbItem item, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        item.IconId.HasValue ? factory.ItemImages().GetImageAsync(item.IconId.Value, cancellationToken) : throw new ArgumentNullException(nameof(item.IconId));
+        item.IconId.HasValue
+            ? factory.ItemImages().GetImageAsync(item.IconId.Value, cancellationToken)
+            : throw new InvalidOperationException("Item does not have an associated icon.");
 }

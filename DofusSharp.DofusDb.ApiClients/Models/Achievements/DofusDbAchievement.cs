@@ -64,5 +64,5 @@ public static class DofusDbAchievementImagesExtensions
     public static Task<Stream> GetIconAsync(this DofusDbAchievement achievement, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
         achievement.IconId.HasValue
             ? factory.AchievementImages().GetImageAsync(achievement.IconId.Value, cancellationToken)
-            : throw new ArgumentNullException(nameof(achievement.IconId));
+            : throw new InvalidOperationException("Achievement does not have an associated icon.");
 }
