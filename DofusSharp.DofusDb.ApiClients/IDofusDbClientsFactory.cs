@@ -14,52 +14,62 @@ using DofusSharp.DofusDb.ApiClients.Models.Titles;
 
 namespace DofusSharp.DofusDb.ApiClients;
 
+/// <summary>
+///     Factory for creating DofusDb API clients.
+/// </summary>
 public interface IDofusDbClientsFactory
 {
-    IDofusDbVersionClient Version();
-    IDofusDbCriterionClient Criterion();
-    IDofusDbAlmanaxCalendarClient Almanax();
-    IDofusDbTableClient<DofusDbAlmanaxCalendar> AlmanaxCalendars();
-    IDofusDbTableClient<DofusDbServer> Servers();
-    IDofusDbTableClient<DofusDbCharacteristic> Characteristics();
-    IDofusDbTableClient<DofusDbItem> Items();
-    IDofusDbImageClient<long> ItemImages();
-    IDofusDbTableClient<DofusDbItemType> ItemTypes();
-    IDofusDbTableClient<DofusDbItemSuperType> ItemSuperTypes();
-    IDofusDbTableClient<DofusDbItemSet> ItemSets();
-    IDofusDbTableClient<DofusDbJob> Jobs();
-    IDofusDbImageClient<long> JobImages();
-    IDofusDbTableClient<DofusDbRecipe> Recipes();
-    IDofusDbTableClient<DofusDbSkill> Skills();
-    IDofusDbTableClient<DofusDbSpell> Spells();
-    IDofusDbImageClient<long> SpellImages();
-    IDofusDbTableClient<DofusDbSpellLevel> SpellLevels();
-    IDofusDbTableClient<DofusDbSpellState> SpellStates();
-    IDofusDbImageClient<string> SpellStateImages();
-    IDofusDbTableClient<DofusDbSpellVariant> SpellVariants();
-    IDofusDbTableClient<DofusDbMonster> Monsters();
-    IDofusDbImageClient<long> MonsterImages();
-    IDofusDbTableClient<DofusDbMonsterRace> MonsterRaces();
-    IDofusDbTableClient<DofusDbMonsterSuperRace> MonsterSuperRaces();
-    IDofusDbTableClient<DofusDbMount> Mounts();
-    IDofusDbTableClient<DofusDbMountFamily> MountFamilies();
-    IDofusDbTableClient<DofusDbMountBehavior> MountBehaviors();
-    IDofusDbTableClient<DofusDbNpc> Npcs();
-    IDofusDbTableClient<DofusDbNpcMessage> NpcMessages();
-    IDofusDbTableClient<DofusDbWorld> Worlds();
-    IDofusDbTableClient<DofusDbSuperArea> SuperAreas();
-    IDofusDbTableClient<DofusDbArea> Areas();
-    IDofusDbTableClient<DofusDbSubArea> SubAreas();
-    IDofusDbTableClient<DofusDbMap> Maps();
-    IDofusDbScalableImageClient<long> MapImages();
-    IDofusDbTableClient<DofusDbMapPosition> MapPositions();
-    IDofusDbTableClient<DofusDbDungeon> Dungeons();
-    IDofusDbTableClient<DofusDbAchievement> Achievements();
-    IDofusDbImageClient<long> AchievementImages();
-    IDofusDbTableClient<DofusDbAchievementObjective> AchievementObjectives();
-    IDofusDbTableClient<DofusDbAchievementReward> AchievementRewards();
-    IDofusDbTableClient<DofusDbAchievementCategory> AchievementCategories();
-    IDofusDbTableClient<DofusDbTitle> Titles();
-    IDofusDbTableClient<DofusDbOrnament> Ornaments();
-    IDofusDbImageClient<long> OrnamentImages();
+    // @formatter:off
+    
+    IDofusDbAlmanaxCalendarClient   Almanax();
+    IDofusDbCriterionClient         Criterion();
+    IDofusDbVersionClient           Version();
+
+    IDofusDbTableClient<DofusDbAchievement>           Achievements();
+    IDofusDbTableClient<DofusDbAchievementCategory>   AchievementCategories();
+    IDofusDbTableClient<DofusDbAchievementObjective>  AchievementObjectives();
+    IDofusDbTableClient<DofusDbAchievementReward>     AchievementRewards();
+    IDofusDbTableClient<DofusDbAlmanaxCalendar>       AlmanaxCalendars();
+    IDofusDbTableClient<DofusDbArea>                  Areas();
+    IDofusDbTableClient<DofusDbCharacteristic>        Characteristics();
+    IDofusDbTableClient<DofusDbDungeon>               Dungeons();
+    IDofusDbTableClient<DofusDbItem>                  Items();
+    IDofusDbTableClient<DofusDbItemSet>               ItemSets();
+    IDofusDbTableClient<DofusDbItemSuperType>         ItemSuperTypes();
+    IDofusDbTableClient<DofusDbItemType>              ItemTypes();
+    IDofusDbTableClient<DofusDbJob>                   Jobs();
+    IDofusDbTableClient<DofusDbMap>                   Maps();
+    IDofusDbTableClient<DofusDbMapPosition>           MapPositions();
+    IDofusDbTableClient<DofusDbMonster>               Monsters();
+    IDofusDbTableClient<DofusDbMonsterRace>           MonsterRaces();
+    IDofusDbTableClient<DofusDbMonsterSuperRace>      MonsterSuperRaces();
+    IDofusDbTableClient<DofusDbMount>                 Mounts();
+    IDofusDbTableClient<DofusDbMountBehavior>         MountBehaviors();
+    IDofusDbTableClient<DofusDbMountFamily>           MountFamilies();
+    IDofusDbTableClient<DofusDbNpc>                   Npcs();
+    IDofusDbTableClient<DofusDbNpcMessage>            NpcMessages();
+    IDofusDbTableClient<DofusDbOrnament>              Ornaments();
+    IDofusDbTableClient<DofusDbRecipe>                Recipes();
+    IDofusDbTableClient<DofusDbServer>                Servers();
+    IDofusDbTableClient<DofusDbSkill>                 Skills();
+    IDofusDbTableClient<DofusDbSpell>                 Spells();
+    IDofusDbTableClient<DofusDbSpellLevel>            SpellLevels();
+    IDofusDbTableClient<DofusDbSpellState>            SpellStates();
+    IDofusDbTableClient<DofusDbSpellVariant>          SpellVariants();
+    IDofusDbTableClient<DofusDbSubArea>               SubAreas();
+    IDofusDbTableClient<DofusDbSuperArea>             SuperAreas();
+    IDofusDbTableClient<DofusDbTitle>                 Titles();
+    IDofusDbTableClient<DofusDbWorld>                 Worlds();
+
+    IDofusDbImageClient<long>     AchievementImages();
+    IDofusDbImageClient<long>     ItemImages();
+    IDofusDbImageClient<long>     JobImages();
+    IDofusDbImageClient<long>     MonsterImages();
+    IDofusDbImageClient<long>     OrnamentImages();
+    IDofusDbImageClient<long>     SpellImages();
+    IDofusDbImageClient<string>   SpellStateImages();
+
+    IDofusDbScalableImageClient<long>   MapImages();
+    
+    // @formatter:on
 }
