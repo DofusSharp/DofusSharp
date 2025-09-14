@@ -73,16 +73,16 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOption
     public IDofusDbTableClient<DofusDbTitle>                 Titles()                 => new DofusDbTableClient<DofusDbTitle>                 (new Uri(baseAddress, "titles/"),                  referrer,            options);
     public IDofusDbTableClient<DofusDbWorld>                 Worlds()                 => new DofusDbTableClient<DofusDbWorld>                 (new Uri(baseAddress, "worlds/"),                  referrer,            options);
     
-    public IDofusDbImagesClient<long>                         AchievementImages()      => new DofusDbImagesClient<long>                         (new Uri(baseAddress, "img/achievements/"),        ImageFormat.Png,     referrer);
+    public IDofusDbImagesClient<long>                        AchievementImages()      => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/achievements/"),        ImageFormat.Png,     referrer);
     public IDofusDbBreedImagesClient                         BreedImages()            => new DofusDbBreedImagesClient                         (new Uri(baseAddress, "img/"),                     referrer);
-    public IDofusDbImagesClient<long>                         ItemImages()             => new DofusDbImagesClient<long>                         (new Uri(baseAddress, "img/items/"),               ImageFormat.Png,     referrer);
-    public IDofusDbImagesClient<long>                         JobImages()              => new DofusDbImagesClient<long>                         (new Uri(baseAddress, "img/jobs/"),                ImageFormat.Jpeg,    referrer);
-    public IDofusDbImagesClient<long>                         MonsterImages()          => new DofusDbImagesClient<long>                         (new Uri(baseAddress, "img/monsters/"),            ImageFormat.Png,     referrer);
-    public IDofusDbImagesClient<long>                         OrnamentImages()         => new DofusDbImagesClient<long>                         (new Uri(baseAddress, "img/ornaments/"),           ImageFormat.Png,     referrer);
-    public IDofusDbImagesClient<long>                         SpellImages()            => new DofusDbImagesClient<long>                         (new Uri(baseAddress, "img/spells/"),              ImageFormat.Png,     referrer, "sort_");
-    public IDofusDbImagesClient<string>                       SpellStateImages()       => new DofusDbImagesClient<string>                       (new Uri(baseAddress, "img/states/"),              ImageFormat.Png,     referrer);
+    public IDofusDbImagesClient<long>                        ItemImages()             => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/items/"),               ImageFormat.Png,     referrer);
+    public IDofusDbImagesClient<long>                        JobImages()              => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/jobs/"),                ImageFormat.Jpeg,    referrer);
+    public IDofusDbImagesClient<long>                        MonsterImages()          => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/monsters/"),            ImageFormat.Png,     referrer);
+    public IDofusDbImagesClient<long>                        OrnamentImages()         => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/ornaments/"),           ImageFormat.Png,     referrer);
+    public IDofusDbImagesClient<long>                        SpellImages()            => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/spells/"),              ImageFormat.Png,     referrer, "sort_");
+    public IDofusDbImagesClient<string>                      SpellStateImages()       => new DofusDbImagesClient<string>                      (new Uri(baseAddress, "img/states/"),              ImageFormat.Png,     referrer);
     
-    public IDofusDbScalableImagesClient<long>                 MapImages()              => new DofusDbScalableImagesClient<long>                 (new Uri(baseAddress, "img/maps/"),                ImageFormat.Jpeg,    referrer);
+    public IDofusDbScalableImagesClient<long>                MapImages()              => new DofusDbScalableImagesClient<long>                (new Uri(baseAddress, "img/maps/"),                ImageFormat.Jpeg,    referrer);
 
     // @formatter:on
 }

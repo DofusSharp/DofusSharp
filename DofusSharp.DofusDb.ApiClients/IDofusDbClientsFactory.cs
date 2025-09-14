@@ -71,14 +71,14 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbTitle>                 Titles();
     IDofusDbTableClient<DofusDbWorld>                 Worlds();
 
-    IDofusDbImagesClient<long>     AchievementImages();
+    IDofusDbImagesClient<long>    AchievementImages();
     IDofusDbBreedImagesClient     BreedImages();
-    IDofusDbImagesClient<long>     ItemImages();
-    IDofusDbImagesClient<long>     JobImages();
-    IDofusDbImagesClient<long>     MonsterImages();
-    IDofusDbImagesClient<long>     OrnamentImages();
-    IDofusDbImagesClient<long>     SpellImages();
-    IDofusDbImagesClient<string>   SpellStateImages();
+    IDofusDbImagesClient<long>    ItemImages();
+    IDofusDbImagesClient<long>    JobImages();
+    IDofusDbImagesClient<long>    MonsterImages();
+    IDofusDbImagesClient<long>    OrnamentImages();
+    IDofusDbImagesClient<long>    SpellImages();
+    IDofusDbImagesClient<string>  SpellStateImages();
 
     IDofusDbScalableImagesClient<long>   MapImages();
     
