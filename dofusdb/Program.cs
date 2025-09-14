@@ -90,6 +90,7 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbSpellState>("spell-states", "Spell States", uri => GetFactory(uri).SpellStates(), defaultUrl).CreateCommand(),
         new ImageClientCommand<string>("spell-state-images", "Spell State images", uri => GetFactory(uri).SpellStateImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbSpellVariant>("spell-variants", "Spell Variants", uri => GetFactory(uri).SpellVariants(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbSubArea>("sub-areas", "Sub Areas", uri => GetFactory(uri).SubAreas(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbSuperArea>("super-areas", "Super Areas", uri => GetFactory(uri).SuperAreas(), defaultUrl).CreateCommand(),
         new GameVersionCommand("game-version", "Get the version of the game corresponding to the data", uri => GetFactory(uri).Version(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbWorld>("worlds", "Worlds", uri => GetFactory(uri).Worlds(), defaultUrl).CreateCommand()
