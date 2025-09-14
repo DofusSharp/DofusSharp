@@ -37,6 +37,20 @@ This will help you discover available commands and options more efficiently when
 
 ## Usage
 
+Types of clients:
+- **Game version**: get the current game version
+- **Almanax**: get the almanax data for a specific date
+- **Criterion**: parse a criterion string into a structured object
+- **Table data**: such as `items`, `recipes`, etc.
+  - `list`: fetch rows of data from an API
+  - `get`: fetch a single row of data by its unique identifier
+  - `count`: get the total count of rows matching the specified filters
+- **Image data**: such as `item-images`, `job-images` etc.
+  - `get`: fetch a single image by its unique identifier
+- **Scalable image data**: such as `map-images` etc.
+  - `get`: fetch a single image by its unique identifier, with optional `--scale` flag
+
+Usage:
 ```
 Description:
   A command-line interface for querying the DofusDB API.
@@ -59,6 +73,8 @@ Commandes :
   achievement-images      Achievements images client
   achievement-categories  Achievement Categories client
   achievement-objectives  Achievement Objectives client
+  almanax <date>          Get the almanax of the given day [default: 14/09/2025]
+  almanax-calendars       AlmanaxCalendars client
   servers                 Servers client
   characteristics         Characteristics client
   items                   Items client
@@ -114,6 +130,49 @@ Options :
   -d, --debug     Show debugging output
 ```
 
+### Almanax
+
+```
+Description:
+  Get the almanax of the given day
+
+Utilisation :
+  dofusdb almanax [<date>] [options]
+
+Arguments :
+  <date>  The specific day for which to retrieve the Almanax calendar data (format: MM/DD/YYYY) [default: 14/09/2025]
+
+Options :
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
+  --pretty-print         Pretty print the JSON output
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
+```
+
+### Criterion
+
+```
+Description:
+  Parse a criterion string into a JSON array with more information
+
+Utilisation :
+  dofusdb criterion <criterion> [options]
+
+Arguments :
+  <criterion>  Criterion to parse
+
+Options :
+  --lang <En|Fr>         Language to request
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
+  --pretty-print         Pretty print the JSON output
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
+```
+
 ### Table data
 
 ```
@@ -150,8 +209,7 @@ Options :
   --skip <skip>          Number of results to skip [default: 0]
   --select <select>      Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
   --sort <sort>          Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
-  --filter <filter>      Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
-                         [example: --filter "level>=10,name.fr=Razielle|Goultard"]
+  --filter <filter>      Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
   --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
@@ -229,8 +287,7 @@ Utilisation :
   dofusdb items count [options]
 
 Options :
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
-                     [example: --filter "level>=10,name.fr=Razielle|Goultard"]
+  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
   -q, --quiet        Display less output
@@ -253,8 +310,7 @@ Options :
   --skip <skip>      Number of results to skip [default: 0]
   --select <select>  Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
   --sort <sort>      Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
-                     [example: --filter "level>=10,name.fr=Razielle|Goultard"]
+  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
   -q, --quiet        Display less output
@@ -336,28 +392,6 @@ Options :
   -?, -h, --help                             Show help and usage information
   -q, --quiet                                Display less output
   -d, --debug                                Show debugging output
-```
-
-### Criterion
-
-```
-Description:
-  Parse a criterion string into a JSON array with more information
-
-Utilisation :
-  dofusdb criterion <criterion> [options]
-
-Arguments :
-  <criterion>  Criterion to parse
-
-Options :
-  --lang <En|Fr>         Language to request
-  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
-  --pretty-print         Pretty print the JSON output
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
-  -?, -h, --help         Show help and usage information
-  -q, --quiet            Display less output
-  -d, --debug            Show debugging output
 ```
 
 ## Contributing
