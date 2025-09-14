@@ -41,7 +41,7 @@ class AlmanaxCommand(Func<Uri, IDofusDbAlmanaxCalendarClient> clientFactory, Uri
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
-                bool quiet = r.GetValue(CommonOptions.Quiet);
+                bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbAlmanaxCalendar));
