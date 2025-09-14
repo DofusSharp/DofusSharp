@@ -4,6 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Models;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
+using DofusSharp.DofusDb.ApiClients.Models.Alterations;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -46,6 +47,7 @@ static class DofusDbProdOrBetaJsonTypeInfoResolver
                 new JsonDerivedType(typeof(DofusDbAchievementCategory), useBetaModels ? "AchievementCategoryData" : "AchievementCategories"),
                 new JsonDerivedType(typeof(DofusDbAchievementObjective), useBetaModels ? "AchievementObjectiveData" : "AchievementObjectives"),
                 new JsonDerivedType(typeof(DofusDbAchievementReward), useBetaModels ? "AchievementRewardData" : "AchievementRewards"),
+                new JsonDerivedType(typeof(DofusDbAlteration), useBetaModels ? "AlterationData" : "Alterations"),
                 new JsonDerivedType(typeof(DofusDbAlignmentRank), useBetaModels ? "AlignmentRankData" : "AlignmentRanks"),
                 new JsonDerivedType(typeof(DofusDbAlignmentSide), useBetaModels ? "AlignmentSideData" : "AlignmentSides"),
                 new JsonDerivedType(typeof(DofusDbAlmanaxCalendar), useBetaModels ? "AlmanaxCalendarData" : "AlmanaxCalendars"),
