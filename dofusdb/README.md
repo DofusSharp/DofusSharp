@@ -26,6 +26,15 @@ dotnet tool install --global dofusdb
 
 Download the latest release from the [GitHub releases page](https://github.com/DofusSharp/DofusSharp/releases/latest).
 
+## Suggestions
+
+Completions for the `dofusdb` CLI commands are powered by the underlying implementation using [System.CommandLine](https://github.com/dotnet/command-line-api). This enables intelligent tab completion for commands, options, and arguments in supported shells.
+
+To enable tab completion for your shell, follow the official Microsoft documentation:
+[How to enable tab completion for .NET CLI tools](https://learn.microsoft.com/en-us/dotnet/standard/commandline/how-to-enable-tab-completion).
+
+This will help you discover available commands and options more efficiently when using the CLI.
+
 ## Usage
 
 ```
