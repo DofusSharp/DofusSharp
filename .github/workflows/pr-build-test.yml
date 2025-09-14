@@ -68,7 +68,7 @@ jobs:
       
   build-and-test-dofusdb:
     name: Build and test DofusDb
-    needs: compute-version
+    needs: [ compute-changes, compute-version ]
     if: needs.compute-changes.outputs.dofusdb-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
@@ -79,7 +79,7 @@ jobs:
   
   build-and-test-dofocus:
     name: Build and test Dofocus
-    needs: compute-version
+    needs: [ compute-changes, compute-version ]
     if: needs.compute-changes.outputs.dofocus-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
@@ -90,7 +90,7 @@ jobs:
   
   build-and-test-best-crush:
     name: Build and test Best Crush
-    needs: compute-version
+    needs: [ compute-changes, compute-version ]
     if: needs.compute-changes.outputs.best-crush-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln-maui.yml
     with:
