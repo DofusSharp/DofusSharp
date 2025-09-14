@@ -49,6 +49,10 @@ Types of clients:
   - `get`: fetch a single image by its unique identifier
 - **Scalable image data**: such as `map-images` etc.
   - `get`: fetch a single image by its unique identifier, with optional `--scale` flag
+- **Breed image data**: `breed-images`
+  - `symbol`: fetch the breed symbol image
+  - `logo`: fetch the breed logo image
+  - `head`: fetch the breed head image
 
 Usage:
 ```
@@ -68,7 +72,7 @@ Options :
 
 Commandes :
   achievements            Achievements client
-  achievement-images      Achievements images client
+  achievement-images      Achievement images client
   achievement-categories  Achievement Categories client
   achievement-objectives  Achievement Objectives client
   achievement-rewards     Achievement Rewards client
@@ -79,6 +83,8 @@ Commandes :
   almanax-calendars       AlmanaxCalendars client
   alterations             Alterations client
   areas                   Areas client
+  breeds                  Breeds client
+  breed-images            Breed images client
   characteristics         Characteristics client
   criterion <criterion>   Parse a criterion string into a JSON array with more information
   dungeons                Dungeons client
@@ -104,7 +110,7 @@ Commandes :
   npcs                    NPCs client
   npc-messages            NPC Messages client
   ornaments               Ornaments client
-  ornament-images         Ornaments images client
+  ornament-images         Ornament images client
   recipes                 Recipes client
   servers                 Servers client
   skills                  Skills client
@@ -400,6 +406,86 @@ Options :
   -?, -h, --help                             Show help and usage information
   -q, --quiet                                Display less output
   -d, --debug                                Show debugging output
+```
+
+### Breed image data
+
+```
+Description:
+  Breed images client
+
+Utilisation :
+  dofusdb breed-images [command] [options]
+
+Options :
+  -?, -h, --help  Show help and usage information
+  -q, --quiet     Display less output
+  -d, --debug     Show debugging output
+
+Commandes :
+  symbol <symbol-id>  Retrieve the symbol image for a breed using its ID
+  logo <logo-id>      Retrieve the logo image for a breed using its ID
+  head <head-id>      Retrieve the head image for a breed using its ID
+```
+
+### `symbol`
+
+```
+Description:
+  Retrieve the symbol image for a breed using its ID
+
+Utilisation :
+  dofusdb breed-images symbol <symbol-id> [options]
+
+Arguments :
+  <symbol-id>  The unique identifier of the breed symbol to retrieve. Symbol ID = Breed ID)
+
+Options :
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
+```
+
+### `logo`
+
+```
+Description:
+  Retrieve the logo image for a breed using its ID
+
+Utilisation :
+  dofusdb breed-images logo <logo-id> [options]
+
+Arguments :
+  <logo-id>  The unique identifier of the breed logo to retrieve. Logo ID = Breed ID
+
+Options :
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
+```
+
+### `head`
+
+```
+Description:
+  Retrieve the head image for a breed using its ID
+
+Utilisation :
+  dofusdb breed-images head <head-id> [options]
+
+Arguments :
+  <head-id>  The unique identifier of the breed head to retrieve. Male head ID = breed ID × 10, female head ID = breed ID × 10 + 1
+
+Options :
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to the console
+  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
 ```
 
 ## Contributing

@@ -49,6 +49,10 @@ Types of clients:
   - `get`: fetch a single image by its unique identifier
 - **Scalable image data**: such as `map-images` etc.
   - `get`: fetch a single image by its unique identifier, with optional `--scale` flag
+- **Breed image data**: `breed-images`
+  - `symbol`: fetch the breed symbol image
+  - `logo`: fetch the breed logo image
+  - `head`: fetch the breed head image
 
 Usage:
 ```
@@ -165,6 +169,30 @@ Build the search query URL for the specified parameters without executing the re
 
 ```
 {{run:dofusdb map-images get --help}}
+```
+
+### Breed image data
+
+```
+{{run:dofusdb breed-images --help}}
+```
+
+### `symbol`
+
+```
+{{run:dofusdb breed-images symbol --help}}
+```
+
+### `logo`
+
+```
+{{run:dofusdb breed-images logo --help}}
+```
+
+### `head`
+
+```
+{{run:dofusdb breed-images head --help}}
 ```
 
 ## Contributing

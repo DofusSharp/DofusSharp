@@ -2,6 +2,7 @@
 using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
+using DofusSharp.DofusDb.ApiClients.Models.Breeds;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -38,6 +39,7 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbAllianceRight>         AllianceRights();
     IDofusDbTableClient<DofusDbAlteration>            Alterations();
     IDofusDbTableClient<DofusDbArea>                  Areas();
+    IDofusDbTableClient<DofusDbBreed>                 Breeds();
     IDofusDbTableClient<DofusDbCharacteristic>        Characteristics();
     IDofusDbTableClient<DofusDbDungeon>               Dungeons();
     IDofusDbTableClient<DofusDbGuildRight>            GuildRights();
@@ -70,6 +72,7 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbWorld>                 Worlds();
 
     IDofusDbImageClient<long>     AchievementImages();
+    IDofusDbBreedImagesClient     BreedImages();
     IDofusDbImageClient<long>     ItemImages();
     IDofusDbImageClient<long>     JobImages();
     IDofusDbImageClient<long>     MonsterImages();

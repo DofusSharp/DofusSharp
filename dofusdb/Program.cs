@@ -11,6 +11,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
+using DofusSharp.DofusDb.ApiClients.Models.Breeds;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -54,7 +55,7 @@ RootCommand rootCommand = new(
     {
         // @formatter:max_line_length 9999
         new TableClientCommand<DofusDbAchievement>("achievements", "Achievements", uri => GetFactory(uri).Achievements(), defaultUrl).CreateCommand(),
-        new ImageClientCommand<long>("achievement-images", "Achievements images", uri => GetFactory(uri).AchievementImages(), defaultUrl).CreateCommand(),
+        new ImageClientCommand<long>("achievement-images", "Achievement images", uri => GetFactory(uri).AchievementImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementCategory>("achievement-categories", "Achievement Categories", uri => GetFactory(uri).AchievementCategories(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementObjective>("achievement-objectives", "Achievement Objectives", uri => GetFactory(uri).AchievementObjectives(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementReward>("achievement-rewards", "Achievement Rewards", uri => GetFactory(uri).AchievementRewards(), defaultUrl).CreateCommand(),
@@ -65,6 +66,8 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbAlmanaxCalendar>("almanax-calendars", "AlmanaxCalendars", uri => GetFactory(uri).AlmanaxCalendars(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAlteration>("alterations", "Alterations", uri => GetFactory(uri).Alterations(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbArea>("areas", "Areas", uri => GetFactory(uri).Areas(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbBreed>("breeds", "Breeds", uri => GetFactory(uri).Breeds(), defaultUrl).CreateCommand(),
+        new BreedImageClientCommand("breed-images", uri => GetFactory(uri).BreedImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
         new GameCriterionCommand("criterion", "Parse a criterion string into a JSON array with more information", uri => GetFactory(uri).Criterion(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand(),
@@ -90,7 +93,7 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbNpc>("npcs", "NPCs", uri => GetFactory(uri).Npcs(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbNpcMessage>("npc-messages", "NPC Messages", uri => GetFactory(uri).NpcMessages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbOrnament>("ornaments", "Ornaments", uri => GetFactory(uri).Ornaments(), defaultUrl).CreateCommand(),
-        new ImageClientCommand<long>("ornament-images", "Ornaments images", uri => GetFactory(uri).OrnamentImages(), defaultUrl).CreateCommand(),
+        new ImageClientCommand<long>("ornament-images", "Ornament images", uri => GetFactory(uri).OrnamentImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbRecipe>("recipes", "Recipes", uri => GetFactory(uri).Recipes(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbServer>("servers", "Servers", uri => GetFactory(uri).Servers(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbSkill>("skills", "Skills", uri => GetFactory(uri).Skills(), defaultUrl).CreateCommand(),

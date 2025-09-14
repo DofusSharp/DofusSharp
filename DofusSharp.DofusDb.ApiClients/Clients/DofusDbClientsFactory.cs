@@ -3,6 +3,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
+using DofusSharp.DofusDb.ApiClients.Models.Breeds;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
@@ -38,8 +39,9 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOption
     public IDofusDbTableClient<DofusDbAlignmentSide>         AlignmentSides()         => new DofusDbTableClient<DofusDbAlignmentSide>         (new Uri(baseAddress, "alignment-sides/"),         referrer,            options);
     public IDofusDbTableClient<DofusDbAllianceRight>         AllianceRights()         => new DofusDbTableClient<DofusDbAllianceRight>         (new Uri(baseAddress, "alliance-rights/"),         referrer,            options);
     public IDofusDbTableClient<DofusDbAlmanaxCalendar>       AlmanaxCalendars()       => new DofusDbTableClient<DofusDbAlmanaxCalendar>       (new Uri(baseAddress, "almanax-calendars/"),       referrer,            options);
-    public IDofusDbTableClient<DofusDbAlteration>            Alterations()            => new DofusDbTableClient<DofusDbAlteration>            (new Uri(baseAddress, "alterations/"),            referrer,            options);
+    public IDofusDbTableClient<DofusDbAlteration>            Alterations()            => new DofusDbTableClient<DofusDbAlteration>            (new Uri(baseAddress, "alterations/"),             referrer,            options);
     public IDofusDbTableClient<DofusDbArea>                  Areas()                  => new DofusDbTableClient<DofusDbArea>                  (new Uri(baseAddress, "areas/"),                   referrer,            options);
+    public IDofusDbTableClient<DofusDbBreed>                 Breeds()                 => new DofusDbTableClient<DofusDbBreed>                 (new Uri(baseAddress, "breeds/"),                  referrer,            options);
     public IDofusDbTableClient<DofusDbCharacteristic>        Characteristics()        => new DofusDbTableClient<DofusDbCharacteristic>        (new Uri(baseAddress, "characteristics/"),         referrer,            options);
     public IDofusDbTableClient<DofusDbDungeon>               Dungeons()               => new DofusDbTableClient<DofusDbDungeon>               (new Uri(baseAddress, "dungeons/"),                referrer,            options);
     public IDofusDbTableClient<DofusDbGuildRight>            GuildRights()            => new DofusDbTableClient<DofusDbGuildRight>            (new Uri(baseAddress, "guild-rights/"),            referrer,            options);
@@ -72,6 +74,7 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOption
     public IDofusDbTableClient<DofusDbWorld>                 Worlds()                 => new DofusDbTableClient<DofusDbWorld>                 (new Uri(baseAddress, "worlds/"),                  referrer,            options);
     
     public IDofusDbImageClient<long>                         AchievementImages()      => new DofusDbImageClient<long>                         (new Uri(baseAddress, "img/achievements/"),        ImageFormat.Png,     referrer);
+    public IDofusDbBreedImagesClient                         BreedImages()            => new DofusDbBreedImagesClient                         (new Uri(baseAddress, "img/"),                     referrer);
     public IDofusDbImageClient<long>                         ItemImages()             => new DofusDbImageClient<long>                         (new Uri(baseAddress, "img/items/"),               ImageFormat.Png,     referrer);
     public IDofusDbImageClient<long>                         JobImages()              => new DofusDbImageClient<long>                         (new Uri(baseAddress, "img/jobs/"),                ImageFormat.Jpeg,    referrer);
     public IDofusDbImageClient<long>                         MonsterImages()          => new DofusDbImageClient<long>                         (new Uri(baseAddress, "img/monsters/"),            ImageFormat.Png,     referrer);
