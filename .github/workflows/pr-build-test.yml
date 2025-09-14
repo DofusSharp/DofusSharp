@@ -12,13 +12,7 @@ env:
 permissions:
   contents: read
 
-jobs:
-  compute-version:
-    name: Compute version
-    uses: ./.github/workflows/reusable-compute-version.yml
-    with:
-      build-name: pr
-  
+jobs:  
   compute-changes:
     runs-on: ubuntu-latest
     
@@ -59,10 +53,18 @@ jobs:
               - 'BestCrush*/**'
               - 'Tests.BestCrush*'
               - 'Tests.BestCrush*/**'
+
+    compute-version:
+    name: Compute version
+    if: (needs.compute-changes.outputs.dofusdb-changed == 'true' || needs.compute-changes.outputs.dofocus-changed == 'true' || needs.compute-changes.outputs.best-crush-changed == 'true')
+    needs: compute-changes
+    uses: ./.github/workflows/reusable-compute-version.yml
+    with:
+      build-name: pr
   
   build-and-test-dofusdb:
     name: Build and test DofusDb
-    needs: [ compute-version, compute-changes ]
+    needs: compute-version
     if: needs.compute-changes.outputs.dofusdb-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
@@ -73,7 +75,7 @@ jobs:
   
   build-and-test-dofocus:
     name: Build and test Dofocus
-    needs: [ compute-version, compute-changes ]
+    needs: compute-version
     if: needs.compute-changes.outputs.dofocus-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
@@ -84,7 +86,7 @@ jobs:
   
   build-and-test-best-crush:
     name: Build and test Best Crush
-    needs: [ compute-version, compute-changes ]
+    needs: compute-version
     if: needs.compute-changes.outputs.best-crush-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln-maui.yml
     with:
