@@ -7,6 +7,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
+using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
@@ -54,6 +55,8 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonDerivedType(typeof(DofusDbMountFamilyBeta), "MountFamilyData")]
 [JsonDerivedType(typeof(DofusDbMountBehavior), "MountBehaviors")]
 [JsonDerivedType(typeof(DofusDbMountBehaviorBeta), "MountBehaviorData")]
+[JsonDerivedType(typeof(DofusDbNpc), "Npcs")]
+[JsonDerivedType(typeof(DofusDbNpcMessage), "NpcMessages")]
 [JsonDerivedType(typeof(DofusDbServer), "Servers")]
 [JsonDerivedType(typeof(DofusDbSpell), "Spells")]
 [JsonDerivedType(typeof(DofusDbSpellLevel), "SpellLevels")]

@@ -99,6 +99,8 @@ Commandes :
   mounts                  Mounts client
   mount-families          Mount Families client
   mount-behaviors         MountBehaviors client
+  npcs                    Npcs client
+  npc-messages            NpcMessages client
   worlds                  Worlds client
   super-areas             Super Areas client
   areas                   Areas client

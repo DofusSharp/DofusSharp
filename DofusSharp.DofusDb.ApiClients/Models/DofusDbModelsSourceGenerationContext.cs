@@ -10,6 +10,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
+using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
@@ -53,6 +54,8 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMount>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMountFamily>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbMountBehavior>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbNpc>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbNpcMessage>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbServer>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpell>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbSpellLevel>))]
@@ -79,6 +82,7 @@ public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContex
                 new JsonStringEnumConverter<DofusDbCriterionResourceType>(JsonNamingPolicy.KebabCaseLower),
                 new DofusDbValueTupleJsonConverter<int, int>(),
                 new DofusDbValueTupleJsonConverter<int, double>(),
+                new DofusDbValueTupleJsonConverter<long, long>(),
                 new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),
                 new DofusDbDateOnlyJsonConverter(),
                 new DofusDbCriterionJsonConverter()

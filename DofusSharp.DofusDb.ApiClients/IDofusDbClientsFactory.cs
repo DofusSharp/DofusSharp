@@ -6,6 +6,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
+using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
@@ -43,6 +44,8 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbMount> Mounts();
     IDofusDbTableClient<DofusDbMountFamily> MountFamilies();
     IDofusDbTableClient<DofusDbMountBehavior> MountBehaviors();
+    IDofusDbTableClient<DofusDbNpc> Npcs();
+    IDofusDbTableClient<DofusDbNpcMessage> NpcMessages();
     IDofusDbTableClient<DofusDbWorld> Worlds();
     IDofusDbTableClient<DofusDbSuperArea> SuperAreas();
     IDofusDbTableClient<DofusDbArea> Areas();

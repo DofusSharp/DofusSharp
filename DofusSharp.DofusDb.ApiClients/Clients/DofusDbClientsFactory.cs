@@ -7,6 +7,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
+using DofusSharp.DofusDb.ApiClients.Models.Npcs;
 using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
@@ -51,6 +52,8 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer = null) : IDofusDbCli
     public IDofusDbTableClient<DofusDbMount> Mounts() => new DofusDbTableClient<DofusDbMount>(new Uri(baseAddress, "mounts/"), referrer);
     public IDofusDbTableClient<DofusDbMountFamily> MountFamilies() => new DofusDbTableClient<DofusDbMountFamily>(new Uri(baseAddress, "mount-families/"), referrer);
     public IDofusDbTableClient<DofusDbMountBehavior> MountBehaviors() => new DofusDbTableClient<DofusDbMountBehavior>(new Uri(baseAddress, "mount-behaviors/"), referrer);
+    public IDofusDbTableClient<DofusDbNpc> Npcs() => new DofusDbTableClient<DofusDbNpc>(new Uri(baseAddress, "npcs/"), referrer);
+    public IDofusDbTableClient<DofusDbNpcMessage> NpcMessages() => new DofusDbTableClient<DofusDbNpcMessage>(new Uri(baseAddress, "npc-messages/"), referrer);
     public IDofusDbTableClient<DofusDbWorld> Worlds() => new DofusDbTableClient<DofusDbWorld>(new Uri(baseAddress, "worlds/"), referrer);
     public IDofusDbTableClient<DofusDbSuperArea> SuperAreas() => new DofusDbTableClient<DofusDbSuperArea>(new Uri(baseAddress, "super-areas/"), referrer);
     public IDofusDbTableClient<DofusDbArea> Areas() => new DofusDbTableClient<DofusDbArea>(new Uri(baseAddress, "areas/"), referrer);
