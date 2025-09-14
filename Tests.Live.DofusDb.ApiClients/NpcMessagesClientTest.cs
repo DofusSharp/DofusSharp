@@ -24,8 +24,7 @@ public class NpcMessagesClientTest
         // which means that no exception is thrown during the search
         DofusDbSearchQuery query = new() { Limit = 1000 };
         DofusDbNpcMessage[] results = await client.MultiQuerySearchAsync(query).ToArrayAsync();
-        int count = await client.CountAsync(query.Predicates);
 
-        results.Length.Should().Be(count);
+        results.Length.Should().Be(1000);
     }
 }
