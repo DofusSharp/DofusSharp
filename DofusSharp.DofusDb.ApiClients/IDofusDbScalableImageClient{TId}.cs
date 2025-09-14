@@ -6,7 +6,7 @@ namespace DofusSharp.DofusDb.ApiClients;
 ///     A client for interacting with a DofusDB API that provides image resources.
 /// </summary>
 /// <typeparam name="TId">The type of the unique identifier for the images.</typeparam>
-public interface IDofusDbScalableImageClient<in TId> : IDofusDbImageClient<TId>
+public interface IDofusDbScalableImagesClient<in TId> : IDofusDbImagesClient<TId>
 {
     /// <summary>
     ///     Fetches the image resource from the DofusDB API by its unique identifier.

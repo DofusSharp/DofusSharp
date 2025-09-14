@@ -4,9 +4,9 @@ using DofusSharp.DofusDb.ApiClients.Models.Common;
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 /// <inheritdoc />
-class DofusDbImageClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? referrer, string? prefix) : IDofusDbImageClient<TId>
+class DofusDbImagesClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? referrer, string? prefix) : IDofusDbImagesClient<TId>
 {
-    public DofusDbImageClient(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null) : this(baseAddress, imageFormat, referrer, null)
+    public DofusDbImagesClient(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null) : this(baseAddress, imageFormat, referrer, null)
     {
     }
 

@@ -5,7 +5,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImageClient<TId>> clientFactory, Uri defaultUrl)
+class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbScalableImagesClient<TId>> clientFactory, Uri defaultUrl)
 {
     readonly Argument<TId> _idArgument = new("id")
     {
@@ -49,7 +49,7 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
 
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbScalableImageClient<TId> client = clientFactory(url);
+                IDofusDbScalableImagesClient<TId> client = clientFactory(url);
 
                 Stream image = null!;
                 if (quiet)
@@ -72,7 +72,7 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
         return result;
     }
 
-    FileStream GetOutputStream(IDofusDbImageClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile)
+    FileStream GetOutputStream(IDofusDbImagesClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile)
     {
         if (outputFile == null)
         {

@@ -5,7 +5,7 @@ using Spectre.Console;
 
 namespace dofusdb.Commands;
 
-class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbImageClient<TId>> clientFactory, Uri defaultUrl)
+class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbImagesClient<TId>> clientFactory, Uri defaultUrl)
 {
     readonly Argument<TId> _idArgument = new("id")
     {
@@ -41,7 +41,7 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
-                IDofusDbImageClient<TId> client = clientFactory(url);
+                IDofusDbImagesClient<TId> client = clientFactory(url);
 
                 Stream image = null!;
                 if (quiet)
@@ -64,7 +64,7 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
         return result;
     }
 
-    FileStream GetOutputStream(IDofusDbImageClient<TId> client, TId id, string? outputFile)
+    FileStream GetOutputStream(IDofusDbImagesClient<TId> client, TId id, string? outputFile)
     {
         if (outputFile == null)
         {

@@ -7,7 +7,7 @@ public class MapImagesClientTest
     [Fact]
     public async Task MapImagesClient_Should_GetMapImage()
     {
-        IDofusDbScalableImageClient<long> client = DofusDbClient.Beta(Constants.Referrer).MapImages();
+        IDofusDbScalableImagesClient<long> client = DofusDbClient.Beta(Constants.Referrer).MapImages();
         await using Stream imageStream = await client.GetImageAsync(3333);
         await Verify(imageStream, "jpg");
     }

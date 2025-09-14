@@ -4,7 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Common;
 namespace DofusSharp.DofusDb.ApiClients.Clients;
 
 /// <inheritdoc />
-class DofusDbScalableImageClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null) : IDofusDbScalableImageClient<TId>
+class DofusDbScalableImagesClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? referrer = null) : IDofusDbScalableImagesClient<TId>
 {
     public Uri BaseAddress { get; } = baseAddress;
     public ImageFormat ImageFormat { get; } = imageFormat;

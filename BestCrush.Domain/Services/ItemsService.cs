@@ -41,7 +41,7 @@ public class ItemsService(BestCrushDbContext context, IDofusDbClientsFactory dof
 
     public async Task<string?> GetItemIconAsync(long iconId)
     {
-        IDofusDbImageClient<long> client = dofusDbClientsFactory.ItemImages();
+        IDofusDbImagesClient<long> client = dofusDbClientsFactory.ItemImages();
         string cacheKey = $"item-icon-{iconId}.png";
         byte[] content = await imageCache.GetOrAddAsync(
             cacheKey,

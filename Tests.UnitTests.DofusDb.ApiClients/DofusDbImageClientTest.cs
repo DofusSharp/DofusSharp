@@ -9,8 +9,8 @@ using Tests.UnitTests.DofusDb.ApiClients.Extensions;
 
 namespace Tests.UnitTests.DofusDb.ApiClients;
 
-[TestSubject(typeof(DofusDbImageClient<>))]
-public class DofusDbImageClientTest
+[TestSubject(typeof(DofusDbImagesClient<>))]
+public class DofusDbImagesClientTest
 {
     [Theory]
     [InlineData(ImageFormat.Jpeg, "jpg")]
@@ -20,7 +20,7 @@ public class DofusDbImageClientTest
         byte[] imageBytes = [4, 5, 6];
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, $"http://base.com/123.{extension}").ReturnsResponse(HttpStatusCode.OK, imageBytes);
-        DofusDbImageClient<int> client = new(new Uri("http://base.com"), imageFormat)
+        DofusDbImagesClient<int> client = new(new Uri("http://base.com"), imageFormat)
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };
@@ -35,7 +35,7 @@ public class DofusDbImageClientTest
     {
         Mock<HttpMessageHandler> httpHandlerMock = new(MockBehavior.Strict);
         httpHandlerMock.SetupRequest(HttpMethod.Get, "http://base.com/123.jpg").ReturnsResponse(HttpStatusCode.OK, "1.2.3.4");
-        DofusDbImageClient<int> client = new(new Uri("http://base.com"), ImageFormat.Jpeg, new Uri("http://referrer.com"))
+        DofusDbImagesClient<int> client = new(new Uri("http://base.com"), ImageFormat.Jpeg, new Uri("http://referrer.com"))
         {
             HttpClientFactory = httpHandlerMock.CreateClientFactory()
         };

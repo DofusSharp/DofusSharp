@@ -7,7 +7,7 @@ public class ItemImagesClientTest
     [Fact]
     public async Task ItemImagesClient_Should_GetItemImage()
     {
-        IDofusDbImageClient<long> client = DofusDbClient.Beta(Constants.Referrer).ItemImages();
+        IDofusDbImagesClient<long> client = DofusDbClient.Beta(Constants.Referrer).ItemImages();
         await using Stream imageStream = await client.GetImageAsync(6007);
         await Verify(imageStream, "png");
     }
