@@ -101,7 +101,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
-                bool quiet = r.GetValue(CommonOptions.Quiet);
+                bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(IReadOnlyList<TResource>));
@@ -181,7 +181,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 string? outputFile = r.GetValue(_outputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
-                bool quiet = r.GetValue(CommonOptions.Quiet);
+                bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
                 JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
@@ -250,7 +250,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
             {
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
-                bool quiet = r.GetValue(CommonOptions.Quiet);
+                bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbTableClient<TResource> client = clientFactory(url);

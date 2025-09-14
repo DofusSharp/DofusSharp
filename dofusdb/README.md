@@ -227,8 +227,8 @@ Utilisation :
   dofusdb items count [options]
 
 Options :
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: 
-                     --filter "level>=10,name.fr=Razielle|Goultard"]
+  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
+                     [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
   -q, --quiet        Display less output
@@ -251,8 +251,8 @@ Options :
   --skip <skip>      Number of results to skip [default: 0]
   --select <select>  Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
   --sort <sort>      Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: 
-                     --filter "level>=10,name.fr=Razielle|Goultard"]
+  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
+                     [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
   -q, --quiet        Display less output
@@ -343,10 +343,10 @@ Description:
   Parse a criterion string into a JSON array with more information
 
 Utilisation :
-  dofusdb criterion <id> [options]
+  dofusdb criterion <criterion> [options]
 
 Arguments :
-  <id>  Criterion to parse
+  <criterion>  Criterion to parse
 
 Options :
   --lang <En|Fr>         Language to request
@@ -358,7 +358,6 @@ Options :
   -d, --debug            Show debugging output
 ```
 
-
 ## Contributing
 
 Contributions are welcome! Please open issues or submit pull requests for bug fixes, features, or documentation improvements.
@@ -366,3 +365,4 @@ Contributions are welcome! Please open issues or submit pull requests for bug fi
 ## License
 
 This project is licensed under the terms of the [MIT License](../LICENSE.md).
+

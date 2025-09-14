@@ -38,7 +38,7 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
             {
                 TId id = r.GetRequiredValue(_idArgument);
                 string? outputFile = r.GetValue(_outputFileOption);
-                bool quiet = r.GetValue(CommonOptions.Quiet);
+                bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;

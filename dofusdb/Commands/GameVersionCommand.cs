@@ -18,7 +18,7 @@ class GameVersionCommand(Func<Uri, IDofusDbVersionClient> clientFactory, Uri def
         result.SetAction(async (r, cancellationToken) =>
             {
                 string? baseUrl = r.GetValue(_baseUrlOption);
-                bool quiet = r.GetValue(CommonOptions.Quiet);
+                bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;
                 IDofusDbVersionClient client = clientFactory(url);
