@@ -71,11 +71,13 @@ Commandes :
   achievement-images      Achievements images client
   achievement-categories  Achievement Categories client
   achievement-objectives  Achievement Objectives client
-  almanax <date>          Get the almanax of the given day [default: 14/09/2025]
+  achievement-rewards     Achievement Rewards client
   alignment-ranks         Alignment Ranks client
   alignment-sides         Alignment Sides client
   alliance-rights         Alliance Rights client
+  almanax <date>          Get the almanax of the given day [default: 14/09/2025]
   almanax-calendars       AlmanaxCalendars client
+  alterations             Alterations client
   areas                   Areas client
   characteristics         Characteristics client
   criterion <criterion>   Parse a criterion string into a JSON array with more information

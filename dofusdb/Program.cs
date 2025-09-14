@@ -10,6 +10,7 @@ using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
 using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
+using DofusSharp.DofusDb.ApiClients.Models.Alterations;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -56,11 +57,13 @@ RootCommand rootCommand = new(
         new ImageClientCommand<long>("achievement-images", "Achievements images", uri => GetFactory(uri).AchievementImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementCategory>("achievement-categories", "Achievement Categories", uri => GetFactory(uri).AchievementCategories(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAchievementObjective>("achievement-objectives", "Achievement Objectives", uri => GetFactory(uri).AchievementObjectives(), defaultUrl).CreateCommand(),
-        new AlmanaxCommand("almanax", "Get the almanax of the given day", uri => GetFactory(uri).Almanax(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbAchievementReward>("achievement-rewards", "Achievement Rewards", uri => GetFactory(uri).AchievementRewards(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAlignmentRank>("alignment-ranks", "Alignment Ranks", uri => GetFactory(uri).AlignmentRanks(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAlignmentSide>("alignment-sides", "Alignment Sides", uri => GetFactory(uri).AlignmentSides(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAllianceRight>("alliance-rights", "Alliance Rights", uri => GetFactory(uri).AllianceRights(), defaultUrl).CreateCommand(),
+        new AlmanaxCommand("almanax", "Get the almanax of the given day", uri => GetFactory(uri).Almanax(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbAlmanaxCalendar>("almanax-calendars", "AlmanaxCalendars", uri => GetFactory(uri).AlmanaxCalendars(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbAlteration>("alterations", "Alterations", uri => GetFactory(uri).Alterations(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbArea>("areas", "Areas", uri => GetFactory(uri).Areas(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
         new GameCriterionCommand("criterion", "Parse a criterion string into a JSON array with more information", uri => GetFactory(uri).Criterion(), defaultUrl).CreateCommand(),
