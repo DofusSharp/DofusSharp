@@ -61,7 +61,7 @@ jobs:
   
   build-and-test-dofusdb:
     name: Build and test DofusDb
-    needs: [compute-version, compute-changes]
+    needs: [ compute-version, compute-changes ]
     if: needs.compute-changes.outputs.dofusdb-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
@@ -94,8 +94,8 @@ jobs:
 
   publish-test-reports:
     name: Publish test reports
-    if: (!cancelled())
-    needs: [build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush]
+    if: (!cancelled() && (needs.compute-changes.outputs.dofusdb-changed == 'true' || needs.compute-changes.outputs.dofocus-changed == 'true' || needs.compute-changes.outputs.best-crush-changed == 'true'))
+    needs: [ build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush ]
     runs-on: ubuntu-latest
 
     permissions:
@@ -116,8 +116,8 @@ jobs:
 
   publish-coverage-reports:
     name: Publish coverage reports
-    if: (!cancelled())
-    needs: [build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush]
+    if: (!cancelled() && (needs.compute-changes.outputs.dofusdb-changed == 'true' || needs.compute-changes.outputs.dofocus-changed == 'true' || needs.compute-changes.outputs.best-crush-changed == 'true'))
+    needs: [ build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush ]
     runs-on: ubuntu-latest
 
     permissions:
