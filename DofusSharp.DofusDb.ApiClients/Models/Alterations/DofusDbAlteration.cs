@@ -53,3 +53,17 @@ public class DofusDbAlteration : DofusDbResource
     /// </summary>
     public string? Img { get; init; }
 }
+
+public static class DofusDbAlterationImagesExtensions
+{
+    /// <summary>
+    ///     Gets the icon image stream for the specified alteration using the provided factory to create the image client.
+    /// </summary>
+    /// <param name="alteration">The alteration whose icon to fetch.</param>
+    /// <param name="factory">The factory to create the image client.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<Stream> GetIconAsync(this DofusDbAlteration alteration, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        alteration.IconId.HasValue
+            ? factory.ItemImages().GetImageAsync(alteration.IconId.Value, cancellationToken)
+            : throw new InvalidOperationException("Alteration does not have an associated icon.");
+}
