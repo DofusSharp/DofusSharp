@@ -3,6 +3,7 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using System.Runtime.CompilerServices;
 using dofusdb.Commands;
 using DofusSharp.DofusDb.ApiClients;
 using DofusSharp.DofusDb.ApiClients.Models.Achievements;
@@ -130,7 +131,7 @@ catch (TaskCanceledException exn)
     if (debug)
     {
         AnsiConsole.WriteLine("Details:");
-        AnsiConsole.WriteLine(exn.ToString());
+        WriteException(exn);
     }
     return 2;
 }
@@ -140,7 +141,7 @@ catch (Exception exn)
     {
         AnsiConsole.MarkupLine("[red]An unexpected error occurred, please open an issue at https://github.com/DofusSharp/DofusSharp/issues/new?template=bug_report.md.[/]");
         AnsiConsole.WriteLine("Details:");
-        AnsiConsole.WriteLine(exn.ToString());
+        WriteException(exn);
     }
     else
     {
@@ -153,4 +154,16 @@ catch (Exception exn)
 IDofusDbClientsFactory GetFactory(Uri uri)
 {
     return DofusDbClient.Create(uri, referrer);
+}
+
+void WriteException(Exception exn)
+{
+    if (RuntimeFeature.IsDynamicCodeSupported)
+    {
+        AnsiConsole.WriteException(exn, ExceptionFormats.ShortenEverything);
+    }
+    else
+    {
+        AnsiConsole.WriteLine(exn.ToString());
+    }
 }
