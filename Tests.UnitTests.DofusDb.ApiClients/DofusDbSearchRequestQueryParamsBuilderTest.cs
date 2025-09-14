@@ -84,7 +84,7 @@ public class DofusDbSearchRequestQueryParamsBuilderTest
     {
         DofusDbSearchQuery query = new() { Predicates = [new DofusDbSearchPredicate.NotEq("parameter", "value")] };
         string queryParams = _builder.BuildQueryParams(query);
-        queryParams.Should().Be("parameter[$neq]=value");
+        queryParams.Should().Be("parameter[$ne]=value");
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class DofusDbSearchRequestQueryParamsBuilderTest
         DofusDbSearchQuery query = new()
             { Predicates = [new DofusDbSearchPredicate.And(new DofusDbSearchPredicate.Eq("parameter1", "value1"), new DofusDbSearchPredicate.NotEq("parameter2", "value2"))] };
         string queryParams = _builder.BuildQueryParams(query);
-        queryParams.Should().Be("$and[0][parameter1]=value1&$and[1][parameter2][$neq]=value2");
+        queryParams.Should().Be("$and[0][parameter1]=value1&$and[1][parameter2][$ne]=value2");
     }
 
     [Fact]
@@ -150,7 +150,7 @@ public class DofusDbSearchRequestQueryParamsBuilderTest
         DofusDbSearchQuery query = new()
             { Predicates = [new DofusDbSearchPredicate.Or(new DofusDbSearchPredicate.Eq("parameter1", "value1"), new DofusDbSearchPredicate.NotEq("parameter2", "value2"))] };
         string queryParams = _builder.BuildQueryParams(query);
-        queryParams.Should().Be("$or[0][parameter1]=value1&$or[1][parameter2][$neq]=value2");
+        queryParams.Should().Be("$or[0][parameter1]=value1&$or[1][parameter2][$ne]=value2");
     }
 
     [Fact]

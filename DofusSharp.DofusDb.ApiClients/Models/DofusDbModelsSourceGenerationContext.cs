@@ -9,6 +9,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Jobs;
 using DofusSharp.DofusDb.ApiClients.Models.Maps;
 using DofusSharp.DofusDb.ApiClients.Models.Monsters;
 using DofusSharp.DofusDb.ApiClients.Models.Mounts;
+using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Models.Servers;
 using DofusSharp.DofusDb.ApiClients.Models.Spells;
 using DofusSharp.DofusDb.ApiClients.Models.Titles;
@@ -22,6 +23,11 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchQuery))]
 // Search results: all concrete search results must be listed here, there is currently no way to tell the generation context that it must combine a generic type with
 // all the types it already knows
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementCategory>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementObjective>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementReward>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievementRewardBeta>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbAchievement>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbItem>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbWeapon>))]
@@ -68,6 +74,7 @@ public partial class DofusDbModelsSourceGenerationContext : JsonSerializerContex
                 new JsonStringEnumConverter<ImageFormat>(),
                 new JsonStringEnumConverter<DofusDbImageScale>(),
                 new JsonStringEnumConverter<DofusDbLanguage>(),
+                new JsonStringEnumConverter<DofusDbCriterionResourceType>(JsonNamingPolicy.KebabCaseLower),
                 new DofusDbValueTupleJsonConverter<int, int>(),
                 new DofusDbValueTupleJsonConverter<int, double>(),
                 new DofusDbValueOrFalseJsonConverter<DofusDbItemSetMinimal>(),

@@ -1,0 +1,38 @@
+﻿{
+  CategoryId: 15,
+  IconId: 73,
+  ObjectiveIds: [
+    186
+  ],
+  RewardIds: [
+    1075,
+    3978,
+    5585
+  ],
+  Name: {
+    De: Kadett,
+    En: Hopeful,
+    Es: Superjefe,
+    Fr: Espoir,
+    Pt: Promissor
+  },
+  Description: {
+    De: Stufe 160 erreichen,
+    En: Reach level 160.,
+    Es: Alcanzar el nivel 160.,
+    Fr: Atteindre le niveau 160.,
+    Pt: Atingir o nível 160.
+  },
+  Slug: {
+    De: kadett,
+    En: hopeful,
+    Es: superjefe,
+    Fr: espoir,
+    Pt: promissor
+  },
+  Need: {},
+  Img: https://api.beta.dofusdb.fr/img/achievements/73.png,
+  Id: 11,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

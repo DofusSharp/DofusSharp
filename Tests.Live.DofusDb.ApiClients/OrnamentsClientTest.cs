@@ -1,5 +1,5 @@
 ﻿using DofusSharp.DofusDb.ApiClients;
-using DofusSharp.DofusDb.ApiClients.Models.Achievements;
+using DofusSharp.DofusDb.ApiClients.Models.Ornaments;
 using DofusSharp.DofusDb.ApiClients.Search;
 using FluentAssertions;
 

@@ -1,8 +1,13 @@
 ﻿namespace DofusSharp.DofusDb.ApiClients.Models.Criterion;
 
-public record DofusDbCriterionCollection(IReadOnlyList<DofusDbCriterion> Value) : DofusDbCriterion
+/// <summary>
+///     A sequence of criteria.
+///     This is usually used to chain <see cref="DofusDbCriterionText" /> and <see cref="DofusDbCriterionResource" /> together to form a sentence.
+/// </summary>
+/// <param name="Value"></param>
+public record DofusDbCriterionSequence(IReadOnlyList<DofusDbCriterion> Value) : DofusDbCriterion
 {
-    public virtual bool Equals(DofusDbCriterionCollection? other)
+    public virtual bool Equals(DofusDbCriterionSequence? other)
     {
         if (other is null)
         {

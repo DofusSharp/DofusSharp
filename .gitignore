@@ -1,6 +1,7 @@
 artifacts-dotnet-releaser
 *.received.*
 ignore
+dist
 nsis/BestCrush/app
 nsis/BestCrush/*.exe
 nsis/BestCrush/redist/
