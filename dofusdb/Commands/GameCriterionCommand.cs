@@ -21,12 +21,6 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
         Description = "Language to request"
     };
 
-    readonly Option<bool> _prettyPrintOption = new("--pretty-print")
-    {
-        Description = "Pretty print the JSON output",
-        DefaultValueFactory = _ => false
-    };
-
     readonly Option<string> _baseUrlOption = new("--base")
     {
         Description = "Base URL to use when building the query URL",
@@ -42,7 +36,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
             {
                 _langOption,
                 CommonOptions.OutputFileOption,
-                _prettyPrintOption, _baseUrlOption
+                CommonOptions.PrettyPrintOption, _baseUrlOption
             }
         };
         result.SetAction(async (r, cancellationToken) =>
@@ -50,7 +44,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
                 string criterion = r.GetRequiredValue(_criterionArgument);
                 DofusDbLanguage lang = r.GetValue(_langOption);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
-                bool prettyPrint = r.GetValue(_prettyPrintOption);
+                bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 

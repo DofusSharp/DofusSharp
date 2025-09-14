@@ -59,12 +59,6 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
         CustomParser = ParseFilterOption
     };
 
-    readonly Option<bool> _prettyPrintOption = new("--pretty-print")
-    {
-        Description = "Pretty print the JSON output",
-        DefaultValueFactory = _ => false
-    };
-
     readonly Option<string> _baseUrlOption = new("--base")
     {
         Description = "Base URL to use when building the query URL",
@@ -83,7 +77,13 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     Command CreateListCommand()
     {
         Command result = new("list", $"List all {name.ToLowerInvariant()}")
-            { Options = { _allOption, _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, CommonOptions.OutputFileOption, _prettyPrintOption, _baseUrlOption } };
+        {
+            Options =
+            {
+                _allOption, _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, CommonOptions.OutputFileOption,
+                CommonOptions.PrettyPrintOption, _baseUrlOption
+            }
+        };
 
         result.SetAction(async (r, cancellationToken) =>
             {
@@ -94,7 +94,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 Dictionary<string, DofusDbSearchQuerySortOrder>? sort = r.GetValue(_sortOption);
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
-                bool prettyPrint = r.GetValue(_prettyPrintOption);
+                bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
@@ -169,13 +169,13 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     Command CreateGetCommand()
     {
         Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
-            { Arguments = { _idArgument }, Options = { CommonOptions.OutputFileOption, _prettyPrintOption, _baseUrlOption } };
+            { Arguments = { _idArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 long id = r.GetRequiredValue(_idArgument);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
-                bool prettyPrint = r.GetValue(_prettyPrintOption);
+                bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 

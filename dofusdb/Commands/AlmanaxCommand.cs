@@ -15,12 +15,6 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
         DefaultValueFactory = _ => DateOnly.FromDateTime(DateTime.Today)
     };
 
-    readonly Option<bool> _prettyPrintOption = new("--pretty-print")
-    {
-        Description = "Pretty print the JSON output",
-        DefaultValueFactory = _ => false
-    };
-
     readonly Option<string> _baseUrlOption = new("--base")
     {
         Description = "Base URL to use when building the query URL",
@@ -29,12 +23,12 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
 
     public Command CreateCommand()
     {
-        Command result = new(command, description) { Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, _prettyPrintOption, _baseUrlOption } };
+        Command result = new(command, description) { Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, _baseUrlOption } };
         result.SetAction(async (r, cancellationToken) =>
             {
                 DateOnly date = r.GetRequiredValue(_dateArgument);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
-                bool prettyPrint = r.GetValue(_prettyPrintOption);
+                bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 

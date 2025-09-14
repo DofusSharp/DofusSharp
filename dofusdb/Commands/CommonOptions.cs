@@ -20,4 +20,10 @@ static class CommonOptions
     {
         Description = "File to write the JSON output to. If not specified, the output will be written to the console"
     };
+
+    public static readonly Option<bool> PrettyPrintOption = new("--pretty-print")
+    {
+        Description = "Pretty print the JSON output",
+        DefaultValueFactory = _ => false
+    };
 }
