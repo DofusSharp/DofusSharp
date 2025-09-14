@@ -13,11 +13,6 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
         Arity = ArgumentArity.ExactlyOne
     };
 
-    readonly Option<string> _outputFileOption = new("--output", "-o")
-    {
-        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
-    };
-
     readonly Option<string> _baseUrlOption = new("--base")
     {
         Description = "Base URL to use when building the query URL",
@@ -32,12 +27,12 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
 
     Command CreateGetCommand()
     {
-        Command result = new("get", $"Get {name.ToLowerInvariant()} by id") { Arguments = { _idArgument }, Options = { _outputFileOption, _baseUrlOption } };
+        Command result = new("get", $"Get {name.ToLowerInvariant()} by id") { Arguments = { _idArgument }, Options = { CommonOptions.OutputFileOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 TId id = r.GetRequiredValue(_idArgument);
-                string? outputFile = r.GetValue(_outputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 Uri url = baseUrl is not null ? new Uri(baseUrl) : defaultUrl;

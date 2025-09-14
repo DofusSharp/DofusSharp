@@ -15,4 +15,9 @@ static class CommonOptions
         Description = "Show debugging output",
         Recursive = true
     };
+
+    public static readonly Option<string> OutputFileOption = new("--output", "-o")
+    {
+        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
+    };
 }

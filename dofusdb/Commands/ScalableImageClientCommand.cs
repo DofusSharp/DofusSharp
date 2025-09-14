@@ -19,11 +19,6 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
         DefaultValueFactory = _ => DofusDbImageScale.Full
     };
 
-    readonly Option<string> _outputFileOption = new("--output", "-o")
-    {
-        Description = "File to write the JSON output to. If not specified, the output will be written to the console"
-    };
-
     readonly Option<string> _baseUrlOption = new("--base")
     {
         Description = "Base URL to use when building the query URL",
@@ -38,13 +33,14 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
 
     Command CreateGetCommand()
     {
-        Command result = new("get", $"Get {name.ToLowerInvariant()} by id") { Arguments = { _idArgument }, Options = { _scaleOption, _outputFileOption, _baseUrlOption } };
+        Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
+            { Arguments = { _idArgument }, Options = { _scaleOption, CommonOptions.OutputFileOption, _baseUrlOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 TId id = r.GetRequiredValue(_idArgument);
                 DofusDbImageScale scale = r.GetValue(_scaleOption);
-                string? outputFile = r.GetValue(_outputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 string? baseUrl = r.GetValue(_baseUrlOption);

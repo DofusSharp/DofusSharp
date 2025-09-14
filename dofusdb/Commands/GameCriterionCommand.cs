@@ -21,11 +21,6 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
         Description = "Language to request"
     };
 
-    readonly Option<string> _outputFileOption = new("--output", "-o")
-    {
-        Description = "File to write the JSON output to. If not specified, the output will be written to stdout"
-    };
-
     readonly Option<bool> _prettyPrintOption = new("--pretty-print")
     {
         Description = "Pretty print the JSON output",
@@ -46,7 +41,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
             Options =
             {
                 _langOption,
-                _outputFileOption,
+                CommonOptions.OutputFileOption,
                 _prettyPrintOption, _baseUrlOption
             }
         };
@@ -54,7 +49,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
             {
                 string criterion = r.GetRequiredValue(_criterionArgument);
                 DofusDbLanguage lang = r.GetValue(_langOption);
-                string? outputFile = r.GetValue(_outputFileOption);
+                string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(_prettyPrintOption);
                 string? baseUrl = r.GetValue(_baseUrlOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
