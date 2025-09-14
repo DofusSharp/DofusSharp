@@ -25,9 +25,9 @@ class DofusDbQueryProvider(IDofusDbClientsFactory factory) : IDofusDbQueryProvid
     public IDofusDbQuery<DofusDbAchievementObjective>  AchievementObjectives() => new DofusDbQuery<DofusDbAchievementObjective>(factory.AchievementObjectives());
     public IDofusDbQuery<DofusDbAchievementReward>     AchievementRewards()    => new DofusDbQuery<DofusDbAchievementReward>(factory.AchievementRewards());
     public IDofusDbQuery<DofusDbAlmanaxCalendar>       AlmanaxCalendars()      => new DofusDbQuery<DofusDbAlmanaxCalendar>(factory.AlmanaxCalendars());
-    public IDofusDbQuery<DofusDbAllianceRight>         AllianceRights()        => new DofusDbQuery<DofusDbAllianceRight>(factory.AllianceRights());
     public IDofusDbQuery<DofusDbAlignmentRank>         AlignmentRanks()        => new DofusDbQuery<DofusDbAlignmentRank>(factory.AlignmentRanks());
     public IDofusDbQuery<DofusDbAlignmentSide>         AlignmentSides()        => new DofusDbQuery<DofusDbAlignmentSide>(factory.AlignmentSides());
+    public IDofusDbQuery<DofusDbAllianceRight>         AllianceRights()        => new DofusDbQuery<DofusDbAllianceRight>(factory.AllianceRights());
     public IDofusDbQuery<DofusDbArea>                  Areas()                 => new DofusDbQuery<DofusDbArea>(factory.Areas());
     public IDofusDbQuery<DofusDbCharacteristic>        Characteristics()       => new DofusDbQuery<DofusDbCharacteristic>(factory.Characteristics());
     public IDofusDbQuery<DofusDbDungeon>               Dungeons()              => new DofusDbQuery<DofusDbDungeon>(factory.Dungeons());

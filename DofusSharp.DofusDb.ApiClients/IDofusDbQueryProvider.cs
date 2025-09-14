@@ -28,9 +28,9 @@ public interface IDofusDbQueryProvider
     IDofusDbQuery<DofusDbAchievementObjective>  AchievementObjectives();
     IDofusDbQuery<DofusDbAchievementReward>     AchievementRewards();
     IDofusDbQuery<DofusDbAlmanaxCalendar>       AlmanaxCalendars();
-    IDofusDbQuery<DofusDbAllianceRight>         AllianceRights();
     IDofusDbQuery<DofusDbAlignmentRank>         AlignmentRanks();
     IDofusDbQuery<DofusDbAlignmentSide>         AlignmentSides();
+    IDofusDbQuery<DofusDbAllianceRight>         AllianceRights();
     IDofusDbQuery<DofusDbArea>                  Areas();
     IDofusDbQuery<DofusDbCharacteristic>        Characteristics();
     IDofusDbQuery<DofusDbDungeon>               Dungeons();

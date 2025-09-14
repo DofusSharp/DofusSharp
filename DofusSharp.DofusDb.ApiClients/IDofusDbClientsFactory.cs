@@ -32,9 +32,9 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbAchievementObjective>  AchievementObjectives();
     IDofusDbTableClient<DofusDbAchievementReward>     AchievementRewards();
     IDofusDbTableClient<DofusDbAlmanaxCalendar>       AlmanaxCalendars();
-    IDofusDbTableClient<DofusDbAllianceRight>         AllianceRights();
     IDofusDbTableClient<DofusDbAlignmentRank>         AlignmentRanks();
     IDofusDbTableClient<DofusDbAlignmentSide>         AlignmentSides();
+    IDofusDbTableClient<DofusDbAllianceRight>         AllianceRights();
     IDofusDbTableClient<DofusDbArea>                  Areas();
     IDofusDbTableClient<DofusDbCharacteristic>        Characteristics();
     IDofusDbTableClient<DofusDbDungeon>               Dungeons();
