@@ -26,9 +26,7 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOption
     // @formatter:off
     
     public IDofusDbAlmanaxCalendarClient                     Almanax()                => new DofusDbAlmanaxClient                             (new Uri(baseAddress, "almanax/"),                 referrer,            options);
-    
     public IDofusDbCriterionClient                           Criterion()              => new DofusDbCriterionClient                           (new Uri(baseAddress, "criterion/"),               referrer,            options);
-    
     public IDofusDbVersionClient                             Version()                => new DofusDbVersionClient                             (new Uri(baseAddress, "version/"),                 referrer);
     
     public IDofusDbTableClient<DofusDbAchievement>           Achievements()           => new DofusDbTableClient<DofusDbAchievement>           (new Uri(baseAddress, "achievements/"),            referrer,            options);
