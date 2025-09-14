@@ -11,13 +11,12 @@ env:
 permissions:
   contents: read
 
-jobs:
-  compute-version:
-    name: Compute version
-    uses: ./.github/workflows/reusable-compute-version.yml
-    with:
-      build-name: pr
-  
+# See https://stackoverflow.com/a/72408109/26358508
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:  
   compute-changes:
     runs-on: ubuntu-latest
     
@@ -59,9 +58,17 @@ jobs:
               - 'Tests.BestCrush*'
               - 'Tests.BestCrush*/**'
   
+  compute-version:
+    name: Compute version
+    needs: compute-changes
+    if: needs.compute-changes.outputs.dofusdb-changed == 'true' || needs.compute-changes.outputs.dofocus-changed == 'true' || needs.compute-changes.outputs.best-crush-changed == 'true'
+    uses: ./.github/workflows/reusable-compute-version.yml
+    with:
+      build-name: pr
+      
   build-and-test-dofusdb:
     name: Build and test DofusDb
-    needs: [compute-version, compute-changes]
+    needs: [ compute-changes, compute-version ]
     if: needs.compute-changes.outputs.dofusdb-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
@@ -72,7 +79,7 @@ jobs:
   
   build-and-test-dofocus:
     name: Build and test Dofocus
-    needs: [ compute-version, compute-changes ]
+    needs: [ compute-changes, compute-version ]
     if: needs.compute-changes.outputs.dofocus-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln.yml
     with:
@@ -83,7 +90,7 @@ jobs:
   
   build-and-test-best-crush:
     name: Build and test Best Crush
-    needs: [ compute-version, compute-changes ]
+    needs: [ compute-changes, compute-version ]
     if: needs.compute-changes.outputs.best-crush-changed == 'true'
     uses: ./.github/workflows/reusable-build-test-sln-maui.yml
     with:
@@ -94,8 +101,8 @@ jobs:
 
   publish-test-reports:
     name: Publish test reports
-    if: (!cancelled())
-    needs: [build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush]
+    if: (!cancelled() && (needs.compute-changes.outputs.dofusdb-changed == 'true' || needs.compute-changes.outputs.dofocus-changed == 'true' || needs.compute-changes.outputs.best-crush-changed == 'true'))
+    needs: [ compute-changes, build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush ]
     runs-on: ubuntu-latest
 
     permissions:
@@ -116,8 +123,8 @@ jobs:
 
   publish-coverage-reports:
     name: Publish coverage reports
-    if: (!cancelled())
-    needs: [build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush]
+    if: (!cancelled() && (needs.compute-changes.outputs.dofusdb-changed == 'true' || needs.compute-changes.outputs.dofocus-changed == 'true' || needs.compute-changes.outputs.best-crush-changed == 'true'))
+    needs: [ compute-changes, build-and-test-dofusdb, build-and-test-dofocus, build-and-test-best-crush ]
     runs-on: ubuntu-latest
 
     permissions:
