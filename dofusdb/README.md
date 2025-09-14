@@ -72,6 +72,8 @@ Commandes :
   achievement-categories  Achievement Categories client
   achievement-objectives  Achievement Objectives client
   almanax <date>          Get the almanax of the given day [default: 14/09/2025]
+  alignment-ranks         Alignment Ranks client
+  alignment-sides         Alignment Sides client
   almanax-calendars       AlmanaxCalendars client
   areas                   Areas client
   characteristics         Characteristics client
@@ -95,8 +97,8 @@ Commandes :
   mounts                  Mounts client
   mount-behaviors         MountBehaviors client
   mount-families          Mount Families client
-  npcs                    Npcs client
-  npc-messages            NpcMessages client
+  npcs                    NPCs client
+  npc-messages            NPC Messages client
   ornaments               Ornaments client
   ornament-images         Ornaments images client
   recipes                 Recipes client
