@@ -60,6 +60,7 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics(), defaultUrl).CreateCommand(),
         new GameCriterionCommand("criterion", "Parse a criterion string into a JSON array with more information", uri => GetFactory(uri).Criterion(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons(), defaultUrl).CreateCommand(),
+        new GameVersionCommand("game-version", "Get the version of the game corresponding to the data", uri => GetFactory(uri).Version(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbItem>("items", "Items", uri => GetFactory(uri).Items(), defaultUrl).CreateCommand(),
         new ImageClientCommand<long>("item-images", "Item images", uri => GetFactory(uri).ItemImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbItemSet>("item-sets", "Item Sets", uri => GetFactory(uri).ItemSets(), defaultUrl).CreateCommand(),
@@ -77,8 +78,8 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbMount>("mounts", "Mounts", uri => GetFactory(uri).Mounts(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbMountBehavior>("mount-behaviors", "MountBehaviors", uri => GetFactory(uri).MountBehaviors(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbMountFamily>("mount-families", "Mount Families", uri => GetFactory(uri).MountFamilies(), defaultUrl).CreateCommand(),
-        new TableClientCommand<DofusDbNpc>("npcs", "Npcs", uri => GetFactory(uri).Npcs(), defaultUrl).CreateCommand(),
-        new TableClientCommand<DofusDbNpcMessage>("npc-messages", "NpcMessages", uri => GetFactory(uri).NpcMessages(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbNpc>("npcs", "NPCs", uri => GetFactory(uri).Npcs(), defaultUrl).CreateCommand(),
+        new TableClientCommand<DofusDbNpcMessage>("npc-messages", "NPC Messages", uri => GetFactory(uri).NpcMessages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbOrnament>("ornaments", "Ornaments", uri => GetFactory(uri).Ornaments(), defaultUrl).CreateCommand(),
         new ImageClientCommand<long>("ornament-images", "Ornaments images", uri => GetFactory(uri).OrnamentImages(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbRecipe>("recipes", "Recipes", uri => GetFactory(uri).Recipes(), defaultUrl).CreateCommand(),
@@ -92,7 +93,6 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbSpellVariant>("spell-variants", "Spell Variants", uri => GetFactory(uri).SpellVariants(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbSubArea>("sub-areas", "Sub Areas", uri => GetFactory(uri).SubAreas(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbSuperArea>("super-areas", "Super Areas", uri => GetFactory(uri).SuperAreas(), defaultUrl).CreateCommand(),
-        new GameVersionCommand("game-version", "Get the version of the game corresponding to the data", uri => GetFactory(uri).Version(), defaultUrl).CreateCommand(),
         new TableClientCommand<DofusDbWorld>("worlds", "Worlds", uri => GetFactory(uri).Worlds(), defaultUrl).CreateCommand()
         // @formatter:max_line_length restore
     }

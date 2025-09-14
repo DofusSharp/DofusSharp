@@ -67,24 +67,40 @@ Options :
   --version       Afficher les informations de version
 
 Commandes :
-  game-version            Get the version of the game corresponding to the data
-  criterion <criterion>   Parse a criterion string into a JSON array with more information
   achievements            Achievements client
   achievement-images      Achievements images client
   achievement-categories  Achievement Categories client
   achievement-objectives  Achievement Objectives client
   almanax <date>          Get the almanax of the given day [default: 14/09/2025]
   almanax-calendars       AlmanaxCalendars client
-  servers                 Servers client
+  areas                   Areas client
   characteristics         Characteristics client
+  criterion <criterion>   Parse a criterion string into a JSON array with more information
+  dungeons                Dungeons client
+  game-version            Get the version of the game corresponding to the data
   items                   Items client
   item-images             Item images client
-  item-types              Item Types client
-  item-super-types        Item Super Types client
   item-sets               Item Sets client
+  item-super-types        Item Super Types client
+  item-types              Item Types client
   jobs                    Jobs client
   job-images              Job images client
+  maps                    Maps client
+  map-images              Map images client
+  map-positions           Map Positions client
+  monsters                Monsters client
+  monster-images          Monster images client
+  monster-races           Monster Races client
+  monster-super-races     Monster Super Races client
+  mounts                  Mounts client
+  mount-behaviors         MountBehaviors client
+  mount-families          Mount Families client
+  npcs                    Npcs client
+  npc-messages            NpcMessages client
+  ornaments               Ornaments client
+  ornament-images         Ornaments images client
   recipes                 Recipes client
+  servers                 Servers client
   skills                  Skills client
   spells                  Spells client
   spell-images            Spell images client
@@ -92,26 +108,9 @@ Commandes :
   spell-states            Spell States client
   spell-state-images      Spell State images client
   spell-variants          Spell Variants client
-  monsters                Monsters client
-  monster-images          Monster images client
-  monster-races           Monster Races client
-  monster-super-races     Monster Super Races client
-  mounts                  Mounts client
-  mount-families          Mount Families client
-  mount-behaviors         MountBehaviors client
-  npcs                    Npcs client
-  npc-messages            NpcMessages client
-  worlds                  Worlds client
-  super-areas             Super Areas client
-  areas                   Areas client
   sub-areas               Sub Areas client
-  maps                    Maps client
-  map-images              Map images client
-  map-positions           Map Positions client
-  dungeons                Dungeons client
-  titles                  Titles client
-  ornaments               Ornaments client
-  ornament-images         Ornaments images client
+  super-areas             Super Areas client
+  worlds                  Worlds client
 ```
 
 ### Game version
@@ -209,7 +208,8 @@ Options :
   --skip <skip>          Number of results to skip [default: 0]
   --select <select>      Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
   --sort <sort>          Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
-  --filter <filter>      Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: --filter "level>=10,name.fr=Razielle|Goultard"]
+  --filter <filter>      Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
+                         [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
   --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
@@ -287,7 +287,8 @@ Utilisation :
   dofusdb items count [options]
 
 Options :
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: --filter "level>=10,name.fr=Razielle|Goultard"]
+  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
+                     [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
   -q, --quiet        Display less output
@@ -310,7 +311,8 @@ Options :
   --skip <skip>      Number of results to skip [default: 0]
   --select <select>  Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
   --sort <sort>      Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values [example: --filter "level>=10,name.fr=Razielle|Goultard"]
+  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
+                     [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
   -?, -h, --help     Show help and usage information
   -q, --quiet        Display less output
