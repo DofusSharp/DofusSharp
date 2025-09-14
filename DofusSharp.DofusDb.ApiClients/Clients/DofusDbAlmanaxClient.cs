@@ -25,7 +25,7 @@ class DofusDbAlmanaxClient : IDofusDbAlmanaxCalendarClient
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync(typeof(DofusDbAlmanaxCalendar), DofusDbModelsSourceGenerationContext.Instance, cancellationToken) as DofusDbAlmanaxCalendar
-               ?? throw new InvalidOperationException("Could not deserialize the version.");
+               ?? throw new InvalidOperationException("Could not deserialize the almanax calendar.");
     }
 
     public Uri GetAlmanaxQuery(DateOnly date) => new(BaseAddress, "?date=" + date.ToString("MM/dd/yyyy"));
