@@ -1,4 +1,7 @@
 ﻿using DofusSharp.DofusDb.ApiClients.Models.Common;
+using DofusSharp.DofusDb.ApiClients.Models.Criterion;
+using DofusSharp.DofusDb.ApiClients.Models.Monsters;
+using DofusSharp.DofusDb.ApiClients.Models.Servers;
 
 namespace DofusSharp.DofusDb.ApiClients.Models.Challenges;
 
@@ -70,4 +73,49 @@ public static class DofusDbChallengeImagesExtensions
         challenge.IconId.HasValue
             ? factory.ChallengeImages().GetImageAsync(challenge.IconId.Value, cancellationToken)
             : throw new InvalidOperationException("Challenge does not have an associated icon.");
+
+    /// <summary>
+    ///     Get the parsed completion criterion for the challenge.
+    /// </summary>
+    /// <param name="challenge">The challenge for which to get the completion criterion.</param>
+    /// <param name="factory">The factory to use to create the criterion client.</param>
+    /// <param name="language">The language to use for the textual parts of the criterion.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<DofusDbCriterion?> GetCompletionCriterionAsync(
+        this DofusDbChallenge challenge,
+        IDofusDbClientsFactory factory,
+        DofusDbLanguage? language = null,
+        CancellationToken cancellationToken = default
+    ) =>
+        challenge.CompletionCriterion is not null
+            ? factory.Criterion().ParseCriterionAsync(challenge.CompletionCriterion, language, cancellationToken)
+            : throw new InvalidOperationException("Challenge does not have a completion criterion.");
+
+    /// <summary>
+    ///     Get the parsed activation criterion for the challenge.
+    /// </summary>
+    /// <param name="challenge">The challenge for which to get the activation criterion.</param>
+    /// <param name="factory">The factory to use to create the criterion client.</param>
+    /// <param name="language">The language to use for the textual parts of the criterion.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<DofusDbCriterion?> GetActivationCriterionAsync(
+        this DofusDbChallenge challenge,
+        IDofusDbClientsFactory factory,
+        DofusDbLanguage? language = null,
+        CancellationToken cancellationToken = default
+    ) =>
+        challenge.ActivationCriterion is not null
+            ? factory.Criterion().ParseCriterionAsync(challenge.ActivationCriterion, language, cancellationToken)
+            : throw new InvalidOperationException("Challenge does not have a activation criterion.");
+
+    /// <summary>
+    ///     Get the target monster for the challenge.
+    /// </summary>
+    /// <param name="challenge">The challenge for which to get the target monster.</param>
+    /// <param name="factory">The factory to use to create the monster client.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<DofusDbMonster> GetTargetMonsterAsync(this DofusDbChallenge challenge, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        challenge.TargetMonsterId.HasValue
+            ? factory.Monsters().GetAsync(challenge.TargetMonsterId.Value, cancellationToken)
+            : throw new InvalidOperationException("Challenge does not have a target monster.");
 }
