@@ -19,7 +19,7 @@ public interface IDofusDbBreedImagesClient : IDofusDbClient
     /// </summary>
     /// <remarks>The symbol ID is the same as the breed ID.</remarks>
     /// <param name="id">The unique identifier of the symbol.</param>
-    Uri GetSymbolQuery(long id);
+    Uri GetSymbolRequestUri(long id);
 
     /// <summary>
     ///     Fetch the logo image with the given id.
@@ -35,7 +35,7 @@ public interface IDofusDbBreedImagesClient : IDofusDbClient
     /// </summary>
     /// <remarks>The logo ID is the same as the breed ID.</remarks>
     /// <param name="id">The unique identifier of the logo.</param>
-    Uri GetLogoQuery(long id);
+    Uri GetLogoRequestUri(long id);
 
     /// <summary>
     ///     Fetch the head image with the given id.
@@ -50,5 +50,5 @@ public interface IDofusDbBreedImagesClient : IDofusDbClient
     /// </summary>
     /// <remarks>The male head ID is the breed ID multiplied by 10. The female head ID is the breed ID multiplied by 10 plus 1.</remarks>
     /// <param name="id">The unique identifier of the head.</param>
-    Uri GetHeadQuery(long id);
+    Uri GetHeadRequestUri(long id);
 }

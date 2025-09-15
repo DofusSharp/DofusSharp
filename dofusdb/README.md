@@ -135,7 +135,8 @@ Utilisation :
   dofusdb game-version [options]
 
 Options :
-  --base <base>   Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>   Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run   Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help  Show help and usage information
   -q, --quiet     Display less output
   -d, --debug     Show debugging output
@@ -156,7 +157,8 @@ Arguments :
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -178,7 +180,8 @@ Options :
   --lang <En|Fr>         Language to request
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -199,10 +202,9 @@ Options :
   -d, --debug     Show debugging output
 
 Commandes :
-  list         List all items
-  get <id>     Get items by id
-  build-query  Build the search query for items
-  count        Count items
+  list      List all items
+  get <id>  Get items by id
+  count     Count items
 ```
 
 #### `list`
@@ -224,7 +226,8 @@ Options :
                          [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -281,7 +284,8 @@ Arguments :
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -299,12 +303,14 @@ Utilisation :
   dofusdb items count [options]
 
 Options :
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
-                     [example: --filter "level>=10,name.fr=Razielle|Goultard"]
-  --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
-  -?, -h, --help     Show help and usage information
-  -q, --quiet        Display less output
-  -d, --debug        Show debugging output
+  --filter <filter>      Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
+                         [example: --filter "level>=10,name.fr=Razielle|Goultard"]
+  -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
+  -?, -h, --help         Show help and usage information
+  -q, --quiet            Display less output
+  -d, --debug            Show debugging output
 ```
 
 #### `build-query`
@@ -313,22 +319,20 @@ Build the search query URL for the specified parameters without executing the re
 
 ```
 Description:
-  Build the search query for items
+  Items client
 
 Utilisation :
-  dofusdb items build-query [options]
+  dofusdb items [command] [options]
 
 Options :
-  --limit <limit>    Maximum number of results to retrieve. If the value exceeds the API’s maximum page size, multiple requests will be performed [default: 10]
-  --skip <skip>      Number of results to skip [default: 0]
-  --select <select>  Comma separated list of fields to include in the results. If not specified, all fields are included [example: --select "id,name.fr,level"]
-  --sort <sort>      Comma separated list of fields to sorts the results by. Prefix with '-' for descending order [example: --sort "-level,name.fr"]
-  --filter <filter>  Comma separated list of predicates to filter the results by. Each predicate is made of the name of the field, an operator (=, !=, <, <=, >, >=) and the value. Multiple values can be separated by '|' for '=' operator (in) and for '!=' operator (not in) to match any of the values 
-                     [example: --filter "level>=10,name.fr=Razielle|Goultard"]
-  --base <base>      Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
-  -?, -h, --help     Show help and usage information
-  -q, --quiet        Display less output
-  -d, --debug        Show debugging output
+  -?, -h, --help  Show help and usage information
+  -q, --quiet     Display less output
+  -d, --debug     Show debugging output
+
+Commandes :
+  list      List all items
+  get <id>  Get items by id
+  count     Count items
 ```
 
 ### Image data
@@ -363,7 +367,8 @@ Arguments :
 
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -402,7 +407,8 @@ Arguments :
 Options :
   --scale <Full|Half|Quarter|ThreeQuarters>  Scale of the image to fetch [default: Full]
   -o, --output <output>                      File to write the JSON output to. If not specified, an arbitrary file name will be used
-  --base <base>                              Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>                              Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run                              Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help                             Show help and usage information
   -q, --quiet                                Display less output
   -d, --debug                                Show debugging output
@@ -442,7 +448,8 @@ Arguments :
 
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -462,7 +469,8 @@ Arguments :
 
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -482,7 +490,8 @@ Arguments :
 
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
-  --base <base>          Base URL to use when building the query URL [default: https://api.beta.dofusdb.fr/]
+  --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
+  -n, --dry-run          Do not perform the HTTP queries, display the request URL instead
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output

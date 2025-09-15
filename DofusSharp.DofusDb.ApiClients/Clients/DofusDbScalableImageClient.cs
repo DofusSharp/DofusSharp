@@ -15,14 +15,14 @@ class DofusDbScalableImagesClient<TId>(Uri baseAddress, ImageFormat imageFormat,
 
     public async Task<Stream> GetImageAsync(TId id, DofusDbImageScale scale, CancellationToken cancellationToken = default)
     {
-        Uri url = GetImageQuery(id, scale);
+        Uri url = GetImageRequestUri(id, scale);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         return await httpClient.GetImageStreamAsync(url, cancellationToken);
     }
 
-    public Uri GetImageQuery(TId id) => GetImageQuery(id, DofusDbImageScale.Full);
+    public Uri GetImageRequestUri(TId id) => GetImageRequestUri(id, DofusDbImageScale.Full);
 
-    public Uri GetImageQuery(TId id, DofusDbImageScale scale)
+    public Uri GetImageRequestUri(TId id, DofusDbImageScale scale)
     {
         string scaleString = scale switch
         {

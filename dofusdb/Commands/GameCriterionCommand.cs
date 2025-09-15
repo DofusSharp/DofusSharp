@@ -26,13 +26,9 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
         Command result = new(command, description)
         {
             Arguments = { _criterionArgument },
-            Options =
-            {
-                _langOption,
-                CommonOptions.OutputFileOption,
-                CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption
-            }
+            Options = { _langOption, CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption }
         };
+
         result.SetAction(async (r, cancellationToken) =>
             {
                 string criterion = r.GetRequiredValue(_criterionArgument);
@@ -40,33 +36,59 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
-                JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
-                JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbCriterion));
-
                 IDofusDbCriterionClient client = clientFactory(new Uri(baseUrl));
-
-                DofusDbCriterion? parsedCriterion = null!;
-                if (quiet)
-                {
-                    parsedCriterion = await client.ParseCriterionAsync(criterion, lang, cancellationToken);
-                }
-                else
-                {
-                    await AnsiConsole
-                        .Status()
-                        .Spinner(Spinner.Known.Default)
-                        .StartAsync(
-                            $"Executing query: {client.ParseCriterionQuery(criterion, lang)}...",
-                            async _ => parsedCriterion = await client.ParseCriterionAsync(criterion, lang, cancellationToken)
-                        );
-                }
-
-                await using Stream stream = Utils.GetOutputStream(outputFile);
-                await JsonSerializer.SerializeAsync(stream, parsedCriterion, jsonTypeInfo, cancellationToken);
+                return request
+                    ? WriteCriterionRequest(client, criterion, lang, outputFile)
+                    : await ExecuteCriterionRequestAsync(client, criterion, lang, outputFile, prettyPrint, quiet, cancellationToken);
             }
         );
+
         return result;
+    }
+
+    static int WriteCriterionRequest(IDofusDbCriterionClient client, string criterion, DofusDbLanguage lang, string? outputFile)
+    {
+        Uri query = client.GetCriterionRequestUri(criterion, lang);
+        using Stream stream = Utils.GetOutputStream(outputFile);
+        using StreamWriter textWriter = new(stream);
+        textWriter.WriteLine(query.ToString());
+        return 0;
+    }
+
+    static async Task<int> ExecuteCriterionRequestAsync(
+        IDofusDbCriterionClient client,
+        string criterion,
+        DofusDbLanguage lang,
+        string? outputFile,
+        bool prettyPrint,
+        bool quiet,
+        CancellationToken cancellationToken
+    )
+    {
+        JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
+        JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbCriterion));
+        DofusDbCriterion? parsedCriterion = null!;
+        if (quiet)
+        {
+            parsedCriterion = await client.ParseCriterionAsync(criterion, lang, cancellationToken);
+        }
+        else
+        {
+            await AnsiConsole
+                .Status()
+                .Spinner(Spinner.Known.Default)
+                .StartAsync(
+                    $"Executing query: {client.GetCriterionRequestUri(criterion, lang)}...",
+                    async _ => parsedCriterion = await client.ParseCriterionAsync(criterion, lang, cancellationToken)
+                );
+        }
+
+        await using Stream stream = Utils.GetOutputStream(outputFile);
+        await JsonSerializer.SerializeAsync(stream, parsedCriterion, jsonTypeInfo, cancellationToken);
+
+        return 0;
     }
 }

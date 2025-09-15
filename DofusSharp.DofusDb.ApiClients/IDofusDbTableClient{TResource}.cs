@@ -26,7 +26,7 @@ public interface IDofusDbTableClient<TResource> : IDofusDbTableClient where TRes
     ///     This URL is the one used by <see cref="GetAsync(long, CancellationToken)" />.
     /// </summary>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
-    Uri GetQuery(long id);
+    Uri GetGetRequestUri(long id);
 
     /// <summary>
     ///     Fetch the number of resources available in the API.
@@ -41,7 +41,7 @@ public interface IDofusDbTableClient<TResource> : IDofusDbTableClient where TRes
     ///     This URL is the one used by <see cref="CountAsync(IReadOnlyCollection{DofusDbSearchPredicate}, CancellationToken)" />.
     /// </summary>
     /// <param name="predicates">The collection of predicates to filter the resources. If empty, all resources are counted.</param>
-    Uri CountQuery(IReadOnlyCollection<DofusDbSearchPredicate> predicates);
+    Uri GetCountRequestUri(IReadOnlyCollection<DofusDbSearchPredicate> predicates);
 
     /// <summary>
     ///     Fetch a paginated list of resources from the API based on the provided search query.
@@ -56,7 +56,7 @@ public interface IDofusDbTableClient<TResource> : IDofusDbTableClient where TRes
     ///     This URL is the one used by <see cref="SearchAsync(DofusDbSearchQuery, CancellationToken)" />.
     /// </summary>
     /// <param name="query">The search query containing pagination parameters.</param>
-    Uri SearchQuery(DofusDbSearchQuery query);
+    Uri GetSearchRequestUri(DofusDbSearchQuery query);
 }
 
 public static class DofusDbTableClientExtensions

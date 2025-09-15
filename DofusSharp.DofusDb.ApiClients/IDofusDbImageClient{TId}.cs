@@ -26,5 +26,5 @@ public interface IDofusDbImagesClient<in TId> : IDofusDbClient
     ///     This URL is the one used by <see cref="GetImageAsync(TId, CancellationToken)" />.
     /// </summary>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
-    Uri GetImageQuery(TId id);
+    Uri GetImageRequestUri(TId id);
 }

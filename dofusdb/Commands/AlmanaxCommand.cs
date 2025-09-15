@@ -18,37 +18,64 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
     public Command CreateCommand()
     {
         Command result = new(command, description)
-            { Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption } };
-        result.SetAction(async (r, cancellationToken) =>
+        {
+            Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption }
+        };
+
+        result.SetAction(async (r, token) =>
             {
                 DateOnly date = r.GetRequiredValue(_dateArgument);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
-                JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
-                JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbAlmanaxCalendar));
-
                 IDofusDbAlmanaxCalendarClient client = clientFactory(new Uri(baseUrl));
-
-                DofusDbAlmanaxCalendar almanax = null!;
-                if (quiet)
-                {
-                    almanax = await client.GetAlmanaxAsync(date, cancellationToken);
-                }
-                else
-                {
-                    await AnsiConsole
-                        .Status()
-                        .Spinner(Spinner.Known.Default)
-                        .StartAsync($"Executing query: {client.GetAlmanaxQuery(date)}...", async _ => almanax = await client.GetAlmanaxAsync(date, cancellationToken));
-                }
-
-                await using Stream stream = Utils.GetOutputStream(outputFile);
-                await JsonSerializer.SerializeAsync(stream, almanax, jsonTypeInfo, cancellationToken);
+                return request ? WriteAlmanaxRequest(client, date, outputFile) : await ExecuteAlmanaxRequest(client, date, outputFile, prettyPrint, quiet, token);
             }
         );
+
         return result;
+    }
+
+    static int WriteAlmanaxRequest(IDofusDbAlmanaxCalendarClient client, DateOnly date, string? outputFile)
+    {
+        Uri query = client.GetAlmanaxRequestUri(date);
+        using Stream stream = Utils.GetOutputStream(outputFile);
+        using StreamWriter textWriter = new(stream);
+        textWriter.WriteLine(query.ToString());
+        return 0;
+    }
+
+    static async Task<int> ExecuteAlmanaxRequest(
+        IDofusDbAlmanaxCalendarClient client,
+        DateOnly date,
+        string? outputFile,
+        bool prettyPrint,
+        bool quiet,
+        CancellationToken cancellationToken
+    )
+    {
+        JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
+        JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbAlmanaxCalendar));
+
+        DofusDbAlmanaxCalendar almanax = null!;
+        if (quiet)
+        {
+            almanax = await client.GetAlmanaxAsync(date, cancellationToken);
+        }
+        else
+        {
+            await AnsiConsole
+                .Status()
+                .Spinner(Spinner.Known.Default)
+                .StartAsync($"Executing query: {client.GetAlmanaxRequestUri(date)}...", async _ => almanax = await client.GetAlmanaxAsync(date, cancellationToken));
+        }
+
+        await using Stream stream = Utils.GetOutputStream(outputFile);
+        await JsonSerializer.SerializeAsync(stream, almanax, jsonTypeInfo, cancellationToken);
+
+        return 0;
     }
 }

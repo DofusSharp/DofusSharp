@@ -22,39 +22,55 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
     Command CreateGetCommand()
     {
         Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
-            { Arguments = { _idArgument }, Options = { CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption } };
+            { Arguments = { _idArgument }, Options = { CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 TId id = r.GetRequiredValue(_idArgument);
                 string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
-                bool quiet = r.GetValue(CommonOptions.QuietOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
+                bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbImagesClient<TId> client = clientFactory(new Uri(baseUrl));
-
-                Stream image = null!;
-                if (quiet)
-                {
-                    image = await client.GetImageAsync(id, cancellationToken);
-                }
-                else
-                {
-                    await AnsiConsole
-                        .Status()
-                        .Spinner(Spinner.Known.Default)
-                        .StartAsync($"Executing query: {client.GetImageQuery(id)}...", async _ => image = await client.GetImageAsync(id, cancellationToken));
-                }
-
-                await using Stream stream = GetOutputStream(client, id, outputFile);
-                await image.CopyToAsync(stream, cancellationToken);
+                return request ? WriteImageRequest(client, id, outputFile) : await ExecuteImageRequestAsync(client, id, outputFile, quiet, cancellationToken);
             }
         );
 
         return result;
     }
 
-    FileStream GetOutputStream(IDofusDbImagesClient<TId> client, TId id, string? outputFile)
+    static int WriteImageRequest(IDofusDbImagesClient<TId> client, TId id, string? outputFile)
+    {
+        Uri query = client.GetImageRequestUri(id);
+        using Stream stream = Utils.GetOutputStream(outputFile);
+        using StreamWriter textWriter = new(stream);
+        textWriter.WriteLine(query.ToString());
+        return 0;
+    }
+
+    async Task<int> ExecuteImageRequestAsync(IDofusDbImagesClient<TId> client, TId id, string? outputFile, bool quiet, CancellationToken cancellationToken)
+    {
+        Stream image = null!;
+        if (quiet)
+        {
+            image = await client.GetImageAsync(id, cancellationToken);
+        }
+        else
+        {
+            await AnsiConsole
+                .Status()
+                .Spinner(Spinner.Known.Default)
+                .StartAsync($"Executing query: {client.GetImageRequestUri(id)}...", async _ => image = await client.GetImageAsync(id, cancellationToken));
+        }
+
+        await using Stream stream = GetOutputStream(client, id, outputFile);
+        await image.CopyToAsync(stream, cancellationToken);
+
+        return 0;
+    }
+
+    Stream GetOutputStream(IDofusDbImagesClient<TId> client, TId id, string? outputFile)
     {
         if (outputFile == null)
         {
@@ -67,12 +83,6 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
             outputFile = $"{command}-{id}{extension}";
         }
 
-        string? directory = Path.GetDirectoryName(outputFile);
-        if (!string.IsNullOrWhiteSpace(directory) && !Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
-        return File.Create(outputFile);
+        return Utils.GetOutputStream(outputFile);
     }
 }

@@ -19,5 +19,5 @@ public interface IDofusDbAlmanaxCalendarClient : IDofusDbClient
     ///     This URL is the one used by <see cref="GetAlmanaxAsync" />.
     /// </summary>
     /// <param name="date">The specific day for which to retrieve the Almanax calendar data.</param>
-    Uri GetAlmanaxQuery(DateOnly date);
+    Uri GetAlmanaxRequestUri(DateOnly date);
 }

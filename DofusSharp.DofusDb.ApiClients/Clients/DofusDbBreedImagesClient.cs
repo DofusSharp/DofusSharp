@@ -11,28 +11,28 @@ class DofusDbBreedImagesClient(Uri baseAddress, Uri? referrer) : IDofusDbBreedIm
 
     public async Task<Stream> GetSymbolAsync(long id, CancellationToken cancellationToken = default)
     {
-        Uri url = GetSymbolQuery(id);
+        Uri url = GetSymbolRequestUri(id);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         return await httpClient.GetImageStreamAsync(url, cancellationToken);
     }
 
-    public Uri GetSymbolQuery(long id) => new(BaseAddress, $"breeds/symbol_{id}.png");
+    public Uri GetSymbolRequestUri(long id) => new(BaseAddress, $"breeds/symbol_{id}.png");
 
     public async Task<Stream> GetLogoAsync(long id, CancellationToken cancellationToken = default)
     {
-        Uri url = GetLogoQuery(id);
+        Uri url = GetLogoRequestUri(id);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         return await httpClient.GetImageStreamAsync(url, cancellationToken);
     }
 
-    public Uri GetLogoQuery(long id) => new(BaseAddress, $"breeds/logo_transparent_{id}.png");
+    public Uri GetLogoRequestUri(long id) => new(BaseAddress, $"breeds/logo_transparent_{id}.png");
 
     public async Task<Stream> GetHeadAsync(long id, CancellationToken cancellationToken = default)
     {
-        Uri url = GetHeadQuery(id);
+        Uri url = GetHeadRequestUri(id);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         return await httpClient.GetImageStreamAsync(url, cancellationToken);
     }
 
-    public Uri GetHeadQuery(long id) => new(BaseAddress, $"heads/SmallHead_{id}.png");
+    public Uri GetHeadRequestUri(long id) => new(BaseAddress, $"heads/SmallHead_{id}.png");
 }

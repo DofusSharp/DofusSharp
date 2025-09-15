@@ -18,7 +18,7 @@ class DofusDbTableClient<TResource>(Uri baseAddress, Uri? referrer, JsonSerializ
 
     public async Task<TResource> GetAsync(long id, CancellationToken cancellationToken = default)
     {
-        Uri url = GetQuery(id);
+        Uri url = GetGetRequestUri(id);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -31,11 +31,11 @@ class DofusDbTableClient<TResource>(Uri baseAddress, Uri? referrer, JsonSerializ
         return result;
     }
 
-    public Uri GetQuery(long id) => new(BaseAddress, $"{id}");
+    public Uri GetGetRequestUri(long id) => new(BaseAddress, $"{id}");
 
     public async Task<int> CountAsync(IReadOnlyCollection<DofusDbSearchPredicate> predicates, CancellationToken cancellationToken = default)
     {
-        Uri url = CountQuery(predicates);
+        Uri url = GetCountRequestUri(predicates);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -48,7 +48,7 @@ class DofusDbTableClient<TResource>(Uri baseAddress, Uri? referrer, JsonSerializ
         return result.Total;
     }
 
-    public Uri CountQuery(IReadOnlyCollection<DofusDbSearchPredicate> predicates)
+    public Uri GetCountRequestUri(IReadOnlyCollection<DofusDbSearchPredicate> predicates)
     {
         DofusDbSearchQuery query = new() { Limit = 0, Predicates = predicates };
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
@@ -57,7 +57,7 @@ class DofusDbTableClient<TResource>(Uri baseAddress, Uri? referrer, JsonSerializ
 
     public async Task<DofusDbSearchResult<TResource>> SearchAsync(DofusDbSearchQuery query, CancellationToken cancellationToken = default)
     {
-        Uri url = SearchQuery(query);
+        Uri url = GetSearchRequestUri(query);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -70,7 +70,7 @@ class DofusDbTableClient<TResource>(Uri baseAddress, Uri? referrer, JsonSerializ
         return result;
     }
 
-    public Uri SearchQuery(DofusDbSearchQuery query)
+    public Uri GetSearchRequestUri(DofusDbSearchQuery query)
     {
         string queryParams = _queryParamsBuilder.BuildQueryParams(query);
         string requestUri = string.IsNullOrWhiteSpace(queryParams) ? string.Empty : $"?{queryParams}";

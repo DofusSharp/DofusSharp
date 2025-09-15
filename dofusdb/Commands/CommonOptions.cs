@@ -42,4 +42,10 @@ static class CommonOptions
         DefaultValueFactory = _ => DofusDbClient.ProductionUri.ToString()
 #endif
     };
+
+    public static readonly Option<bool> RequestOption = new("--dry-run", "-n")
+    {
+        Description = "Do not perform the HTTP queries, display the request URL instead",
+        DefaultValueFactory = _ => false
+    };
 }
