@@ -86,6 +86,7 @@ Commandes :
   breeds                  Breeds client
   breed-images            Breed images client
   challenges              Challenges client
+  challenge-images        Challenge images client
   characteristics         Characteristics client
   criterion <criterion>   Parse a criterion string into a JSON array with more information
   dungeons                Dungeons client
