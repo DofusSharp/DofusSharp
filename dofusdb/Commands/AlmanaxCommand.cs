@@ -19,6 +19,7 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
     {
         Command result = new(command, description)
             { Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.QueryOption } };
+
         result.SetAction(async (r, token) =>
             {
                 DateOnly date = r.GetRequiredValue(_dateArgument);
@@ -32,6 +33,7 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
                 return query ? await QueryAsync(client, date, outputFile) : await ExecuteAsync(client, date, outputFile, prettyPrint, quiet, token);
             }
         );
+
         return result;
     }
 
