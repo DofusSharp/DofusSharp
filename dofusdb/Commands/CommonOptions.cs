@@ -43,9 +43,9 @@ static class CommonOptions
 #endif
     };
 
-    public static readonly Option<bool> RequestOption = new("--request-only")
+    public static readonly Option<bool> RequestOption = new("--dry-run", "-n")
     {
-        Description = "Output the HTTP request URL that would be executed, without actually executing it",
+        Description = "Do not perform the HTTP queries, display the request URL instead",
         DefaultValueFactory = _ => false
     };
 }
