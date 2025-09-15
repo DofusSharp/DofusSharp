@@ -6,6 +6,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
 using DofusSharp.DofusDb.ApiClients.Models.Breeds;
+using DofusSharp.DofusDb.ApiClients.Models.Challenges;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -55,6 +56,7 @@ static class DofusDbProdOrBetaJsonTypeInfoResolver
                 new JsonDerivedType(typeof(DofusDbAllianceRight), useBetaModels ? "AllianceRightData" : "AllianceRights"),
                 new JsonDerivedType(typeof(DofusDbArea), useBetaModels ? "AreaData" : "Areas"),
                 new JsonDerivedType(typeof(DofusDbBreed), useBetaModels ? "BreedData" : "Breeds"),
+                new JsonDerivedType(typeof(DofusDbChallenge), useBetaModels ? "ChallengeData" : "Challenges"),
                 new JsonDerivedType(typeof(DofusDbCharacteristic), useBetaModels ? "CharacteristicData" : "Characteristics"),
                 new JsonDerivedType(typeof(DofusDbDungeon), useBetaModels ? "DungeonData" : "Dungeons"),
                 new JsonDerivedType(typeof(DofusDbGuildRight), useBetaModels ? "GuildRightData" : "GuildRights"),

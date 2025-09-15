@@ -1,0 +1,53 @@
+﻿{
+  IncompatibleChallenges: [
+    2,
+    8,
+    805,
+    811
+  ],
+  CategoryId: 1,
+  IconId: 1,
+  CompletionCriterion: TM=1,0,
+  ActivationCriterion: GL>4,0,
+  TargetMonsterId: 0,
+  Name: {
+    De: Zombie,
+    En: Zombie,
+    Es: Zombi,
+    Fr: Zombie,
+    Pt: Zumbi
+  },
+  Description: {
+    De:
+Die verbündeten Kämpfer müssen in jedem Spielzug genau einen BP verwenden.
+
+Der Verlust von BP beim Entblocken führt nicht zu einem Scheitern der Herausforderung.,
+    En:
+Allied fighters must use exactly one Movement Point per turn.
+
+Losing Movement Points by unlocking will not cause you to fail the challenge.,
+    Es:
+Los luchadores aliados deben utilizar exactamente un punto de movimiento por cada turno de juego.
+
+Perder puntos de movimiento al zafarse de un placaje no hace fallar el reto.,
+    Fr:
+Les combattants alliés doivent utiliser exactement un point de mouvement par tour de jeu.
+
+Perdre des points de mouvement en détaclant ne fait pas échouer le challenge.,
+    Pt:
+Os combatentes aliados devem usar exatamente um ponto de movimento por turno.
+
+Perder pontos de movimento ao escapar de um bloqueio não leva ao fracasso no desafio.
+  },
+  Slug: {
+    De: zombie,
+    En: zombie,
+    Es: zombi,
+    Fr: zombie,
+    Pt: zumbi
+  },
+  Img: https://api.beta.dofusdb.fr/img/challenges/1.png,
+  Id: 1,
+  CreatedAt: DateTimeOffset_1,
+  UpdatedAt: DateTimeOffset_2
+}

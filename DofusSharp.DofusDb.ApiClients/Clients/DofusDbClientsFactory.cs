@@ -4,6 +4,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
 using DofusSharp.DofusDb.ApiClients.Models.Breeds;
+using DofusSharp.DofusDb.ApiClients.Models.Challenges;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
@@ -42,6 +43,7 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOption
     public IDofusDbTableClient<DofusDbAlteration>            Alterations()            => new DofusDbTableClient<DofusDbAlteration>            (new Uri(baseAddress, "alterations/"),             referrer,            options);
     public IDofusDbTableClient<DofusDbArea>                  Areas()                  => new DofusDbTableClient<DofusDbArea>                  (new Uri(baseAddress, "areas/"),                   referrer,            options);
     public IDofusDbTableClient<DofusDbBreed>                 Breeds()                 => new DofusDbTableClient<DofusDbBreed>                 (new Uri(baseAddress, "breeds/"),                  referrer,            options);
+    public IDofusDbTableClient<DofusDbChallenge>             Challenges()             => new DofusDbTableClient<DofusDbChallenge>             (new Uri(baseAddress, "challenges/"),              referrer,            options);
     public IDofusDbTableClient<DofusDbCharacteristic>        Characteristics()        => new DofusDbTableClient<DofusDbCharacteristic>        (new Uri(baseAddress, "characteristics/"),         referrer,            options);
     public IDofusDbTableClient<DofusDbDungeon>               Dungeons()               => new DofusDbTableClient<DofusDbDungeon>               (new Uri(baseAddress, "dungeons/"),                referrer,            options);
     public IDofusDbTableClient<DofusDbGuildRight>            GuildRights()            => new DofusDbTableClient<DofusDbGuildRight>            (new Uri(baseAddress, "guild-rights/"),            referrer,            options);

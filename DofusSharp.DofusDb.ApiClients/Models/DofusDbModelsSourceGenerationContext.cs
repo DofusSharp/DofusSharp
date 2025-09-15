@@ -6,6 +6,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
 using DofusSharp.DofusDb.ApiClients.Models.Breeds;
+using DofusSharp.DofusDb.ApiClients.Models.Challenges;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Common;
 using DofusSharp.DofusDb.ApiClients.Models.Criterion;
@@ -41,6 +42,7 @@ namespace DofusSharp.DofusDb.ApiClients.Models;
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbAlignmentSide>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbArea>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbBreed>))]
+[JsonSerializable(typeof(DofusDbSearchResult<DofusDbChallenge>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbCharacteristic>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbDungeon>))]
 [JsonSerializable(typeof(DofusDbSearchResult<DofusDbGuildRight>))]
