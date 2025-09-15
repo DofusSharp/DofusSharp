@@ -22,7 +22,7 @@ class DofusDbCriterionClient(Uri baseAddress, Uri? referrer, JsonSerializerOptio
             return null;
         }
 
-        Uri url = ParseCriterionQuery(criterion, language);
+        Uri url = GetCriterionRequestUri(criterion, language);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -36,7 +36,7 @@ class DofusDbCriterionClient(Uri baseAddress, Uri? referrer, JsonSerializerOptio
         return result;
     }
 
-    public Uri ParseCriterionQuery(string criterion, DofusDbLanguage? language = null)
+    public Uri GetCriterionRequestUri(string criterion, DofusDbLanguage? language = null)
     {
         string queryString = language switch
         {

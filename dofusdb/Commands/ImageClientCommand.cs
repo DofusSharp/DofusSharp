@@ -42,7 +42,7 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
 
     static int Query(IDofusDbImagesClient<TId> client, TId id, string? outputFile)
     {
-        Uri query = client.GetImageQuery(id);
+        Uri query = client.GetImageRequestUri(id);
         using Stream stream = Utils.GetOutputStream(outputFile);
         using StreamWriter textWriter = new(stream);
         textWriter.WriteLine(query.ToString());
@@ -61,7 +61,7 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
             await AnsiConsole
                 .Status()
                 .Spinner(Spinner.Known.Default)
-                .StartAsync($"Executing query: {client.GetImageQuery(id)}...", async _ => image = await client.GetImageAsync(id, cancellationToken));
+                .StartAsync($"Executing query: {client.GetImageRequestUri(id)}...", async _ => image = await client.GetImageAsync(id, cancellationToken));
         }
 
         await using Stream stream = GetOutputStream(client, id, outputFile);

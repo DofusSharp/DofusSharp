@@ -18,12 +18,12 @@ class DofusDbImagesClient<TId>(Uri baseAddress, ImageFormat imageFormat, Uri? re
 
     public async Task<Stream> GetImageAsync(TId id, CancellationToken cancellationToken = default)
     {
-        Uri url = GetImageQuery(id);
+        Uri url = GetImageRequestUri(id);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         return await httpClient.GetImageStreamAsync(url, cancellationToken);
     }
 
-    public Uri GetImageQuery(TId id)
+    public Uri GetImageRequestUri(TId id)
     {
         string extension = ImageFormat.ToExtension();
         return new Uri(BaseAddress, $"{Prefix}{id}.{extension}");

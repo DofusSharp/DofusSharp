@@ -103,7 +103,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
 
     static int QuerySearchAsync(IDofusDbTableClient<TResource> client, DofusDbSearchQuery searchQuery, string? outputFile)
     {
-        Uri query = client.SearchQuery(searchQuery);
+        Uri query = client.GetSearchRequestUri(searchQuery);
         using Stream stream = Utils.GetOutputStream(outputFile);
         using StreamWriter textWriter = new(stream);
         textWriter.WriteLine(query.ToString());
@@ -163,7 +163,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                                         }
 
                                         case DofusDbTableClientExtensions.MultiSearchNextQuery nextQuery:
-                                            tsk.Description($"[{tsk.Value}/{tsk.MaxValue}] {client.SearchQuery(nextQuery.NextQuery)}...".EscapeMarkup());
+                                            tsk.Description($"[{tsk.Value}/{tsk.MaxValue}] {client.GetSearchRequestUri(nextQuery.NextQuery)}...".EscapeMarkup());
                                             ctx.Refresh();
                                             break;
                                     }
@@ -205,7 +205,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
 
     static int QueryGetAsync(IDofusDbTableClient<TResource> client, long id, string? outputFile)
     {
-        Uri query = client.GetQuery(id);
+        Uri query = client.GetGetRequestUri(id);
         using Stream stream = Utils.GetOutputStream(outputFile);
         using StreamWriter textWriter = new(stream);
         textWriter.WriteLine(query.ToString());
@@ -227,7 +227,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
             await AnsiConsole
                 .Status()
                 .Spinner(Spinner.Known.Default)
-                .StartAsync($"Executing query: {client.GetQuery(id)}...", async _ => resource = await client.GetAsync(id, cancellationToken));
+                .StartAsync($"Executing query: {client.GetGetRequestUri(id)}...", async _ => resource = await client.GetAsync(id, cancellationToken));
         }
 
         await using Stream stream = Utils.GetOutputStream(outputFile);
@@ -259,7 +259,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
 
     static int QueryCountAsync(IDofusDbTableClient<TResource> client, IReadOnlyList<DofusDbSearchPredicate>? filter, string? outputFile)
     {
-        Uri query = client.CountQuery(filter ?? []);
+        Uri query = client.GetCountRequestUri(filter ?? []);
         using Stream stream = Utils.GetOutputStream(outputFile);
         using StreamWriter textWriter = new(stream);
         textWriter.WriteLine(query.ToString());
@@ -276,7 +276,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     {
         if (!quiet)
         {
-            await Console.Error.WriteLineAsync($"Executing query: {client.CountQuery(filter ?? [])}...");
+            await Console.Error.WriteLineAsync($"Executing query: {client.GetCountRequestUri(filter ?? [])}...");
         }
 
         int results = 0;
@@ -289,7 +289,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
             await AnsiConsole
                 .Status()
                 .Spinner(Spinner.Known.Default)
-                .StartAsync($"Executing query: {client.CountQuery(filter ?? [])}...", async _ => results = await client.CountAsync(filter ?? [], cancellationToken));
+                .StartAsync($"Executing query: {client.GetCountRequestUri(filter ?? [])}...", async _ => results = await client.CountAsync(filter ?? [], cancellationToken));
         }
 
         await using Stream stream = Utils.GetOutputStream(outputFile);

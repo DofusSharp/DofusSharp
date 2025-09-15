@@ -15,7 +15,7 @@ class DofusDbAlmanaxClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions
 
     public async Task<DofusDbAlmanaxCalendar> GetAlmanaxAsync(DateOnly date, CancellationToken cancellationToken = default)
     {
-        Uri url = GetAlmanaxQuery(date);
+        Uri url = GetAlmanaxRequestUri(date);
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -23,5 +23,5 @@ class DofusDbAlmanaxClient(Uri baseAddress, Uri? referrer, JsonSerializerOptions
                ?? throw new InvalidOperationException("Could not deserialize the almanax calendar.");
     }
 
-    public Uri GetAlmanaxQuery(DateOnly date) => new(BaseAddress, "?date=" + date.ToString("MM/dd/yyyy"));
+    public Uri GetAlmanaxRequestUri(DateOnly date) => new(BaseAddress, "?date=" + date.ToString("MM/dd/yyyy"));
 }

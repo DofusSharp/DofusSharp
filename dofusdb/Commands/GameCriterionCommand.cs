@@ -49,7 +49,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
 
     static int Query(IDofusDbCriterionClient client, string criterion, DofusDbLanguage lang, string? outputFile)
     {
-        Uri query = client.ParseCriterionQuery(criterion, lang);
+        Uri query = client.GetCriterionRequestUri(criterion, lang);
         using Stream stream = Utils.GetOutputStream(outputFile);
         using StreamWriter textWriter = new(stream);
         textWriter.WriteLine(query.ToString());
@@ -79,7 +79,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
                 .Status()
                 .Spinner(Spinner.Known.Default)
                 .StartAsync(
-                    $"Executing query: {client.ParseCriterionQuery(criterion, lang)}...",
+                    $"Executing query: {client.GetCriterionRequestUri(criterion, lang)}...",
                     async _ => parsedCriterion = await client.ParseCriterionAsync(criterion, lang, cancellationToken)
                 );
         }

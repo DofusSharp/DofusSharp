@@ -26,7 +26,7 @@ class GameVersionCommand(string command, string description, Func<Uri, IDofusDbV
 
     static int Query(IDofusDbVersionClient client)
     {
-        Uri query = client.GetVersionQuery();
+        Uri query = client.GetVersionRequestUri();
         Console.WriteLine(query.ToString());
         return 0;
     }
@@ -43,7 +43,7 @@ class GameVersionCommand(string command, string description, Func<Uri, IDofusDbV
             await AnsiConsole
                 .Status()
                 .Spinner(Spinner.Known.Default)
-                .StartAsync($"Executing query: {client.GetVersionQuery()}...", async _ => version = await client.GetVersionAsync(cancellationToken));
+                .StartAsync($"Executing query: {client.GetVersionRequestUri()}...", async _ => version = await client.GetVersionAsync(cancellationToken));
         }
 
         Console.WriteLine(version);

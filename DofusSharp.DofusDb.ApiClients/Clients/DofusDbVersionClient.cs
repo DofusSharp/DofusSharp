@@ -13,7 +13,7 @@ class DofusDbVersionClient(Uri baseAddress, Uri? referrer = null) : IDofusDbVers
 
     public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
     {
-        Uri url = GetVersionQuery();
+        Uri url = GetVersionRequestUri();
         using HttpClient httpClient = HttpClientUtils.CreateHttpClient(HttpClientFactory, null, Referrer);
         using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -27,5 +27,5 @@ class DofusDbVersionClient(Uri baseAddress, Uri? referrer = null) : IDofusDbVers
         return Version.Parse(result);
     }
 
-    public Uri GetVersionQuery() => BaseAddress;
+    public Uri GetVersionRequestUri() => BaseAddress;
 }

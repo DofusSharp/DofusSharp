@@ -49,7 +49,7 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
 
     static int Query(IDofusDbScalableImagesClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile)
     {
-        Uri query = client.GetImageQuery(id, scale);
+        Uri query = client.GetImageRequestUri(id, scale);
         using Stream stream = Utils.GetOutputStream(outputFile);
         using StreamWriter textWriter = new(stream);
         textWriter.WriteLine(query.ToString());
@@ -68,7 +68,7 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
             await AnsiConsole
                 .Status()
                 .Spinner(Spinner.Known.Default)
-                .StartAsync($"Executing query: {client.GetImageQuery(id, scale)}...", async _ => image = await client.GetImageAsync(id, scale, cancellationToken));
+                .StartAsync($"Executing query: {client.GetImageRequestUri(id, scale)}...", async _ => image = await client.GetImageAsync(id, scale, cancellationToken));
         }
 
         await using Stream stream = GetOutputStream(client, id, scale, outputFile);

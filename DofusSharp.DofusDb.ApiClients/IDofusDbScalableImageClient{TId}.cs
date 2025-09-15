@@ -23,5 +23,5 @@ public interface IDofusDbScalableImagesClient<in TId> : IDofusDbImagesClient<TId
     /// </summary>
     /// <param name="id">The unique identifier of the resource to fetch.</param>
     /// <param name="scale">The scale of the image to fetch.</param>
-    Uri GetImageQuery(TId id, DofusDbImageScale scale);
+    Uri GetImageRequestUri(TId id, DofusDbImageScale scale);
 }

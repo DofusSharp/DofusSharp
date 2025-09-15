@@ -41,7 +41,7 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
 
     static int Query(IDofusDbAlmanaxCalendarClient client, DateOnly date, string? outputFile)
     {
-        Uri query = client.GetAlmanaxQuery(date);
+        Uri query = client.GetAlmanaxRequestUri(date);
         using Stream stream = Utils.GetOutputStream(outputFile);
         using StreamWriter textWriter = new(stream);
         textWriter.WriteLine(query.ToString());
@@ -63,7 +63,7 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
             await AnsiConsole
                 .Status()
                 .Spinner(Spinner.Known.Default)
-                .StartAsync($"Executing query: {client.GetAlmanaxQuery(date)}...", async _ => almanax = await client.GetAlmanaxAsync(date, cancellationToken));
+                .StartAsync($"Executing query: {client.GetAlmanaxRequestUri(date)}...", async _ => almanax = await client.GetAlmanaxAsync(date, cancellationToken));
         }
 
         await using Stream stream = Utils.GetOutputStream(outputFile);

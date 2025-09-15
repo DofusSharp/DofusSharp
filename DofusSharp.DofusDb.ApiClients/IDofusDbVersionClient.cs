@@ -15,5 +15,5 @@ public interface IDofusDbVersionClient : IDofusDbClient
     ///     Get the URL to fetch the current version.
     ///     This URL is the one used by <see cref="GetVersionAsync(CancellationToken)" />.
     /// </summary>
-    Uri GetVersionQuery();
+    Uri GetVersionRequestUri();
 }

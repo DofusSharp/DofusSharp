@@ -22,5 +22,5 @@ public interface IDofusDbCriterionClient : IDofusDbClient
     /// </summary>
     /// <param name="criterion">The criterion to parse.</param>
     /// <param name="language">The language to use for the textual parts of the result.</param>
-    Uri ParseCriterionQuery(string criterion, DofusDbLanguage? language = null);
+    Uri GetCriterionRequestUri(string criterion, DofusDbLanguage? language = null);
 }
