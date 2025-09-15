@@ -76,6 +76,7 @@ class DofusDbClientsFactory(Uri baseAddress, Uri? referrer, JsonSerializerOption
     public IDofusDbTableClient<DofusDbWorld>                 Worlds()                 => new DofusDbTableClient<DofusDbWorld>                 (new Uri(baseAddress, "worlds/"),                  referrer,            options);
     
     public IDofusDbImagesClient<long>                        AchievementImages()      => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/achievements/"),        ImageFormat.Png,     referrer);
+    public IDofusDbImagesClient<long>                        ChallengeImages()        => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/challenges/"),          ImageFormat.Png,     referrer);
     public IDofusDbBreedImagesClient                         BreedImages()            => new DofusDbBreedImagesClient                         (new Uri(baseAddress, "img/"),                     referrer);
     public IDofusDbImagesClient<long>                        ItemImages()             => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/items/"),               ImageFormat.Png,     referrer);
     public IDofusDbImagesClient<long>                        JobImages()              => new DofusDbImagesClient<long>                        (new Uri(baseAddress, "img/jobs/"),                ImageFormat.Jpeg,    referrer);

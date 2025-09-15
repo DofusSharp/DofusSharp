@@ -74,6 +74,7 @@ public interface IDofusDbClientsFactory
     IDofusDbTableClient<DofusDbWorld>                 Worlds();
 
     IDofusDbImagesClient<long>    AchievementImages();
+    IDofusDbImagesClient<long>    ChallengeImages();
     IDofusDbBreedImagesClient     BreedImages();
     IDofusDbImagesClient<long>    ItemImages();
     IDofusDbImagesClient<long>    JobImages();

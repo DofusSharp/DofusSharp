@@ -63,6 +63,7 @@ RootCommand rootCommand = new(
         new TableClientCommand<DofusDbBreed>("breeds", "Breeds", uri => GetFactory(uri).Breeds()).CreateCommand(),
         new BreedImageClientCommand("breed-images", uri => GetFactory(uri).BreedImages()).CreateCommand(),
         new TableClientCommand<DofusDbChallenge>("challenges", "Challenges", uri => GetFactory(uri).Challenges()).CreateCommand(),
+        new ImageClientCommand<long>("challenge-images", "Challenge images", uri => GetFactory(uri).ChallengeImages()).CreateCommand(),
         new TableClientCommand<DofusDbCharacteristic>("characteristics", "Characteristics", uri => GetFactory(uri).Characteristics()).CreateCommand(),
         new GameCriterionCommand("criterion", "Parse a criterion string into a JSON array with more information", uri => GetFactory(uri).Criterion()).CreateCommand(),
         new TableClientCommand<DofusDbDungeon>("dungeons", "Dungeons", uri => GetFactory(uri).Dungeons()).CreateCommand(),

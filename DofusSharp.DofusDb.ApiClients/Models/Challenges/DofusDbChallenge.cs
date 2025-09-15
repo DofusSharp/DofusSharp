@@ -57,3 +57,17 @@ public class DofusDbChallenge : DofusDbResource
     /// </summary>
     public string? Img { get; init; }
 }
+
+public static class DofusDbChallengeImagesExtensions
+{
+    /// <summary>
+    ///     Gets the image stream for the challenge's icon.
+    /// </summary>
+    /// <param name="challenge">The challenge for which to get the image stream.</param>
+    /// <param name="factory">The factory to use to create the image client.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public static Task<Stream> GetIconAsync(this DofusDbChallenge challenge, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        challenge.IconId.HasValue
+            ? factory.ChallengeImages().GetImageAsync(challenge.IconId.Value, cancellationToken)
+            : throw new InvalidOperationException("Challenge does not have an associated icon.");
+}
