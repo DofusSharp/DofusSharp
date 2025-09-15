@@ -45,7 +45,7 @@ static class CommonOptions
 
     public static readonly Option<bool> QueryOption = new("--query")
     {
-        Description = "Output the HTTP query URL that would be executed",
+        Description = "Output the HTTP query URL that would be executed, without actually executing it",
         DefaultValueFactory = _ => false
     };
 }
