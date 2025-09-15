@@ -136,7 +136,7 @@ Utilisation :
 
 Options :
   --base <base>   Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
-  --query         Output the HTTP query URL that would be executed, without actually executing it
+  --request-only  Output the HTTP request URL that would be executed, without actually executing it
   -?, -h, --help  Show help and usage information
   -q, --quiet     Display less output
   -d, --debug     Show debugging output
@@ -158,7 +158,7 @@ Options :
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
   --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
-  --query                Output the HTTP query URL that would be executed, without actually executing it
+  --request-only         Output the HTTP request URL that would be executed, without actually executing it
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -181,7 +181,7 @@ Options :
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
   --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
-  --query                Output the HTTP query URL that would be executed, without actually executing it
+  --request-only         Output the HTTP request URL that would be executed, without actually executing it
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -227,7 +227,7 @@ Options :
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
   --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
-  --query                Output the HTTP query URL that would be executed, without actually executing it
+  --request-only         Output the HTTP request URL that would be executed, without actually executing it
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -285,7 +285,7 @@ Options :
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --pretty-print         Pretty print the JSON output
   --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
-  --query                Output the HTTP query URL that would be executed, without actually executing it
+  --request-only         Output the HTTP request URL that would be executed, without actually executing it
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -307,7 +307,7 @@ Options :
                          [example: --filter "level>=10,name.fr=Razielle|Goultard"]
   -o, --output <output>  File to write the JSON output to. If not specified, the output will be written to stdout
   --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
-  --query                Output the HTTP query URL that would be executed, without actually executing it
+  --request-only         Output the HTTP request URL that would be executed, without actually executing it
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -368,7 +368,7 @@ Arguments :
 Options :
   -o, --output <output>  File to write the JSON output to. If not specified, an arbitrary file name will be used
   --base <base>          Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
-  --query                Output the HTTP query URL that would be executed, without actually executing it
+  --request-only         Output the HTTP request URL that would be executed, without actually executing it
   -?, -h, --help         Show help and usage information
   -q, --quiet            Display less output
   -d, --debug            Show debugging output
@@ -408,7 +408,7 @@ Options :
   --scale <Full|Half|Quarter|ThreeQuarters>  Scale of the image to fetch [default: Full]
   -o, --output <output>                      File to write the JSON output to. If not specified, an arbitrary file name will be used
   --base <base>                              Base URL to use when building the query URL [default: https://api.dofusdb.fr/]
-  --query                                    Output the HTTP query URL that would be executed, without actually executing it
+  --request-only                             Output the HTTP request URL that would be executed, without actually executing it
   -?, -h, --help                             Show help and usage information
   -q, --quiet                                Display less output
   -d, --debug                                Show debugging output

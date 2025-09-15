@@ -22,18 +22,18 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
     Command CreateGetCommand()
     {
         Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
-            { Arguments = { _idArgument }, Options = { CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption, CommonOptions.QueryOption } };
+            { Arguments = { _idArgument }, Options = { CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 TId id = r.GetRequiredValue(_idArgument);
                 string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
-                bool query = r.GetValue(CommonOptions.QueryOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbImagesClient<TId> client = clientFactory(new Uri(baseUrl));
-                return query ? Query(client, id, outputFile) : await ExecuteAsync(client, id, outputFile, quiet, cancellationToken);
+                return request ? Query(client, id, outputFile) : await ExecuteAsync(client, id, outputFile, quiet, cancellationToken);
             }
         );
 

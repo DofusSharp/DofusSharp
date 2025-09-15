@@ -8,16 +8,16 @@ class GameVersionCommand(string command, string description, Func<Uri, IDofusDbV
 {
     public Command CreateCommand()
     {
-        Command result = new(command, description) { Options = { CommonOptions.BaseUrlOption, CommonOptions.QueryOption } };
+        Command result = new(command, description) { Options = { CommonOptions.BaseUrlOption, CommonOptions.RequestOption } };
         
         result.SetAction(async (r, cancellationToken) =>
             {
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
-                bool query = r.GetValue(CommonOptions.QueryOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbVersionClient client = clientFactory(new Uri(baseUrl));
-                return query ? Query(client) : await ExecuteAsync(client, quiet, cancellationToken);
+                return request ? Query(client) : await ExecuteAsync(client, quiet, cancellationToken);
             }
         );
         

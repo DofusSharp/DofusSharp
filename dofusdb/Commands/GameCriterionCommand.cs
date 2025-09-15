@@ -26,7 +26,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
         Command result = new(command, description)
         {
             Arguments = { _criterionArgument },
-            Options = { _langOption, CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.QueryOption }
+            Options = { _langOption, CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption }
         };
 
         result.SetAction(async (r, cancellationToken) =>
@@ -36,11 +36,11 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
-                bool query = r.GetValue(CommonOptions.QueryOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbCriterionClient client = clientFactory(new Uri(baseUrl));
-                return query ? Query(client, criterion, lang, outputFile) : await ExecuteAsync(client, criterion, lang, outputFile, prettyPrint, quiet, cancellationToken);
+                return request ? Query(client, criterion, lang, outputFile) : await ExecuteAsync(client, criterion, lang, outputFile, prettyPrint, quiet, cancellationToken);
             }
         );
 

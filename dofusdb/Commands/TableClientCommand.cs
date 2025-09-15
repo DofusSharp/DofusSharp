@@ -74,7 +74,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
             Options =
             {
                 _allOption, _limitOption, _skipOption, _selectOption, _sortOption, _filterOption, CommonOptions.OutputFileOption,
-                CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.QueryOption
+                CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption
             }
         };
 
@@ -89,12 +89,12 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
-                bool query = r.GetValue(CommonOptions.QueryOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
                 DofusDbSearchQuery searchQuery = new() { Limit = all ? null : limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] };
-                return query ? QuerySearchAsync(client, searchQuery, outputFile) : await ExecuteSearchAsync(client, searchQuery, outputFile, prettyPrint, quiet, cancellationToken);
+                return request ? QuerySearchAsync(client, searchQuery, outputFile) : await ExecuteSearchAsync(client, searchQuery, outputFile, prettyPrint, quiet, cancellationToken);
             }
         );
 
@@ -184,7 +184,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     Command CreateGetCommand()
     {
         Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
-            { Arguments = { _idArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.QueryOption } };
+            { Arguments = { _idArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
@@ -192,11 +192,11 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
-                bool query = r.GetValue(CommonOptions.QueryOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
-                return query ? QueryGetAsync(client, id, outputFile) : await QueryGetAsync(client, id, outputFile, prettyPrint, quiet, cancellationToken);
+                return request ? QueryGetAsync(client, id, outputFile) : await QueryGetAsync(client, id, outputFile, prettyPrint, quiet, cancellationToken);
             }
         );
 
@@ -239,18 +239,18 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     Command CreateCountCommand()
     {
         Command result = new("count", $"Count {name.ToLowerInvariant()}")
-            { Options = { _filterOption, CommonOptions.OutputFileOption, CommonOptions.BaseUrlOption, CommonOptions.QueryOption } };
+            { Options = { _filterOption, CommonOptions.OutputFileOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
                 IReadOnlyList<DofusDbSearchPredicate>? filter = r.GetValue(_filterOption);
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
-                bool query = r.GetValue(CommonOptions.QueryOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
-                return query ? QueryCountAsync(client, filter, outputFile) : await ExecuteCountAsync(client, filter, outputFile, quiet, cancellationToken);
+                return request ? QueryCountAsync(client, filter, outputFile) : await ExecuteCountAsync(client, filter, outputFile, quiet, cancellationToken);
             }
         );
 

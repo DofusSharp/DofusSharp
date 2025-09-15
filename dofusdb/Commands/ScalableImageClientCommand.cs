@@ -28,7 +28,7 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
     Command CreateGetCommand()
     {
         Command result = new("get", $"Get {name.ToLowerInvariant()} by id")
-            { Arguments = { _idArgument }, Options = { _scaleOption, CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption, CommonOptions.QueryOption } };
+            { Arguments = { _idArgument }, Options = { _scaleOption, CommonOptions.OutputImageOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption } };
 
         result.SetAction(async (r, cancellationToken) =>
             {
@@ -36,11 +36,11 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
                 DofusDbImageScale scale = r.GetValue(_scaleOption);
                 string? outputFile = r.GetValue(CommonOptions.OutputImageOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
-                bool query = r.GetValue(CommonOptions.QueryOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbScalableImagesClient<TId> client = clientFactory(new Uri(baseUrl));
-                return query ? Query(client, id, scale, outputFile) : await ExecuteAsync(client, id, scale, outputFile, quiet, cancellationToken);
+                return request ? Query(client, id, scale, outputFile) : await ExecuteAsync(client, id, scale, outputFile, quiet, cancellationToken);
             }
         );
 

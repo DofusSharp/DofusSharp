@@ -18,7 +18,9 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
     public Command CreateCommand()
     {
         Command result = new(command, description)
-            { Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.QueryOption } };
+        {
+            Arguments = { _dateArgument }, Options = { CommonOptions.OutputFileOption, CommonOptions.PrettyPrintOption, CommonOptions.BaseUrlOption, CommonOptions.RequestOption }
+        };
 
         result.SetAction(async (r, token) =>
             {
@@ -26,11 +28,11 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
                 string? outputFile = r.GetValue(CommonOptions.OutputFileOption);
                 bool prettyPrint = r.GetValue(CommonOptions.PrettyPrintOption);
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
-                bool query = r.GetValue(CommonOptions.QueryOption);
+                bool request = r.GetValue(CommonOptions.RequestOption);
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbAlmanaxCalendarClient client = clientFactory(new Uri(baseUrl));
-                return query ? Query(client, date, outputFile) : await ExecuteAsync(client, date, outputFile, prettyPrint, quiet, token);
+                return request ? Query(client, date, outputFile) : await ExecuteAsync(client, date, outputFile, prettyPrint, quiet, token);
             }
         );
 
