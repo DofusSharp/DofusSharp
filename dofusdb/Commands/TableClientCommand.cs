@@ -369,6 +369,10 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
         }
     }
 
+    // NOTE: The order of operators in the regex alternation matters!
+    // Longer operators (>=, <=, !=) must come before shorter ones (>, <, =)
+    // to avoid greedy matching issues (e.g., matching ">=" as ">" and "=" separately).
+    // Do not reorder unless you understand the implications.
     [GeneratedRegex(
         "^(?<field>.+?)(?<operator>>=|<=|!=|>|<|=)(?<value>.+?)$",
         RegexOptions.Compiled
