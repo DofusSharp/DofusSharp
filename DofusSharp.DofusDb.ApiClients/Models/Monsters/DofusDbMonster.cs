@@ -231,8 +231,6 @@ public static class DofusDbMonsterImagesExtensions
     /// <param name="monster">The monster for which to fetch the graphics image.</param>
     /// <param name="factory">The factory used to create the image client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetGfxAsync(this DofusDbMonster monster, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        monster.GfxId.HasValue
-            ? factory.MonsterImages().GetImageAsync(monster.GfxId.Value, cancellationToken)
-            : throw new InvalidOperationException("Monster does not have an associated graphics ID.");
+    public static async Task<Stream?> GetGfxAsync(this DofusDbMonster monster, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        monster.GfxId.HasValue ? await factory.MonsterImages().GetImageAsync(monster.GfxId.Value, cancellationToken) : null;
 }

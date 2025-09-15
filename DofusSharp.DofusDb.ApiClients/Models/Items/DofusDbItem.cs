@@ -372,12 +372,11 @@ public static class DofusDbItemImagesExtensions
 {
     /// <summary>
     ///     Gets the image stream for the item's icon.
+    ///     Returns null if the item does not have an associated icon.
     /// </summary>
     /// <param name="item">The item for which to get the image stream.</param>
     /// <param name="factory">The factory to use to create the image client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetIconAsync(this DofusDbItem item, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        item.IconId.HasValue
-            ? factory.ItemImages().GetImageAsync(item.IconId.Value, cancellationToken)
-            : throw new InvalidOperationException("Item does not have an associated icon.");
+    public static async Task<Stream?> GetIconAsync(this DofusDbItem item, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        item.IconId.HasValue ? await factory.ItemImages().GetImageAsync(item.IconId.Value, cancellationToken) : null;
 }

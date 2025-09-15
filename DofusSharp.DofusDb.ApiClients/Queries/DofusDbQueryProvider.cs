@@ -3,6 +3,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
 using DofusSharp.DofusDb.ApiClients.Models.Breeds;
+using DofusSharp.DofusDb.ApiClients.Models.Challenges;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -33,6 +34,7 @@ class DofusDbQueryProvider(IDofusDbClientsFactory factory) : IDofusDbQueryProvid
     public IDofusDbQuery<DofusDbAlteration>            Alterations()           => new DofusDbQuery<DofusDbAlteration>(factory.Alterations());
     public IDofusDbQuery<DofusDbArea>                  Areas()                 => new DofusDbQuery<DofusDbArea>(factory.Areas());
     public IDofusDbQuery<DofusDbBreed>                 Breeds()                => new DofusDbQuery<DofusDbBreed>(factory.Breeds());
+    public IDofusDbQuery<DofusDbChallenge>             Challenges()            => new DofusDbQuery<DofusDbChallenge>(factory.Challenges());
     public IDofusDbQuery<DofusDbCharacteristic>        Characteristics()       => new DofusDbQuery<DofusDbCharacteristic>(factory.Characteristics());
     public IDofusDbQuery<DofusDbDungeon>               Dungeons()              => new DofusDbQuery<DofusDbDungeon>(factory.Dungeons());
     public IDofusDbQuery<DofusDbGuildRight>            GuildRights()           => new DofusDbQuery<DofusDbGuildRight>(factory.GuildRights());

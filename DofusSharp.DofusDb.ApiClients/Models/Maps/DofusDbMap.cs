@@ -148,11 +148,11 @@ public static class DofusDbMapImagesExtensions
     /// <param name="factory">The factory to create the client from.</param>
     /// <param name="scale">The scale of the image to fetch.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetImageAsync(
+    public static async Task<Stream?> GetImageAsync(
         this DofusDbMap map,
         IDofusDbClientsFactory factory,
         DofusDbImageScale scale = DofusDbImageScale.Full,
         CancellationToken cancellationToken = default
     ) =>
-        map.Id.HasValue ? factory.MapImages().GetImageAsync(map.Id.Value, scale, cancellationToken) : throw new ArgumentNullException(nameof(map.Id));
+        map.Id.HasValue ? await factory.MapImages().GetImageAsync(map.Id.Value, scale, cancellationToken) : null;
 }

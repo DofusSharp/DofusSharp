@@ -46,8 +46,6 @@ public static class DofusDbOrnamentImagesExtensions
     /// <param name="ornament">The ornament whose icon to fetch.</param>
     /// <param name="factory">The factory to create the image client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetIconAsync(this DofusDbOrnament ornament, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        ornament.IconId.HasValue
-            ? factory.OrnamentImages().GetImageAsync(ornament.IconId.Value, cancellationToken)
-            : throw new InvalidOperationException("Ornament does not have an associated icon.");
+    public static async Task<Stream?> GetIconAsync(this DofusDbOrnament ornament, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        ornament.IconId.HasValue ? await factory.OrnamentImages().GetImageAsync(ornament.IconId.Value, cancellationToken) : null;
 }

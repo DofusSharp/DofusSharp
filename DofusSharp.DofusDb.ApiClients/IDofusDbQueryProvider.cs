@@ -3,6 +3,7 @@ using DofusSharp.DofusDb.ApiClients.Models.Alignments;
 using DofusSharp.DofusDb.ApiClients.Models.Almanax;
 using DofusSharp.DofusDb.ApiClients.Models.Alterations;
 using DofusSharp.DofusDb.ApiClients.Models.Breeds;
+using DofusSharp.DofusDb.ApiClients.Models.Challenges;
 using DofusSharp.DofusDb.ApiClients.Models.Characteristics;
 using DofusSharp.DofusDb.ApiClients.Models.Items;
 using DofusSharp.DofusDb.ApiClients.Models.Jobs;
@@ -36,6 +37,7 @@ public interface IDofusDbQueryProvider
     IDofusDbQuery<DofusDbAlteration>            Alterations();
     IDofusDbQuery<DofusDbArea>                  Areas();
     IDofusDbQuery<DofusDbBreed>                 Breeds();
+    IDofusDbQuery<DofusDbChallenge>             Challenges();
     IDofusDbQuery<DofusDbCharacteristic>        Characteristics();
     IDofusDbQuery<DofusDbDungeon>               Dungeons();
     IDofusDbQuery<DofusDbGuildRight>            GuildRights();
