@@ -40,7 +40,6 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbCriterionClient client = clientFactory(new Uri(baseUrl));
-
                 return query ? await QueryAsync(client, criterion, lang, outputFile) : await ExecuteAsync(client, criterion, lang, outputFile, prettyPrint, quiet, cancellationToken);
             }
         );
