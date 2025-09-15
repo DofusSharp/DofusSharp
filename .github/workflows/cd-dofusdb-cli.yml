@@ -46,55 +46,6 @@ jobs:
       - name: Test
         run: dotnet test DofusSharp.DofusDb.Filter.slnf --configuration Release --no-build
 
-  build-publish-nuget:
-    name: Pack DofusDB CLI and push to nuget
-    runs-on: ubuntu-latest
-    needs: [compute-version, build-test]
-    
-    permissions:
-      contents: write
-      packages: write
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Install .NET 10.0
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 10.0.x
-
-      - name: Pack
-        run: dotnet pack dofusdb/dofusdb.csproj --output nuget/ --configuration Release --property Version=${{ needs.compute-version.outputs.version }}
-
-      - name: Configure Github Nuget repository
-        if: ${{ !inputs.dry-run }}
-        run: dotnet nuget add source --username ismailbennani --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DofusSharp/index.json"
-
-      - name: Publish nugets - Github
-        if: ${{ !inputs.dry-run }}
-        run: |
-          for filename in nuget/*.nupkg; do
-              dotnet nuget push "$filename" --source github --api-key ${{ secrets.GITHUB_TOKEN }}
-          done
-
-      - name: Publish nugets - Nuget
-        if: ${{ !inputs.dry-run }}
-        run: |
-          for filename in nuget/*.nupkg; do
-              dotnet nuget push "$filename" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}
-          done
-
-      - name: Upload tool as artifact
-        if: ${{ github.event_name != 'release' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: libraries
-          path: nuget/*.nupkg
-          if-no-files-found: error
-
   build-publish-binaries:
     name: Publish DofusDB CLI and push to release
     needs: [compute-version, build-test]
