@@ -151,8 +151,8 @@ public static class DofusDbBreedImagesExtensions
     /// <param name="breed">The breed for which to fetch the symbol image.</param>
     /// <param name="factory">The factory used to create the image client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetSymbolAsync(this DofusDbBreed breed, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        breed.Id.HasValue ? factory.BreedImages().GetSymbolAsync(breed.Id.Value, cancellationToken) : throw new ArgumentNullException(nameof(breed.Id));
+    public static async Task<Stream?> GetSymbolAsync(this DofusDbBreed breed, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        breed.Id.HasValue ? await factory.BreedImages().GetSymbolAsync(breed.Id.Value, cancellationToken) : null;
 
     /// <summary>
     ///     Fetches the logo image for the specified breed using the provided factory to create the image client.
@@ -160,8 +160,8 @@ public static class DofusDbBreedImagesExtensions
     /// <param name="breed">The breed for which to fetch the logo image.</param>
     /// <param name="factory">The factory used to create the image client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetLogoAsync(this DofusDbBreed breed, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        breed.Id.HasValue ? factory.BreedImages().GetLogoAsync(breed.Id.Value, cancellationToken) : throw new ArgumentNullException(nameof(breed.Id));
+    public static async Task<Stream?> GetLogoAsync(this DofusDbBreed breed, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        breed.Id.HasValue ? await factory.BreedImages().GetLogoAsync(breed.Id.Value, cancellationToken) : null;
 
     /// <summary>
     ///     Fetches the head image for the specified breed using the provided factory to create the image client.
@@ -170,9 +170,9 @@ public static class DofusDbBreedImagesExtensions
     /// <param name="factory">The factory used to create the image client.</param>
     /// <param name="gender">The gender of the head image to fetch.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetHeadAsync(this DofusDbBreed breed, IDofusDbClientsFactory factory, DofusDbGender gender, CancellationToken cancellationToken = default) =>
+    public static async Task<Stream?> GetHeadAsync(this DofusDbBreed breed, IDofusDbClientsFactory factory, DofusDbGender gender, CancellationToken cancellationToken = default) =>
         breed.Id.HasValue
-            ? factory
+            ? await factory
                 .BreedImages()
                 .GetHeadAsync(
                     gender switch
@@ -183,5 +183,5 @@ public static class DofusDbBreedImagesExtensions
                     },
                     cancellationToken
                 )
-            : throw new ArgumentNullException(nameof(breed.Id));
+            : null;
 }

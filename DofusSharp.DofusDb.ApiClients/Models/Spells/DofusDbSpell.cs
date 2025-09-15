@@ -106,8 +106,6 @@ public static class DofusDbSpellImagesExtensions
     /// <param name="spell">The spell for which to fetch the icon image.</param>
     /// <param name="factory">The factory to create the images client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetIconAsync(this DofusDbSpell spell, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        spell.IconId.HasValue
-            ? factory.SpellImages().GetImageAsync(spell.IconId.Value, cancellationToken)
-            : throw new InvalidOperationException("Spell does not have an associated icon.");
+    public static async Task<Stream?> GetIconAsync(this DofusDbSpell spell, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        spell.IconId.HasValue ? await factory.SpellImages().GetImageAsync(spell.IconId.Value, cancellationToken) : null;
 }

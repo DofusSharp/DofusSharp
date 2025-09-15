@@ -65,14 +65,13 @@ public static class DofusDbChallengeImagesExtensions
 {
     /// <summary>
     ///     Gets the image stream for the challenge's icon.
+    ///     Returns null if the challenge does not have an associated icon.
     /// </summary>
     /// <param name="challenge">The challenge for which to get the image stream.</param>
     /// <param name="factory">The factory to use to create the image client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<Stream> GetIconAsync(this DofusDbChallenge challenge, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        challenge.IconId.HasValue
-            ? factory.ChallengeImages().GetImageAsync(challenge.IconId.Value, cancellationToken)
-            : throw new InvalidOperationException("Challenge does not have an associated icon.");
+    public static async Task<Stream?> GetIconAsync(this DofusDbChallenge challenge, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        challenge.IconId.HasValue ? await factory.ChallengeImages().GetImageAsync(challenge.IconId.Value, cancellationToken) : null;
 
     /// <summary>
     ///     Get the parsed completion criterion for the challenge.
@@ -81,15 +80,13 @@ public static class DofusDbChallengeImagesExtensions
     /// <param name="factory">The factory to use to create the criterion client.</param>
     /// <param name="language">The language to use for the textual parts of the criterion.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<DofusDbCriterion?> GetCompletionCriterionAsync(
+    public static async Task<DofusDbCriterion?> GetCompletionCriterionAsync(
         this DofusDbChallenge challenge,
         IDofusDbClientsFactory factory,
         DofusDbLanguage? language = null,
         CancellationToken cancellationToken = default
     ) =>
-        challenge.CompletionCriterion is not null
-            ? factory.Criterion().ParseCriterionAsync(challenge.CompletionCriterion, language, cancellationToken)
-            : throw new InvalidOperationException("Challenge does not have a completion criterion.");
+        challenge.CompletionCriterion is not null ? await factory.Criterion().ParseCriterionAsync(challenge.CompletionCriterion, language, cancellationToken) : null;
 
     /// <summary>
     ///     Get the parsed activation criterion for the challenge.
@@ -98,15 +95,13 @@ public static class DofusDbChallengeImagesExtensions
     /// <param name="factory">The factory to use to create the criterion client.</param>
     /// <param name="language">The language to use for the textual parts of the criterion.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<DofusDbCriterion?> GetActivationCriterionAsync(
+    public static async Task<DofusDbCriterion?> GetActivationCriterionAsync(
         this DofusDbChallenge challenge,
         IDofusDbClientsFactory factory,
         DofusDbLanguage? language = null,
         CancellationToken cancellationToken = default
     ) =>
-        challenge.ActivationCriterion is not null
-            ? factory.Criterion().ParseCriterionAsync(challenge.ActivationCriterion, language, cancellationToken)
-            : throw new InvalidOperationException("Challenge does not have a activation criterion.");
+        challenge.ActivationCriterion is not null ? await factory.Criterion().ParseCriterionAsync(challenge.ActivationCriterion, language, cancellationToken) : null;
 
     /// <summary>
     ///     Get the target monster for the challenge.
@@ -114,8 +109,6 @@ public static class DofusDbChallengeImagesExtensions
     /// <param name="challenge">The challenge for which to get the target monster.</param>
     /// <param name="factory">The factory to use to create the monster client.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public static Task<DofusDbMonster> GetTargetMonsterAsync(this DofusDbChallenge challenge, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
-        challenge.TargetMonsterId.HasValue
-            ? factory.Monsters().GetAsync(challenge.TargetMonsterId.Value, cancellationToken)
-            : throw new InvalidOperationException("Challenge does not have a target monster.");
+    public static async Task<DofusDbMonster?> GetTargetMonsterAsync(this DofusDbChallenge challenge, IDofusDbClientsFactory factory, CancellationToken cancellationToken = default) =>
+        challenge.TargetMonsterId.HasValue ? await factory.Monsters().GetAsync(challenge.TargetMonsterId.Value, cancellationToken) : null;
 }
