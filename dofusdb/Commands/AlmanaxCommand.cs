@@ -32,14 +32,14 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbAlmanaxCalendarClient client = clientFactory(new Uri(baseUrl));
-                return request ? Query(client, date, outputFile) : await ExecuteAsync(client, date, outputFile, prettyPrint, quiet, token);
+                return request ? WriteAlmanaxRequest(client, date, outputFile) : await ExecuteAlmanaxRequest(client, date, outputFile, prettyPrint, quiet, token);
             }
         );
 
         return result;
     }
 
-    static int Query(IDofusDbAlmanaxCalendarClient client, DateOnly date, string? outputFile)
+    static int WriteAlmanaxRequest(IDofusDbAlmanaxCalendarClient client, DateOnly date, string? outputFile)
     {
         Uri query = client.GetAlmanaxRequestUri(date);
         using Stream stream = Utils.GetOutputStream(outputFile);
@@ -48,7 +48,14 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
         return 0;
     }
 
-    static async Task<int> ExecuteAsync(IDofusDbAlmanaxCalendarClient client, DateOnly date, string? outputFile, bool prettyPrint, bool quiet, CancellationToken cancellationToken)
+    static async Task<int> ExecuteAlmanaxRequest(
+        IDofusDbAlmanaxCalendarClient client,
+        DateOnly date,
+        string? outputFile,
+        bool prettyPrint,
+        bool quiet,
+        CancellationToken cancellationToken
+    )
     {
         JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
         JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(DofusDbAlmanaxCalendar));

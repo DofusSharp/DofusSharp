@@ -40,14 +40,16 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbCriterionClient client = clientFactory(new Uri(baseUrl));
-                return request ? Query(client, criterion, lang, outputFile) : await ExecuteAsync(client, criterion, lang, outputFile, prettyPrint, quiet, cancellationToken);
+                return request
+                    ? WriteCriterionRequest(client, criterion, lang, outputFile)
+                    : await ExecuteCriterionRequestAsync(client, criterion, lang, outputFile, prettyPrint, quiet, cancellationToken);
             }
         );
 
         return result;
     }
 
-    static int Query(IDofusDbCriterionClient client, string criterion, DofusDbLanguage lang, string? outputFile)
+    static int WriteCriterionRequest(IDofusDbCriterionClient client, string criterion, DofusDbLanguage lang, string? outputFile)
     {
         Uri query = client.GetCriterionRequestUri(criterion, lang);
         using Stream stream = Utils.GetOutputStream(outputFile);
@@ -56,7 +58,7 @@ class GameCriterionCommand(string command, string description, Func<Uri, IDofusD
         return 0;
     }
 
-    static async Task<int> ExecuteAsync(
+    static async Task<int> ExecuteCriterionRequestAsync(
         IDofusDbCriterionClient client,
         string criterion,
         DofusDbLanguage lang,

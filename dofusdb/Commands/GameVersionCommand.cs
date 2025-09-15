@@ -9,7 +9,7 @@ class GameVersionCommand(string command, string description, Func<Uri, IDofusDbV
     public Command CreateCommand()
     {
         Command result = new(command, description) { Options = { CommonOptions.BaseUrlOption, CommonOptions.RequestOption } };
-        
+
         result.SetAction(async (r, cancellationToken) =>
             {
                 string baseUrl = r.GetRequiredValue(CommonOptions.BaseUrlOption);
@@ -17,21 +17,21 @@ class GameVersionCommand(string command, string description, Func<Uri, IDofusDbV
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbVersionClient client = clientFactory(new Uri(baseUrl));
-                return request ? Query(client) : await ExecuteAsync(client, quiet, cancellationToken);
+                return request ? WriteVersionRequest(client) : await ExecuteVersionRequestAsync(client, quiet, cancellationToken);
             }
         );
-        
+
         return result;
     }
 
-    static int Query(IDofusDbVersionClient client)
+    static int WriteVersionRequest(IDofusDbVersionClient client)
     {
         Uri query = client.GetVersionRequestUri();
         Console.WriteLine(query.ToString());
         return 0;
     }
 
-    static async Task<int> ExecuteAsync(IDofusDbVersionClient client, bool quiet, CancellationToken cancellationToken)
+    static async Task<int> ExecuteVersionRequestAsync(IDofusDbVersionClient client, bool quiet, CancellationToken cancellationToken)
     {
         Version version = null!;
         if (quiet)

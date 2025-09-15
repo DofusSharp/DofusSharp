@@ -94,14 +94,16 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
 
                 IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
                 DofusDbSearchQuery searchQuery = new() { Limit = all ? null : limit, Skip = skip, Select = select ?? [], Sort = sort ?? [], Predicates = filter ?? [] };
-                return request ? QuerySearchAsync(client, searchQuery, outputFile) : await ExecuteSearchAsync(client, searchQuery, outputFile, prettyPrint, quiet, cancellationToken);
+                return request
+                    ? WriteSearchRequest(client, searchQuery, outputFile)
+                    : await ExecuteSearchRequestAsync(client, searchQuery, outputFile, prettyPrint, quiet, cancellationToken);
             }
         );
 
         return result;
     }
 
-    static int QuerySearchAsync(IDofusDbTableClient<TResource> client, DofusDbSearchQuery searchQuery, string? outputFile)
+    static int WriteSearchRequest(IDofusDbTableClient<TResource> client, DofusDbSearchQuery searchQuery, string? outputFile)
     {
         Uri query = client.GetSearchRequestUri(searchQuery);
         using Stream stream = Utils.GetOutputStream(outputFile);
@@ -110,7 +112,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
         return 0;
     }
 
-    static async Task<int> ExecuteSearchAsync(
+    static async Task<int> ExecuteSearchRequestAsync(
         IDofusDbTableClient<TResource> client,
         DofusDbSearchQuery searchQuery,
         string? outputFile,
@@ -196,14 +198,14 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
-                return request ? QueryGetAsync(client, id, outputFile) : await QueryGetAsync(client, id, outputFile, prettyPrint, quiet, cancellationToken);
+                return request ? WriteGetRequest(client, id, outputFile) : await ExecuteGetRequestAsync(client, id, outputFile, prettyPrint, quiet, cancellationToken);
             }
         );
 
         return result;
     }
 
-    static int QueryGetAsync(IDofusDbTableClient<TResource> client, long id, string? outputFile)
+    static int WriteGetRequest(IDofusDbTableClient<TResource> client, long id, string? outputFile)
     {
         Uri query = client.GetGetRequestUri(id);
         using Stream stream = Utils.GetOutputStream(outputFile);
@@ -212,7 +214,14 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
         return 0;
     }
 
-    static async Task<int> QueryGetAsync(IDofusDbTableClient<TResource> client, long id, string? outputFile, bool prettyPrint, bool quiet, CancellationToken cancellationToken)
+    static async Task<int> ExecuteGetRequestAsync(
+        IDofusDbTableClient<TResource> client,
+        long id,
+        string? outputFile,
+        bool prettyPrint,
+        bool quiet,
+        CancellationToken cancellationToken
+    )
     {
         JsonSerializerOptions options = Utils.BuildJsonSerializerOptions(prettyPrint);
         JsonTypeInfo jsonTypeInfo = options.GetTypeInfo(typeof(TResource));
@@ -250,14 +259,14 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbTableClient<TResource> client = clientFactory(new Uri(baseUrl));
-                return request ? QueryCountAsync(client, filter, outputFile) : await ExecuteCountAsync(client, filter, outputFile, quiet, cancellationToken);
+                return request ? WriteCountRequest(client, filter, outputFile) : await ExecuteCountRequestAsync(client, filter, outputFile, quiet, cancellationToken);
             }
         );
 
         return result;
     }
 
-    static int QueryCountAsync(IDofusDbTableClient<TResource> client, IReadOnlyList<DofusDbSearchPredicate>? filter, string? outputFile)
+    static int WriteCountRequest(IDofusDbTableClient<TResource> client, IReadOnlyList<DofusDbSearchPredicate>? filter, string? outputFile)
     {
         Uri query = client.GetCountRequestUri(filter ?? []);
         using Stream stream = Utils.GetOutputStream(outputFile);
@@ -266,7 +275,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
         return 0;
     }
 
-    static async Task<int> ExecuteCountAsync(
+    static async Task<int> ExecuteCountRequestAsync(
         IDofusDbTableClient<TResource> client,
         IReadOnlyList<DofusDbSearchPredicate>? filter,
         string? outputFile,

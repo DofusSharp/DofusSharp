@@ -40,14 +40,14 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbScalableImagesClient<TId> client = clientFactory(new Uri(baseUrl));
-                return request ? Query(client, id, scale, outputFile) : await ExecuteAsync(client, id, scale, outputFile, quiet, cancellationToken);
+                return request ? WriteImageRequest(client, id, scale, outputFile) : await ExecuteImageRequestAsync(client, id, scale, outputFile, quiet, cancellationToken);
             }
         );
 
         return result;
     }
 
-    static int Query(IDofusDbScalableImagesClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile)
+    static int WriteImageRequest(IDofusDbScalableImagesClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile)
     {
         Uri query = client.GetImageRequestUri(id, scale);
         using Stream stream = Utils.GetOutputStream(outputFile);
@@ -56,7 +56,14 @@ class ScalableImageClientCommand<TId>(string command, string name, Func<Uri, IDo
         return 0;
     }
 
-    async Task<int> ExecuteAsync(IDofusDbScalableImagesClient<TId> client, TId id, DofusDbImageScale scale, string? outputFile, bool quiet, CancellationToken cancellationToken)
+    async Task<int> ExecuteImageRequestAsync(
+        IDofusDbScalableImagesClient<TId> client,
+        TId id,
+        DofusDbImageScale scale,
+        string? outputFile,
+        bool quiet,
+        CancellationToken cancellationToken
+    )
     {
         Stream image = null!;
         if (quiet)

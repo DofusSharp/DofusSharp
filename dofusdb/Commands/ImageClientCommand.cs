@@ -33,14 +33,14 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbImagesClient<TId> client = clientFactory(new Uri(baseUrl));
-                return request ? Query(client, id, outputFile) : await ExecuteAsync(client, id, outputFile, quiet, cancellationToken);
+                return request ? WriteImageRequest(client, id, outputFile) : await ExecuteImageRequestAsync(client, id, outputFile, quiet, cancellationToken);
             }
         );
 
         return result;
     }
 
-    static int Query(IDofusDbImagesClient<TId> client, TId id, string? outputFile)
+    static int WriteImageRequest(IDofusDbImagesClient<TId> client, TId id, string? outputFile)
     {
         Uri query = client.GetImageRequestUri(id);
         using Stream stream = Utils.GetOutputStream(outputFile);
@@ -49,7 +49,7 @@ class ImageClientCommand<TId>(string command, string name, Func<Uri, IDofusDbIma
         return 0;
     }
 
-    async Task<int> ExecuteAsync(IDofusDbImagesClient<TId> client, TId id, string? outputFile, bool quiet, CancellationToken cancellationToken)
+    async Task<int> ExecuteImageRequestAsync(IDofusDbImagesClient<TId> client, TId id, string? outputFile, bool quiet, CancellationToken cancellationToken)
     {
         Stream image = null!;
         if (quiet)
