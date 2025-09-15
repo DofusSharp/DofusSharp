@@ -338,7 +338,7 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     }
 
     [GeneratedRegex(
-        "^(?<field>.+)(?<operator>=|!=|<|<=|>|>=)(?<value>.+)$",
+        "^(?<field>.+?)(?<operator>>=|<=|!=|>|<|=)(?<value>.+?)$",
         RegexOptions.Compiled
         | RegexOptions.CultureInvariant
         | RegexOptions.IgnoreCase
