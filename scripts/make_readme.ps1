@@ -28,7 +28,7 @@ while ($Match.Success) {
     $Command = $Match.Groups[1].Value.Trim()
 
     # post process command
-    $Command = $Command -replace "dofusdb", "$PSScriptRoot/../dofusdb/bin/Debug/net10.0/dofusdb.exe"
+    $Command = $Command -replace "dofusdb", "$PSScriptRoot/../dofusdb/bin/Release/net10.0/dofusdb.exe"
     
     Write-Host "Executing command: $Command"
     
