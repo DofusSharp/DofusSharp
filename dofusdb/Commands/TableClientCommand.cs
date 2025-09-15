@@ -276,9 +276,9 @@ partial class TableClientCommand<TResource>(string command, string name, Func<Ur
     {
         List<DofusDbSearchPredicate> result = [];
 
-        foreach (Token token in r.Tokens)
+        foreach (string token in r.Tokens.SelectMany(t => t.Value.Split(',')))
         {
-            DofusDbSearchPredicate? predicate = ParseFilter(r, token.Value);
+            DofusDbSearchPredicate? predicate = ParseFilter(r, token);
             if (predicate is null)
             {
                 continue;
