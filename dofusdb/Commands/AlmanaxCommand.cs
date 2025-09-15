@@ -30,19 +30,19 @@ class AlmanaxCommand(string command, string description, Func<Uri, IDofusDbAlman
                 bool quiet = r.GetValue(CommonOptions.QuietOption);
 
                 IDofusDbAlmanaxCalendarClient client = clientFactory(new Uri(baseUrl));
-                return query ? await QueryAsync(client, date, outputFile) : await ExecuteAsync(client, date, outputFile, prettyPrint, quiet, token);
+                return query ? Query(client, date, outputFile) : await ExecuteAsync(client, date, outputFile, prettyPrint, quiet, token);
             }
         );
 
         return result;
     }
 
-    static async Task<int> QueryAsync(IDofusDbAlmanaxCalendarClient client, DateOnly date, string? outputFile)
+    static int Query(IDofusDbAlmanaxCalendarClient client, DateOnly date, string? outputFile)
     {
         Uri query = client.GetAlmanaxQuery(date);
-        await using Stream stream = Utils.GetOutputStream(outputFile);
-        await using StreamWriter textWriter = new(stream);
-        await textWriter.WriteLineAsync(query.ToString());
+        using Stream stream = Utils.GetOutputStream(outputFile);
+        using StreamWriter textWriter = new(stream);
+        textWriter.WriteLine(query.ToString());
         return 0;
     }
 
