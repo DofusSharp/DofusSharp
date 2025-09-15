@@ -42,4 +42,10 @@ static class CommonOptions
         DefaultValueFactory = _ => DofusDbClient.ProductionUri.ToString()
 #endif
     };
+
+    public static readonly Option<bool> QueryOption = new("--query")
+    {
+        Description = "Output the HTTP query URL that would be executed",
+        DefaultValueFactory = _ => false
+    };
 }
