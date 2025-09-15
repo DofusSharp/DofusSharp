@@ -26,7 +26,7 @@ jobs:
       best-crush-changed: ${{ steps.filter-paths.outputs.best-crush }}
     
     steps:
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         id: filter-paths
         with:
           list-files: 'escape'
