@@ -100,7 +100,7 @@ jobs:
 
       - name: Upload binaries as artifact
         if: ${{ github.event_name != 'release' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           path: dist/${{ matrix.output-name }}
           name: dofusdb-${{ matrix.rid }}

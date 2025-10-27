@@ -46,7 +46,7 @@ jobs:
 
       - name: Upload test reports as artifact
         if: ${{ !cancelled() && inputs.test-reports-artifact != null }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ inputs.test-reports-artifact }}
           path: |
@@ -57,7 +57,7 @@ jobs:
 
       - name: Upload coverage reports as artifact
         if: ${{ !cancelled() && inputs.coverage-reports-artifact != null }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ inputs.coverage-reports-artifact }}
           path: TestResults/**/*.cobertura.xml
