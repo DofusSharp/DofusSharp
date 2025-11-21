@@ -32,7 +32,7 @@ jobs:
       version-short: ${{ steps.compute_version.outputs.version-short }}
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
